@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog · Mmnd</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+#pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.3}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem}
+.nav-links a{padding:.5rem 1rem;text-decoration:none;color:var(--muted);font-size:.875rem;font-weight:500}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{position:relative;z-index:1;max-width:800px;margin:0 auto;padding:4rem 1.5rem}
+h1{font-family:Georgia,serif;font-size:2.25rem;font-weight:600;margin-bottom:.5rem}
+@media(min-width:640px){h1{font-size:3rem}}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+.subtitle{color:var(--muted);font-size:.875rem;margin-bottom:2rem}
+.post{border:1px solid var(--border);border-radius:.75rem;padding:1.5rem;background:var(--card);margin-bottom:1rem;transition:all .2s;cursor:pointer}
+.post:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 24px rgba(194,65,12,.08)}
+.post-meta{font-size:.6875rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.5rem}
+.post-title{font-family:Georgia,serif;font-size:1.25rem;font-weight:600;margin-bottom:.5rem}
+.post-excerpt{font-size:.875rem;color:var(--muted);margin-bottom:.75rem}
+.post-tags{display:flex;gap:.25rem;flex-wrap:wrap}
+.post-tag{font-size:.5625rem;padding:.125rem .375rem;border-radius:.25rem;background:var(--accent-bg);color:var(--primary);font-weight:500}
+.post-link{font-size:.75rem;color:var(--primary);text-decoration:none;font-weight:500}
+.post-link:hover{text-decoration:underline}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2.5rem 1.5rem}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<canvas id="pbg"></canvas>
+<header><nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="sources.html">Sources</a>
+<a href="blog.html" class="active">Blog</a>
+<a href="demos.html">Demos</a>
+<a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+</nav></header>
+
+<main>
+<p class="eyebrow">Blog &middot; Observations from the observatory</p>
+<h1>Field notes from the Mathocalypse.</h1>
+<p class="subtitle">Curated posts connecting each mathematical expression to its broader context &mdash; historical, philosophical, and forward-looking. Click any post to explore the expression.</p>
+
+<div class="post" onclick="window.location.href='sources.html'">
+<div class="post-meta">2026-01-15 &middot; 8 min read &middot; AI cognition</div>
+<div class="post-title">The Mathocalypse: What Happens When AI Solves the Unsolvable</div>
+<div class="post-excerpt">Three named breakthroughs in 2024-2025 &mdash; Erdős disproved, UGC Lean-verified, Unitary Synthesis refuted &mdash; mark the crossing-point where AI stopped being a mathematical assistant and became the most powerful theorem prover on Earth. Aaronson calls it the Mathocalypse. This post examines what that means for the practice of mathematics.</div>
+<div class="post-tags"><span class="post-tag">Erdős</span><span class="post-tag">UGC</span><span class="post-tag">Unitary Synthesis</span><span class="post-tag">Aaronson</span></div>
+<a class="post-link" href="sources.html">Read the expressions &rarr;</a>
+</div>
+
+<div class="post" onclick="window.location.href='sources.html'">
+<div class="post-meta">2026-01-20 &middot; 6 min read &middot; Quantum/cosmos</div>
+<div class="post-title">Erdős, Algebraic Number Theory, and the Power of Parallel Search</div>
+<div class="post-excerpt">How did AI disprove a 1946 conjecture that had stumped combinatorial geometers for 80 years? Not by being smarter than Erdős, but by being tireless &mdash; it tried thousands of obscure constructions from algebraic number theory without fatigue or discouragement. The mechanism is not intelligence; it is the absence of psychological cost.</div>
+<div class="post-tags"><span class="post-tag">Erdős</span><span class="post-tag">Kolmogorov</span><span class="post-tag">creativity</span></div>
+<a class="post-link" href="sources.html">Explore the counterexample &rarr;</a>
+</div>
+
+<div class="post" onclick="window.location.href='sources.html'">
+<div class="post-meta">2026-01-25 &middot; 10 min read &middot; Foundations</div>
+<div class="post-title">The Halting Problem at 90: Turing's Question Persists</div>
+<div class="post-excerpt">In 1936, Alan Turing asked whether machines can decide what humans cannot. In 2026, Scott Aaronson asks the same question &mdash; but the substrate has changed. AI theorem provers can now decide things Turing's machines couldn't, but the formal boundary (Gödel's incompleteness, Turing's undecidability) persists. The question outlives the technology.</div>
+<div class="post-tags"><span class="post-tag">Gödel</span><span class="post-tag">Turing</span><span class="post-tag">Löb</span><span class="post-tag">cross-era</span></div>
+<a class="post-link" href="sources.html">Explore the boundary &rarr;</a>
+</div>
+
+<div class="post" onclick="window.location.href='sources.html'">
+<div class="post-meta">2026-02-01 &middot; 7 min read &middot; AI cognition</div>
+<div class="post-title">Kolmogorov Complexity and the Structure of Mathematical Creativity</div>
+<div class="post-excerpt">When AI finds connections no specialist would have made, what exactly is it doing? The formal answer is: discovering low-Kolmogorov-complexity bridges between distant concepts. The Erdős disproof used algebraic number theory &mdash; a high-K domain for combinatorial geometers, but a low-K bridge for the AI once the search was parallelized.</div>
+<div class="post-tags"><span class="post-tag">Kolmogorov</span><span class="post-tag">attention</span><span class="post-tag">creativity</span></div>
+<a class="post-link" href="sources.html">Explore the complexity &rarr;</a>
+</div>
+
+<div class="post" onclick="window.location.href='sources.html'">
+<div class="post-meta">2026-02-08 &middot; 9 min read &middot; Quantum/cosmos</div>
+<div class="post-title">Why the Holographic Principle Matters for AI</div>
+<div class="post-excerpt">The Bekenstein-Hawking entropy formula S = kA/(4lP²) tells us that black hole information is proportional to surface area, not volume. The Unitary Synthesis Problem &mdash; refuted by AI &mdash; has direct implications for black hole complexity. When P=PSPACE, the computational complexity of quantum state formation at event horizons is bounded. The observatory connects these threads.</div>
+<div class="post-tags"><span class="post-tag">holographic</span><span class="post-tag">unitary</span><span class="post-tag">BQP</span></div>
+<a class="post-link" href="sources.html">Explore the connection &rarr;</a>
+</div>
+
+<div class="post" onclick="window.location.href='sources.html'">
+<div class="post-meta">2026-02-15 &middot; 11 min read &middot; Philosophy</div>
+<div class="post-title">Löb's Theorem: The Self-Trust Trap in AI Alignment</div>
+<div class="post-excerpt">If a formal system proves that its own proofs imply truth, then by Löb's theorem it proves everything. The consequence for AI alignment is startling: an AI that trusts its own proof checker will, by the same theorem, prove anything it can state. This is the formal version of the self-trust trap &mdash; and it's why Aaronson spent two years at OpenAI working on alignment.</div>
+<div class="post-tags"><span class="post-tag">Löb</span><span class="post-tag">Gödel</span><span class="post-tag">alignment</span><span class="post-tag">AIXI</span></div>
+<a class="post-link" href="sources.html">Explore the trap &rarr;</a>
+</div>
+
+</main>
+
+<footer><div class="footer-inner">
+<p>&copy; 2026 Mmnd Collective &middot; Apache-2.0</p>
+<p style="margin-top:.5rem"><a href="mailto:testdemoqwenai2025@gmail.com" style="color:var(--primary)">testdemoqwenai2025@gmail.com</a> &middot; GDPR-aligned</p>
+</div></footer>
+
+<script>
+function toggleTheme(){var d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+// Particle bg
+(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(40,Math.floor(cv.width*cv.height/30000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.2})}function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1}function lp(){dr();raf=requestAnimationFrame(lp)}addEventListener('resize',rs);rs();if(!red)raf=requestAnimationFrame(lp)})();
+</script>
+</body>
+</html>
