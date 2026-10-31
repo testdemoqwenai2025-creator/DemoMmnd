@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Post · Mmnd</title>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--fg);line-height:1.7}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem}
+.nav-links a{padding:.5rem 1rem;text-decoration:none;color:var(--muted);font-size:.875rem;font-weight:500}
+.nav-links a:hover{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{max-width:700px;margin:0 auto;padding:4rem 1.5rem}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2rem;font-weight:600;line-height:1.2;margin-bottom:1rem}
+@media(min-width:640px){h1{font-size:2.5rem}}
+.meta{color:var(--muted);font-size:.8125rem;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+p{margin-bottom:1.25rem}
+strong{color:var(--primary)}
+.back-link{display:inline-block;margin-bottom:2rem;color:var(--primary);text-decoration:none;font-size:.875rem}
+.cta{margin-top:2rem;padding:1.5rem;background:var(--secondary);border-radius:.75rem;border:1px solid var(--border)}
+.cta a{color:var(--primary);text-decoration:none;font-weight:600}
+footer{border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem;text-align:center}
+footer p{font-size:.75rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header><nav>
+<a href="../index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links"><a href="../index.html">Home</a><a href="../sources.html">Sources</a><a href="../blog.html">Blog</a><a href="../demos.html">Demos</a><a href="../about.html">About</a></div>
+<button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+</nav></header>
+<main>
+<a href="../blog.html" class="back-link">&larr; Back to blog</a>
+<p class="eyebrow">Full article</p>
+<h1>loeb-self-trust</h1>
+<p class="meta">This post's full content is being prepared. The excerpt and expression links are available on the <a href="../blog.html" style="color:var(--primary)">blog index</a>.</p>
+<p>Each blog post connects to specific mathematical expressions in the observatory. Use the links below to explore them directly.</p>
+<div class="cta"><p><a href="../sources.html">Explore all expressions &rarr;</a></p></div>
+</main>
+<footer><p>&copy; 2026 Mmnd Collective</p></footer>
+<script>
+function toggleTheme(){var d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+</script>
+</body>
+</html>
