@@ -1,0 +1,17 @@
+{
+"name": "Mmnd Observatory",
+"short_name": "Mmnd",
+"description": "Mathematical expressions rendered as living code — cross-era pairings of thought.",
+"start_url": "/DemoMmnd/",
+"display": "standalone",
+"background_color": "#faf7f2",
+"theme_color": "#c2410c",
+"icons": [
+{
+"src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Ccircle cx='96' cy='96' r='80' fill='%23faf7f2' stroke='%23c2410c' stroke-width='4'/%3E%3Ctext x='96' y='110' text-anchor='middle' font-size='80' fill='%23c2410c'%3E%E2%9A%9B%3C/text%3E%3C/svg%3E",
+"sizes": "192x192",
+"type": "image/svg+xml"
+}
+],
+"pages": ["index.html", "sources.html", "blog.html", "demos.html", "about.html"]
+}
