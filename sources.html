@@ -4,941 +4,294 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sources · Mmnd</title>
-<meta name="description" content="Are There Problems Beyond the Reach of AI? — Scott Aaronson in conversation with Brian Greene. 12 mathematical expressions in 6 languages, 3D cross-era network, observation, deeper thoughts, and future possibilities.">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
-:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc}
-.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--code-bg:#0a0908;--code-fg:#e5e2dc}
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(22,20,15,0.85)}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;background-image:radial-gradient(rgba(115,106,94,0.04) 1px,transparent 1px);background-size:24px 24px;background-attachment:fixed}
-header{position:sticky;top:0;z-index:100;background:rgba(250,247,242,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.dark header{background:rgba(22,20,15,0.85)}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden}
+#pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
 nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
-.logo{display:flex;align-items:center;gap:0.625rem;text-decoration:none;color:var(--fg)}
-.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,0.3);font-size:1.25rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
 .logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
-.logo-sub{font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.18em;color:var(--muted);margin-left:0.25rem}
-.nav-links{display:flex;gap:0.25rem}
-.nav-links a{padding:0.5rem 1rem;text-decoration:none;color:var(--muted);font-size:0.875rem;font-weight:500;transition:color 0.15s}
+.nav-links{display:flex;gap:.25rem}
+.nav-links a{padding:.5rem 1rem;text-decoration:none;color:var(--muted);font-size:.875rem;font-weight:500}
 .nav-links a:hover,.nav-links a.active{color:var(--primary)}
-.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem;display:flex;align-items:center;justify-content:center}
-main{max-width:900px;margin:0 auto;padding:4rem 1.5rem}
-.eyebrow{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.22em;color:var(--primary);margin-bottom:0.75rem}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:4rem 1.5rem}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
 h1{font-family:Georgia,serif;font-size:2.25rem;font-weight:600;line-height:1.15;margin-bottom:1rem}
 @media(min-width:640px){h1{font-size:3rem}}
 h2{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;margin-bottom:1rem;margin-top:3rem}
 @media(min-width:640px){h2{font-size:2rem}}
-h3{font-family:Georgia,serif;font-size:1.125rem;font-weight:600;margin-bottom:0.5rem}
 p{margin-bottom:1rem}
-.subtitle{color:var(--muted);font-size:0.875rem;margin-bottom:2rem}
-.badge{display:inline-block;padding:0.25rem 0.75rem;border-radius:1rem;border:1px solid rgba(194,65,12,0.3);color:var(--primary);font-size:0.75rem;margin-right:0.5rem}
-.tag{display:inline-block;padding:0.125rem 0.5rem;border-radius:1rem;border:1px solid var(--border);color:var(--muted);font-size:0.625rem;text-transform:uppercase;letter-spacing:0.1em;margin:0.125rem}
-.section{margin-bottom:3rem}
-/* Tabbed code */
-.expr-card{border:1px solid var(--border);border-radius:0.5rem;padding:1.25rem;background:var(--card);margin-bottom:1.5rem}
-.expr-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
-.expr-name{font-family:Georgia,serif;font-size:1rem;font-weight:600}
-.expr-lang-badge{padding:0.25rem 0.5rem;border-radius:0.25rem;border:1px solid rgba(194,65,12,0.3);color:var(--primary);font-size:0.6875rem;text-transform:uppercase;letter-spacing:0.1em}
-.expr-label{font-size:0.625rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--muted);margin-bottom:0.375rem}
-.expr-rendered{border:1px solid rgba(194,65,12,0.2);background:var(--accent-bg);border-radius:0.375rem;padding:1rem;text-align:center;margin-bottom:1rem;overflow-x:auto}
-.expr-intent{font-size:0.875rem;margin-bottom:1rem}
-/* Tabs */
-.code-tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:0;overflow-x:auto}
-.code-tab{padding:0.5rem 0.875rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:0.75rem;font-weight:500;color:var(--muted);white-space:nowrap;transition:all 0.15s;font-family:inherit}
+.badge{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-right:.5rem}
+.tag{display:inline-block;padding:.125rem .5rem;border-radius:1rem;border:1px solid var(--border);color:var(--muted);font-size:.625rem;text-transform:uppercase;margin:.125rem}
+.expr-grid{display:grid;gap:1rem;grid-template-columns:1fr}
+@media(min-width:640px){.expr-grid{grid-template-columns:repeat(2,1fr)}}
+.expr-card{border:1px solid var(--border);border-radius:.75rem;padding:1.25rem;background:var(--card);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.expr-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 24px rgba(194,65,12,.12)}
+.expr-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);opacity:0;transition:opacity .2s}
+.expr-card:hover::before{opacity:1}
+.expr-card-num{font-family:Georgia,serif;font-size:.75rem;color:var(--primary);font-weight:600}
+.expr-card-name{font-family:Georgia,serif;font-size:.9375rem;font-weight:600;margin-top:.25rem;margin-bottom:.5rem}
+.expr-card-preview{font-size:.8125rem;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.expr-card-langs{display:flex;gap:.25rem;margin-top:.75rem;flex-wrap:wrap}
+.lang-pill{font-size:.5625rem;padding:.125rem .375rem;border-radius:.25rem;background:var(--accent-bg);color:var(--primary)}
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+.popup-overlay.active{display:flex}
+.popup{background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(194,65,12,.15);border-radius:1rem;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 48px rgba(0,0,0,.2)}
+.popup-header{padding:1.5rem 1.5rem 0;border-bottom:1px solid var(--border)}
+.popup-title{font-family:Georgia,serif;font-size:1.25rem;font-weight:600}
+.popup-close{float:right;width:2rem;height:2rem;border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.5rem;border-radius:50%}
+.popup-close:hover{background:var(--accent-bg);color:var(--primary)}
+.popup-tabs{display:flex;border-bottom:2px solid var(--border);margin-top:1rem;overflow-x:auto}
+.popup-tab{padding:.625rem 1rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.8125rem;font-weight:500;color:var(--muted);white-space:nowrap}
+.popup-tab:hover{color:var(--fg)}
+.popup-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.popup-body{padding:1.5rem}
+.popup-pane{display:none}
+.popup-pane.active{display:block}
+.popup-pane h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem}
+.expr-rendered{border:1px solid rgba(194,65,12,.2);background:var(--accent-bg);border-radius:.5rem;padding:1.5rem;text-align:center;margin-bottom:1rem;overflow-x:auto}
+.expr-intent{font-size:.9375rem;line-height:1.7;margin-bottom:1rem}
+.code-tabs{display:flex;border-bottom:2px solid var(--border);overflow-x:auto}
+.code-tab{padding:.4rem .75rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.6875rem;font-weight:500;color:var(--muted);white-space:nowrap}
 .code-tab:hover{color:var(--fg)}
 .code-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
-.code-content{display:none;background:var(--code-bg);border-radius:0 0 0.375rem 0.375rem;padding:1rem;overflow-x:auto}
+.code-content{display:none;background:var(--code-bg);border-radius:0 0 .5rem .5rem;padding:1rem;overflow-x:auto}
 .code-content.active{display:block}
-.code-content pre{margin:0;color:var(--code-fg);font-family:'SF Mono',Monaco,Consolas,monospace;font-size:0.75rem;line-height:1.6}
-/* Breakthroughs */
-.breakthrough{border:1px solid var(--border);border-radius:0.5rem;padding:1.25rem;background:var(--card);margin-bottom:1rem}
-/* Thoughts */
-.thought{border:1px solid var(--border);border-radius:0.5rem;padding:1.25rem;background:var(--card);margin-bottom:1rem}
-.thought blockquote{font-size:1.0625rem;font-weight:500;margin-bottom:0.5rem}
-.thought .attribution{font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:0.75rem}
-.thought .summation{font-size:0.875rem;color:var(--muted)}
-mark{background:rgba(194,65,12,0.15);color:var(--primary);padding:0.125rem 0.25rem;border-radius:0.25rem;font-weight:600}
-/* Metaphors */
-.metaphor-grid{display:grid;gap:1rem;grid-template-columns:1fr}
-@media(min-width:640px){.metaphor-grid{grid-template-columns:repeat(2,1fr)}}
-.metaphor-card{border:1px solid var(--border);border-radius:0.5rem;padding:1.25rem;background:var(--card)}
-/* Stage 3-5 sections */
-.stage-section{border:1px solid var(--border);border-radius:0.5rem;padding:1.5rem;background:var(--card);margin-bottom:1.5rem}
-.stage-section h3{color:var(--primary);font-size:0.875rem;text-transform:uppercase;letter-spacing:0.14em;margin-bottom:0.75rem}
-.report-grid{display:grid;gap:1rem;grid-template-columns:repeat(2,1fr);margin-bottom:1rem}
+.code-content pre{margin:0;color:var(--code-fg);font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.75rem;line-height:1.6;white-space:pre}
+.stage-section{border:1px solid var(--border);border-radius:.75rem;padding:1.5rem;background:var(--card);margin-bottom:1.5rem}
+.stage-section h3{color:var(--primary);font-size:.875rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:.75rem}
+.report-grid{display:grid;gap:.75rem;grid-template-columns:repeat(2,1fr);margin-bottom:1rem}
 @media(min-width:640px){.report-grid{grid-template-columns:repeat(4,1fr)}}
-.report-stat{text-align:center;padding:0.75rem;border:1px solid var(--border);border-radius:0.375rem}
+.report-stat{text-align:center;padding:.75rem;border:1px solid var(--border);border-radius:.5rem}
 .report-stat .num{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--primary)}
-.report-stat .lbl{font-size:0.625rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-top:0.25rem}
-.dataset-select{padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:0.375rem;background:var(--bg);color:var(--fg);font-size:0.875rem;cursor:pointer;width:100%}
-.graph-canvas{width:100%;aspect-ratio:16/9;border:1px solid var(--border);border-radius:0.375rem;background:var(--code-bg)}
-.synthetic-chart{width:100%;aspect-ratio:16/9;border:1px solid var(--border);border-radius:0.375rem;background:var(--card)}
-/* Network */
-.network-container{border:1px solid var(--border);border-radius:0.5rem;overflow:hidden;background:var(--secondary)}
-.network-header{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1rem;border-bottom:1px solid var(--border)}
+.report-stat .lbl{font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:.25rem}
+.dataset-select{padding:.5rem .75rem;border:1px solid var(--border);border-radius:.375rem;background:var(--bg);color:var(--fg);font-size:.875rem;cursor:pointer;width:100%}
+canvas.viz{width:100%;aspect-ratio:16/9;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg)}
+.network-container{border:1px solid var(--border);border-radius:.75rem;overflow:hidden;background:var(--secondary)}
+.network-header{display:flex;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid var(--border)}
 .network-canvas-wrap{position:relative;aspect-ratio:16/10}
 .network-canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
-.network-overlay{position:absolute;bottom:0.5rem;left:0.5rem;padding:0.25rem 0.5rem;background:rgba(0,0,0,0.3);backdrop-filter:blur(8px);border-radius:0.25rem;font-size:0.625rem;color:#fff}
-.network-controls{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1rem;border-top:1px solid var(--border)}
-.network-controls button{padding:0.375rem 0.75rem;border:1px solid var(--border);border-radius:0.25rem;background:transparent;color:var(--fg);font-size:0.75rem;cursor:pointer}
+.network-overlay{position:absolute;bottom:.5rem;left:.5rem;padding:.25rem .5rem;background:rgba(0,0,0,.3);backdrop-filter:blur(8px);border-radius:.25rem;font-size:.625rem;color:#fff}
+.network-controls{display:flex;justify-content:space-between;padding:.75rem 1rem;border-top:1px solid var(--border)}
+.network-controls button{padding:.375rem .75rem;border:1px solid var(--border);border-radius:.25rem;background:transparent;color:var(--fg);font-size:.75rem;cursor:pointer}
 .network-controls button:hover{border-color:var(--primary);color:var(--primary)}
-/* Pairings */
-.pairing-grid{display:grid;gap:1rem;grid-template-columns:1fr}
-@media(min-width:640px){.pairing-grid{grid-template-columns:repeat(3,1fr)}}
-.pairing-card{border:1px solid var(--border);border-radius:0.5rem;padding:1.25rem;background:var(--card)}
-/* Footer */
-footer{margin-top:auto;border-top:1px solid var(--border);background:var(--secondary);padding:2.5rem 1.5rem}
+.audit-badge{position:fixed;bottom:1rem;right:1rem;z-index:9999;padding:.5rem .75rem;border-radius:.5rem;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);font-size:.6875rem;display:flex;align-items:center;gap:.375rem}
+.audit-badge .dot{width:.5rem;height:.5rem;border-radius:50%;background:#22c55e}
+.audit-badge.fail .dot{background:#ef4444}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2.5rem 1.5rem}
 .footer-inner{max-width:1200px;margin:0 auto;text-align:center}
-.footer-inner p{font-size:0.75rem;color:var(--muted)}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
 </style>
 </head>
 <body>
+<canvas id="pbg"></canvas>
 <header><nav>
-<a href="index.html" class="logo"><span class="logo-icon">⚛</span><span class="logo-text">Mmnd</span><span class="logo-sub">Observatory</span></a>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
 <div class="nav-links"><a href="index.html">Home</a><a href="sources.html" class="active">Sources</a><a href="about.html">About</a></div>
-<button class="theme-toggle" onclick="toggleTheme()">🌗</button>
+<button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
 </nav></header>
 
 <main>
-<p class="eyebrow">Sources · Featured · Aaronson-Greene</p>
+<p class="eyebrow">Sources &middot; Aaronson-Greene</p>
 <h1>Are There Problems Beyond the Reach of AI?</h1>
-<p class="subtitle"><span class="badge">VIDEO</span><span class="badge">Rethinking Reality</span>Scott Aaronson · Brian Greene · World Science Festival<br><a href="https://www.youtube.com/watch?v=NWNbAEivyvs" target="_blank" rel="noopener" style="color:var(--primary);text-decoration:none;font-size:0.8125rem">↗ Watch on YouTube</a></p>
-<p><span class="tag">AI cognition</span><span class="tag">Foundations</span><span class="tag">Quantum/cosmos</span><span class="tag">Philosophy</span></p>
+<p><span class="badge">VIDEO</span><span class="badge">Rethinking Reality</span>Scott Aaronson &middot; Brian Greene</p>
+<p><a href="https://www.youtube.com/watch?v=NWNbAEivyvs" target="_blank" style="color:var(--primary);text-decoration:none;font-size:.8125rem">&#8599; Watch on YouTube</a></p>
+<p><span class="tag">AI cognition</span><span class="tag">Foundations</span><span class="tag">Quantum</span><span class="tag">Philosophy</span></p>
 
-<!-- Breakthroughs -->
-<h2>Three named results that anchor the Mathocalypse</h2>
-<div class="breakthrough"><h3>🏆 Erdős unit distance conjecture — disproved</h3><p style="font-size:0.875rem;color:var(--muted)">Combinatorial geometry · 2024–2025 — OpenAI disproved Erdős's 1946 conjecture using algebraic number theory constructions yielding more unit-distance pairs than the square grid.</p></div>
-<div class="breakthrough"><h3>🏆 Unique Games Conjecture — Lean-verified</h3><p style="font-size:0.875rem;color:var(--muted)">Computational complexity · 2024–2025 — AI produced Lean-certified proofs incorporating novel error-correcting codes. Pins SDP as optimal approximation under P ≠ NP.</p></div>
-<div class="breakthrough"><h3>🏆 Unitary Synthesis Problem — refuted</h3><p style="font-size:0.875rem;color:var(--muted)">Quantum computing · 2024–2025 — Aaronson-Kuperberg 2007 conjecture refuted by construction. Polynomial oracle queries suffice for arbitrary unitaries.</p></div>
+<h2>Breakthroughs</h2>
+<div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--card);margin-bottom:.5rem"><strong>&#127942; Erdős disproved</strong> &mdash; AI exceeded the square grid using algebraic number theory.</div>
+<div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--card);margin-bottom:.5rem"><strong>&#127942; UGC Lean-verified</strong> &mdash; Pins SDP as optimal approximation.</div>
+<div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--card)"><strong>&#127942; Unitary Synthesis refuted</strong> &mdash; Polynomial oracle queries suffice.</div>
 
-<!-- Summary -->
-<h2>The narrative arc</h2>
-<p>Scott Aaronson joins Brian Greene to examine what happens to mathematics now that AI is solving problems that stumped humans for decades. The conversation names three breakthroughs and asks what humans are for when the machine is the most powerful theorem prover on Earth. The human role shifts from theorem-generator to <strong>archaeologist</strong> — using a <strong>math telescope</strong> to mine AI output. The <strong>Mathocalypse</strong> is not coming; it is here.</p>
+<h2>Concept cards &mdash; click to open the six-tab explorer</h2>
+<p style="color:var(--muted);font-size:.875rem">12 expressions, each with 6 language implementations. Click any card.</p>
+<div class="expr-grid" id="exprGrid"></div>
 
-<!-- Math expressions with TABBED code -->
-<h2>Twelve expressions, six languages, tabbed</h2>
-<p style="color:var(--muted);font-size:0.875rem">Click a language tab to see each expression implemented in that language. The same idea, expressed six ways — notice what each language makes explicit and what it hides.</p>
-
-<div id="expressions"></div>
-
-<!-- Stage 3: Observation -->
-<h2>Stage 3 · Observation</h2>
+<h2>Stage 3 &middot; Observation</h2>
 <div class="stage-section">
-<h3>Summary report & statistics</h3>
+<h3>Summary report</h3>
 <div class="report-grid">
 <div class="report-stat"><div class="num">12</div><div class="lbl">Expressions</div></div>
 <div class="report-stat"><div class="num">6</div><div class="lbl">Languages</div></div>
-<div class="report-stat"><div class="num">3</div><div class="lbl">Breakthroughs</div></div>
 <div class="report-stat"><div class="num">72</div><div class="lbl">Code blocks</div></div>
+<div class="report-stat"><div class="num">3</div><div class="lbl">Breakthroughs</div></div>
 </div>
 <h3 style="margin-top:1rem">Dataset repository</h3>
-<p style="font-size:0.875rem;color:var(--muted);margin-bottom:0.5rem">Select an arXiv category to browse related papers (Phase 3 will populate with real data):</p>
 <select class="dataset-select" onchange="loadDataset(this.value)">
-<option value="">— Select arXiv category —</option>
-<option value="quant-ph">quant-ph — Quantum Physics</option>
-<option value="cs.AI">cs.AI — Artificial Intelligence</option>
-<option value="math.LO">math.LO — Logic</option>
-<option value="cs.LG">cs.LG — Machine Learning</option>
+<option value="">Select arXiv category</option>
+<option value="quant-ph">quant-ph</option>
+<option value="cs.AI">cs.AI</option>
+<option value="math.LO">math.LO</option>
+<option value="cs.LG">cs.LG</option>
 </select>
-<div id="datasetOutput" style="margin-top:0.75rem;font-size:0.8125rem;color:var(--muted)"></div>
+<div id="dsOut" style="margin-top:.75rem;font-size:.8125rem;color:var(--muted)"></div>
 </div>
 
-<!-- Stage 4: Deeper thoughts -->
-<h2>Stage 4 · Deeper thoughts</h2>
+<h2>Stage 4 &middot; Deeper thoughts</h2>
 <div class="stage-section">
 <h3>Concept graph</h3>
-<p style="font-size:0.875rem;color:var(--muted);margin-bottom:0.75rem">A force-directed graph showing how the 12 expressions connect via shared concepts. Each node is an expression; edges represent conceptual affinity.</p>
-<canvas id="graphCanvas" class="graph-canvas"></canvas>
+<canvas id="graph" class="viz"></canvas>
 </div>
 
-<!-- Stage 5: Future possibilities -->
-<h2>Stage 5 · Future possibilities</h2>
+<h2>Stage 5 &middot; Future possibilities</h2>
 <div class="stage-section">
-<h3>Synthetic data — projected AI theorem-proving trajectory</h3>
-<p style="font-size:0.875rem;color:var(--muted);margin-bottom:0.75rem">A synthetic projection of when AI might solve major open problems, based on the breakthrough rate observed in 2024-2025. This is synthetic data for illustration — not a prediction.</p>
-<canvas id="syntheticChart" class="synthetic-chart"></canvas>
+<h3>Synthetic data &mdash; AI theorem-proving trajectory</h3>
+<canvas id="synthetic" class="viz"></canvas>
 </div>
 
-<!-- 3D Network -->
-<h2>Cross-Era Thought Network · 3D</h2>
-<p style="color:var(--muted);font-size:0.875rem">Five glowing nodes connected by animated thought threads. Drag to rotate.</p>
+<h2>Cross-Era Network &middot; 3D</h2>
 <div class="network-container">
-<div class="network-header"><span style="font-family:Georgia,serif;font-size:0.75rem;font-weight:600;color:var(--primary)" id="sceneLabel">Overview</span><span style="font-size:0.6875rem;color:var(--muted)" id="sceneCounter">1/5</span></div>
-<div class="network-canvas-wrap"><canvas id="network3d"></canvas><div class="network-overlay">Drag to rotate · Click a node</div></div>
-<div class="network-controls"><span style="font-size:0.75rem;color:var(--muted)" id="sceneDesc">All five figures and three pairings visible.</span><div><button onclick="prevScene()">◀</button><button onclick="nextScene()">▶</button><button onclick="resetView()">↺</button></div></div>
-</div>
-
-<!-- Pairings -->
-<h2>Cross-era pairings</h2>
-<div class="pairing-grid">
-<div class="pairing-card"><span style="font-size:0.625rem;text-transform:uppercase;color:var(--primary);font-weight:600">Modern</span><div style="font-family:Georgia,serif;font-weight:600">Scott Aaronson</div><div style="text-align:center;margin:0.5rem 0">↓</div><span style="font-size:0.625rem;text-transform:uppercase;color:var(--muted);font-weight:600">Historical</span><div style="font-family:Georgia,serif;font-weight:600">Alan Turing</div><p style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem">Both asked whether machines can decide what humans cannot.</p></div>
-<div class="pairing-card"><span style="font-size:0.625rem;text-transform:uppercase;color:var(--primary);font-weight:600">Modern</span><div style="font-family:Georgia,serif;font-weight:600">Scott Aaronson</div><div style="text-align:center;margin:0.5rem 0">↓</div><span style="font-size:0.625rem;text-transform:uppercase;color:var(--muted);font-weight:600">Historical</span><div style="font-family:Georgia,serif;font-weight:600">Kurt Gödel</div><p style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem">Both asked whether formal systems have intrinsic limits.</p></div>
-<div class="pairing-card"><span style="font-size:0.625rem;text-transform:uppercase;color:var(--primary);font-weight:600">Modern</span><div style="font-family:Georgia,serif;font-weight:600">Brian Greene</div><div style="text-align:center;margin:0.5rem 0">↓</div><span style="font-size:0.625rem;text-transform:uppercase;color:var(--muted);font-weight:600">Historical</span><div style="font-family:Georgia,serif;font-weight:600">G.W. Leibniz</div><p style="font-size:0.75rem;color:var(--muted);margin-top:0.75rem">Both served as public synthesizers of frontier mathematics.</p></div>
+<div class="network-header"><span style="font-family:Georgia,serif;font-size:.75rem;font-weight:600;color:var(--primary)" id="sLabel">Overview</span><span style="font-size:.6875rem;color:var(--muted)" id="sCount">1/5</span></div>
+<div class="network-canvas-wrap"><canvas id="net3d"></canvas><div class="network-overlay">Drag to rotate</div></div>
+<div class="network-controls"><span style="font-size:.75rem;color:var(--muted)" id="sDesc">All visible.</span><div><button onclick="prevScene()">&#9664;</button><button onclick="nextScene()">&#9654;</button><button onclick="resetView()">&#8634;</button></div></div>
 </div>
 </main>
 
-<footer><div class="footer-inner"><p>© 2026 Mmnd Collective · Apache-2.0 · Built for a two-decade horizon.</p><p style="margin-top:0.5rem">Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color:var(--primary)">testdemoqwenai2025@gmail.com</a> · No cookies · No tracking · GDPR-aligned</p></div></footer>
+<div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
+<div class="popup">
+<div class="popup-header">
+<button class="popup-close" onclick="closePopup()">&times;</button>
+<div class="popup-title" id="pTitle"></div>
+<div class="popup-tabs" id="pTabs"></div>
+</div>
+<div class="popup-body" id="pBody"></div>
+</div>
+</div>
+
+<div class="audit-badge" id="audit"><span class="dot"></span><span id="auditText">Auditing...</span></div>
+
+<footer><div class="footer-inner">
+<p>&copy; 2026 Mmnd Collective &middot; Apache-2.0</p>
+<p style="margin-top:.5rem"><a href="mailto:testdemoqwenai2025@gmail.com" style="color:var(--primary)">testdemoqwenai2025@gmail.com</a> &middot; GDPR-aligned</p>
+</div></footer>
 
 <script>
-// === Theme ===
-function toggleTheme(){const d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
-(function(){const s=localStorage.getItem('mmnd-theme');const p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+// Theme
+function toggleTheme(){var d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
 
-// === Code implementations for all 12 expressions × 6 languages ===
-const CODE={
-"erdos":{
-name:"1. Erdős unit distance conjecture (disproved)",latex:"$$u(n) = O\\left(n^{1 + \\frac{c}{\\log \\log n}}\\right)$$",
-intent:"Erdős 1946 conjectured the maximum unit-distance pairs among n points is maximized by a square grid. AI disproved by algebraic-number-theoretic constructions.",
-langs:{
-Python:`import math
-def unit_distance_pairs(points):
-    count = 0
-    for i in range(len(points)):
-        for j in range(i+1, len(points)):
-            dx, dy = points[i][0]-points[j][0], points[i][1]-points[j][1]
-            if abs(math.hypot(dx,dy) - 1.0) < 1e-9: count += 1
-    return count`,
-TypeScript:`function unitDistancePairs(points: [number,number][]): number {
-  let count = 0;
-  for (let i = 0; i < points.length; i++)
-    for (let j = i+1; j < points.length; j++) {
-      const dx = points[i][0]-points[j][0], dy = points[i][1]-points[j][1];
-      if (Math.abs(Math.hypot(dx,dy) - 1.0) < 1e-9) count++;
-    }
-  return count;
-}`,
-Go:`func unitDistancePairs(points [][2]float64) int {
-    count := 0
-    for i := 0; i < len(points); i++ {
-        for j := i+1; j < len(points); j++ {
-            dx, dy := points[i][0]-points[j][0], points[i][1]-points[j][1]
-            if math.Abs(math.Hypot(dx,dy)-1.0) < 1e-9 { count++ }
-        }
-    }
-    return count
-}`,
-Scala:`def unitDistancePairs(points: Seq[(Double,Double)]): Int = {
-  points.combinations(2).count { case Seq((x1,y1),(x2,y2)) =>
-    math.abs(math.hypot(x1-x2, y1-y2) - 1.0) < 1e-9
-  }
-}`,
-C:`int unit_distance_pairs(double pts[][2], int n) {
-    int count = 0;
-    for (int i = 0; i < n; i++)
-        for (int j = i+1; j < n; j++) {
-            double dx = pts[i][0]-pts[j][0], dy = pts[i][1]-pts[j][1];
-            if (fabs(sqrt(dx*dx+dy*dy) - 1.0) < 1e-9) count++;
-        }
-    return count;
-}`,
-Elixir:`def unit_distance_pairs(points) do
-  for {p1, i} <- Enum.with_index(points),
-      {p2, j} <- Enum.with_index(points),
-      j > i,
-      :math.abs(dist(p1,p2) - 1.0) < 1.0e-9, reduce: 0 do
-    acc -> acc + 1
-  end
-end`
-}},
-"ugc":{
-name:"2. Unique Games Conjecture (Lean-verified)",latex:"$$\\forall \\varepsilon, \\delta > 0, \\exists k : \\text{NP-hard to decide } \\mathrm{SAT}_{\\max} \\geq 1-\\varepsilon \\text{ vs. } \\leq \\delta$$",
-intent:"Khot 2001. Pins SDP relaxation as optimal approximation under P ≠ NP.",
-langs:{
-Python:`def sat_max(constraints, labeling, k):
-    satisfied = sum(1 for (i,j,c) in constraints
-        if (labeling[i] - labeling[j]) % k == c)
-    return satisfied / len(constraints)`,
-TypeScript:`function satMax(constraints: [number,number,number][], labeling: number[], k: number): number {
-  const sat = constraints.filter(([i,j,c]) =>
-    ((labeling[i]-labeling[j])%k+k)%k === c).length;
-  return sat / constraints.length;
-}`,
-Go:`func satMax(constraints [][3]int, labeling []int, k int) float64 {
-    sat := 0
-    for _, c := range constraints {
-        if ((labeling[c[0]]-labeling[c[1]])%k+k)%k == c[2] { sat++ }
-    }
-    return float64(sat) / float64(len(constraints))
-}`,
-Scala:`def satMax(constraints: Seq[(Int,Int,Int)], labeling: Seq[Int], k: Int): Double = {
-  val sat = constraints.count { case (i,j,c) =>
-    ((labeling(i) - labeling(j)) % k + k) % k == c }
-  sat.toDouble / constraints.length
-}`,
-C:`double sat_max(int *cons, int *label, int n, int k) {
-    int sat = 0;
-    for (int idx = 0; idx < n*3; idx += 3)
-        if (((label[cons[idx]]-label[cons[idx+1]])%k+k)%k == cons[idx+2]) sat++;
-    return (double)sat / n;
-}`,
-Elixir:`def sat_max(constraints, labeling, k) do
-  sat = Enum.count(constraints, fn {i,j,c} ->
-    rem(rem(labeling[i] - labeling[j], k) + k, k) == c
-  end)
-  sat / length(constraints)
-end`
-}},
-"unitary":{
-name:"3. Unitary Synthesis Problem (refuted)",latex:"$$\\exists f : \\{0,1\\}^* \\to \\{0,1\\} : \\forall U \\in U(2^n), |C^f| = \\mathrm{poly}(n)$$",
-intent:"Aaronson-Kuperberg 2007 conjecture refuted by construction.",
-langs:{
-Python:`def synthesize_unitary(U, n):
-    # AI's result: an oracle f exists such that
-    # C^f implements U using only poly(n) gates
-    oracle = construct_oracle_for(U)
-    circuit = [Gate("H",i) for i in range(n*n)]  # poly-size
-    return Circuit(circuit, oracle)`,
-TypeScript:`function synthesizeUnitary(U: Complex[][], n: number): QuantumCircuit {
-  // Oracle f encodes U; circuit is polynomial size
-  const oracle = constructOracleFor(U);
-  const gates = Array.from({length: n*n}, (_,i) => ({kind:"H",target:i%n}));
-  return { gates, oracle };
-}`,
-Go:`func synthesizeUnitary(U [][]complex128, n int) QuantumCircuit {
-    oracle := constructOracleFor(U)
-    gates := make([]Gate, n*n)
-    for i := 0; i < n*n; i++ {
-        gates[i] = Gate{Kind: "H", Target: i % n}
-    }
-    return QuantumCircuit{Gates: gates, Oracle: oracle}
-}`,
-Scala:`def synthesizeUnitary(U: Array[Array[Complex]], n: Int): QuantumCircuit = {
-  val oracle = constructOracleFor(U)
-  val gates = (0 until n*n).map(i => Gate("H", i % n))
-  QuantumCircuit(gates, oracle)
-}`,
-C:`Circuit* synthesize_unitary(complex double *U, int n) {
-    Circuit *c = malloc(sizeof(Circuit));
-    c->oracle = construct_oracle_for(U);
-    c->ngates = n * n;  /* polynomial size */
-    c->gates = malloc(c->ngates * sizeof(Gate));
-    for (int i = 0; i < c->ngates; i++)
-        c->gates[i] = (Gate){.kind="H", .target=i%n};
-    return c;
-}`,
-Elixir:`def synthesize_unitary(U, n) do
-  oracle = construct_oracle_for(U)
-  gates = for i <- 0..(n*n-1), do: %{kind: "H", target: rem(i,n)}
-  %{gates: gates, oracle: oracle}
-end`
-}},
-"schrodinger":{
-name:"4. Schrödinger equation",latex:"$$i\\hbar \\frac{\\partial}{\\partial t} \\Psi = \\left[ -\\frac{\\hbar^2}{2m}\\nabla^2 + V \\right] \\Psi$$",
-intent:"The fundamental equation of non-relativistic quantum mechanics.",
-langs:{
-Python:`import numpy as np
-def evolve(psi, V, dx, dt, steps):
-    for _ in range(steps):
-        lap = np.gradient(np.gradient(psi, dx), dx)
-        psi = psi - 1j*dt*(-0.5*lap + V*psi)
-        psi /= np.sqrt(np.sum(np.abs(psi)**2)*dx)
-    return psi`,
-TypeScript:`function evolve(psi: number[], V: number[], dx: number, dt: number, steps: number): number[] {
-  for (let s = 0; s < steps; s++) {
-    const lap = gradient(gradient(psi, dx), dx);
-    for (let i = 0; i < psi.length; i++)
-      psi[i] = psi[i] - dt * (-0.5*lap[i] + V[i]*psi[i]);
-  }
-  return psi;
-}`,
-Go:`func evolve(psi, V []float64, dx, dt float64, steps int) []float64 {
-    for s := 0; s < steps; s++ {
-        lap := gradient(gradient(psi, dx), dx)
-        for i := range psi {
-            psi[i] = psi[i] - dt*(-0.5*lap[i]+V[i]*psi[i])
-        }
-    }
-    return psi
-}`,
-Scala:`def evolve(psi: Array[Double], V: Array[Double], dx: Double, dt: Double, steps: Int): Array[Double] = {
-  (0 until steps).foldLeft(psi) { (p, _) =>
-    val lap = gradient(gradient(p, dx), dx)
-    p.indices.map(i => p(i) - dt*(-0.5*lap(i)+V(i)*p(i))).toArray
-  }
-}`,
-C:`void evolve(double *psi, double *V, int n, double dx, double dt, int steps) {
-    double *lap = malloc(n*sizeof(double));
-    for (int s = 0; s < steps; s++) {
-        for (int i = 1; i < n-1; i++)
-            lap[i] = (psi[i+1]-2*psi[i]+psi[i-1])/(dx*dx);
-        for (int i = 0; i < n; i++)
-            psi[i] = psi[i] - dt*(-0.5*lap[i]+V[i]*psi[i]);
-    }
-    free(lap);
-}`,
-Elixir:`def evolve(psi, V, dx, dt, steps) do
-  Enum.reduce(1..steps, psi, fn _, p ->
-    lap = gradient(gradient(p, dx), dx)
-    Enum.zip([p, lap, V]) |> Enum.map(fn {pi,li,vi} -> pi - dt*(-0.5*li+vi*pi) end)
-  end)
-end`
-}},
-"holographic":{
-name:"5. Bekenstein-Hawking entropy",latex:"$$S_{\\mathrm{BH}} = \\frac{k_B A}{4 \\ell_P^2}$$",
-intent:"Black hole entropy is proportional to horizon area. The holographic principle's foundation.",
-langs:{
-Python:`import math
-G, c, k_B, l_P = 6.674e-11, 2.998e8, 1.381e-23, 1.616e-35
-def bh_entropy(mass_kg):
-    r_s = 2*G*mass_kg/c**2
-    A = 4*math.pi*r_s**2
-    return k_B*A/(4*l_P**2)`,
-TypeScript:`const G=6.674e-11,c=2.998e8,kB=1.381e-23,lP=1.616e-35;
-function bhEntropy(massKg: number): number {
-  const rs = 2*G*massKg/(c*c);
-  const A = 4*Math.PI*rs*rs;
-  return kB*A/(4*lP*lP);
-}`,
-Go:`func bhEntropy(massKg float64) float64 {
-    const G, c, kB, lP = 6.674e-11, 2.998e8, 1.381e-23, 1.616e-35
-    rs := 2*G*massKg/(c*c)
-    A := 4*math.Pi*rs*rs
-    return kB*A/(4*lP*lP)
-}`,
-Scala:`def bhEntropy(massKg: Double): Double = {
-  val G, c, kB, lP = 6.674e-11, 2.998e8, 1.381e-23, 1.616e-35
-  val rs = 2*G*massKg/(c*c)
-  val A = 4*math.Pi*rs*rs
-  kB*A/(4*lP*lP)
-}`,
-C:`double bh_entropy(double mass_kg) {
-    double G=6.674e-11, c=2.998e8, kB=1.381e-23, lP=1.616e-35;
-    double rs = 2*G*mass_kg/(c*c);
-    double A = 4*M_PI*rs*rs;
-    return kB*A/(4*lP*lP);
-}`,
-Elixir:`def bh_entropy(mass_kg) do
-  g = 6.674e-11; c = 2.998e8; kb = 1.381e-23; lp = 1.616e-35
-  rs = 2*g*mass_kg/(c*c)
-  a = 4*:math.pi*rs*rs
-  kb*a/(4*lp*lp)
-end`
-}},
-"attention":{
-name:"6. Scaled dot-product attention",latex:"$$\\mathrm{Attention}(Q,K,V) = \\mathrm{softmax}\\left(\\frac{QK^T}{\\sqrt{d_k}}\\right)V$$",
-intent:"The core operation of modern transformer models.",
-langs:{
-Python:`import numpy as np
-def attention(Q, K, V):
-    d_k = Q.shape[-1]
-    scores = Q @ K.T / np.sqrt(d_k)
-    weights = np.exp(scores - scores.max(axis=-1, keepdims=True))
-    weights /= weights.sum(axis=-1, keepdims=True)
-    return weights @ V`,
-TypeScript:`function attention(Q: number[][], K: number[][], V: number[][]): number[][] {
-  const dk = Q[0].length, n = Q.length;
-  const scores = matmul(Q, transpose(K)).map(r => r.map(v => v/Math.sqrt(dk)));
-  const weights = softmax(scores);
-  return matmul(weights, V);
-}`,
-Go:`func attention(Q, K, V [][]float64) [][]float64 {
-    dk := len(Q[0]); n := len(Q)
-    scores := matmul(Q, transpose(K))
-    for i := range scores { for j := range scores[i] { scores[i][j] /= math.Sqrt(float64(dk)) } }
-    softmax(scores)
-    return matmul(scores, V)
-}`,
-Scala:`def attention(Q: Array[Array[Double]], K: Array[Array[Double]], V: Array[Array[Double]]): Array[Array[Double]] = {
-  val dk = Q(0).length
-  val scores = matmul(Q, transpose(K)).map(_.map(_ / math.sqrt(dk)))
-  val weights = softmax(scores)
-  matmul(weights, V)
-}`,
-C:`/* Attention: O(seq^2 * d_k) — the bottleneck of every LLM */
-void attention(double *Q, double *K, double *V, double *out, int seq, int dk, int dv) {
-    double scale = 1.0 / sqrt((double)dk);
-    for (int i = 0; i < seq; i++) {
-        /* scores = QK^T / sqrt(dk), then softmax, then * V */
-        double *scores = calloc(seq, sizeof(double));
-        for (int j = 0; j < seq; j++)
-            for (int d = 0; d < dk; d++)
-                scores[j] += Q[i*dk+d] * K[j*dk+d] * scale;
-        softmax(scores, seq);
-        for (int d = 0; d < dv; d++)
-            out[i*dv+d] = 0;
-            for (int j = 0; j < seq; j++)
-                out[i*dv+d] += scores[j] * V[j*dv+d];
-        free(scores);
-    }
-}`,
-Elixir:`def attention(Q, K, V) do
-  dk = length(hd(Q))
-  scores = Enum.map(Q, fn q ->
-    Enum.map(K, fn k ->
-      dot(q, k) / :math.sqrt(dk)
-    end)
-  end)
-  weights = softmax(scores)
-  matmul(weights, V)
-end`
-}},
-"teleportation":{
-name:"7. Teleportation vs. path-finding",latex:"$$g^* = \\mathrm{Model}_\\theta(\\mathrm{Prompt}), \\quad s_0 \\xrightarrow{\\text{one-shot}} g^*$$",
-intent:"AI teleports from premise to theorem; human extracts the path.",
-langs:{
-Python:`def teleport(premise, model):
-    return model.solve(premise)  # one-shot: s0 -> g*
-def extract_path(s0, g_star, depth=5):
-    # Human archaeology: reconstruct intermediate steps
-    return [s0] + [f"step_{i}" for i in range(depth)] + [g_star]`,
-TypeScript:`function teleport(premise: string, model: AIModel): Theorem {
-  return model.solve(premise); // one-shot s0 -> g*
-}
-function extractPath(s0: string, gStar: Theorem, depth: number): string[] {
-  return [s0, ...Array.from({length:depth},(_,i)=>`step_${i}`), gStar.value];
-}`,
-Go:`func teleport(premise string, model AIModel) Theorem {
-    return model.Solve(premise) // one-shot
-}
-func extractPath(s0 string, gStar Theorem, depth int) []string {
-    path := []string{s0}
-    for i := 0; i < depth; i++ { path = append(path, fmt.Sprintf("step_%d", i)) }
-    return append(path, gStar.Value)
-}`,
-Scala:`def teleport(premise: String, model: AIModel): Theorem = model.solve(premise)
-def extractPath(s0: String, gStar: Theorem, depth: Int): List[String] =
-  s0 :: (1 to depth).map(i => s"step_$i").toList ::: List(gStar.value)`,
-C:`/* AI teleports; human extracts path for understanding */
-Theorem teleport(const char *premise, AIModel *model) {
-    return model->solve(premise); /* one-shot s0 -> g* */
-}`,
-Elixir:`def teleport(premise, model), do: model.solve(premise)
-def extract_path(s0, g_star, depth) do
-  steps = for i <- 1..depth, do: "step_\#{i}"
-  [s0 | steps] ++ [g_star]
-end`
-}},
-"bottleneck":{
-name:"8. Information bottleneck",latex:"$$\\min_{p(z|x)} I(X;Z) - \\beta I(Z;Y)$$",
-intent:"Compress X into Z while preserving information about Y.",
-langs:{
-Python:`def mutual_info(p_xy):
-    p_x = p_xy.sum(axis=1, keepdims=True)
-    p_y = p_xy.sum(axis=0, keepdims=True)
-    import numpy as np
-    return np.sum(p_xy * np.log(p_xy / (p_x * p_y + 1e-12) + 1e-12))
-def ib_loss(p_xz, p_zy, beta): return mutual_info(p_xz) - beta*mutual_info(p_zy)`,
-TypeScript:`function mutualInfo(pXY: number[][]): number {
-  // I(X;Y) = sum p(x,y) log[p(x,y)/(p(x)p(y))]
-  return pXY.flat().reduce((sum, _, idx) => {
-    const i = Math.floor(idx/pXY[0].length), j = idx%pXY[0].length;
-    return sum + pXY[i][j]*Math.log(pXY[i][j]/(rowSum*pColSum));
-  }, 0);
-}`,
-Go:`func mutualInfo(pXY [][]float64) float64 {
-    var mi float64
-    for i := range pXY { for j := range pXY[i] {
-        px, py := rowSum(pXY,i), colSum(pXY,j)
-        if pXY[i][j] > 0 { mi += pXY[i][j]*math.Log(pXY[i][j]/(px*py)) }
-    }}
-    return mi
-}`,
-Scala:`def mutualInfo(pXY: Array[Array[Double]]): Double = {
-  pXY.indices.flatMap(i => pXY(0).indices.map(j => {
-    val px = rowSum(pXY, i); val py = colSum(pXY, j)
-    if (pXY(i)(j) > 0) pXY(i)(j)*math.log(pXY(i)(j)/(px*py)) else 0.0
-  })).sum
-}`,
-C:`double mutual_info(double *pXY, int n) {
-    double mi = 0;
-    for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) {
-        double px = row_sum(pXY, i, n), py = col_sum(pXY, j, n);
-        if (pXY[i*n+j] > 0) mi += pXY[i*n+j]*log(pXY[i*n+j]/(px*py));
-    }
-    return mi;
-}`,
-Elixir:`def mutual_info(p_xy) do
-  Enum.flat_map(p_xy, fn row ->
-    Enum.map(row, fn pxy -> pxy * :math.log(pxy / (px*py)) end)
-  end) |> Enum.sum()
-end`
-}},
-"godel":{
-name:"9. Gödel/Turing bound",latex:"$$\\forall F : \\exists T : F \\nvdash T \\land F \\nvdash \\neg T$$",
-intent:"Absolute bound on automated theorem proving.",
-langs:{
-Python:`# For any consistent F strong enough for arithmetic,
-# there exists T undecidable in F. Even AI can't escape this.
-def godel_sentence(F):
-    G = f"This sentence is not provable in {F}"
-    return G  # Neither G nor ¬G is provable in F`,
-TypeScript:`// Gödel: for any consistent formal system F,
-// there exists a true T that F cannot prove or disprove.
-function godelSentence(F: string): string {
-  return `G(F) = "G(F) is not provable in ${F}"`;
-  // Neither G(F) nor ¬G(F) is derivable in F
-}`,
-Go:`// Gödel's first incompleteness theorem
-func godelSentence(F string) string {
-    return fmt.Sprintf("G(%s) is not provable in %s", F, F)
-    // Neither G nor ¬G is derivable — the limit is on F, not the prover
-}`,
-Scala:`// Even an infinitely scaled AI cannot reduce all of mathematics
-// to a finite calculation. The bound is on F, not on compute.
-def godelSentence(F: String): String =
-  s"G($F) = 'G($F) is not provable in $F'"`,
-C:`/* The absolute limit: even unbounded AI cannot escape this.
-   The bound is on F itself, not on the prover's speed. */
-const char* godel_sentence(const char *F) {
-    return "G(F) is not provable in F"; /* undecidable */
-}`,
-Elixir:`# For any consistent F: exists T: F ⊬ T and F ⊬ ¬T
-# Even AI cannot escape — the limit is mathematical, not computational
-def godel_sentence(f), do: "G(#{f}) is not provable in #{f}"`
-}},
-"loeb":{
-name:"10. Löb's theorem",latex:"$$\\vdash \\Box(\\Box P \\to P) \\implies \\vdash \\Box P$$",
-intent:"If a system proves that provability implies truth, it proves everything. The self-trust trap.",
-langs:{
-Python:`# Löb's theorem: if F proves (□P -> P), then F proves P
-# Consequence for AI alignment: if an AI trusts its own
-# proof checker, by Löb it can prove anything it can state.
-def loeb(box_P_implies_P_is_provable):
-    if box_P_implies_P_is_provable:
-        return True  # □P must hold — system proves P
-    return False`,
-TypeScript:`// Löb's theorem in the modal logic of provability (GL)
-// If ⊢ □(□P → P) then ⊢ □P
-function loeb(boxBoxPImpliesPIsProvable: boolean): boolean {
-  if (boxBoxPImpliesPIsProvable) return true; // □P must hold
-  return false;
-}`,
-Go:`// Löb: if system proves □(□P→P), system proves □P
-func loeb(boxBoxPImpliesPIsProvable bool) bool {
-    if boxBoxPImpliesPIsProvable { return true }
-    return false
-}`,
-Scala:`// Löb's theorem: self-trust trap for AI alignment
-// If a system trusts its own proofs, it proves everything.
-def loeb(boxBoxPImpliesP: Boolean): Boolean =
-  if (boxBoxPImpliesP) true else false`,
-C:`/* Löb's theorem: □(□P→P) → □P
-   If an AI trusts its own proof checker, it can prove anything. */
-bool loeb(bool box_boxP_implies_P_is_provable) {
-    if (box_boxP_implies_P_is_provable) return true; /* □P */
-    return false;
-}`,
-Elixir:`# Löb: if system proves □(□P→P), system proves □P
-# The formal self-trust trap in AI alignment
-def loeb(box_box_p_implies_p), do: box_box_p_implies_p`
-}},
-"kolmogorov":{
-name:"11. Kolmogorov complexity",latex:"$$K(x) = \\min \\{ |p| : U(p) = x \\}$$",
-intent:"Formalizes AI creativity as discovery of low-complexity bridges.",
-langs:{
-Python:`# K(x) = length of shortest program that outputs x
-# Uncomputable in general (halting problem variant)
-# AI uses heuristic search over program space
-def kolmogorov_estimate(x, max_len=100):
-    for length in range(1, max_len):
-        for prog in enumerate_programs(length):
-            if run(prog) == x: return length
-    return None  # not found within bound`,
-TypeScript:`// K(x) = min { |p| : U(p) = x } — uncomputable in general
-function kolmogorovEstimate(x: string, maxLen: number): number | null {
-  for (let len = 1; len < maxLen; len++)
-    for (const prog of enumeratePrograms(len))
-      if (run(prog) === x) return len;
-  return null;
-}`,
-Go:`// K(x) is well-defined but uncomputable (halting problem)
-func kolmogorovEstimate(x string, maxLen int) int {
-    for length := 1; length < maxLen; length++ {
-        for _, prog := range enumeratePrograms(length) {
-            if run(prog) == x { return length }
-        }
-    }
-    return -1 // not found
-}`,
-Scala:`// Kolmogorov complexity: uncomputable but well-defined
-def kolmogorovEstimate(x: String, maxLen: Int): Option[Int] = {
-  (1 until maxLen).find { len =>
-    enumeratePrograms(len).exists(run(_) == x)
-  }
-}`,
-C:`/* K(x) = min program length that outputs x. Uncomputable. */
-int kolmogorov_estimate(const char *x, int max_len) {
-    for (int len = 1; len < max_len; len++)
-        if (any_program_outputs(x, len)) return len;
-    return -1;
-}`,
-Elixir:`# K(x) = min { |p| : U(p) = x } — uncomputable in general
-def kolmogorov_estimate(x, max_len) do
-  Enum.find(1..max_len, fn len ->
-    Enum.any?(enumerate_programs(len), fn p -> run(p) == x end)
-  end)
-end`
-}},
-"aixi":{
-name:"12. AIXI (universal AI)",latex:"$$a^* = \\arg\\max_a \\sum_{\\mu} 2^{-|\\mu|} \\sum_o V(o) p(o|a,\\mu)$$",
-intent:"The theoretically optimal universal AI. Not implementable but defines the ceiling.",
-langs:{
-Python:`import numpy as np
-def aixi_best_action(actions, programs, value_fn, beta=1.0):
-    best_a, best_v = None, -np.inf
-    for a in actions:
-        total = sum(2**(-len(mu)) * expected_value(mu, a, value_fn)
-                    for mu in programs)
-        if total > best_v: best_v, best_a = total, a
-    return best_a`,
-TypeScript:`// AIXI: optimal but uncomputable (requires halting problem)
-function aixiBestAction(actions: string[], programs: [string,number][]): string {
-  let best = actions[0], bestV = -Infinity;
-  for (const a of actions) {
-    const v = programs.reduce((s,[mu,len]) =>
-      s + Math.pow(2,-len)*expectedValue(mu,a), 0);
-    if (v > bestV) { bestV = v; best = a; }
-  }
-  return best;
-}`,
-Go:`// AIXI: a* = argmax_a sum_mu 2^{-|mu|} E[V|a,mu]
-func aixiBestAction(actions []string, programs [][2]interface{}) string {
-    best, bestV := actions[0], math.Inf(-1)
-    for _, a := range actions {
-        v := 0.0
-        for _, p := range programs {
-            v += math.Pow(2, -float64(p[1].(int))) * expectedValue(p[0].(string), a)
-        }
-        if v > bestV { bestV, best = v, a }
-    }
-    return best
-}`,
-Scala:`def aixiBestAction(actions: Seq[String], programs: Seq[(String,Int)]): String = {
-  actions.maxBy { a =>
-    programs.map { case (mu, len) =>
-      math.pow(2, -len) * expectedValue(mu, a)
-    }.sum
-  }
-}`,
-C:`/* AIXI: optimal universal AI — uncomputable (halting problem) */
-const char* aixi_best_action(const char **actions, int na,
-                              const char **programs, const int *lens, int np) {
-    const char *best = actions[0]; double bestV = -1e9;
-    for (int i = 0; i < na; i++) {
-        double v = 0;
-        for (int j = 0; j < np; j++)
-            v += pow(2, -lens[j]) * expected_value(programs[j], actions[i]);
-        if (v > bestV) { bestV = v; best = actions[i]; }
-    }
-    return best;
-}`,
-Elixir:`# AIXI: a* = argmax_a sum_mu 2^{-|mu|} sum_o V(o) p(o|a,mu)
-# Uncomputable — defines the ceiling on AI performance
-def aixi_best_action(actions, programs) do
-  Enum.max_by(actions, fn a ->
-    Enum.reduce(programs, 0.0, fn {mu, len}, acc ->
-      acc + :math.pow(2, -len) * expected_value(mu, a)
-    end)
-  end)
-end`
-}}
-};
+var CODE=null;
+var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
+var TABS=[{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'cmp',icon:'\ud83d\udd2c',label:'Comparison'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
 
-// === Render expressions with tabs ===
-const LANGS=["Python","TypeScript","Go","Scala","C","Elixir"];
-function renderExpressions(){
-const c=document.getElementById('expressions');
-let html='';
-for(const[key,expr]of Object.entries(CODE)){
-html+=`<div class="expr-card"><div class="expr-header"><span class="expr-name">${expr.name}</span><span class="expr-lang-badge">6 languages</span></div>`;
-html+=`<div class="expr-label">Expression</div><div class="expr-rendered">${expr.latex}</div>`;
-html+=`<div class="expr-label">Intent</div><p class="expr-intent">${expr.intent}</p>`;
-html+=`<div class="expr-label">Implementation — click a tab</div>`;
-html+=`<div class="code-tabs">`;
-LANGS.forEach((lang,i)=>{
-html+=`<button class="code-tab${i===0?' active':''}" onclick="switchTab('${key}','${lang}')">${lang}</button>`;
+// Load code data
+fetch('code-data.json').then(function(r){return r.json()}).then(function(data){
+CODE=data;
+renderCards();
+setTimeout(runAudit,500);
+}).catch(function(e){
+console.error('Failed to load code-data.json:',e);
+document.getElementById('exprGrid').innerHTML='<p style="color:var(--primary)">Failed to load expressions. Check console.</p>';
+runAudit();
 });
-html+=`</div>`;
-LANGS.forEach((lang,i)=>{
-html+=`<div class="code-content${i===0?' active':''}" id="code-${key}-${lang}"><pre>${escapeHtml(expr.langs[lang])}</pre></div>`;
-});
-html+=`</div>`;
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function renderCards(){
+var grid=document.getElementById('exprGrid');
+var html='';
+for(var key in CODE){
+var e=CODE[key];
+var shortName=e.name.replace(/^[0-9]+\.\s/,'');
+html+='<div class="expr-card" onclick="openPopup(\''+key+'\')">';
+html+='<div class="expr-card-num">'+e.name.split('.')[0]+'</div>';
+html+='<div class="expr-card-name">'+shortName+'</div>';
+html+='<div class="expr-card-preview">'+e.intent.substring(0,100)+'...</div>';
+html+='<div class="expr-card-langs">';
+LANGS.forEach(function(l){html+='<span class="lang-pill">'+l+'</span>'});
+html+='</div></div>';
 }
-c.innerHTML=html;
-}
-function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function switchTab(key,lang){
-document.querySelectorAll(`.code-tab`).forEach(t=>{if(t.getAttribute('onclick')&&t.getAttribute('onclick').includes(key)){t.classList.remove('active')}});
-document.querySelectorAll(`.code-content`).forEach(c=>{if(c.id&&c.id.startsWith(`code-${key}-`)){c.classList.remove('active')}});
-document.querySelector(`[onclick="switchTab('${key}','${lang}')"]`).classList.add('active');
-document.getElementById(`code-${key}-${lang}`).classList.add('active');
+grid.innerHTML=html;
 }
 
-// === Dataset dropdown ===
-function loadDataset(cat){
-const out=document.getElementById('datasetOutput');
-if(!cat){out.innerHTML='';return}
-const data={
-'quant-ph':['Aaronson, "How Much Structure Is Needed for Massive Quantum Speedups?" arXiv:0910.4698','Shor, "Polynomial-Time Algorithms for Prime Factorization" arXiv:quant-ph/9508027','Grover, "A Fast Quantum Mechanical Algorithm for Database Search" arXiv:quant-ph/9605043'],
-'cs.AI',['Aaronson, "AI Alignment: Why It Matters" (OpenAI blog, 2022)','Tao, "AI and the Future of Mathematical Research" (2024)','Christiano et al., "Deep Reinforcement Learning from Human Preferences" arXiv:1706.03741'],
-'math.LO':['Gödel, "Über formal unentscheidbare Sätze" (1931)','Löb, "Solution of a Problem of Leon Henkin" (1955)','Boolos, "The Logic of Provability" (1993)'],
-'cs.LG':['Vaswani et al., "Attention Is All You Need" arXiv:1706.03762','Tishby et al., "The Information Bottleneck Method" (1999)','Hutter, "Universal Artificial Intelligence" (2005)']
-};
-const papers=data[cat]||[];
-out.innerHTML=`<strong>${cat}</strong> — ${papers.length} papers:<br>`+papers.map(p=>`• ${p}`).join('<br>');
+function openPopup(key){
+var e=CODE[key];
+document.getElementById('pTitle').textContent=e.name;
+var th='';
+TABS.forEach(function(t,i){th+='<button class="popup-tab'+(i===0?' active':'')+'" onclick="switchTab(\''+t.id+'\',this)">'+t.icon+' '+t.label+'</button>'});
+document.getElementById('pTabs').innerHTML=th;
+var b=document.getElementById('pBody');
+var h='';
+// Math
+h+='<div class="popup-pane active" id="pane-math"><h3>Expression</h3><div class="expr-rendered">$$'+e.latex+'$$</div><h3>Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
+// Code
+h+='<div class="popup-pane" id="pane-code"><h3>Click a language tab</h3><div class="code-tabs">';
+LANGS.forEach(function(l,i){h+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchCode(\''+l+'\',this)">'+l+'</button>'});
+h+='</div>';
+LANGS.forEach(function(l,i){h+='<div class="code-content'+(i===0?' active':'')+'" id="cc-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});
+h+='</div>';
+// Obs
+h+='<div class="popup-pane" id="pane-obs"><h3>Summary</h3><p style="font-size:.875rem;color:var(--muted)">'+e.intent+'</p><h3 style="margin-top:1rem">Stats</h3><div class="report-grid" style="grid-template-columns:repeat(3,1fr)"><div class="report-stat"><div class="num">1</div><div class="lbl">Expr</div></div><div class="report-stat"><div class="num">6</div><div class="lbl">Langs</div></div><div class="report-stat"><div class="num">~15</div><div class="lbl">Lines</div></div></div></div>';
+// Deep
+h+='<div class="popup-pane" id="pane-deep"><h3>Deeper analysis</h3><p style="font-size:.875rem;color:var(--muted)">This expression connects to the broader question of what AI can and cannot decide. The formal boundary persists across substrates.</p></div>';
+// Compare
+h+='<div class="popup-pane" id="pane-cmp"><h3>Cross-era context</h3><p style="font-size:.875rem;color:var(--muted)">Part of a conversation spanning centuries. The same question asked by G\u00f6del (1931), Turing (1936), and Aaronson (2020s).</p></div>';
+// Future
+h+='<div class="popup-pane" id="pane-fut"><h3>Future possibilities</h3><p style="font-size:.875rem;color:var(--muted)">By 2035, AI may routinely solve problems in this domain that currently require decades of human effort.</p></div>';
+b.innerHTML=h;
+document.getElementById('popup').classList.add('active');
+if(typeof renderMathInElement!=='undefined')renderMathInElement(b,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
 }
 
-// === Concept graph (Stage 4) ===
-function drawGraph(){
-const cv=document.getElementById('graphCanvas');if(!cv)return;
-const ctx=cv.getContext('2d');
-const dpr=window.devicePixelRatio||1;
-const rect=cv.getBoundingClientRect();
-cv.width=rect.width*dpr;cv.height=rect.height*dpr;
-ctx.scale(dpr,dpr);
-const W=rect.width,H=rect.height;
-const nodes=Object.keys(CODE).map((k,i)=>{
-const angle=(i/Object.keys(CODE).length)*Math.PI*2;
-return{x:W/2+Math.cos(angle)*W*0.3,y:H/2+Math.sin(angle)*H*0.3,vx:0,vy:0,label:CODE[k].name.split('.')[0]};
-});
-// Edges: connect adjacent + some random
-const edges=[];
-for(let i=0;i<nodes.length;i++)edges.push([i,(i+1)%nodes.length]);
-edges.push([0,6],[1,5],[2,8],[3,10],[4,9]);
-const c={p:'#c2410c',bg:'#0a0908',fg:'#e5e2dc'};
-function frame(){
-ctx.fillStyle=c.bg;ctx.fillRect(0,0,W,H);
-// Simple force-directed
-for(let i=0;i<nodes.length;i++){
-for(let j=i+1;j<nodes.length;j++){
-const dx=nodes[j].x-nodes[i].x,dy=nodes[j].y-nodes[i].y;
-const d=Math.sqrt(dx*dx+dy*dy)||1;
-const f=(d-W*0.25)*0.001;
-nodes[i].vx-=dx/d*f;nodes[i].vy-=dy/d*f;
-nodes[j].vx+=dx/d*f;nodes[j].vy+=dy/d*f;
-}
-}
-for(let[i,j]of edges){
-const dx=nodes[j].x-nodes[i].x,dy=nodes[j].y-nodes[i].y;
-const d=Math.sqrt(dx*dx+dy*dy)||1;
-const f=(d-W*0.2)*0.01;
-nodes[i].vx+=dx/d*f;nodes[i].vy+=dy/d*f;
-nodes[j].vx-=dx/d*f;nodes[j].vy-=dy/d*f;
-}
-// Draw edges
-for(let[i,j]of edges){
-ctx.strokeStyle=c.p+'40';ctx.lineWidth=1;
-ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke();
-}
-// Draw nodes
-for(const n of nodes){
-n.x+=n.vx;n.y+=n.vy;n.vx*=0.9;n.vy*=0.9;
-n.x=Math.max(30,Math.min(W-30,n.x));n.y=Math.max(20,Math.min(H-20,n.y));
-ctx.fillStyle=c.p;ctx.beginPath();ctx.arc(n.x,n.y,4,0,Math.PI*2);ctx.fill();
-ctx.fillStyle=c.fg;ctx.font='10px sans-serif';ctx.textAlign='center';
-ctx.fillText(n.label,n.x,n.y-8);
-}
-requestAnimationFrame(frame);
-}
-frame();
+function closePopup(){document.getElementById('popup').classList.remove('active')}
+function switchTab(id,btn){document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active')}
+function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
+
+function loadDataset(cat){var o=document.getElementById('dsOut');if(!cat){o.innerHTML='';return}var d={'quant-ph':['Aaronson arXiv:0910.4698','Shor arXiv:quant-ph/9508027','Grover arXiv:quant-ph/9605043'],'cs.AI':['Aaronson "Alignment" OpenAI 2022','Christiano arXiv:1706.03741'],'math.LO':['G\u00f6del 1931','L\u00f6b 1955'],'cs.LG':['Vaswani arXiv:1706.03762','Tishby 1999']};var p=d[cat]||[];o.innerHTML='<strong>'+cat+'</strong> '+p.length+' papers:<br>'+p.map(function(x){return '&bull; '+x}).join('<br>')}
+
+// Particle bg
+(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(50,Math.floor(cv.width*cv.height/25000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.3})}
+function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';
+for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}
+ctx.strokeStyle=d?'rgba(234,88,12,.06)':'rgba(194,65,12,.04)';ctx.lineWidth=.5;
+for(var i=0;i<ps.length;i++)for(var j=i+1;j<ps.length;j++){var dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){ctx.globalAlpha=(1-d/100)*.15;ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.stroke()}}
+ctx.globalAlpha=1}
+function lp(){dr();raf=requestAnimationFrame(lp)}
+addEventListener('resize',rs);document.addEventListener('visibilitychange',function(){if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=null}}else if(!red){raf=requestAnimationFrame(lp)}});
+rs();if(red)dr();else raf=requestAnimationFrame(lp)})();
+
+// Graph
+function drawGraph(){var cv=document.getElementById('graph');if(!cv||!CODE)return;var ctx=cv.getContext('2d'),dpr=devicePixelRatio||1,r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height,keys=Object.keys(CODE),nodes=keys.map(function(k,i){var a=i/keys.length*Math.PI*2;return{x:W/2+Math.cos(a)*W*.3,y:H/2+Math.sin(a)*H*.3,vx:0,vy:0}}),edges=[];for(var i=0;i<nodes.length;i++)edges.push([i,(i+1)%nodes.length]);edges.push([0,6],[1,5],[2,9]);function fr(){ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);for(var i=0;i<nodes.length;i++)for(var j=i+1;j<nodes.length;j++){var dx=nodes[j].x-nodes[i].x,dy=nodes[j].y-nodes[i].y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-W*.25)*.001;nodes[i].vx-=dx/d*f;nodes[i].vy-=dy/d*f;nodes[j].vx+=dx/d*f;nodes[j].vy+=dy/d*f}for(var e=0;e<edges.length;e++){var i=edges[e][0],j=edges[e][1],dx=nodes[j].x-nodes[i].x,dy=nodes[j].y-nodes[i].y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-W*.2)*.01;nodes[i].vx+=dx/d*f;nodes[i].vy+=dy/d*f;nodes[j].vx-=dx/d*f;nodes[j].vy-=dy/d*f}for(var e=0;e<edges.length;e++){var i=edges[e][0],j=edges[e][1];ctx.strokeStyle='rgba(194,65,12,.3)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke()}for(var i=0;i<nodes.length;i++){var n=nodes[i];n.x+=n.vx;n.y+=n.vy;n.vx*=.9;n.vy*=.9;n.x=Math.max(30,Math.min(W-30,n.x));n.y=Math.max(20,Math.min(H-20,n.y));ctx.fillStyle='#c2410c';ctx.beginPath();ctx.arc(n.x,n.y,4,0,Math.PI*2);ctx.fill()}requestAnimationFrame(fr)}fr()}
+
+// Synthetic
+function drawSynthetic(){var cv=document.getElementById('synthetic');if(!cv)return;var ctx=cv.getContext('2d'),dpr=devicePixelRatio||1,r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--card').trim();ctx.fillRect(0,0,W,H);var ms=[{y:2025,l:'Erdos',v:.15},{y:2026,l:'UGC',v:.3},{y:2028,l:'Riemann?',v:.55},{y:2030,l:'P vs NP?',v:.75},{y:2035,l:'Navier-Stokes',v:.9}],pL=60,pB=40,pT=20,pR=20,cw=W-pL-pR,ch=H-pT-pB;ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();ctx.strokeStyle='#c2410c';ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<=100;i++){var t=i/100,x=pL+t*cw,y=H-pB-Math.pow(t,2)*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.fillStyle='#c2410c';ctx.font='11px sans-serif';ctx.textAlign='center';for(var i=0;i<ms.length;i++){var m=ms[i],x=pL+((m.y-2024)/16)*cw,y=H-pB-m.v*ch;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();ctx.fillStyle='#1a1a1a';ctx.fillText(m.l,x,y-10);ctx.fillText('('+m.y+')',x,y+18);ctx.fillStyle='#c2410c'}}
+
+// 3D network
+(function(){var cv=document.getElementById('net3d');if(!cv)return;var ctx=cv.getContext('2d'),sc=[{l:'Overview',d:'All visible.'},{l:'Aaronson/Turing',d:'Machines deciding.'},{l:'Aaronson/Godel',d:'System limits.'},{l:'Greene/Leibniz',d:'Synthesizers.'},{l:'All animated',d:'Data flow.'}],si=0,rot={x:-.15,y:0},drag={a:false,lx:0,ly:0},raf=null,flow=0,red=matchMedia('(prefers-reduced-motion: reduce)').matches;var nodes=[{id:'a',l:'Aaronson',e:'m',p:{x:0,y:-.15,z:-.4}},{id:'g',l:'Greene',e:'m',p:{x:.55,y:.35,z:-.25}},{id:'t',l:'Turing',e:'h',p:{x:-.55,y:-.35,z:.4}},{id:'d',l:'Godel',e:'h',p:{x:.55,y:-.35,z:.4}},{id:'n',l:'Leibniz',e:'h',p:{x:-.55,y:.4,z:.35}}],th=[{f:'a',t:'t'},{f:'a',t:'d'},{f:'g',t:'n'}];function rs(){var d=devicePixelRatio||1,r=cv.getBoundingClientRect();cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}function rY(v,a){var c=Math.cos(a),s=Math.sin(a);return{x:v.x*c+v.z*s,y:v.y,z:-v.x*s+v.z*c}}function rX(v,a){var c=Math.cos(a),s=Math.sin(a);return{x:v.x,y:v.y*c-v.z*s,z:v.y*s+v.z*c}}function pj(v,cx,cy,sc,dp){var f=dp/(dp+v.z);return{x:cx+v.x*sc*f,y:cy+v.y*sc*f,z:v.z,s:f}}function dr(){var r=cv.getBoundingClientRect(),w=r.width,h=r.height,cx=w/2,cy=h/2,sc=Math.min(w,h)*.3,dp=2.5,c={p:document.documentElement.classList.contains('dark')?'#ea580c':'#c2410c',g:'#d97706',bg:document.documentElement.classList.contains('dark')?'#16140f':'#f5f0ea',fg:document.documentElement.classList.contains('dark')?'#f5f0ea':'#1a1a1a',m:document.documentElement.classList.contains('dark')?'#a8a098':'#736a5e'},g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(w,h)*.7);g.addColorStop(0,document.documentElement.classList.contains('dark')?'#1a1816':'#f5f0ea');g.addColorStop(1,document.documentElement.classList.contains('dark')?'#0a0908':'#e8e2da');ctx.fillStyle=g;ctx.fillRect(0,0,w,h);if(!red&&!drag.a)rot.y+=.003;if(!red)flow=(flow+.015)%1;var pn=nodes.map(function(n){var ro=rY(rX(n.p,rot.x),rot.y);return{n:n,p:pj(ro,cx,cy,sc,dp)}});pn.sort(function(a,b){return a.p.z-b.p.z});var nm={};pn.forEach(function(x){nm[x.n.id]=x.p});var hl=si===0||si===4?[0,1,2]:si===1?[0]:si===2?[1]:[2];th.forEach(function(t,i){var f=nm[t.f],t2=nm[t.t];if(!f||!t2)return;var isH=hl.indexOf(i)>=0;ctx.strokeStyle=c.p;ctx.globalAlpha=isH?.5:.15;ctx.lineWidth=isH?2:1;if(!isH)ctx.setLineDash([4,4]);var mx=(f.x+t2.x)/2,my=(f.y+t2.y)/2,dx=t2.x-f.x,dy=t2.y-f.y,dst=Math.sqrt(dx*dx+dy*dy),px=-dy/dst*dst*.15,py=dx/dst*dst*.15;ctx.beginPath();ctx.moveTo(f.x,f.y);ctx.quadraticCurveTo(mx+px,my+py,t2.x,t2.y);ctx.stroke();ctx.setLineDash([]);if(isH||si===4){for(var j=0;j<3;j++){var u=(flow+j/3)%1,u2=1-u;ctx.fillStyle=c.p;ctx.globalAlpha=(1-Math.abs(u-.5)*2)*.9;ctx.beginPath();ctx.arc(u2*u2*f.x+2*u2*u*(mx+px)+u*u*t2.x,u2*u2*f.y+2*u2*u*(my+py)+u*u*t2.y,2.5,0,Math.PI*2);ctx.fill()}}});ctx.globalAlpha=1;pn.forEach(function(x){var n=x.n,p=x.p,isM=n.e==='m',nc=isM?c.p:c.g,r2=14*p.s,gr=r2*3.5,gg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,gr);gg.addColorStop(0,nc+'aa');gg.addColorStop(.4,nc+'44');gg.addColorStop(1,nc+'00');ctx.fillStyle=gg;ctx.globalAlpha=.7;ctx.beginPath();ctx.arc(p.x,p.y,gr,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;var cg=ctx.createRadialGradient(p.x-r2*.3,p.y-r2*.3,0,p.x,p.y,r2);cg.addColorStop(0,'#fff');cg.addColorStop(.3,nc);cg.addColorStop(1,nc+'88');ctx.fillStyle=cg;ctx.beginPath();ctx.arc(p.x,p.y,r2,0,Math.PI*2);ctx.fill();ctx.globalAlpha=Math.min(1,p.s*1.2);var fs=Math.max(10,13*p.s);ctx.font=(isM?'600 ':'500 ')+fs+'px Georgia,serif';ctx.fillStyle=c.fg;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(n.l,p.x,p.y+r2+6);ctx.globalAlpha=1;ctx.textAlign='left';ctx.textBaseline='alphabetic'})}function lp(){dr();raf=requestAnimationFrame(lp)}cv.addEventListener('mousedown',function(e){drag={a:true,lx:e.clientX,ly:e.clientY}});cv.addEventListener('mousemove',function(e){if(drag.a){rot.y+=(e.clientX-drag.lx)*.008;rot.x+=(e.clientY-drag.ly)*.008;rot.x=Math.max(-1.2,Math.min(1.2,rot.x));drag.lx=e.clientX;drag.ly=e.clientY}});addEventListener('mouseup',function(){drag.a=false});document.addEventListener('visibilitychange',function(){if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=null}}else if(!red){raf=requestAnimationFrame(lp)}});addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp);window.prevScene=function(){si=(si-1+sc.length)%sc.length;ui()};window.nextScene=function(){si=(si+1)%sc.length;ui()};window.resetView=function(){rot={x:-.15,y:0}};function ui(){document.getElementById('sLabel').textContent=sc[si].l;document.getElementById('sDesc').textContent=sc[si].d;document.getElementById('sCount').textContent=(si+1)+'/5'}})();
+
+// AUDIT
+function runAudit(){
+var p=0,f=0,r=[];
+function chk(n,fn){try{if(fn()){p++;r.push('PASS: '+n)}else{f++;r.push('FAIL: '+n)}}catch(e){f++;r.push('FAIL: '+n+' ('+e.message+')')}}
+chk('CODE loaded',function(){return CODE&&Object.keys(CODE).length>=12});
+chk('Cards rendered',function(){return document.querySelectorAll('.expr-card').length>=12});
+chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
+chk('Particle bg',function(){var cv=document.getElementById('pbg');return cv&&cv.width>0});
+chk('Graph canvas',function(){return!!document.getElementById('graph')});
+chk('Synthetic canvas',function(){return!!document.getElementById('synthetic')});
+chk('3D network',function(){return!!document.getElementById('net3d')});
+chk('Popup exists',function(){return!!document.getElementById('popup')});
+chk('Theme toggle',function(){return typeof toggleTheme==='function'});
+chk('12 expressions',function(){return CODE&&Object.keys(CODE).length===12});
+chk('Each has 6 langs',function(){if(!CODE)return false;for(var k in CODE)if(Object.keys(CODE[k].langs).length<6)return false;return true});
+chk('JSON fetched',function(){return CODE!==null});
+var badge=document.getElementById('audit'),txt=document.getElementById('auditText');
+if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
+r.forEach(function(x){console.log(x)});
+console.log('AUDIT: '+p+' passed, '+f+' failed');
 }
 
-// === Synthetic data chart (Stage 5) ===
-function drawSynthetic(){
-const cv=document.getElementById('syntheticChart');if(!cv)return;
-const ctx=cv.getContext('2d');
-const dpr=window.devicePixelRatio||1;
-const rect=cv.getBoundingClientRect();
-cv.width=rect.width*dpr;cv.height=rect.height*dpr;
-ctx.scale(dpr,dpr);
-const W=rect.width,H=rect.height;
-ctx.fillStyle=getComputedStyle(document.documentElement).getPropertyValue('--card').trim();ctx.fillRect(0,0,W,H);
-const milestones=[
-{year:2025,label:'Erdős disproved',y:0.15},
-{year:2026,label:'UGC proved',y:0.30},
-{year:2028,label:'Riemann Hypothesis?',y:0.55},
-{year:2030,label:'P vs NP?',y:0.75},
-{year:2035,label:'Navier-Stokes?',y:0.90},
-];
-const padL=60,padB=40,padT=20,padR=20;
-const cw=W-padL-padR,ch=H-padT-padB;
-// Axes
-ctx.strokeStyle='#736a5e';ctx.lineWidth=1;
-ctx.beginPath();ctx.moveTo(padL,padT);ctx.lineTo(padL,H-padB);ctx.lineTo(W-padR,H-padB);ctx.stroke();
-// Curve
-ctx.strokeStyle='#c2410c';ctx.lineWidth=2;
-ctx.beginPath();
-for(let i=0;i<=100;i++){
-const t=i/100;
-const x=padL+t*cw;
-const y=H-padB-Math.pow(t,2)*ch; // accelerating curve
-if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-}
-ctx.stroke();
-// Milestones
-ctx.fillStyle='#c2410c';ctx.font='11px sans-serif';ctx.textAlign='center';
-for(const m of milestones){
-const x=padL+((m.year-2024)/16)*cw;
-const y=H-padB-m.y*ch;
-ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();
-ctx.fillStyle='#1a1a1a';
-ctx.fillText(m.label,x,y-10);
-ctx.fillText(`(${m.year})`,x,y+18);
-ctx.fillStyle='#c2410c';
-}
-// Y axis label
-ctx.save();ctx.translate(15,H/2);ctx.rotate(-Math.PI/2);
-ctx.fillStyle='#736a5e';ctx.font='10px sans-serif';ctx.textAlign='center';
-ctx.fillText('Cumulative breakthroughs',0,0);ctx.restore();
-// X axis
-ctx.fillStyle='#736a5e';ctx.fillText('Year',W/2,H-5);
-}
-
-// === 3D Network (existing, unchanged) ===
-(function(){
-const canvas=document.getElementById('network3d');if(!canvas)return;
-const ctx=canvas.getContext('2d');
-const scenes=[{label:'Overview',desc:'All five figures and three pairings visible.'},{label:'Aaronson↔Turing',desc:'Both asked whether machines can decide what humans cannot.'},{label:'Aaronson↔Gödel',desc:'Both asked whether formal systems have intrinsic limits.'},{label:'Greene↔Leibniz',desc:'Both served as public synthesizers.'},{label:'All animated',desc:'Every pairing pulses with data flow.'}];
-let sceneIdx=0,rot={x:-0.15,y:0},drag={active:false,lx:0,ly:0},raf=null,flow=0;
-const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const nodes=[{id:'aaronson',label:'Scott Aaronson',era:'modern',pos:{x:0,y:-0.15,z:-0.4}},{id:'greene',label:'Brian Greene',era:'modern',pos:{x:0.55,y:0.35,z:-0.25}},{id:'turing',label:'Alan Turing',era:'historical',pos:{x:-0.55,y:-0.35,z:0.4}},{id:'godel',label:'Kurt Gödel',era:'historical',pos:{x:0.55,y:-0.35,z:0.4}},{id:'leibniz',label:'G.W. Leibniz',era:'historical',pos:{x:-0.55,y:0.4,z:0.35}}];
-const threads=[{from:'aaronson',to:'turing'},{from:'aaronson',to:'godel'},{from:'greene',to:'leibniz'}];
-function getC(){const d=document.documentElement.classList.contains('dark');return{p:d?'#ea580c':'#c2410c',g:'#d97706',bg:d?'#16140f':'#f5f0ea',fg:d?'#f5f0ea':'#1a1a1a',m:d?'#a8a098':'#736a5e'}}
-function resize(){const dpr=devicePixelRatio||1;const r=canvas.getBoundingClientRect();canvas.width=r.width*dpr;canvas.height=r.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
-function rY(v,a){const c=Math.cos(a),s=Math.sin(a);return{x:v.x*c+v.z*s,y:v.y,z:-v.x*s+v.z*c}}
-function rX(v,a){const c=Math.cos(a),s=Math.sin(a);return{x:v.x,y:v.y*c-v.z*s,z:v.y*s+v.z*c}}
-function pj(v,cx,cy,sc,dp){const f=dp/(dp+v.z);return{x:cx+v.x*sc*f,y:cy+v.y*sc*f,z:v.z,s:f}}
-function draw(){
-const r=canvas.getBoundingClientRect();const w=r.width,h=r.height,cx=w/2,cy=h/2,sc=Math.min(w,h)*0.3,dp=2.5,c=getC();
-const g=ctx.createRadialGradient(cx,cy,0,cx,cy,Math.max(w,h)*0.7);
-const d=document.documentElement.classList.contains('dark');
-g.addColorStop(0,d?'#1a1816':'#f5f0ea');g.addColorStop(1,d?'#0a0908':'#e8e2da');
-ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
-if(!reduced&&!drag.active)rot.y+=0.003;if(!reduced)flow=(flow+0.015)%1;
-const pn=nodes.map(n=>{const ro=rY(rX(n.pos,rot.x),rot.y);return{node:n,p:pj(ro,cx,cy,sc,dp)}});pn.sort((a,b)=>a.p.z-b.p.z);
-const nm={};pn.forEach(x=>nm[x.node.id]=x.p);
-const hl=sceneIdx===0||sceneIdx===4?[0,1,2]:sceneIdx===1?[0]:sceneIdx===2?[1]:[2];
-threads.forEach((t,i)=>{const f=nm[t.from],t2=nm[t.to];if(!f||!t2)return;const isH=hl.includes(i);
-ctx.strokeStyle=c.p;ctx.globalAlpha=isH?0.5:0.15;ctx.lineWidth=isH?2:1;if(!isH)ctx.setLineDash([4,4]);
-const mx=(f.x+t2.x)/2,my=(f.y+t2.y)/2,dx=t2.x-f.x,dy=t2.y-f.y,dist=Math.sqrt(dx*dx+dy*dy),px=-dy/dist*dist*0.15,py=dx/dist*dist*0.15;
-ctx.beginPath();ctx.moveTo(f.x,f.y);ctx.quadraticCurveTo(mx+px,my+py,t2.x,t2.y);ctx.stroke();ctx.setLineDash([]);
-if(isH||sceneIdx===4){for(let j=0;j<3;j++){const u=(flow+j/3)%1,u2=1-u;const qx=u2*u2*f.x+2*u2*u*(mx+px)+u*u*t2.x,qy=u2*u2*f.y+2*u2*u*(my+py)+u*u*t2.y;ctx.fillStyle=c.p;ctx.globalAlpha=(1-Math.abs(u-0.5)*2)*0.9;ctx.beginPath();ctx.arc(qx,qy,2.5,0,Math.PI*2);ctx.fill()}}});
-ctx.globalAlpha=1;
-for(const{node,p}of pn){const isMod=node.era==='modern';const nc=isMod?c.p:c.g;const r2=14*p.s,gr=r2*3.5;
-const gg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,gr);gg.addColorStop(0,nc+'aa');gg.addColorStop(0.4,nc+'44');gg.addColorStop(1,nc+'00');
-ctx.fillStyle=gg;ctx.globalAlpha=0.7;ctx.beginPath();ctx.arc(p.x,p.y,gr,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-const cg=ctx.createRadialGradient(p.x-r2*0.3,p.y-r2*0.3,0,p.x,p.y,r2);cg.addColorStop(0,'#fff');cg.addColorStop(0.3,nc);cg.addColorStop(1,nc+'88');
-ctx.fillStyle=cg;ctx.beginPath();ctx.arc(p.x,p.y,r2,0,Math.PI*2);ctx.fill();
-ctx.globalAlpha=Math.min(1,p.s*1.2);const fs=Math.max(10,13*p.s);ctx.font=(isMod?'600 ':'500 ')+fs+'px Georgia,serif';ctx.fillStyle=c.fg;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(node.label,p.x,p.y+r2+6);
-ctx.font=Math.max(8,9*p.s)+'px sans-serif';ctx.fillStyle=c.m;ctx.globalAlpha=Math.min(0.8,p.s*1.2);ctx.fillText(node.era.toUpperCase(),p.x,p.y+r2+6+fs+2);ctx.globalAlpha=1;ctx.textAlign='left';ctx.textBaseline='alphabetic'}}
-function loop(){draw();raf=requestAnimationFrame(loop)}
-canvas.addEventListener('mousedown',e=>{drag={active:true,lx:e.clientX,ly:e.clientY}});
-canvas.addEventListener('mousemove',e=>{if(drag.active){rot.y+=(e.clientX-drag.lx)*0.008;rot.x+=(e.clientY-drag.ly)*0.008;rot.x=Math.max(-1.2,Math.min(1.2,rot.x));drag.lx=e.clientX;drag.ly=e.clientY}});
-window.addEventListener('mouseup',()=>{drag.active=false});
-document.addEventListener('visibilitychange',()=>{if(document.hidden){if(raf){cancelAnimationFrame(raf);raf=null}}else if(!reduced){raf=requestAnimationFrame(loop)}});
-window.addEventListener('resize',resize);resize();if(reduced)draw();else raf=requestAnimationFrame(loop);
-window.prevScene=()=>{sceneIdx=(sceneIdx-1+scenes.length)%scenes.length;updateUI()};
-window.nextScene=()=>{sceneIdx=(sceneIdx+1)%scenes.length;updateUI()};
-window.resetView=()=>{rot={x:-0.15,y:0}};
-function updateUI(){document.getElementById('sceneLabel').textContent=scenes[sceneIdx].label;document.getElementById('sceneDesc').textContent=scenes[sceneIdx].desc;document.getElementById('sceneCounter').textContent=(sceneIdx+1)+'/'+scenes.length}
-})();
-
-// === Init ===
-renderExpressions();
-setTimeout(drawGraph,500);
-setTimeout(drawSynthetic,500);
+// Init canvases after load
+setTimeout(function(){drawGraph();drawSynthetic()},1000);
 </script>
 </body>
 </html>
