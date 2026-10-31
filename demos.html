@@ -179,6 +179,7 @@ ctx.globalAlpha=1;
 if(psAttempts%30===0)document.getElementById('psAttempts').textContent=psAttempts.toLocaleString();
 psRaf=requestAnimationFrame(frame)
 }
+requestAnimationFrame(frame);
 }
 psInit();
 ;function psToggle(){psRunning=!psRunning}
