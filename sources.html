@@ -66,6 +66,15 @@ p{margin-bottom:1rem}
 .code-content{display:none;background:var(--code-bg);border-radius:0 0 .5rem .5rem;padding:1rem;overflow-x:auto}
 .code-content.active{display:block}
 .code-content pre{margin:0;color:var(--code-fg);font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.75rem;line-height:1.6;white-space:pre}
+.map-table{margin-bottom:1rem;border:1px solid var(--border);border-radius:.5rem;overflow:hidden}
+.map-table table{width:100%;border-collapse:collapse;font-size:.75rem}
+.map-table th{background:var(--accent-bg);color:var(--primary);text-align:left;padding:.5rem .75rem;font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.map-table td{padding:.4rem .75rem;border-bottom:1px solid var(--border);vertical-align:top}
+.map-sym{font-family:Georgia,serif;color:var(--primary);font-weight:600;white-space:nowrap}
+.map-arrow{color:var(--muted);text-align:center;width:1.5rem}
+.map-code{font-family:'SF Mono',Monaco,Consolas,monospace;color:var(--fg);font-size:.6875rem}
+.map-note{color:var(--muted);font-size:.6875rem;font-style:italic}
+.demo-canvas{width:100%;aspect-ratio:2/1;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg);margin-bottom:.5rem}
 .stage-section{border:1px solid var(--border);border-radius:.75rem;padding:1.5rem;background:var(--card);margin-bottom:1.5rem}
 .stage-section h3{color:var(--primary);font-size:.875rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:.75rem}
 .report-grid{display:grid;gap:.75rem;grid-template-columns:repeat(2,1fr);margin-bottom:1rem}
@@ -223,13 +232,17 @@ var h='';
 // Math
 h+='<div class="popup-pane active" id="pane-math"><h3>Expression</h3><div class="expr-rendered">$$'+e.latex+'$$</div><h3>Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
 // Code
-h+='<div class="popup-pane" id="pane-code"><h3>Click a language tab</h3><div class="code-tabs">';
+h+='<div class="popup-pane" id="pane-code">';
+if(e.mapping){h+='<h3>Math \u2192 Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'</td><td class="map-arrow">\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
+h+='<h3>Click a language tab</h3><div class="code-tabs">';
 LANGS.forEach(function(l,i){h+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchCode(\''+l+'\',this)">'+l+'</button>'});
 h+='</div>';
 LANGS.forEach(function(l,i){h+='<div class="code-content'+(i===0?' active':'')+'" id="cc-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});
 h+='</div>';
 // Obs
-h+='<div class="popup-pane" id="pane-obs"><h3>Summary</h3><p style="font-size:.875rem;color:var(--muted)">'+e.intent+'</p><h3 style="margin-top:1rem">Stats</h3><div class="report-grid" style="grid-template-columns:repeat(3,1fr)"><div class="report-stat"><div class="num">1</div><div class="lbl">Expr</div></div><div class="report-stat"><div class="num">6</div><div class="lbl">Langs</div></div><div class="report-stat"><div class="num">~15</div><div class="lbl">Lines</div></div></div></div>';
+h+='<div class="popup-pane" id="pane-obs">';
+if(e.demo){h+='<h3>'+e.demo.title+'</h3><canvas id="demoCv" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">'+e.demo.desc+'</p>'}
+h+='<h3>Summary</h3><p style="font-size:.875rem;color:var(--muted)">'+e.intent+'</p><h3 style="margin-top:1rem">Stats</h3><div class="report-grid" style="grid-template-columns:repeat(3,1fr)"><div class="report-stat"><div class="num">1</div><div class="lbl">Expr</div></div><div class="report-stat"><div class="num">6</div><div class="lbl">Langs</div></div><div class="report-stat"><div class="num">~15</div><div class="lbl">Lines</div></div></div></div>';
 // Deep
 h+='<div class="popup-pane" id="pane-deep"><h3>Deeper analysis</h3><p style="font-size:.875rem;color:var(--muted)">This expression connects to the broader question of what AI can and cannot decide. The formal boundary persists across substrates.</p></div>';
 // Compare
@@ -239,7 +252,27 @@ h+='<div class="popup-pane" id="pane-fut"><h3>Future possibilities</h3><p style=
 b.innerHTML=h;
 document.getElementById('popup').classList.add('active');
 if(typeof renderMathInElement!=='undefined')renderMathInElement(b,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+if(e.demo){var dk=key;setTimeout(function(){drawDemo(dk,document.getElementById('demoCv'))},100)}
 }
+
+// Expression-specific demos
+function drawDemo(id,cv){if(!cv)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+function clear(){ctx.fillStyle=bg;ctx.fillRect(0,0,W,H)}
+function label(s,x,y){ctx.fillStyle=fg;ctx.font='11px sans-serif';ctx.textAlign='center';ctx.fillText(s,x,y)}
+switch(id){
+case'erdos':clear();var pts=[];for(var i=0;i<20;i++)pts.push({x:20+Math.random()*(W-40),y:20+Math.random()*(H-40)});ctx.strokeStyle='rgba(194,65,12,0.15)';ctx.lineWidth=.5;for(var i=0;i<pts.length;i++)for(var j=i+1;j<pts.length;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<60){ctx.strokeStyle='rgba(194,65,12,0.5)';ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle=pc;pts.forEach(function(p){ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});label('Points with unit-distance pairs',W/2,H-8);break;
+case'ugc':clear();var vs=6;var vx=[];for(var i=0;i<vs;i++){var a=i/vs*Math.PI*2;vx.push({x:W/2+Math.cos(a)*W*.3,y:H/2+Math.sin(a)*H*.3})}ctx.strokeStyle='rgba(194,65,12,0.2)';ctx.lineWidth=1;for(var i=0;i<vs;i++)for(var j=i+1;j<vs;j++){ctx.beginPath();ctx.moveTo(vx[i].x,vx[i].y);ctx.lineTo(vx[j].x,vx[j].y);ctx.stroke()}ctx.fillStyle=pc;vx.forEach(function(v,i){ctx.beginPath();ctx.arc(v.x,v.y,6,0,Math.PI*2);ctx.fill()});label('Variables (nodes) + constraints (edges)',W/2,H-8);break;
+case'schrodinger':clear();ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();for(var x=0;x<W;x++){var t=x/W*Math.PI*4;var y=H/2+Math.sin(t)*H*.3*Math.exp(-x/W*0.5);if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.strokeStyle='rgba(194,65,12,0.3)';ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();label('Real part of \u03a8(r,t) — decaying wave',W/2,H-8);break;
+case'attention':clear();var n=8,sz=W/n;for(var i=0;i<n;i++)for(var j=0;j<n;j++){var v=Math.exp(-((i-j)*(i-j))/8);ctx.fillStyle='rgba(194,65,12,'+v+')';ctx.fillRect(j*sz,i*sz,sz-1,sz-1)}label('Attention weights (QK^T/\u221ad_k)',W/2,H-8);break;
+case'godel':clear();ctx.strokeStyle=pc;ctx.lineWidth=2;var cx=W/2,cy=H/2,rad=Math.min(W,H)*.25;ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2);ctx.stroke();ctx.fillStyle=pc;ctx.font='14px Georgia,serif';ctx.textAlign='center';ctx.fillText('G(F)',cx,cy+5);ctx.font='10px sans-serif';ctx.fillStyle=mt;ctx.fillText('"This is not provable in F"',cx,cy+22);label('Self-referential loop — G(F) refers to itself',W/2,H-8);break;
+case'kolmogorov':clear();var progs=['ab','xyz','abc123','qwert','fn(a,b)','solve(x)','if(p)then(q)','while(true)loop','function f(){return g()}'];ctx.fillStyle=pc;progs.forEach(function(p,i){var x=20,y=20+i*(H-30)/progs.length;var w=p.length*8;ctx.globalAlpha=Math.pow(2,-p.length/4);ctx.fillRect(x,y,w,12);ctx.globalAlpha=1;ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='left';ctx.fillText(p,x+w+5,y+10);ctx.fillStyle=pc});label('Program length vs weight (2^{|p|})',W/2,H-8);break;
+case'holographic':clear();var cx=W/2,cy=H/2,rad=Math.min(W,H)*.3;var g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);g.addColorStop(0,'#1a1a1a');g.addColorStop(.7,'#333');g.addColorStop(1,pc);ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2);ctx.fill();ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2);ctx.stroke();label('S = k\u2082A / (4\u2113\u209a\u00b2) — area, not volume',W/2,H-8);break;
+case'teleportation':clear();ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(30,H/2);ctx.quadraticCurveTo(W/2,20,W-30,H/2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=pc;ctx.beginPath();ctx.arc(30,H/2,5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(W-30,H/2,5,0,Math.PI*2);ctx.fill();ctx.font='10px sans-serif';ctx.fillStyle=mt;ctx.textAlign='center';ctx.fillText('s\u2080',30,H/2+18);ctx.fillText('g*',W-30,H/2+18);ctx.fillText('AI: one-shot teleport',W/2,H-15);label('AI jumps directly (dashed) vs human reconstructs path',W/2,H-8);break;
+case'bottleneck':clear();var boxes=[{x:30,l:'X'},{x:W/2-20,l:'Z'},{x:W-50,l:'Y'}];ctx.strokeStyle=pc;ctx.lineWidth=2;boxes.forEach(function(b){ctx.strokeRect(b.x,H/2-20,30,40);ctx.fillStyle=fg;ctx.font='14px Georgia,serif';ctx.textAlign='center';ctx.fillText(b.l,b.x+15,H/2+5)});ctx.strokeStyle='rgba(194,65,12,0.3)';ctx.beginPath();ctx.moveTo(60,H/2);ctx.lineTo(W/2-20,H/2);ctx.moveTo(W/2+10,H/2);ctx.lineTo(W-50,H/2);ctx.stroke();ctx.fillStyle=mt;ctx.font='9px sans-serif';ctx.fillText('I(X;Z)',(60+W/2-20)/2,H/2-8);ctx.fillText('\u03b2 I(Z;Y)',(W/2+10+W-50)/2,H/2-8);label('Information bottleneck: compress X, preserve Y',W/2,H-8);break;
+case'loeb':clear();var cx=W/2,cy=H/2-10;ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,30,-Math.PI/2,Math.PI*1.5);ctx.stroke();ctx.fillStyle=pc;ctx.beginPath();ctx.moveTo(cx+30,cy);ctx.lineTo(cx+25,cy-5);ctx.lineTo(cx+25,cy+5);ctx.fill();ctx.font='12px Georgia,serif';ctx.fillStyle=fg;ctx.textAlign='center';ctx.fillText('\u25a1P \u2192 P',cx,cy-35);label('Self-trust: if system trusts own proofs \u2192 proves everything',W/2,H-8);break;
+case'unitary':clear();var gates=['H','H','Oracle','H','H'];var gw=W/gates.length;ctx.strokeStyle=pc;ctx.lineWidth=1;gates.forEach(function(g,i){var x=i*gw+gw/2;ctx.strokeRect(x-20,H/2-15,40,30);ctx.fillStyle=fg;ctx.font='10px monospace';ctx.textAlign='center';ctx.fillText(g,x,H/2+4)});ctx.strokeStyle='rgba(194,65,12,0.5)';ctx.beginPath();ctx.moveTo(20,H/2);ctx.lineTo(W-20,H/2);ctx.stroke();label('Polynomial-size quantum circuit with oracle f',W/2,H-8);break;
+case'aixi':clear();var cx=W/2,cy=H/2;ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,Math.min(W,H)*.25,0,Math.PI*2);ctx.stroke();ctx.fillStyle=pc;for(var i=0;i<12;i++){var a=i/12*Math.PI*2,r=Math.min(W,H)*.15+Math.random()*30;ctx.globalAlpha=Math.pow(2,-i);ctx.beginPath();ctx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,3,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;ctx.font='12px Georgia,serif';ctx.fillStyle=fg;ctx.textAlign='center';ctx.fillText('a*',cx,cy+5);label('All programs \u03bc weighted by 2^{-|\u03bc|}',W/2,H-8);break;
+default:clear();label('Demo: '+id,W/2,H/2)}}
 
 function closePopup(){document.getElementById('popup').classList.remove('active')}
 function switchTab(id,btn){document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active')}
@@ -284,6 +317,9 @@ chk('Theme toggle',function(){return typeof toggleTheme==='function'});
 chk('12 expressions',function(){return CODE&&Object.keys(CODE).length===12});
 chk('Each has 6 langs',function(){if(!CODE)return false;for(var k in CODE)if(Object.keys(CODE[k].langs).length<6)return false;return true});
 chk('JSON fetched',function(){return CODE!==null});
+chk('Mappings present',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].mapping)return false;return true});
+chk('Demos configured',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].demo)return false;return true});
+chk('drawDemo function',function(){return typeof drawDemo==='function'});
 var badge=document.getElementById('audit'),txt=document.getElementById('auditText');
 if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
 r.forEach(function(x){console.log(x)});
