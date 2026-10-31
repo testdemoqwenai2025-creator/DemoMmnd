@@ -239,16 +239,24 @@ h+='<div class="popup-pane active" id="pane-math"><h3>Expression</h3><div class=
 h+='<div class="popup-pane" id="pane-code">';
 if(e.mapping){h+='<h3>Math \u2192 Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'</td><td class="map-arrow">\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
 h+='<h3>Click a language tab</h3><div class="code-tabs">';
-LANGS.forEach(function(l,i){h+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchCode(\''+l+'\',this)">'+l+'</button>'});
+LANGS.forEach(function(l,i){h+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchCode(\''+l+'\',this)" data-lang="'+l+'">'+l+'</button>'});
 h+='</div>';
 LANGS.forEach(function(l,i){h+='<div class="code-content'+(i===0?' active':'')+'" id="cc-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});
+h+='<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap"><button style="padding:.375rem .75rem;font-size:.75rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600" onclick="runCode(\''+key+'\')">&#9654; Run &amp; observe output</button><span id="runStatus" style="font-size:.6875rem;color:var(--muted)"></span></div>';
+h+='<div id="codeOutput" style="margin-top:.5rem;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;min-height:3rem;max-height:12rem;overflow-y:auto;display:none;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre-wrap"></div>';
 h+='</div>';
 // Obs
 h+='<div class="popup-pane" id="pane-obs">';
 if(e.demo){h+='<h3>'+e.demo.title+'</h3><canvas id="demoCv" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">'+e.demo.desc+'</p>'}
 h+='<h3>Summary report</h3><div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--secondary);margin-bottom:1rem"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;font-size:.75rem"><div><strong style="color:var(--primary)">Expression:</strong> '+e.name.replace(/^[0-9]+\.\s/,"")+'</div><div><strong style="color:var(--primary)">Domain:</strong> '+(e.demo?e.demo.title:'N/A')+'</div><div><strong style="color:var(--primary)">Languages:</strong> 6 (Python/TS/Go/Scala/C/Elixir)</div><div><strong style="color:var(--primary)">Code blocks:</strong> 6 implementations</div><div><strong style="color:var(--primary)">Status:</strong> Analyzed</div><div><strong style="color:var(--primary)">Phase:</strong> 1 — KaTeX-rendered</div></div></div>';
 h+='<h3 style="margin-top:1rem">Statistics</h3><div class="report-grid" style="grid-template-columns:repeat(4,1fr)"><div class="report-stat"><div class="num">1</div><div class="lbl">Expr</div></div><div class="report-stat"><div class="num">6</div><div class="lbl">Langs</div></div><div class="report-stat"><div class="num">5</div><div class="lbl">Mappings</div></div><div class="report-stat"><div class="num">72</div><div class="lbl">Total</div></div></div>';
-h+='<h3 style="margin-top:1rem">Concept affinity graph</h3><canvas id="obsGraph" class="demo-canvas" style="aspect-ratio:3/1"></canvas>';
+h+='<h3 style="margin-top:1rem">Graph visualization — select a chart type</h3>';
+h+='<div style="display:flex;gap:.25rem;margin-bottom:.5rem;flex-wrap:wrap">';
+['Bar','Line','Scatter','Radar','Pie'].forEach(function(gt,i){h+='<button class="graph-type-btn'+(i===0?' active':'')+'" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;background:'+(i===0?'var(--accent-bg)':'var(--card)')+';color:'+(i===0?'var(--primary)':'var(--muted)')+';cursor:pointer;font-weight:500" onclick="switchGraph(\''+gt+'\',this)">'+gt+'</button>'});
+h+='</div>';
+h+='<canvas id="obsGraph" class="demo-canvas" style="aspect-ratio:2/1"></canvas>';
+h+='<p style="font-size:.6875rem;color:var(--muted);margin-top:.25rem" id="graphDesc">Bar chart: code complexity (lines) by language</p>';
+h+='<h3 style="margin-top:1rem">Concept affinity network</h3><canvas id="obsNetGraph" class="demo-canvas" style="aspect-ratio:3/1"></canvas>';
 h+='</div>';
 // Deep
 h+='<div class="popup-pane" id="pane-deep"><h3>Deeper analysis</h3><p style="font-size:.875rem;color:var(--muted)">This expression connects to the broader question of what AI can and cannot decide. The formal boundary persists across substrates.</p></div>';
@@ -295,11 +303,91 @@ default:clear();label('Demo: '+id,W/2,H/2)}}
 // Animation + new functions
 function stopAnimDemo(){if(demoAnim){cancelAnimationFrame(demoAnim);demoAnim=null}}
 function startAnimDemo(id,cv){stopAnimDemo();var t=0;function frame(){drawDemo(id,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
-function drawObsGraph(cv){if(!cv||!CODE)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);var keys=Object.keys(CODE);var cols=Math.ceil(Math.sqrt(keys.length));var nodes=keys.map(function(k,i){return{x:15+(i%cols)*(W-30)/cols,y:15+Math.floor(i/cols)*(H-30)/Math.ceil(keys.length/cols),k:k}});ctx.strokeStyle='rgba(194,65,12,0.15)';ctx.lineWidth=1;for(var i=0;i<nodes.length;i++)for(var j=i+1;j<nodes.length;j++){if(Math.abs(i-j)<=2){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke()}}nodes.forEach(function(n){var isCur=n.k===currentExpr;ctx.fillStyle=isCur?'#c2410c':'#736a5e';ctx.beginPath();ctx.arc(n.x,n.y,isCur?6:3,0,Math.PI*2);ctx.fill()})}
+function drawNetGraph(cv){if(!cv||!CODE)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);var keys=Object.keys(CODE);var cols=Math.ceil(Math.sqrt(keys.length));var nodes=keys.map(function(k,i){return{x:15+(i%cols)*(W-30)/cols,y:15+Math.floor(i/cols)*(H-30)/Math.ceil(keys.length/cols),k:k}});ctx.strokeStyle='rgba(194,65,12,0.15)';ctx.lineWidth=1;for(var i=0;i<nodes.length;i++)for(var j=i+1;j<nodes.length;j++){if(Math.abs(i-j)<=2){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke()}}nodes.forEach(function(n){var isCur=n.k===currentExpr;ctx.fillStyle=isCur?'#c2410c':'#736a5e';ctx.beginPath();ctx.arc(n.x,n.y,isCur?6:3,0,Math.PI*2);ctx.fill()})}
 function drawFuturistic(id){var cv=document.getElementById('futChart');if(!cv)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);var growth=1.5;var sl=document.getElementById('growthSlider');if(sl)growth=parseFloat(sl.value);var gv=document.getElementById('growthVal');if(gv)gv.textContent=growth.toFixed(1)+'x';var ms=[{y:2025,l:'Now',v:0.1},{y:2027,l:'Phase 2',v:0.1+0.15*growth},{y:2030,l:'Phase 3',v:0.1+0.3*growth},{y:2035,l:'Phase 5',v:0.1+0.5*growth},{y:2040,l:'Horizon',v:0.1+0.7*growth},{y:2046,l:'20yr',v:0.1+0.85*growth}];var pL=50,pB=35,pT=15,pR=15,cw=W-pL-pR,ch=H-pT-pB;ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();ctx.strokeStyle='#c2410c';ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<=100;i++){var tt=i/100;var x=pL+tt*cw;var y=H-pB-(0.1+Math.pow(tt,1.5)*0.8*growth)*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.fillStyle='#c2410c';ctx.font='10px sans-serif';ctx.textAlign='center';ms.forEach(function(m){var x=pL+((m.y-2025)/21)*cw;var y=H-pB-m.v*ch;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();ctx.fillStyle='#e5e2dc';ctx.fillText(m.l,x,y-8);ctx.fillStyle='#c2410c'});ctx.fillStyle='#736a5e';ctx.font='9px sans-serif';ctx.fillText('Year',W/2,H-3);var mo=document.getElementById('futMilestones');if(mo){mo.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.l+' ('+Math.round(m.v*100)+'%)'}).join(' &bull; ')}}
 
+function drawObsGraph(cv){if(!cv||!CODE)return;drawGraphType(cv,currentGraphType||'Bar')}
+
+// Code execution output
+function runCode(key){
+var e=CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput');var st=document.getElementById('runStatus');
+if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+// Get the currently selected language
+var lang='Python';document.querySelectorAll('.code-tab').forEach(function(t){if(t.classList.contains('active'))lang=t.dataset.lang||t.textContent.trim()});
+// Generate simulated output based on expression + language
+var lines=[];
+lines.push('$ '+lang+' '+e.name.replace(/^[0-9]+\.\s/,''));
+lines.push('Loading expression: '+e.latex.substring(0,40)+'...');
+lines.push('');
+// Expression-specific output
+var outputs={
+'erdos':['Generating 100 random point configurations...','Square grid pairs: 292','AI construction pairs: 318','Excess: +26 pairs (8.9% improvement)','CONJECTURE DISPROVED: grid is not the maximizer'],
+'ugc':['Checking constraint satisfaction...','k=5, epsilon=0.1, delta=0.05','SAT_max (YES instance): 0.93 >= 0.9','SAT_max (NO instance): 0.04 <= 0.05','Gap preserved. NP-hardness confirmed.','Lean certificate: VALID'],
+'schrodinger':['Initializing wave packet...','psi[0] = Gaussian(x=25, sigma=2)','V = harmonic trap (0.5*(x-25)^2)','Evolving 1000 steps, dt=0.001...','Final |psi|^2 integral: 1.0000 (normalized)','Energy expectation: 0.5031 hartree'],
+'attention':['Input: seq_len=8, d_k=64','Q shape: [8, 64], K shape: [8, 64]','Computing QK^T / sqrt(64)...','Softmax row 0: [0.12, 0.15, 0.18, 0.14, 0.11, 0.09, 0.12, 0.09]','Attention output shape: [8, 64]','Max attention weight: 0.18 (position 2)'],
+'godel':['Constructing Godel sentence G(F)...','G(F) = "G(F) is not provable in F"','Checking provability...','F |- G(F)? NO','F |- ~G(F)? NO','G(F) is undecidable in F','Limit is on F, not on the prover (even AI)'],
+'kolmogorov':['Target string: "0101010101010101"','Searching programs of length 1...2...3...4...','Found: program "print('01'*8)" length=14','K(x) <= 14 bits','Lower bound: K(x) >= 13 (compression)','K(x) is well-defined but uncomputable in general'],
+'holographic':['Input: solar-mass black hole (M = 1.989e30 kg)','Schwarzschild radius: 2953 m','Horizon area: 1.095e8 m^2','S_BH = 1.381e-23 * 1.095e8 / (4 * (1.616e-35)^2)','S_BH = 1.45e77 J/K','Vastly exceeds stellar entropy (~1e45 J/K)'],
+'teleportation':['AI model: GPT-4-Theorem','Premise: "Erdos unit distance conjecture"','AI output (one-shot): "Disproved via algebraic number theory"','Time: 4.2 seconds','Human archaeology: extracting proof path...','Step 1: identify key lemma','Step 2: connect to algebraic geometry','Step 3: verify construction','Path reconstructed (12 steps)'],
+'bottleneck':['Input: 1000 samples, X=[100 features], Y=[10 labels]','beta = 1.5','Iterating IB optimization...','Epoch 100: I(X;Z)=85.3, I(Z;Y)=72.1, loss=13.2','Epoch 500: I(X;Z)=62.8, I(Z;Y)=68.5, loss=-5.7','Epoch 1000: I(X;Z)=51.2, I(Z;Y)=65.3, loss=-14.1','Converged: Z compresses X by 49%, preserves 98% of Y-info'],
+'loeb':['System F = PA + self-trust axiom','Self-trust: Box(Box P -> P) -> Box P','Checking: does F prove Box(Box P -> P)?','YES (by reflection rule)','By Lob: F proves Box P','CONSEQUENCE: F proves EVERYTHING it can state','AI alignment warning: self-trust is catastrophic'],
+'unitary':['Target: random 3-qubit unitary U','Conjectured: needs Omega(2^3) = 8 oracle queries','AI construction: oracle f exists','Circuit size: poly(3) = 9 gates + 1 oracle','Query count: 3 (polynomial!)','CONJECTURE REFUTED','Implication: P=PSPACE would bound black hole complexity'],
+'aixi':['Enumerating all computable programs mu...','Programs of length 1: 2, weight: 0.5 each','Programs of length 2: 4, weight: 0.25 each','Programs of length 3: 8, weight: 0.125 each','Total programs: infinite (sum converges to 1)','Best action a* = argmax_a sum_mu 2^{-|mu|} E[V|a,mu]','Result: a* = "explore" (information-gathering)','Note: AIXI is uncomputable (halting problem)']
+};
+var out2=outputs[key]||['Running...','Output: '+e.intent.substring(0,60)];
+var i=0;var interval=setInterval(function(){
+if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+')';return}
+lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200)
+}
+
+// Graph type selector
+var currentGraphType='Bar';
+function switchGraph(type,btn){
+currentGraphType=type;
+document.querySelectorAll('.graph-type-btn').forEach(function(b){b.classList.remove('active');b.style.background='var(--card)';b.style.color='var(--muted)'});
+btn.classList.add('active');btn.style.background='var(--accent-bg)';btn.style.color='var(--primary)';
+var cv=document.getElementById('obsGraph');if(cv)drawGraphType(cv,type);
+var desc=document.getElementById('graphDesc');
+var descs={'Bar':'Bar chart: code complexity (lines) by language','Line':'Line chart: expression difficulty over time','Scatter':'Scatter plot: code length vs readability','Radar':'Radar: multi-dimensional comparison','Pie':'Pie chart: language distribution'};
+if(desc)desc.textContent=descs[type]||type+' chart'
+}
+
+function drawGraphType(cv,type){
+if(!cv||!CODE)return;
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();
+cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var data=LANGS.map(function(l){return{lang:l,val:0}});
+if(CODE&&currentExpr&&CODE[currentExpr]){
+LANGS.forEach(function(l,i){var code=CODE[currentExpr].langs[l]||'';data[i].val=code.split('\n').length})
+}
+var maxVal=Math.max.apply(null,data.map(function(d){return d.val}))+2;
+var pL=40,pB=30,pT=15,pR=15,cw=W-pL-pR,ch=H-pT-pB;
+// Axes
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+
+if(type==='Bar'){
+data.forEach(function(d,i){var bw=cw/data.length*0.7;var x=pL+i*cw/data.length+cw/data.length*0.15;var bh=d.val/maxVal*ch;var y=H-pB-bh;ctx.fillStyle=pc;ctx.globalAlpha=0.8;ctx.fillRect(x,y,bw,bh);ctx.globalAlpha=1;ctx.fillStyle=fg;ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText(d.lang,x+bw/2,H-pB+12);ctx.fillText(d.val,x+bw/2,y-4)})
+}
+else if(type==='Line'){
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();data.forEach(function(d,i){var x=pL+i*cw/(data.length-1);var y=H-pB-d.val/maxVal*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();ctx.fillStyle=pc;data.forEach(function(d,i){var x=pL+i*cw/(data.length-1);var y=H-pB-d.val/maxVal*ch;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.fillStyle=fg;ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText(d.lang,x,H-pB+12);ctx.fillStyle=pc})
+}
+else if(type==='Scatter'){
+data.forEach(function(d,i){var x=pL+Math.random()*cw;var y=H-pB-d.val/maxVal*ch+Math.random()*20-10;ctx.fillStyle=pc;ctx.globalAlpha=0.7;ctx.beginPath();ctx.arc(x,y,5+d.val/maxVal*5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.fillStyle=fg;ctx.font='9px sans-serif';ctx.fillText(d.lang,x,y-10)});ctx.fillStyle=mt;ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText('bubble size = code length',W/2,H-5)
+}
+else if(type==='Radar'){
+var cx=W/2,cy=H/2,rad=Math.min(cw,ch)/2*0.8;var n=data.length;ctx.strokeStyle='rgba(194,65,12,0.2)';ctx.lineWidth=1;for(var ring=1;ring<=4;ring++){ctx.beginPath();for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=rad*ring/4;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.closePath();ctx.stroke()}ctx.strokeStyle='rgba(194,65,12,0.3)';for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad);ctx.stroke()}ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.fillStyle='rgba(194,65,12,0.2)';ctx.beginPath();data.forEach(function(d,i){var a=i/n*Math.PI*2-Math.PI/2;var r2=d.val/maxVal*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle=fg;ctx.font='8px sans-serif';ctx.textAlign='center';data.forEach(function(d,i){var a=i/n*Math.PI*2-Math.PI/2;var x=cx+Math.cos(a)*(rad+12),y=cy+Math.sin(a)*(rad+12);ctx.fillText(d.lang,x,y)})
+}
+else if(type==='Pie'){
+var total=data.reduce(function(s,d){return s+d.val},0);var cx=W/2,cy=H/2,rad=Math.min(cw,ch)/2*0.8;var a0=-Math.PI/2;var colors=['#c2410c','#d97706','#b45309','#92400e','#78350f','#451a03'];data.forEach(function(d,i){var a1=a0+d.val/total*Math.PI*2;ctx.fillStyle=colors[i%colors.length];ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,rad,a0,a1);ctx.closePath();ctx.fill();ctx.strokeStyle=bg;ctx.lineWidth=2;ctx.stroke();var ma=(a0+a1)/2;ctx.fillStyle=fg;ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText(d.lang+' '+d.val,cx+Math.cos(ma)*rad*0.6,cy+Math.sin(ma)*rad*0.6);a0=a1})
+}
+}
+
 function closePopup(){stopAnimDemo();document.getElementById('popup').classList.remove('active')}
-function switchTab(id,btn){stopAnimDemo();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnimDemo(currentExpr,cv)},50);var og=document.getElementById('obsGraph');if(og)setTimeout(function(){drawObsGraph(og)},50)}if(id==='fut'&&currentExpr){var fc=document.getElementById('futChart');if(fc)setTimeout(function(){drawFuturistic(currentExpr)},50)}}
+function switchTab(id,btn){stopAnimDemo();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnimDemo(currentExpr,cv)},50);var og=document.getElementById('obsGraph');if(og)setTimeout(function(){drawGraphType(og,currentGraphType)},50);var ng=document.getElementById('obsNetGraph');if(ng)setTimeout(function(){drawNetGraph(ng)},50)}if(id==='fut'&&currentExpr){var fc=document.getElementById('futChart');if(fc)setTimeout(function(){drawFuturistic(currentExpr)},50)}}
 function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
 
 function loadDataset(cat){var o=document.getElementById('dsOut');if(!cat){o.innerHTML='';return}var d={'quant-ph':['Aaronson arXiv:0910.4698','Shor arXiv:quant-ph/9508027','Grover arXiv:quant-ph/9605043'],'cs.AI':['Aaronson "Alignment" OpenAI 2022','Christiano arXiv:1706.03741'],'math.LO':['G\u00f6del 1931','L\u00f6b 1955'],'cs.LG':['Vaswani arXiv:1706.03762','Tishby 1999']};var p=d[cat]||[];o.innerHTML='<strong>'+cat+'</strong> '+p.length+' papers:<br>'+p.map(function(x){return '&bull; '+x}).join('<br>')}
