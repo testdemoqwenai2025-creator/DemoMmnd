@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+<title>Mmnd Observatory Blog</title>
+<link>https://testdemoqwenai2025-creator.github.io/DemoMmnd/blog.html</link>
+<description>Field notes from the Mathocalypse — curated posts connecting mathematical expressions to their broader context.</description>
+<language>en</language>
+<item>
+<title>The Mathocalypse: What Happens When AI Solves the Unsolvable</title>
+<link>https://testdemoqwenai2025-creator.github.io/DemoMmnd/sources.html#erdos</link>
+<description>Three named breakthroughs mark the crossing-point where AI became the most powerful theorem prover on Earth.</description>
+<pubDate>Wed, 15 Jan 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Erdős, Algebraic Number Theory, and the Power of Parallel Search</title>
+<link>https://testdemoqwenai2025-creator.github.io/DemoMmnd/sources.html#erdos</link>
+<description>How AI disproved a 1946 conjecture through tireless parallel search without fatigue.</description>
+<pubDate>Mon, 20 Jan 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>The Halting Problem at 90: Turing's Question Persists</title>
+<link>https://testdemoqwenai2025-creator.github.io/DemoMmnd/sources.html#godel</link>
+<description>In 1936 Turing asked whether machines can decide what humans cannot. In 2026 the question persists.</description>
+<pubDate>Sat, 25 Jan 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Kolmogorov Complexity and the Structure of Mathematical Creativity</title>
+<link>https://testdemoqwenai2025-creator.github.io/DemoMmnd/sources.html#kolmogorov</link>
+<description>When AI finds connections no specialist would have made, what exactly is it doing?</description>
+<pubDate>Sun, 01 Feb 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Why the Holographic Principle Matters for AI</title>
+<link>https://testdemoqwenai2025-creator.github.io/DemoMmnd/sources.html#holographic</link>
+<description>The Unitary Synthesis Problem has direct implications for black hole complexity.</description>
+<pubDate>Sat, 08 Feb 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+<title>Löb's Theorem: The Self-Trust Trap in AI Alignment</title>
+<link>https://testdemoqwenai2025-creator.github.io/DemoMmnd/sources.html#loeb</link>
+<description>If a system proves that its own proofs imply truth, it proves everything.</description>
+<pubDate>Sat, 15 Feb 2026 00:00:00 GMT</pubDate>
+</item>
+</channel>
+</rss>
