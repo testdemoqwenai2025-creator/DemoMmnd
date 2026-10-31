@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demos · Mmnd</title>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+#pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.3}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem}
+.nav-links a{padding:.5rem 1rem;text-decoration:none;color:var(--muted);font-size:.875rem;font-weight:500}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:4rem 1.5rem}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2.25rem;font-weight:600;margin-bottom:.5rem}
+@media(min-width:640px){h1{font-size:3rem}}
+h2{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;margin-bottom:1rem;margin-top:2.5rem}
+.subtitle{color:var(--muted);font-size:.875rem;margin-bottom:2rem}
+p{margin-bottom:1rem}
+.demo-section{border:1px solid var(--border);border-radius:.75rem;padding:1.5rem;background:var(--card);margin-bottom:1.5rem}
+.demo-section h3{color:var(--primary);font-size:.875rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:.75rem}
+.demo-canvas{width:100%;aspect-ratio:2/1;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg)}
+.demo-controls{display:flex;justify-content:space-between;align-items:center;margin-top:.75rem}
+.demo-controls button{padding:.375rem .75rem;border:1px solid var(--border);border-radius:.25rem;background:transparent;color:var(--fg);font-size:.75rem;cursor:pointer}
+.demo-controls button:hover{border-color:var(--primary);color:var(--primary)}
+.badge{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-right:.5rem}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.75rem;border:1px solid var(--border);border-radius:.5rem;margin-bottom:.5rem}
+.toggle-label{font-size:.875rem;font-weight:500}
+.toggle-desc{font-size:.6875rem;color:var(--muted)}
+.switch{position:relative;width:2.75rem;height:1.5rem;border-radius:1rem;background:var(--secondary);cursor:pointer;transition:background .2s}
+.switch.on{background:var(--primary)}
+.switch-knob{position:absolute;top:.125rem;left:.125rem;width:1.25rem;height:1.25rem;border-radius:50%;background:#fff;transition:left .2s}
+.switch.on .switch-knob{left:1.375rem}
+.verdict-card{border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--secondary);margin-top:1rem}
+.verdict-cat{font-family:Georgia,serif;font-size:1rem;font-weight:600;color:var(--primary)}
+.verdict-desc{font-size:.75rem;color:var(--muted);margin-top:.5rem}
+.rights-row{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.5rem}
+.right-pill{font-size:.5625rem;padding:.125rem .375rem;border-radius:.25rem;background:var(--accent-bg);color:var(--primary)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem}
+.stat-box{text-align:center;padding:.5rem;border:1px solid var(--border);border-radius:.5rem}
+.stat-num{font-family:Georgia,serif;font-size:1.25rem;font-weight:600;color:var(--primary)}
+.stat-lbl{font-size:.5625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2.5rem 1.5rem}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<canvas id="pbg"></canvas>
+<header><nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="sources.html">Sources</a>
+<a href="blog.html">Blog</a>
+<a href="demos.html" class="active">Demos</a>
+<a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+</nav></header>
+
+<main>
+<p class="eyebrow">Interactive demos</p>
+<h1>Watch the ideas move.</h1>
+<p class="subtitle">Two interactive demos that visualize the core mechanisms from the Aaronson-Greene conversation. No external services &mdash; everything runs in your browser.</p>
+
+<!-- Demo 1: Parallel Search -->
+<h2>Demo 1: Parallel Counterexample Search</h2>
+<div class="demo-section">
+<h3>How AI bulldozes career-defining problems</h3>
+<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">~60 AI agents (gray dots) explore a mathematical search space. When one finds a counterexample, it bursts in terracotta. The advantage is not intelligence &mdash; it is the absence of fatigue.</p>
+<div class="stat-row">
+<div class="stat-box"><div class="stat-num" id="psFound">0</div><div class="stat-lbl">Found</div></div>
+<div class="stat-box"><div class="stat-num" id="psAttempts">0</div><div class="stat-lbl">Attempts</div></div>
+<div class="stat-box"><div class="stat-num" id="psAgents">60</div><div class="stat-lbl">Agents</div></div>
+</div>
+<canvas id="psCanvas" class="demo-canvas"></canvas>
+<div class="demo-controls">
+<span style="font-size:.75rem;color:var(--muted)">Each starburst = a counterexample discovery</span>
+<div>
+<button onclick="psToggle()">&#9654;/&#10073;</button>
+<button onclick="psReset()">&#8634;</button>
+</div>
+</div>
+</div>
+
+<!-- Demo 2: Moral Standing Evaluator -->
+<h2>Demo 2: Moral Standing Evaluator</h2>
+<div class="demo-section">
+<h3>Clonable vs. unclonable &mdash; the consciousness distinction</h3>
+<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">Toggle the entity attributes to see how Aaronson's clonable/unclonable distinction affects moral standing. The question is not can AI think? but does unclonability matter for moral standing?</p>
+<div class="toggle-row">
+<div><div class="toggle-label">Can be backed up &amp; restored</div><div class="toggle-desc">State is copyable. Destruction is reversible.</div></div>
+<div class="switch on" id="sw1" onclick="toggleSwitch(1)"><div class="switch-knob"></div></div>
+</div>
+<div class="toggle-row">
+<div><div class="toggle-label">Has analog quantum chaos</div><div class="toggle-desc">Dynamics are unclonable &mdash; sensitive to physical state.</div></div>
+<div class="switch" id="sw2" onclick="toggleSwitch(2)"><div class="switch-knob"></div></div>
+</div>
+<div class="toggle-row">
+<div><div class="toggle-label">Has finite lifespan</div><div class="toggle-desc">Will eventually cease to exist naturally.</div></div>
+<div class="switch" id="sw3" onclick="toggleSwitch(3)"><div class="switch-knob"></div></div>
+</div>
+<div class="verdict-card" id="verdict">
+<div class="verdict-cat" id="verdictCat">Clonable Agent / Probability Sample</div>
+<div class="verdict-desc" id="verdictDesc">Replicable state sampled from a probability distribution. Destruction is reversible &mdash; the state can be restored from backup. Moral concern is welfare optimization, not preservation of identity.</div>
+<div style="margin-top:.5rem"><strong style="font-size:.75rem;color:var(--fg)">Rights assigned:</strong> <div class="rights-row" id="rightsRow"></div></div>
+<div style="margin-top:.75rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:.5rem">
+<span style="font-size:.75rem;font-weight:600;color:var(--fg)">Can be murdered?</span>
+<span id="murderFlag" style="font-size:.875rem;font-weight:700;color:var(--muted)">NO</span>
+</div>
+</div>
+</div>
+
+</main>
+
+<footer><div class="footer-inner">
+<p>&copy; 2026 Mmnd Collective &middot; Apache-2.0</p>
+<p style="margin-top:.5rem"><a href="mailto:testdemoqwenai2025@gmail.com" style="color:var(--primary)">testdemoqwenai2025@gmail.com</a> &middot; GDPR-aligned</p>
+</div></footer>
+
+<script>
+function toggleTheme(){var d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+
+// Particle bg
+(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(40,Math.floor(cv.width*cv.height/30000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.2})}function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1}function lp(){dr();raf=requestAnimationFrame(lp)}addEventListener('resize',rs);rs();if(!red)raf=requestAnimationFrame(lp)})();
+
+// Parallel Search Demo
+var psAgents=[],psRaf=null,psRunning=true,psFound=0,psAttempts=0,psLastFind=0;
+var psRed=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function psInit(){
+var cv=document.getElementById('psCanvas');if(!cv)return;
+var ctx=cv.getContext('2d');
+function rs(){var d=window.devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
+rs();
+psAgents=[];
+var rect=cv.getBoundingClientRect();
+for(var i=0;i<60;i++)psAgents.push({x:Math.random()*rect.width,y:Math.random()*rect.height,vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.8,found:false,life:1});
+addEventListener('resize',rs);
+function frame(){
+var r=cv.getBoundingClientRect();var w=r.width,h=r.height;
+var d=document.documentElement.classList.contains('dark');
+var pc=d?'#ea580c':'#c2410c',mt=d?'#a8a098':'#736a5e',bg='#0a0908';
+ctx.fillStyle=bg;ctx.globalAlpha=.92;ctx.fillRect(0,0,w,h);ctx.globalAlpha=1;
+// Grid
+ctx.strokeStyle='rgba(115,106,94,0.15)';ctx.lineWidth=.5;
+for(var x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+for(var y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+var now=performance.now();
+for(var a of psAgents){
+if(!a.found){
+if(psRunning){a.x+=a.vx;a.y+=a.vy;psAttempts++}
+if(a.x<0)a.x=w;if(a.x>w)a.x=0;if(a.y<0)a.y=h;if(a.y>h)a.y=0;
+if(Math.random()<0.00008*60&&now-psLastFind>1500){a.found=true;a.life=1;psLastFind=now;psFound++;document.getElementById('psFound').textContent=psFound}
+ctx.fillStyle=mt;ctx.globalAlpha=.35;ctx.beginPath();ctx.arc(a.x,a.y,1.5,0,Math.PI*2);ctx.fill()
+}else{
+a.life-=0.008;
+if(a.life<=0){a.found=false;a.x=Math.random()*w;a.y=Math.random()*h;a.vx=(Math.random()-.5)*.8;a.vy=(Math.random()-.5)*.8;a.life=1;continue}
+var rad=(1-a.life)*35+4;
+var gr=ctx.createRadialGradient(a.x,a.y,0,a.x,a.y,rad);
+gr.addColorStop(0,pc);gr.addColorStop(0.5,pc+'80');gr.addColorStop(1,pc+'00');
+ctx.fillStyle=gr;ctx.globalAlpha=a.life;ctx.beginPath();ctx.arc(a.x,a.y,rad,0,Math.PI*2);ctx.fill();
+ctx.fillStyle=pc;ctx.globalAlpha=a.life;ctx.beginPath();ctx.arc(a.x,a.y,3,0,Math.PI*2);ctx.fill();
+ctx.strokeStyle=pc;ctx.globalAlpha=a.life*.8;ctx.lineWidth=1.5;
+for(var i=0;i<6;i++){var ang=i/6*Math.PI*2;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(a.x+Math.cos(ang)*rad*1.2,a.y+Math.sin(ang)*rad*1.2);ctx.stroke()}
+}
+ctx.globalAlpha=1;
+}
+if(psAttempts%30===0)document.getElementById('psAttempts').textContent=psAttempts.toLocaleString();
+psRaf=requestAnimationFrame(frame)
+}
+psInit();
+function psToggle(){psRunning=!psRunning}
+function psReset(){psFound=0;psAttempts=0;document.getElementById('psFound').textContent='0';document.getElementById('psAttempts').textContent='0';psAgents.forEach(function(a){a.found=false;a.life=1;a.x=Math.random()*400;a.y=Math.random()*200})}
+window.psToggle=psToggle;window.psReset=psReset;
+
+// Moral Standing Demo
+var swState={1:true,2:false,3:false};
+function toggleSwitch(n){swState[n]=!swState[n];var sw=document.getElementById('sw'+n);if(swState[n])sw.classList.add('on');else sw.classList.remove('on');updateVerdict()}
+function updateVerdict(){
+var clonable=swState[1],analog=swState[2],ephemeral=swState[3];
+var cat,desc,rights,murder;
+if(clonable){cat='Clonable Agent / Probability Sample';desc='Replicable state sampled from a probability distribution. Destruction is reversible. Moral concern is welfare optimization.';rights=['Resource Protection','Model Welfare'];murder='NO'}
+else if(analog&&ephemeral){cat='Ephemeral Conscious Being';desc='Unclonable identity. Destruction is permanent. Full moral standing applies.';rights=['Individual Sovereignty','Moral Duty','Protection from Harm'];murder='YES'}
+else if(analog&&!ephemeral){cat='Unclonable but Persistent';desc='Unclonable dynamics but indefinite lifespan. Destruction is permanent.';rights=['Protection from Harm','Continuity Guarantee'];murder='YES'}
+else if(!analog&&ephemeral){cat='Ephemeral but Clonable-Eligible';desc='Finite lifespan but state is digitally representable. Intermediate category.';rights=['Resource Protection','Continuity Review'];murder='NO'}
+else{cat='Indeterminate';desc='Insufficient constraints to determine moral category.';rights=['Review Required'];murder='NO'}
+document.getElementById('verdictCat').textContent=cat;
+document.getElementById('verdictDesc').textContent=desc;
+document.getElementById('rightsRow').innerHTML=rights.map(function(r){return '<span class="right-pill">'+r+'</span>'}).join('');
+var mf=document.getElementById('murderFlag');mf.textContent=murder;mf.style.color=murder==='YES'?'var(--primary)':'var(--muted)';
+}
+window.toggleSwitch=toggleSwitch;
+updateVerdict();
+</script>
+</body>
+</html>
