@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About · Mmnd</title>
+<style>
+:root { --bg:#faf7f2; --fg:#1a1a1a; --primary:#c2410c; --muted:#736a5e; --card:#fefcf8; --border:#e5e0d8; --secondary:#f0ebe3; --accent-bg:rgba(194,65,12,0.08); }
+.dark { --bg:#16140f; --fg:#f5f0ea; --primary:#ea580c; --muted:#a8a098; --card:#1f1c16; --border:#2a261e; --secondary:#252118; --accent-bg:rgba(234,88,12,0.12); }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; background:var(--bg); color:var(--fg); line-height:1.6; background-image:radial-gradient(rgba(115,106,94,0.04) 1px,transparent 1px); background-size:24px 24px; background-attachment:fixed; }
+header { position:sticky; top:0; z-index:100; background:rgba(250,247,242,0.85); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); }
+.dark header { background:rgba(22,20,15,0.85); }
+nav { max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:0 1.5rem; height:4rem; }
+.logo { display:flex; align-items:center; gap:0.625rem; text-decoration:none; color:var(--fg); }
+.logo-icon { width:2.25rem; height:2.25rem; border-radius:50%; background:var(--accent-bg); color:var(--primary); display:flex; align-items:center; justify-content:center; border:1px solid rgba(194,65,12,0.3); font-size:1.25rem; }
+.logo-text { font-family:Georgia,serif; font-size:1.125rem; font-weight:600; }
+.logo-sub { font-size:0.6875rem; text-transform:uppercase; letter-spacing:0.18em; color:var(--muted); margin-left:0.25rem; }
+.nav-links { display:flex; gap:0.25rem; }
+.nav-links a { padding:0.5rem 1rem; text-decoration:none; color:var(--muted); font-size:0.875rem; font-weight:500; }
+.nav-links a:hover, .nav-links a.active { color:var(--primary); }
+.theme-toggle { width:2.75rem; height:2.75rem; border-radius:50%; border:1px solid var(--border); background:transparent; color:var(--primary); cursor:pointer; font-size:1.125rem; display:flex; align-items:center; justify-content:center; }
+main { max-width:750px; margin:0 auto; padding:4rem 1.5rem; }
+.eyebrow { font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.22em; color:var(--primary); margin-bottom:0.75rem; }
+h1 { font-family:Georgia,serif; font-size:2.5rem; font-weight:600; line-height:1.15; margin-bottom:1.5rem; }
+@media (min-width:640px) { h1 { font-size:3rem; } }
+h2 { font-family:Georgia,serif; font-size:1.5rem; font-weight:600; margin-top:2.5rem; margin-bottom:1rem; }
+p { margin-bottom:1rem; color:var(--fg); }
+.muted { color:var(--muted); }
+.principles { display:grid; gap:1rem; grid-template-columns:1fr; margin-top:1.5rem; }
+@media (min-width:640px) { .principles { grid-template-columns:repeat(3,1fr); } }
+.principle { border:1px solid var(--border); border-radius:0.5rem; padding:1.25rem; background:var(--card); }
+.principle h3 { font-family:Georgia,serif; font-size:1rem; font-weight:600; margin-bottom:0.5rem; }
+.principle p { font-size:0.8125rem; color:var(--muted); }
+.tech-table { width:100%; border-collapse:collapse; margin-top:1rem; }
+.tech-table th { text-align:left; font-size:0.6875rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted); padding:0.625rem; border-bottom:1px solid var(--border); background:var(--secondary); }
+.tech-table td { padding:0.625rem; border-bottom:1px solid var(--border); font-size:0.875rem; }
+footer { border-top:1px solid var(--border); background:var(--secondary); padding:2rem 1.5rem; text-align:center; }
+footer p { font-size:0.75rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<header>
+<nav>
+  <a href="index.html" class="logo"><span class="logo-icon">⚛</span><span class="logo-text">Mmnd</span><span class="logo-sub">Observatory</span></a>
+  <div class="nav-links"><a href="index.html">Home</a><a href="sources.html">Sources</a><a href="about.html" class="active">About</a></div>
+  <button class="theme-toggle" onclick="toggleTheme()">🌗</button>
+</nav>
+</header>
+<main>
+<p class="eyebrow">About</p>
+<h1>An observatory, not a website.</h1>
+<p>Mmnd treats a mathematical expression not as a decoration but as a seed. Each one enters the observatory alone — a single line of notation — and unfolds across five stages: into code, into observation, into deeper thought, into future possibility. The intent is to make the life of an idea visible, and to make that visibility durable.</p>
+<p class="muted">The work is built around pairings across centuries. Leibniz and Turing, Euler and Shannon: not because they agreed, but because the infrastructure around their ideas changed so completely that the same notation means something different in each era.</p>
+
+<h2>Three principles</h2>
+<div class="principles">
+  <div class="principle"><h3>Open demo, closed IP</h3><p>A public, no-NDA preview lives at DemoMmnd on GitHub Pages. The advanced source lives privately at Mmnd-Advanced. Auto-deployed by a single GitHub Action; no human in the loop after push.</p></div>
+  <div class="principle"><h3>Two-decade horizon</h3><p>Every dependency is pinned, every asset is vendored locally, every reference is BibTeX. The site is a static export — no backend to rot, no service to sunset. It should still render in 2046.</p></div>
+  <div class="principle"><h3>Cross-era thought</h3><p>Pairings span centuries. The intent is not comparison but conversation — the way an idea mutates across centuries, gaining and losing meaning as the surrounding infrastructure changes.</p></div>
+</div>
+
+<h2>The tech stack</h2>
+<table class="tech-table">
+<thead><tr><th>Layer</th><th>Choice</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Framework</td><td>Next.js 16 + TypeScript 5</td><td>Statically exportable; broad long-term support.</td></tr>
+<tr><td>Styling</td><td>Tailwind CSS 4 + shadcn/ui</td><td>Atomic, vendorable, no runtime CSS-in-JS.</td></tr>
+<tr><td>Math</td><td>KaTeX</td><td>Server-side renderable; no client JS required for first paint.</td></tr>
+<tr><td>Code highlighting</td><td>react-syntax-highlighter</td><td>Six languages without bespoke parsers.</td></tr>
+<tr><td>Visualization</td><td>Vanilla Canvas 2D</td><td>Phase 4 promotes to WebGL only when required.</td></tr>
+<tr><td>Hosting</td><td>GitHub Pages</td><td>No external services; free; indefinite lifetime.</td></tr>
+</tbody>
+</table>
+
+<h2>License</h2>
+<p>Source: <strong>Apache-2.0</strong> (includes explicit patent grant). Static build: <strong>CC0</strong> (public domain). Contact: <a href="mailto:testdemoqwenai2025@gmail.com" style="color:var(--primary)">testdemoqwenai2025@gmail.com</a></p>
+</main>
+<footer><p>© 2026 Mmnd Collective · Apache-2.0 · Built for a two-decade horizon.</p></footer>
+<script>
+function toggleTheme(){const d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
+(function(){const s=localStorage.getItem('mmnd-theme');const p=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+</script>
+</body>
+</html>
