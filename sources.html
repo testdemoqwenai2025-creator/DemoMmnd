@@ -98,6 +98,21 @@ canvas.viz{width:100%;aspect-ratio:16/9;border:1px solid var(--border);border-ra
 footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2.5rem 1.5rem}
 .footer-inner{max-width:1200px;margin:0 auto;text-align:center}
 .footer-inner p{font-size:.75rem;color:var(--muted)}
+
+@media(max-width:640px){
+.popup{max-width:100%;border-radius:0;margin:0;max-height:100vh;overflow-y:auto}
+.popup-overlay{padding:0}
+.popup-tabs{flex-wrap:wrap}
+.popup-tab{flex:1;text-align:center;padding:.5rem .25rem;font-size:.6875rem}
+.popup-body{padding:1rem}
+.code-tabs{flex-wrap:wrap}
+.code-tab{flex:1;text-align:center;padding:.375rem .25rem;font-size:.625rem}
+.expr-grid{grid-template-columns:1fr!important}
+.demo-canvas{aspect-ratio:3/2!important}
+.report-grid{grid-template-columns:repeat(2,1fr)!important}
+.map-table{font-size:.625rem}
+.map-table td{padding:.2rem .3rem}
+}
 </style>
 </head>
 <body>
@@ -122,6 +137,9 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 
 <h2>Concept cards &mdash; click to open the six-tab explorer</h2>
 <p style="color:var(--muted);font-size:.875rem">12 expressions, each with 6 language implementations. Click any card.</p>
+<div style="margin-bottom:1rem;position:relative">
+<input type="text" id="searchInput" placeholder="Search expressions by name, domain, or language..." style="width:100%;padding:.75rem 1rem;font-size:.875rem;border:1px solid var(--border);border-radius:.5rem;background:var(--card);color:var(--fg)" oninput="filterCards()">
+</div>
 <div class="expr-grid" id="exprGrid"></div>
 
 <h2>Stage 3 &middot; Observation</h2>
@@ -195,6 +213,7 @@ var TABS=[{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'code',icon:'\ud83d\u
 fetch('code-data.json').then(function(r){return r.json()}).then(function(data){
 CODE=data;
 renderCards();
+checkDeepLink();
 setTimeout(runAudit,500);
 }).catch(function(e){
 console.error('Failed to load code-data.json:',e);
@@ -220,6 +239,25 @@ html+='</div></div>';
 }
 grid.innerHTML=html;
 }
+
+function filterCards(){
+var q=(document.getElementById('searchInput').value||'').toLowerCase();
+var cards=document.querySelectorAll('.expr-card');
+var visible=0;
+cards.forEach(function(c){
+var text=c.textContent.toLowerCase();
+var show=!q||text.indexOf(q)>=0;
+c.style.display=show?'':'none';
+if(show)visible++;
+});
+}
+
+// S1: Deep-linking — auto-open popup from URL hash
+function checkDeepLink(){
+var hash=window.location.hash.substring(1);
+if(hash&&CODE[hash]){openPopup(hash)}
+}
+window.addEventListener('hashchange',checkDeepLink);
 
 var currentExpr=null;
 var demoAnim=null;
@@ -309,6 +347,20 @@ function drawFuturistic(id){var cv=document.getElementById('futChart');if(!cv)re
 function drawObsGraph(cv){if(!cv||!CODE)return;drawGraphType(cv,currentGraphType||'Bar')}
 
 // Code execution output
+var pyodideReady=null;
+async function loadPyodide(){
+if(pyodideReady)return pyodideReady;
+pyodideReady='loading';
+try{
+var py=await loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'});
+pyodideReady=py;
+return py;
+}catch(e){
+console.log('Pyodide load failed, using simulated output');
+pyodideReady=null;
+return null;
+}
+}
 function runCode(key){
 var e=CODE[key];if(!e)return;
 var out=document.getElementById('codeOutput');var st=document.getElementById('runStatus');
