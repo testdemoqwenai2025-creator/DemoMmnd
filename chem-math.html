@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="2026-11-02-v5-mol-anim-fix">
+<meta name="version" content="2026-11-02-v6-fut-anim-fix">
 <title>Chem-Math · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -652,19 +652,21 @@ var gv=document.getElementById('growthVal');if(gv)gv.textContent=growth.toFixed(
 var problems=CHEM_FUTURES[currentExpr]||CHEM_FUTURES['dipole'];
 var pL=90,pB=30,pT=35,pR=20,cw=W-pL-pR,ch=H-pT-pB;
 var yearStart=2025,yearEnd=2040,yearSpan=yearEnd-yearStart;
-var animT=futAnimT||0;var growP=Math.min(1,animT/3);
+var animT=futAnimT||0;var growP=Math.min(1,animT/3);var breathe=Math.sin(animT*0.8)*0.04;
 ctx.strokeStyle='rgba(194,65,12,0.08)';ctx.lineWidth=.5;
 for(var y=yearStart;y<=yearEnd;y+=3){var x=pL+((y-yearStart)/yearSpan)*cw;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(y,x,H-pB+10)}
 problems.forEach(function(pb,i){
 var rowY=pT+(i+0.5)*ch/problems.length;var barH=ch/problems.length*0.55;
 ctx.beginPath();
-for(var t=0;t<=100;t++){var year=yearStart+(t/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*growP;var x=pL+(t/100)*cw;var y=rowY-barH/2-pAtY*barH;if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+for(var t=0;t<=100;t++){var year=yearStart+(t/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growP+breathe*rawP);var x=pL+(t/100)*cw;var y=rowY-barH/2-pAtY*barH;if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
 ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
 var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'44');grad.addColorStop(1,'#FFD70066');
 ctx.fillStyle=grad;ctx.fill();
 ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=pc;ctx.lineWidth=1.5;ctx.beginPath();
-for(var t=0;t<=100;t++){var year=yearStart+(t/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*growP;var x=pL+(t/100)*cw;var y=rowY-barH/2-pAtY*barH;if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+for(var t=0;t<=100;t++){var year=yearStart+(t/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growP+breathe*rawP);var x=pL+(t/100)*cw;var y=rowY-barH/2-pAtY*barH;if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
 ctx.stroke();ctx.shadowBlur=0;
+// Flowing particles along the curve
+for(var pi=0;pi<3;pi++){var flowU=((animT*0.12+pi/3)%1);var year=yearStart+flowU*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growP+breathe*rawP);var px=pL+flowU*cw;var py=rowY-barH/2-pAtY*barH;var fadeA=0.5+0.5*Math.sin(flowU*Math.PI);ctx.shadowColor='#FFD700';ctx.shadowBlur=10;ctx.fillStyle='rgba(255,215,0,'+fadeA+')';ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
 ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-5,rowY+3);
 ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText(pb.t.substring(0,20),pL+cw*0.7,rowY+barH/2+8);
 });
@@ -687,7 +689,7 @@ rows+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:.15r
 rows+='<\/table>';dt.innerHTML=rows;
 }
 
-function startFut(){stopFut();futAnimT=0;function loop(){futAnimT+=0.04;if(futAnimT<10){drawChemFuturistic();futRaf=requestAnimationFrame(loop)}}loop()}
+function startFut(){stopFut();futAnimT=0;function loop(){futAnimT+=0.04;drawChemFuturistic();futRaf=requestAnimationFrame(loop)}loop()}
 function stopFut(){if(futRaf){cancelAnimationFrame(futRaf);futRaf=null}}
 
 // Audit
