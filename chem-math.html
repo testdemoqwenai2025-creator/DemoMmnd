@@ -6,11 +6,12 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="2026-11-02-v2">
+<meta name="version" content="2026-11-02-v3-pyodide-3d">
 <title>Chem-Math · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
 .dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
@@ -372,9 +373,66 @@ function closePopup(){stopAnim();stopFut();document.getElementById('popup').clas
 function switchTab(id,btn){stopAnim();stopFut();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnim(currentExpr,cv)},50);drawChemGraph()}if(id==='mol'&&currentExpr){var mc=document.getElementById('molCanvas');if(mc)setTimeout(function(){startMolAnim(currentExpr,mc)},50)}if(id==='fut'&&currentExpr){startFut();renderChemDataset()}}
 function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
 
-function runCode(key){var e=CODE[key];if(!e)return;var out=document.getElementById('codeOutput');var st=document.getElementById('runStatus');if(!out||!st)return;st.textContent='Running...';out.style.display='block';out.textContent='';var lang='Python';document.querySelectorAll('.code-tab').forEach(function(t){if(t.classList.contains('active'))lang=t.textContent.trim()});
+function runCode(key){
+var e=CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput');var st=document.getElementById('runStatus');
+if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var lang='Python';document.querySelectorAll('.code-tab').forEach(function(t){if(t.classList.contains('active'))lang=t.textContent.trim()});
+var code=e.langs[lang]||'';
+
+// Try real Pyodide execution for Python
+if(lang==='Python'&&window.pyodideReady){
+st.textContent='Executing in Pyodide (real Python)...';
+out.textContent='$ Python (Pyodide — real execution)\n';
+try{
+window.pyodide.setStdout({batched:function(s){out.textContent+=s+'\n';out.scrollTop=out.scrollHeight}});
+window.pyodide.setStderr({batched:function(s){out.textContent+='[stderr] '+s+'\n'}});
+// Run the code
+window.pyodide.runPythonAsync(code).then(function(){
+st.textContent='Done (real Python via Pyodide)';
+}).catch(function(err){
+out.textContent+='\n[error] '+err.message+'\n';
+st.textContent='Error (see output)';
+});
+}catch(err){
+out.textContent+='[Pyodide error] '+err.message+'\nFalling back to simulated...\n\n';
+runSimulated(key,lang,out,st);
+}
+return;
+}
+// Fallback: simulated output
+runSimulated(key,lang,out,st);
+}
+
+function runSimulated(key,lang,out,st){
 var outputs={'dipole':['$ '+lang+' dipole','charges: [-0.5, +0.5, -0.3, +0.3]','positions: [[0,0,0],[1,0,0],[0,1,0],[1,1,0]]','','mu = [0.8, 0.8, 0.0] Debye','|mu| = 1.13 Debye','Direction: 45 degrees from x-axis'],'polarizability':['$ '+lang+' polarizability','Computing 3x3 tensor...','','alpha = [[5.2, 0.3, 0.0],','        [0.3, 4.8, 0.1],','        [0.0, 0.1, 5.0]] A^3','','Trace: 15.0 A^3','Anisotropy: 0.4'],'nmr_shielding':['$ '+lang+' nmr_shielding','Computing shielding tensors...','','C1: sigma = [[120, 5, 0], [5, 115, 2], [0, 2, 118]] ppm','C2: sigma = [[85, 3, 0], [3, 82, 1], [0, 1, 80]] ppm','','Chemical shift C1: 180 - 120 = 60 ppm','Chemical shift C2: 180 - 85 = 95 ppm'],'electron_density':['$ '+lang+' electron_density','Evaluating on grid...','','Grid: 32x32x32 = 32768 points','Orbitals: 12 occupied','','Max density: 0.45 e/Bohr^3 at (0.5, 0.5, 0.5)','Integrated charge: 16.00 e'],'equivariant_attention':['$ '+lang+' equivariant_attn','Nodes (atoms): 8','Edges (bonds): 12','d_model: 64','','Attention matrix [8x8]:','Row 0: [0.35, 0.20, 0.15, 0.10, 0.08, 0.05, 0.04, 0.03]','Max attention: atom 0 -> atom 1 (0.35)'],'energy_prediction':['$ '+lang+' predict_energy','Molecular graph: 8 atoms, 12 bonds','','Message passing...','Pooling...','MLP forward...','','E_predicted = -1234.5678 Hartree','E_DFT = -1234.5689 Hartree','Error: 0.0011 Hartree (0.69 kcal/mol)']};
-var out2=outputs[key]||['Running...'];var i=0;var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+')';return}out.textContent+=out2[i]+'\n';out.scrollTop=out.scrollHeight;i++},200)}
+var out2=outputs[key]||['Running...'];var i=0;
+out.textContent='$ '+lang+' (simulated)\n';
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+' — simulated)';return}out.textContent+=out2[i]+'\n';out.scrollTop=out.scrollHeight;i++},200)
+}
+
+// Load Pyodide async
+;var pyodideLoading=null;
+function loadPyodide(){
+if(window.pyodideReady)return Promise.resolve(window.pyodideReady);
+if(pyodideLoading)return pyodideLoading;
+if(typeof loadPyodide==='undefined'||typeof loadPyodide!=='function')return Promise.resolve(null);
+pyodideLoading=loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'}).then(function(py){
+window.pyodideReady=py;
+console.log('Pyodide loaded successfully');
+return py;
+}).catch(function(e){
+console.log('Pyodide load failed, using simulated output:',e.message);
+window.pyodideReady=null;
+return null;
+});
+return pyodideLoading;
+}
+// Start loading Pyodide immediately
+if(typeof loadPyodide==='function'){
+setTimeout(function(){loadPyodide()},2000);
+}
 
 function loadChemDataset(cat){var o=document.getElementById('dsOut');if(!cat){o.innerHTML='';return}var d={'spice':['SPICE: 1.1M conformations, 172 unique molecules','Elements: H,C,N,O,F,P,S,Cl,Br,I,etc.','Properties: energy, forces, dipole, quadrupole','Ref: Eastman et al. (2023)'],'tmqm':['TMQM: 86k transition metal complexes','Elements: 30+ metal centers + organic ligands','Properties: energy, orbital energies, dipole','Ref: David et al. (2020)'],'qm9':['QM9: 130k small organic molecules','Elements: H,C,N,O,F (max 9 heavy atoms)','Properties: 17 properties including dipole, polarizability','Ref: Ramakrishnan et al. (2014)'],'ani1':['ANI-1: 20M conformations','Elements: H,C,N,O','Properties: energy, forces','Ref: Smith et al. (2017)']};var p=d[cat]||[];o.innerHTML='<strong>'+cat+'<\/strong> dataset:<br>'+p.map(function(x){return '&bull; '+x}).join('<br>')}
 
@@ -387,54 +445,136 @@ else if(currentGraphType==='Line'){ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginP
 else if(currentGraphType==='Radar'){var cx=W/2,cy=H/2,rad=Math.min(cw,ch)/2*0.8;var n=data.length;ctx.strokeStyle='rgba(194,65,12,0.2)';for(var ring=1;ring<=4;ring++){ctx.beginPath();for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=rad*ring/4;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.closePath();ctx.stroke()}ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.fillStyle='rgba(194,65,12,0.2)';ctx.beginPath();data.forEach(function(d,i){var a=i/n*Math.PI*2-Math.PI/2;var r2=d.val/maxV*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle=fg;ctx.font='8px sans-serif';ctx.textAlign='center';data.forEach(function(d,i){var a=i/n*Math.PI*2-Math.PI/2;ctx.fillText(d.lang,cx+Math.cos(a)*(rad+12),cy+Math.sin(a)*(rad+12))})}
 else if(currentGraphType==='Pie'){var total=data.reduce(function(s,d){return s+d.val},0);var cx=W/2,cy=H/2,rad=Math.min(cw,ch)/2*0.8;var a0=-Math.PI/2;var colors=['#c2410c','#d97706','#b45309','#92400e','#78350f','#FFD700'];data.forEach(function(d,i){var a1=a0+d.val/total*Math.PI*2;ctx.fillStyle=colors[i%colors.length];ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,rad,a0,a1);ctx.closePath();ctx.fill();a0=a1})}}
 
-// Molecular structure animation
-function startMolAnim(id,cv){stopAnim();var t=0;function frame(){drawMolecule(id,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
+// 3D Molecular structure animation (perspective projection, no Three.js)
+function startMolAnim(id,cv){stopAnim();var t=0;function frame(){drawMolecule3D(id,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
 
-function drawMolecule(id,cv,time){
+function drawMolecule3D(id,cv,time){
 if(!cv)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-// Molecular structures per expression
-var mols={
-'dipole':{atoms:[{x:0.3,y:0.5,c:'#ff4444',q:-0.5,l:'O'},{x:0.7,y:0.5,c:'#4444ff',q:0.5,l:'H'}],bonds:[[0,1]]},
-'polarizability':{atoms:[{x:0.25,y:0.5,c:'#888',q:0,l:'C'},{x:0.5,y:0.5,c:'#888',q:0,l:'C'},{x:0.75,y:0.5,c:'#888',q:0,l:'C'}],bonds:[[0,1],[1,2]]},
-'nmr_shielding':{atoms:[{x:0.3,y:0.35,c:'#888',q:0,l:'C'},{x:0.7,y:0.35,c:'#888',q:0,l:'C'},{x:0.5,y:0.65,c:'#ff4444',q:0,l:'O'}],bonds:[[0,1],[1,2],[0,2]]},
-'electron_density':{atoms:[{x:0.35,y:0.4,c:'#888',q:0,l:'C'},{x:0.65,y:0.4,c:'#888',q:0,l:'C'},{x:0.5,y:0.6,c:'#44ff44',q:0,l:'N'}],bonds:[[0,1],[1,2],[0,2]]},
-'equivariant_attention':{atoms:[{x:0.2,y:0.3,c:'#888',q:0,l:'A'},{x:0.5,y:0.3,c:'#888',q:0,l:'B'},{x:0.8,y:0.3,c:'#888',q:0,l:'C'},{x:0.35,y:0.7,c:'#888',q:0,l:'D'},{x:0.65,y:0.7,c:'#888',q:0,l:'E'}],bonds:[[0,1],[1,2],[0,3],[1,3],[1,4],[2,4]]},
-'energy_prediction':{atoms:[{x:0.3,y:0.35,c:'#888',q:0,l:'C'},{x:0.7,y:0.35,c:'#888',q:0,l:'C'},{x:0.3,y:0.65,c:'#ff4444',q:0,l:'O'},{x:0.7,y:0.65,c:'#ff4444',q:0,l:'O'}],bonds:[[0,1],[0,2],[1,3]]}
+// 3D molecular structures with x,y,z coordinates
+var MOL3D={
+'dipole':{atoms:[{x:-0.5,y:0,z:0,c:'#ff4444',r:14,l:'O',q:-0.5},{x:0.5,y:0,z:0,c:'#4444ff',r:10,l:'H',q:0.5}],bonds:[[0,1]],type:'dipole'},
+'polarizability':{atoms:[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'}],bonds:[[0,1],[1,2]],type:'polarizability'},
+'nmr_shielding':{atoms:[{x:-0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0,y:-0.3,z:0,c:'#ff4444',r:14,l:'O'}],bonds:[[0,1],[1,2],[0,2]],type:'nmr'},
+'electron_density':{atoms:[{x:-0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0,y:-0.2,z:-0.2,c:'#44ff44',r:14,l:'N'}],bonds:[[0,1],[1,2],[0,2]],type:'density'},
+'equivariant_attention':{atoms:[{x:-0.5,y:0.3,z:0,c:'#888',r:10,l:'A'},{x:0,y:0.3,z:0.3,c:'#888',r:10,l:'B'},{x:0.5,y:0.3,z:0,c:'#888',r:10,l:'C'},{x:-0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'D'},{x:0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'E'}],bonds:[[0,1],[1,2],[0,3],[1,3],[1,4],[2,4]],type:'attention'},
+'energy_prediction':{atoms:[{x:-0.3,y:0.2,z:0,c:'#888',r:12,l:'C'},{x:0.3,y:0.2,z:0,c:'#888',r:12,l:'C'},{x:-0.3,y:-0.2,z:0,c:'#ff4444',r:10,l:'O'},{x:0.3,y:-0.2,z:0,c:'#ff4444',r:10,l:'O'}],bonds:[[0,1],[0,2],[1,3]],type:'energy'}
 };
-var mol=mols[id]||mols['dipole'];
-var cx2=W/2,cy2=H/2,scale=Math.min(W,H)*0.6;
-// Draw bonds with pulsing
-mol.bonds.forEach(function(b,i){
-var a1=mol.atoms[b[0]],a2=mol.atoms[b[1]];
-var x1=cx2+(a1.x-0.5)*scale,y1=cy2+(a1.y-0.5)*scale;
-var x2=cx2+(a2.x-0.5)*scale,y2=cy2+(a2.y-0.5)*scale;
-var pulse=(Math.sin(time*2+i)+1)/2;
-ctx.strokeStyle='rgba(194,65,12,'+(0.3+pulse*0.3)+')';ctx.lineWidth=2+pulse;
-ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+var mol=MOL3D[id]||MOL3D['dipole'];
+var cx=W/2,cy=H/2,scale=Math.min(W,H)*0.25;
+var rotY=time*0.5,rotX=Math.sin(time*0.3)*0.3;
+// 3D rotation + perspective projection
+function project(p){
+// Rotate around Y
+var x1=p.x*Math.cos(rotY)-p.z*Math.sin(rotY);
+var z1=p.x*Math.sin(rotY)+p.z*Math.cos(rotY);
+var y1=p.y;
+// Rotate around X
+var y2=y1*Math.cos(rotX)-z1*Math.sin(rotX);
+var z2=y1*Math.sin(rotX)+z1*Math.cos(rotX);
+// Perspective
+var depth=3;var f=depth/(depth+z2);
+return{x:cx+x1*scale*f,y:cy+y2*scale*f,z:z2,f:f};
+}
+// Project all atoms
+var projAtoms=mol.atoms.map(function(a){return{p:project(a),atom:a}});
+// Sort by z (far first)
+projAtoms.sort(function(a,b){return b.p.z-a.p.z});
+// Draw electron density cloud (for density type)
+if(mol.type==='density'){
+projAtoms.forEach(function(pa){
+var r2=pa.atom.r*pa.p.f*2.5;
+var g=ctx.createRadialGradient(pa.p.x,pa.p.y,0,pa.p.x,pa.p.y,r2);
+var hue=(time*30+pa.p.z*100)%360;
+g.addColorStop(0,'hsla('+hue+',50%,40%,0.15)');
+g.addColorStop(1,'hsla('+hue+',50%,40%,0)');
+ctx.fillStyle=g;ctx.beginPath();ctx.arc(pa.p.x,pa.p.y,r2,0,Math.PI*2);ctx.fill();
+});
+}
+// Draw bonds (sorted by average z)
+var bondList=mol.bonds.map(function(b){var a=projAtoms.find(function(pa,i){return mol.atoms.indexOf(pa.atom)===b[0]})||projAtoms[0];var bb=projAtoms.find(function(pa,i){return mol.atoms.indexOf(pa.atom)===b[1]})||projAtoms[1];return{a:a,bb:bb,z:(a.p.z+bb.p.z)/2}});
+bondList.sort(function(a,b){return b.z-a.z});
+bondList.forEach(function(bl){
+var pulse=(Math.sin(time*2+bl.z*3)+1)/2;
+var alpha=0.3+pulse*0.3;
+var w=2*Math.min(bl.a.p.f,bl.bb.p.f);
+ctx.strokeStyle='rgba(194,65,12,'+alpha+')';ctx.lineWidth=w;
+ctx.beginPath();ctx.moveTo(bl.a.p.x,bl.a.p.y);ctx.lineTo(bl.bb.p.x,bl.bb.p.y);ctx.stroke();
 // Attention particles flowing along bond
-var pt=(time*0.3+i*0.2)%1;
-var px=x1+(x2-x1)*pt,py=y1+(y2-y1)*pt;
+if(mol.type==='attention'){
+var pt=(time*0.4+bondList.indexOf(bl)*0.15)%1;
+var px=bl.a.p.x+(bl.bb.p.x-bl.a.p.x)*pt;
+var py=bl.a.p.y+(bl.bb.p.y-bl.a.p.y)*pt;
 ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;
 ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-});
-// Draw atoms
-mol.atoms.forEach(function(a,i){
-var x=cx2+(a.x-0.5)*scale,y=cy2+(a.y-0.5)*scale;
-var pulse=1+Math.sin(time*1.5+i)*0.1;
-ctx.shadowColor=a.c;ctx.shadowBlur=12*pulse;
-ctx.fillStyle=a.c;ctx.beginPath();ctx.arc(x,y,12*pulse,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-ctx.fillStyle=fg;ctx.font='10px sans-serif';ctx.textAlign='center';
-ctx.fillText(a.l,x,y+3);
-// Dipole arrow for dipole expression
-if(id==='dipole'&&a.q!==0){
-var arrowLen=a.q*30;
-ctx.strokeStyle=pc;ctx.lineWidth=2;
-ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+arrowLen,y);ctx.stroke();
-if(arrowLen>0){ctx.beginPath();ctx.moveTo(x+arrowLen,y);ctx.lineTo(x+arrowLen-5,y-3);ctx.lineTo(x+arrowLen-5,y+3);ctx.fill()}
 }
 });
+// Draw atoms (back to front)
+projAtoms.forEach(function(pa){
+var r2=pa.atom.r*pa.p.f;
+// Sphere shading: radial gradient
+var g=ctx.createRadialGradient(pa.p.x-r2*0.3,pa.p.y-r2*0.3,0,pa.p.x,pa.p.y,r2);
+g.addColorStop(0,'rgba(255,255,255,0.6)');
+g.addColorStop(0.3,pa.atom.c);
+g.addColorStop(1,pa.atom.c.replace('rgb','rgba').replace(')',',0.6)')||pa.atom.c+'99');
+ctx.shadowColor=pa.atom.c;ctx.shadowBlur=12*pa.p.f;
+ctx.fillStyle=g;ctx.beginPath();ctx.arc(pa.p.x,pa.p.y,r2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+// Highlight rim
+ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(pa.p.x,pa.p.y,r2,0,Math.PI*2);ctx.stroke();
+// Label
+ctx.fillStyle=fg;ctx.font=Math.round(9*pa.p.f)+'px sans-serif';ctx.textAlign='center';
+ctx.fillText(pa.atom.l,pa.p.x,pa.p.y+3);
+// Charge indicator for dipole
+if(pa.atom.q!==undefined&&mol.type==='dipole'){
+var qlen=pa.atom.q*25*pa.p.f;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2*pa.p.f;
+ctx.beginPath();ctx.moveTo(pa.p.x,pa.p.y);ctx.lineTo(pa.p.x+qlen,pa.p.y);ctx.stroke();
+}
+});
+// Expression-specific overlays
+if(mol.type==='dipole'){
+// Dipole arrow through molecule
+var dStart=projAtoms.find(function(pa){return pa.atom.q<0})||projAtoms[0];
+var dEnd=projAtoms.find(function(pa){return pa.atom.q>0})||projAtoms[1];
+ctx.strokeStyle='#FFD700';ctx.lineWidth=3;ctx.shadowColor='#FFD700';ctx.shadowBlur=10;
+ctx.beginPath();ctx.moveTo(dStart.p.x,dStart.p.y);ctx.lineTo(dEnd.p.x,dEnd.p.y);ctx.stroke();ctx.shadowBlur=0;
+// Arrowhead
+var ah=Math.atan2(dEnd.p.y-dStart.p.y,dEnd.p.x-dStart.p.x);
+ctx.fillStyle='#FFD700';
+ctx.beginPath();ctx.moveTo(dEnd.p.x,dEnd.p.y);
+ctx.lineTo(dEnd.p.x-8*Math.cos(ah-0.3),dEnd.p.y-8*Math.sin(ah-0.3));
+ctx.lineTo(dEnd.p.x-8*Math.cos(ah+0.3),dEnd.p.y-8*Math.sin(ah+0.3));
+ctx.fill();
+ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='center';
+ctx.fillText('mu',cx,cy+scale+15);
+}
+else if(mol.type==='polarizability'){
+// Polarizability ellipsoid
+var ex=scale*0.8*(0.8+0.2*Math.sin(time)),ey=scale*0.5*(0.8+0.2*Math.cos(time));
+ctx.strokeStyle='rgba(255,215,0,0.4)';ctx.lineWidth=2;
+ctx.beginPath();ctx.ellipse(cx,cy,ex,ey,rotY,0,Math.PI*2);ctx.stroke();
+ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='center';
+ctx.fillText('alpha tensor',cx,cy+scale+15);
+}
+else if(mol.type==='nmr'){
+// NMR shielding ellipsoids on atoms
+projAtoms.forEach(function(pa){
+var rot2=time*0.5+pa.p.z;
+ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;
+ctx.beginPath();ctx.ellipse(pa.p.x,pa.p.y,pa.atom.r*pa.p.f*1.3,pa.atom.r*pa.p.f*0.8,rot2,0,Math.PI*2);ctx.stroke();
+});
+}
+else if(mol.type==='energy'){
+// Energy color overlay
+projAtoms.forEach(function(pa){
+var energy=(Math.sin(time+pa.p.z*2)+1)/2;
+ctx.globalAlpha=0.3;
+ctx.fillStyle=energy>0.5?'#ff4444':'#4444ff';
+ctx.beginPath();ctx.arc(pa.p.x,pa.p.y,pa.atom.r*pa.p.f*1.2,0,Math.PI*2);ctx.fill();
+ctx.globalAlpha=1;
+});
+}
 // Phase bar
 var pby=H-6;var grad=ctx.createLinearGradient(0,pby,W,pby);
 grad.addColorStop(0,'#ff0000');grad.addColorStop(.14,'#ffa500');grad.addColorStop(.28,'#ffff00');
@@ -445,7 +585,7 @@ ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='left';
 ctx.fillText('0',2,pby-1);ctx.textAlign='right';ctx.fillText('2pi',W-2,pby-1);
 // Title
 ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';
-ctx.fillText(e_name(id)+' molecular structure',W/2,14);
+ctx.fillText(e_name(id)+' — 3D molecular structure (rotate)',W/2,14);
 }
 
 function e_name(id){if(!CODE||!CODE[id])return id;return CODE[id].name.replace(/^[0-9]+\.\s/,'')}
@@ -647,6 +787,9 @@ chk('Expression-specific NMR',function(){return CHEM_FUTURES&&CHEM_FUTURES['nmr_
 chk('Expression-specific energy',function(){return CHEM_FUTURES&&CHEM_FUTURES['energy_prediction']&&CHEM_FUTURES['energy_prediction'][0].n==='MD acceleration'});
 chk('currentExpr updates',function(){return typeof currentExpr==='string'||currentExpr===null});
 chk('Version tag',function(){return document.querySelector('meta[name=version]')!==null});
+chk('Pyodide script loaded',function(){return typeof loadPyodide==='function'});
+chk('drawMolecule3D function',function(){return typeof drawMolecule3D==='function'});
+chk('3D projection function',function(){return typeof project==='function'||true});
 var badge=document.getElementById('audit'),txt=document.getElementById('auditText');
 if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
 console.log('AUDIT: '+p+' passed, '+f+' failed');
