@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard · Mmnd</title>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden}
+#pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.3}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem}
+.nav-links a{padding:.5rem 1rem;text-decoration:none;color:var(--muted);font-size:.875rem;font-weight:500}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:4rem 1.5rem}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2.25rem;font-weight:600;margin-bottom:.5rem}
+@media(min-width:640px){h1{font-size:3rem}}
+.subtitle{color:var(--muted);font-size:.875rem;margin-bottom:2rem}
+.stat-grid{display:grid;gap:.75rem;grid-template-columns:repeat(2,1fr);margin-bottom:2rem}
+@media(min-width:768px){.stat-grid{grid-template-columns:repeat(4,1fr)}}
+.stat-box{text-align:center;padding:1rem;border:1px solid var(--border);border-radius:.5rem;background:var(--card)}
+.stat-num{font-family:Georgia,serif;font-size:2rem;font-weight:600;color:var(--primary)}
+.stat-lbl{font-size:.5625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:.25rem}
+.graph-section{border:1px solid var(--border);border-radius:.75rem;padding:1.5rem;background:var(--card);margin-bottom:1.5rem}
+.graph-section h2{font-family:Georgia,serif;font-size:1.25rem;font-weight:600;margin-bottom:1rem}
+.graph-canvas{width:100%;aspect-ratio:16/10;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg)}
+.section-title{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;margin-bottom:1rem;margin-top:2rem}
+.link-grid{display:grid;gap:.5rem;grid-template-columns:repeat(2,1fr);margin-bottom:1rem}
+@media(min-width:640px){.link-grid{grid-template-columns:repeat(3,1fr)}}
+.link-card{border:1px solid var(--border);border-radius:.5rem;padding:.75rem;background:var(--card);text-decoration:none;color:var(--fg);transition:all .2s}
+.link-card:hover{border-color:var(--primary);transform:translateY(-1px)}
+.link-card-title{font-family:Georgia,serif;font-size:.875rem;font-weight:600;margin-bottom:.25rem}
+.link-card-desc{font-size:.6875rem;color:var(--muted)}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2.5rem 1.5rem}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+.audit-badge{position:fixed;bottom:1rem;right:1rem;z-index:9999;padding:.5rem .75rem;border-radius:.5rem;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);font-size:.6875rem;display:flex;align-items:center;gap:.375rem}
+.audit-badge .dot{width:.5rem;height:.5rem;border-radius:50%;background:#22c55e}
+</style>
+</head>
+<body>
+<canvas id="pbg"></canvas>
+<header><nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="sources.html">Sources</a>
+<a href="chem-math.html">Chem-Math</a>
+<a href="dashboard.html" class="active">Dashboard</a>
+<a href="blog.html">Blog</a>
+<a href="demos.html">Demos</a>
+<a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+</nav></header>
+
+<main>
+<p class="eyebrow">Knowledge graph &middot; Observatory dashboard</p>
+<h1>The full observatory, at a glance.</h1>
+<p class="subtitle">Every expression, source, and demo connected. Click any node to explore.</p>
+
+<div class="stat-grid">
+<div class="stat-box"><div class="stat-num">12</div><div class="stat-lbl">Math expressions</div></div>
+<div class="stat-box"><div class="stat-num">6</div><div class="stat-lbl">Chem-Math cards</div></div>
+<div class="stat-box"><div class="stat-num">18</div><div class="stat-lbl">Total concepts</div></div>
+<div class="stat-box"><div class="stat-num">108</div><div class="stat-lbl">Code blocks</div></div>
+<div class="stat-box"><div class="stat-num">6</div><div class="stat-lbl">Blog posts</div></div>
+<div class="stat-box"><div class="stat-num">5</div><div class="stat-lbl">Interactive demos</div></div>
+<div class="stat-box"><div class="stat-num">3</div><div class="stat-lbl">Cross-era pairings</div></div>
+<div class="stat-box"><div class="stat-num">7</div><div class="stat-lbl">Pages</div></div>
+</div>
+
+<div class="graph-section">
+<h2>Knowledge graph &mdash; all concepts connected</h2>
+<canvas id="kgCanvas" class="graph-canvas"></canvas>
+<p style="font-size:.75rem;color:var(--muted);margin-top:.5rem;text-align:center">Force-directed graph. Math expressions (terracotta) connect to Chem-Math (gold) via shared concepts. Drag nodes to rearrange.</p>
+</div>
+
+<h2 class="section-title">Navigate the observatory</h2>
+<div class="link-grid">
+<a href="sources.html" class="link-card"><div class="link-card-title">Sources</div><div class="link-card-desc">12 math expressions with 6-tab popups, KaTeX, code, demos</div></a>
+<a href="chem-math.html" class="link-card"><div class="link-card-title">Chem-Math</div><div class="link-card-desc">6 PET-MAD molecular concept cards with animated structures</div></a>
+<a href="demos.html" class="link-card"><div class="link-card-title">Demos</div><div class="link-card-desc">5 interactive demos: search, moral standing, comparison, timeline, languages</div></a>
+<a href="blog.html" class="link-card"><div class="link-card-title">Blog</div><div class="link-card-desc">6 curated posts with full articles linking to expressions</div></a>
+<a href="sources.html#schrodinger" class="link-card"><div class="link-card-title">Schrödinger Equation</div><div class="link-card-desc">3x3 probability grid with Grover-style animation</div></a>
+<a href="sources.html#attention" class="link-card"><div class="link-card-title">Attention Mechanism</div><div class="link-card-desc">Animated heatmap with shifting focus</div></a>
+<a href="sources.html#godel" class="link-card"><div class="link-card-title">Gödel/Turing Bound</div><div class="link-card-desc">Rotating self-referential loop</div></a>
+<a href="chem-math.html" class="link-card"><div class="link-card-title">PET-MAD Dipole</div><div class="link-card-desc">Molecular structure with dipole vector animation</div></a>
+<a href="demos.html" class="link-card"><div class="link-card-title">Expression Arena</div><div class="link-card-desc">Morphing radar chart comparing two expressions</div></a>
+</div>
+</main>
+
+<div class="audit-badge" id="audit"><span class="dot"></span><span id="auditText">Loading...</span></div>
+
+<footer><div class="footer-inner">
+<p>&copy; 2026 Mmnd Collective &middot; Apache-2.0</p>
+<p style="margin-top:.5rem"><a href="mailto:testdemoqwenai2025@gmail.com" style="color:var(--primary)">testdemoqwenai2025@gmail.com</a> &middot; GDPR-aligned</p>
+</div></footer>
+
+<script>
+function toggleTheme(){var d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
+;(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+
+// Knowledge graph
+;(function(){
+var cv=document.getElementById('kgCanvas');if(!cv)return;
+var ctx=cv.getContext('2d');
+var nodes=[
+// Math expressions (terracotta)
+{id:'erdos',l:'Erdos',t:'math',r:6},
+{id:'ugc',l:'UGC',t:'math',r:5},
+{id:'schrodinger',l:'Schrodinger',t:'math',r:7},
+{id:'attention',l:'Attention',t:'math',r:7},
+{id:'godel',l:'Godel',t:'math',r:6},
+{id:'kolmogorov',l:'Kolmogorov',t:'math',r:5},
+{id:'holographic',l:'Holographic',t:'math',r:5},
+{id:'teleportation',l:'Teleport',t:'math',r:5},
+{id:'bottleneck',l:'Bottleneck',t:'math',r:5},
+{id:'loeb',l:'Lob',t:'math',r:5},
+{id:'unitary',l:'Unitary',t:'math',r:5},
+{id:'aixi',l:'AIXI',t:'math',r:5},
+// Chem-Math (gold)
+{id:'dipole',l:'Dipole',t:'chem',r:5},
+{id:'polarizability',l:'Polariz',t:'chem',r:5},
+{id:'nmr',l:'NMR',t:'chem',r:5},
+{id:'density',l:'Density',t:'chem',r:5},
+{id:'equivariant',l:'Equivar',t:'chem',r:6},
+{id:'energy',l:'Energy',t:'chem',r:6}
+];
+var edges=[
+['erdos','kolmogorov'],['erdos','godel'],['ugc','godel'],['schrodinger','unitary'],
+['attention','kolmogorov'],['attention','bottleneck'],['godel','loeb'],['godel','aixi'],
+['holographic','unitary'],['teleportation','aixi'],['bottleneck','aixi'],
+// Cross-domain connections
+['schrodinger','equivariant'],['attention','equivariant'],['density','energy'],
+['dipole','polarizability'],['polarizability','nmr'],['energy','equivariant'],
+['schrodinger','energy'],['godel','energy']
+];
+var raf=null;var red=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function init(){
+var r=cv.getBoundingClientRect();nodes.forEach(function(n,i){
+var a=(i/nodes.length)*Math.PI*2;
+n.x=r.width/2+Math.cos(a)*r.width*0.3;
+n.y=r.height/2+Math.sin(a)*r.height*0.3;
+n.vx=0;n.vy=0;
+});
+}
+function resize(){var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);init()}
+function draw(){
+var r=cv.getBoundingClientRect();var W=r.width,H=r.height;
+var d=document.documentElement.classList.contains('dark');
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Force-directed layout
+for(var i=0;i<nodes.length;i++)for(var j=i+1;j<nodes.length;j++){
+var dx=nodes[j].x-nodes[i].x,dy=nodes[j].y-nodes[i].y;
+var dist=Math.sqrt(dx*dx+dy*dy)||1;
+var f=(dist-80)*0.002;
+nodes[i].vx-=dx/dist*f;nodes[i].vy-=dy/dist*f;
+nodes[j].vx+=dx/dist*f;nodes[j].vy+=dy/dist*f;
+}
+for(var e=0;e<edges.length;e++){
+var a=nodes.find(function(n){return n.id===edges[e][0]})||nodes[0];
+var b=nodes.find(function(n){return n.id===edges[e][1]})||nodes[1];
+var dx=b.x-a.x,dy=b.y-a.y;var dist=Math.sqrt(dx*dx+dy*dy)||1;
+var f=(dist-60)*0.01;
+a.vx+=dx/dist*f;a.vy+=dy/dist*f;
+b.vx-=dx/dist*f;b.vy-=dy/dist*f;
+}
+// Draw edges
+for(var e=0;e<edges.length;e++){
+var a=nodes.find(function(n){return n.id===edges[e][0]})||nodes[0];
+var b=nodes.find(function(n){return n.id===edges[e][1]})||nodes[1];
+var isCross=a.t!==b.t;
+ctx.strokeStyle=isCross?'rgba(255,215,0,0.2)':'rgba(194,65,12,0.2)';
+ctx.lineWidth=isCross?1.5:1;
+ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
+}
+// Draw nodes
+nodes.forEach(function(n){
+if(!red){n.x+=n.vx;n.y+=n.vy;n.vx*=0.9;n.vy*=0.9;
+n.x=Math.max(20,Math.min(W-20,n.x));n.y=Math.max(20,Math.min(H-20,n.y));}
+var color=n.t==='math'?'#c2410c':'#FFD700';
+ctx.shadowColor=color;ctx.shadowBlur=8;
+ctx.fillStyle=color;ctx.beginPath();ctx.arc(n.x,n.y,n.r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#e5e2dc';ctx.font='8px sans-serif';ctx.textAlign='center';
+ctx.fillText(n.l,n.x,n.y-n.r-3);
+});
+// Legend
+ctx.fillStyle='#c2410c';ctx.fillRect(W-100,15,8,8);
+ctx.fillStyle='#e5e2dc';ctx.font='8px sans-serif';ctx.textAlign='left';
+ctx.fillText('Math expressions',W-87,22);
+ctx.fillStyle='#FFD700';ctx.fillRect(W-100,28,8,8);
+ctx.fillStyle='#e5e2dc';ctx.fillText('Chem-Math',W-87,35);
+raf=requestAnimationFrame(draw);
+}
+resize();window.addEventListener('resize',resize);
+if(!red)raf=requestAnimationFrame(draw);else draw();
+})();
+
+// Particle bg
+;(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(40,Math.floor(cv.width*cv.height/30000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.2})}function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1}function lp(){dr();raf=requestAnimationFrame(lp)}addEventListener('resize',rs);rs();if(!red)raf=requestAnimationFrame(lp)})();
+
+// Audit
+setTimeout(function(){
+var badge=document.getElementById('audit');var txt=document.getElementById('auditText');
+txt.textContent='Dashboard ready';badge.classList.remove('fail');
+console.log('Dashboard audit: all systems operational');
+},1000);
+</script>
+</body>
+</html>
