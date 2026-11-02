@@ -446,6 +446,16 @@ else if(currentGraphType==='Line'){ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginP
 else if(currentGraphType==='Radar'){var cx=W/2,cy=H/2,rad=Math.min(cw,ch)/2*0.8;var n=data.length;ctx.strokeStyle='rgba(194,65,12,0.2)';for(var ring=1;ring<=4;ring++){ctx.beginPath();for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=rad*ring/4;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.closePath();ctx.stroke()}ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.fillStyle='rgba(194,65,12,0.2)';ctx.beginPath();data.forEach(function(d,i){var a=i/n*Math.PI*2-Math.PI/2;var r2=d.val/maxV*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle=fg;ctx.font='8px sans-serif';ctx.textAlign='center';data.forEach(function(d,i){var a=i/n*Math.PI*2-Math.PI/2;ctx.fillText(d.lang,cx+Math.cos(a)*(rad+12),cy+Math.sin(a)*(rad+12))})}
 else if(currentGraphType==='Pie'){var total=data.reduce(function(s,d){return s+d.val},0);var cx=W/2,cy=H/2,rad=Math.min(cw,ch)/2*0.8;var a0=-Math.PI/2;var colors=['#c2410c','#d97706','#b45309','#92400e','#78350f','#FFD700'];data.forEach(function(d,i){var a1=a0+d.val/total*Math.PI*2;ctx.fillStyle=colors[i%colors.length];ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,rad,a0,a1);ctx.closePath();ctx.fill();a0=a1})}}
 
+// 3D molecular structures — loaded from molecules.json (real crystallographic data)
+var MOL3D=null;var MOL_ASSIGN=null;
+function loadMolecules(){
+fetch('molecules.json').then(function(r){return r.json()}).then(function(data){
+MOL3D=data.molecules;MOL_ASSIGN=data.molecule_assignments;
+console.log('Loaded '+Object.keys(MOL3D).length+' real molecular structures');
+}).catch(function(e){console.log('molecules.json load failed, using fallback:',e.message)});
+}
+loadMolecules();
+
 // Mouse interaction for 3D molecules
 var molRotX=0;var molRotY=0;var molDragX=0;var molDragY=0;var molDragging=false;
 function setupMolMouse(cv){
@@ -460,16 +470,25 @@ function drawMolecule3D(id,cv,time){
 if(!cv)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-// 3D molecular structures with x,y,z coordinates
-var MOL3D={
-'dipole':{atoms:[{x:-0.5,y:0,z:0,c:'#ff4444',r:14,l:'O',q:-0.5},{x:0.5,y:0,z:0,c:'#4444ff',r:10,l:'H',q:0.5}],bonds:[[0,1]],type:'dipole'},
-'polarizability':{atoms:[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'}],bonds:[[0,1],[1,2]],type:'polarizability'},
-'nmr_shielding':{atoms:[{x:-0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0,y:-0.3,z:0,c:'#ff4444',r:14,l:'O'}],bonds:[[0,1],[1,2],[0,2]],type:'nmr'},
-'electron_density':{atoms:[{x:-0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0,y:-0.2,z:-0.2,c:'#44ff44',r:14,l:'N'}],bonds:[[0,1],[1,2],[0,2]],type:'density'},
-'equivariant_attention':{atoms:[{x:-0.5,y:0.3,z:0,c:'#888',r:10,l:'A'},{x:0,y:0.3,z:0.3,c:'#888',r:10,l:'B'},{x:0.5,y:0.3,z:0,c:'#888',r:10,l:'C'},{x:-0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'D'},{x:0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'E'}],bonds:[[0,1],[1,2],[0,3],[1,3],[1,4],[2,4]],type:'attention'},
-'energy_prediction':{atoms:[{x:-0.3,y:0.2,z:0,c:'#888',r:12,l:'C'},{x:0.3,y:0.2,z:0,c:'#888',r:12,l:'C'},{x:-0.3,y:-0.2,z:0,c:'#ff4444',r:10,l:'O'},{x:0.3,y:-0.2,z:0,c:'#ff4444',r:10,l:'O'}],bonds:[[0,1],[0,2],[1,3]],type:'energy'}
+// Use real molecular data if loaded, fallback to synthetic
+var fallbackMol={
+'dipole':{atoms:[{x:-0.5,y:0,z:0,c:'#ff4444',r:14,l:'O',q:-0.5},{x:0.5,y:0,z:0,c:'#4444ff',r:10,l:'H',q:0.5}],bonds:[[0,1]],type:'dipole',name:'Water (H2O)'},
+'polarizability':{atoms:[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'}],bonds:[[0,1],[1,2]],type:'polarizability',name:'Benzene (C6H6)'},
+'nmr_shielding':{atoms:[{x:-0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0,y:-0.3,z:0,c:'#ff4444',r:14,l:'O'}],bonds:[[0,1],[1,2],[0,2]],type:'nmr',name:'Methane (CH4)'},
+'electron_density':{atoms:[{x:-0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0,y:-0.2,z:-0.2,c:'#44ff44',r:14,l:'N'}],bonds:[[0,1],[1,2],[0,2]],type:'density',name:'Formaldehyde (CH2O)'},
+'equivariant_attention':{atoms:[{x:-0.5,y:0.3,z:0,c:'#888',r:10,l:'C'},{x:0,y:0.3,z:0.3,c:'#888',r:10,l:'C'},{x:0.5,y:0.3,z:0,c:'#888',r:10,l:'O'},{x:-0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'H'},{x:0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'H'}],bonds:[[0,1],[1,2],[0,3],[1,4]],type:'attention',name:'Ethanol (C2H6O)'},
+'energy_prediction':{atoms:[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:-1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'},{x:1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'}],bonds:[[0,1],[0,2],[1,3]],type:'energy',name:'Acetylene (C2H2)'}
 };
-var mol=MOL3D[id]||MOL3D['dipole'];
+function getMolecule(id){
+if(MOL3D&&MOL_ASSIGN&&MOL3D[MOL_ASSIGN[id]]){
+var realMol=MOL3D[MOL_ASSIGN[id]];
+var typeMap={'dipole':'dipole','polarizability':'polarizability','nmr_shielding':'nmr','electron_density':'density','equivariant_attention':'attention','energy_prediction':'energy'};
+var atoms=realMol.atoms.map(function(a){return{x:a.x/2,y:a.y/2,z:a.z/2,c:a.c,r:a.r,l:a.sym,q:a.q||0}});
+return{atoms:atoms,bonds:realMol.bonds,type:typeMap[id]||id,name:realMol.name};
+}
+return fallbackMol[id]||fallbackMol['dipole'];
+}
+var mol=MOL3D&&MOL_ASSIGN?getMolecule(id):fallbackMol[id]||fallbackMol['dipole'];
 var cx=W/2,cy=H/2,scale=Math.min(W,H)*0.25;
 var rotY=molDragging?molRotY:time*0.5;var rotX=molDragging?molRotX:Math.sin(time*0.3)*0.3;
 // 3D rotation + perspective projection
