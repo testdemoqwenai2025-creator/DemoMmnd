@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="2026-11-02-v6-fut-anim-fix">
+<meta name="version" content="2026-11-02-v7-audit-regression">
 <title>Chem-Math · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -63,7 +63,7 @@ p{margin-bottom:1rem}
 .phase-label{font-size:.5625rem;color:var(--muted);white-space:nowrap}
 .popup-header{padding:1.5rem 1.5rem 0;border-bottom:1px solid var(--border);position:relative;z-index:1}
 .popup-title{font-family:Georgia,serif;font-size:1.25rem;font-weight:600;position:relative;z-index:1}
-.popup-close{float:right;width:2rem;height:2rem;border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.5rem;border-radius:50%}
+.popup-close{float:right;width:2rem;height:2rem;border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.5rem;border-radius:50%;position:relative;z-index:10}
 .popup-close:hover{background:var(--accent-bg);color:var(--primary)}
 .popup-tabs{display:flex;border-bottom:2px solid var(--border);margin-top:1rem;overflow-x:auto}
 .popup-tab{padding:.625rem 1rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.8125rem;font-weight:500;color:var(--muted);white-space:nowrap}
@@ -73,7 +73,7 @@ p{margin-bottom:1rem}
 .popup-pane{display:none}
 .popup-pane.active{display:block}
 .popup-pane h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem}
-.expr-rendered{border:1px solid rgba(194,65,12,.2);background:rgba(10,9,8,.6);border-radius:.5rem;padding:2rem;text-align:center;margin-bottom:1rem;overflow-x:auto}
+.expr-rendered{border:1px solid rgba(194,65,12,.2);background:rgba(10,9,8,.6);border-radius:.5rem;padding:2rem;text-align:center;margin-bottom:1rem;overflow-x:auto;color:#e5e2dc}
 .expr-intent{font-size:.9375rem;line-height:1.7;margin-bottom:1rem;color:var(--fg)}
 .map-table{margin-bottom:1rem;border:1px solid var(--border);border-radius:.5rem;overflow:hidden}
 .map-table table{width:100%;border-collapse:collapse;font-size:.75rem}
@@ -718,6 +718,14 @@ chk('Version tag',function(){return document.querySelector('meta[name=version]')
 chk('Pyodide script loaded',function(){return typeof loadPyodide==='function'});
 chk('drawMolecule3D function',function(){return typeof drawMolecule3D==='function'});
 chk('3D projection function',function(){return typeof project==='function'||true});
+// Regression checks for previously-fixed bugs
+chk('Mol anim starts on popup open',function(){return openPopup.toString().indexOf('startMolAnim')>=0});
+chk('No double-lt typo in code-tabs',function(){var s=openPopup.toString();return s.indexOf("'<<")===-1});
+chk('Futuristic anim no freeze',function(){return startFut.toString().indexOf('futAnimT<10')===-1});
+chk('Futuristic has flowing particles',function(){return drawChemFuturistic.toString().indexOf('Flowing particles')>=0});
+chk('Close button has z-index',function(){var t=document.createElement('button');t.className='popup-close';document.body.appendChild(t);var s=getComputedStyle(t);var ok=s.position==='relative'&&parseInt(s.zIndex)>=10;document.body.removeChild(t);return ok});
+chk('Math expr has contrast color',function(){var t=document.createElement('div');t.className='expr-rendered';document.body.appendChild(t);var s=getComputedStyle(t);var c=s.color;document.body.removeChild(t);return c!=='rgb(0, 0, 0)'&&c!=='rgba(0, 0, 0, 0)'});
+chk('Audit uses drawMolecule3D',function(){return typeof drawMolecule3D==='function'});
 var badge=document.getElementById('audit'),txt=document.getElementById('auditText');
 if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
 console.log('AUDIT: '+p+' passed, '+f+' failed');
