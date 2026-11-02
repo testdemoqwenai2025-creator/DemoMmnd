@@ -358,79 +358,135 @@ var demoPanes=document.querySelectorAll('.demo-canvas');
 }
 
 // Expression-specific demos
-function drawDemo(id,cv,time){if(!cv)return;time=time||0;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
-function clear(){ctx.fillStyle=bg;ctx.fillRect(0,0,W,H)}
-function label(s,x,y){ctx.fillStyle=fg;ctx.font='11px sans-serif';ctx.textAlign='center';ctx.fillText(s,x,y)}
-switch(id){
-case'erdos':clear();var pts=[];for(var i=0;i<20;i++)pts.push({x:20+Math.random()*(W-40),y:20+Math.random()*(H-40)});ctx.strokeStyle='rgba(194,65,12,0.15)';ctx.lineWidth=.5;for(var i=0;i<pts.length;i++)for(var j=i+1;j<pts.length;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<60){ctx.strokeStyle='rgba(194,65,12,0.5)';ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle=pc;pts.forEach(function(p){ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});label('Points with unit-distance pairs',W/2,H-8);break;
-case'ugc':clear();var vs=6;var vx=[];for(var i=0;i<vs;i++){var a=i/vs*Math.PI*2;vx.push({x:W/2+Math.cos(a)*W*.3,y:H/2+Math.sin(a)*H*.3})}ctx.strokeStyle='rgba(194,65,12,0.2)';ctx.lineWidth=1;for(var i=0;i<vs;i++)for(var j=i+1;j<vs;j++){ctx.beginPath();ctx.moveTo(vx[i].x,vx[i].y);ctx.lineTo(vx[j].x,vx[j].y);ctx.stroke()}ctx.fillStyle=pc;vx.forEach(function(v,i){ctx.beginPath();ctx.arc(v.x,v.y,6,0,Math.PI*2);ctx.fill()});label('Variables (nodes) + constraints (edges)',W/2,H-8);break;
-case'schrodinger':clear();
-// Grover-style: 3x3 grid with probability cones evolving over time
-var grid3=3, cellW=W/(grid3+1), cellH=H/(grid3+1);
-var cx0=W/2-cellW*grid3/2, cy0=H/2-cellH*grid3/2;
-// Draw grid cells
-for(var gi=0;gi<grid3;gi++){
-for(var gj=0;gj<grid3;gj++){
-var px=cx0+gi*cellW, py=cy0+gj*cellH;
-// Probability = Gaussian wave packet at this position
-var dx=gi-(grid3-1)/2+Math.sin(time*0.5)*1.2;
-var dy=gj-(grid3-1)/2;
-var dist2=dx*dx+dy*dy;
-var prob=Math.exp(-dist2*0.5)*100;
-var phase=(time+gi*0.5+gj*0.3)%(Math.PI*2);
-var hue=phase/(Math.PI*2)*360;
-// Cell background with phase color
-ctx.fillStyle='hsla('+hue+',60%,30%,0.15)';
-ctx.fillRect(px+2,py+2,cellW-4,cellH-4);
-// Grid border
-ctx.strokeStyle='rgba(194,65,12,0.2)';ctx.lineWidth=.5;
-ctx.strokeRect(px+2,py+2,cellW-4,cellH-4);
-// Probability cone (glowing bar)
-if(prob>1){
-var coneH=prob/100*(cellH-8);
-var coneX=px+cellW/2;
-var g2=ctx.createLinearGradient(coneX-cellW/4,py+cellH-coneH,coneX+cellW/4,py+cellH);
-g2.addColorStop(0,pc+'00');
-g2.addColorStop(0.5,pc);
-g2.addColorStop(1,'#FFD700');
-ctx.fillStyle=g2;
-ctx.fillRect(coneX-cellW/4,py+cellH-coneH,cellW/2,coneH);
-// Glow
-ctx.shadowColor=pc;ctx.shadowBlur=15;
-ctx.fillStyle=pc+'44';
-ctx.fillRect(coneX-cellW/4,py+cellH-coneH,cellW/2,coneH);
-ctx.shadowBlur=0;
-}
-// Probability label
-ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='center';
-ctx.fillText(prob.toFixed(0)+'%',px+cellW/2,py+cellH-6);
-// State label
-ctx.fillStyle=mt;ctx.font='8px monospace';
-ctx.fillText('|'+gi+','+gj+'\\u27e9',px+cellW/2,py+12);
-}
-}
-// Phase bar at bottom
-var pby=H-12;
+
+function drawPhaseBar(ctx,W,H){
+var pby=H-6;
 var grad=ctx.createLinearGradient(0,pby,W,pby);
 grad.addColorStop(0,'#ff0000');grad.addColorStop(.14,'#ffa500');grad.addColorStop(.28,'#ffff00');
 grad.addColorStop(.42,'#00ff00');grad.addColorStop(.57,'#00ffff');grad.addColorStop(.71,'#0000ff');
 grad.addColorStop(.85,'#ff00ff');grad.addColorStop(1,'#ff0000');
-ctx.fillStyle=grad;ctx.fillRect(0,pby,W,4);
-ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='left';
-ctx.fillText('Phase 0',2,pby-2);ctx.textAlign='right';ctx.fillText('2\\u03c0',W-2,pby-2);
-// Title
-ctx.fillStyle=pc;ctx.font='bold 14px Georgia,serif';ctx.textAlign='center';
-ctx.fillText('|\\u03a8(r,t)|\\u00b2 \\u2014 probability density',W/2,18);
+ctx.fillStyle=grad;ctx.fillRect(0,pby,W,3);
+ctx.fillStyle='#736a5e';ctx.font='6px monospace';ctx.textAlign='left';
+ctx.fillText('0',2,pby-1);ctx.textAlign='right';ctx.fillText('2pi',W-2,pby-1);
+}
+
+function drawDemo(id,cv,time){if(!cv)return;time=time||0;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+function clear(){ctx.fillStyle=bg;ctx.fillRect(0,0,W,H)}
+function label(s,x,y){ctx.fillStyle=fg;ctx.font='11px sans-serif';ctx.textAlign='center';ctx.fillText(s,x,y)}
+switch(id){
+case'erdos':clear();
+var nPts=15;var pts=[];
+for(var i=0;i<nPts;i++){pts.push({x:20+Math.random()*(W-40),y:20+Math.random()*(H-40),vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5})}
+for(var p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<10||p.x>W-10)p.vx*=-1;if(p.y<10||p.y>H-20)p.vy*=-1}
+ctx.lineWidth=.5;
+for(var i=0;i<pts.length;i++){for(var j=i+1;j<pts.length;j++){
+var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);
+var target=40+Math.sin(time+i)*10;
+var alpha=Math.max(0,1-Math.abs(d-target)/20);
+if(alpha>0.1){var hue=(time*30+i*20)%360;ctx.strokeStyle='hsla('+hue+',70%,50%,'+alpha*0.6+')';ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}
+}}
+pts.forEach(function(p,i){ctx.shadowColor=pc;ctx.shadowBlur=8;ctx.fillStyle=pc;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=fg;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('p'+i,p.x,p.y-8)});
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Unit-distance pairs evolving',W/2,16);
 break;
-case'attention':clear();var n=8,sz=W/n;for(var i=0;i<n;i++)for(var j=0;j<n;j++){var v=Math.exp(-((i-j)*(i-j))/8);ctx.fillStyle='rgba(194,65,12,'+v+')';ctx.fillRect(j*sz,i*sz,sz-1,sz-1)}label('Attention weights (QK^T/\u221ad_k)',W/2,H-8);break;
-case'godel':clear();ctx.strokeStyle=pc;ctx.lineWidth=2;var cx=W/2,cy=H/2,rad=Math.min(W,H)*.25;ctx.beginPath();ctx.arc(cx,cy,rad,time,time+Math.PI*1.8);ctx.stroke();ctx.fillStyle=pc;ctx.font='14px Georgia,serif';ctx.textAlign='center';ctx.fillText('G(F)',cx,cy+5);ctx.font='10px sans-serif';ctx.fillStyle=mt;ctx.fillText('"This is not provable in F"',cx,cy+22);label('Self-referential loop — G(F) refers to itself',W/2,H-8);break;
-case'kolmogorov':clear();var progs=['ab','xyz','abc123','qwert','fn(a,b)','solve(x)','if(p)then(q)','while(true)loop','function f(){return g()}'];ctx.fillStyle=pc;progs.forEach(function(p,i){var x=20,y=20+i*(H-30)/progs.length;var w=p.length*8;ctx.globalAlpha=Math.pow(2,-p.length/4);ctx.fillRect(x,y,w,12);ctx.globalAlpha=1;ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='left';ctx.fillText(p,x+w+5,y+10);ctx.fillStyle=pc});label('Program length vs weight (2^{|p|})',W/2,H-8);break;
-case'holographic':clear();var cx=W/2,cy=H/2,rad=Math.min(W,H)*.3;var g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);g.addColorStop(0,'#1a1a1a');g.addColorStop(.7,'#333');g.addColorStop(1,pc);ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2);ctx.fill();ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,rad,0,Math.PI*2);ctx.stroke();label('S = k\u2082A / (4\u2113\u209a\u00b2) — area, not volume',W/2,H-8);break;
-case'teleportation':clear();ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(30,H/2);ctx.quadraticCurveTo(W/2,20,W-30,H/2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=pc;ctx.beginPath();ctx.arc(30,H/2,5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(W-30,H/2,5,0,Math.PI*2);ctx.fill();ctx.font='10px sans-serif';ctx.fillStyle=mt;ctx.textAlign='center';ctx.fillText('s\u2080',30,H/2+18);ctx.fillText('g*',W-30,H/2+18);ctx.fillText('AI: one-shot teleport',W/2,H-15);label('AI jumps directly (dashed) vs human reconstructs path',W/2,H-8);break;
-case'bottleneck':clear();var boxes=[{x:30,l:'X'},{x:W/2-20,l:'Z'},{x:W-50,l:'Y'}];ctx.strokeStyle=pc;ctx.lineWidth=2;boxes.forEach(function(b){ctx.strokeRect(b.x,H/2-20,30,40);ctx.fillStyle=fg;ctx.font='14px Georgia,serif';ctx.textAlign='center';ctx.fillText(b.l,b.x+15,H/2+5)});ctx.strokeStyle='rgba(194,65,12,0.3)';ctx.beginPath();ctx.moveTo(60,H/2);ctx.lineTo(W/2-20,H/2);ctx.moveTo(W/2+10,H/2);ctx.lineTo(W-50,H/2);ctx.stroke();ctx.fillStyle=mt;ctx.font='9px sans-serif';ctx.fillText('I(X;Z)',(60+W/2-20)/2,H/2-8);ctx.fillText('\u03b2 I(Z;Y)',(W/2+10+W-50)/2,H/2-8);label('Information bottleneck: compress X, preserve Y',W/2,H-8);break;
-case'loeb':clear();var cx=W/2,cy=H/2-10;ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,30,-Math.PI/2,Math.PI*1.5);ctx.stroke();ctx.fillStyle=pc;ctx.beginPath();ctx.moveTo(cx+30,cy);ctx.lineTo(cx+25,cy-5);ctx.lineTo(cx+25,cy+5);ctx.fill();ctx.font='12px Georgia,serif';ctx.fillStyle=fg;ctx.textAlign='center';ctx.fillText('\u25a1P \u2192 P',cx,cy-35);label('Self-trust: if system trusts own proofs \u2192 proves everything',W/2,H-8);break;
-case'unitary':clear();var gates=['H','H','Oracle','H','H'];var gw=W/gates.length;ctx.strokeStyle=pc;ctx.lineWidth=1;gates.forEach(function(g,i){var x=i*gw+gw/2;ctx.strokeRect(x-20,H/2-15,40,30);ctx.fillStyle=fg;ctx.font='10px monospace';ctx.textAlign='center';ctx.fillText(g,x,H/2+4)});ctx.strokeStyle='rgba(194,65,12,0.5)';ctx.beginPath();ctx.moveTo(20,H/2);ctx.lineTo(W-20,H/2);ctx.stroke();label('Polynomial-size quantum circuit with oracle f',W/2,H-8);break;
-case'aixi':clear();var cx=W/2,cy=H/2;ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,Math.min(W,H)*.25,0,Math.PI*2);ctx.stroke();ctx.fillStyle=pc;for(var i=0;i<12;i++){var a=i/12*Math.PI*2+time;var r=Math.min(W,H)*.15+10+5*Math.sin(time*2+i);ctx.globalAlpha=Math.pow(2,-i);ctx.beginPath();ctx.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,3,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;ctx.font='12px Georgia,serif';ctx.fillStyle=fg;ctx.textAlign='center';ctx.fillText('a*',cx,cy+5);label('All programs \u03bc weighted by 2^{-|\u03bc|}',W/2,H-8);break;
+case'ugc':clear();
+var nV=6;var vs=[];
+for(var i=0;i<nV;i++){var a=i/nV*Math.PI*2+time*0.3;vs.push({x:W/2+Math.cos(a)*W*.3,y:H/2+Math.sin(a)*H*.3})}
+for(var i=0;i<nV;i++){for(var j=i+1;j<nV;j++){var pulse=(Math.sin(time*2+i+j)+1)/2;var hue=(time*40+i*j*10)%360;ctx.strokeStyle='hsla('+hue+',60%,50%,'+(0.15+pulse*0.3)+')';ctx.lineWidth=1+pulse*2;ctx.beginPath();ctx.moveTo(vs[i].x,vs[i].y);ctx.lineTo(vs[j].x,vs[j].y);ctx.stroke()}}
+vs.forEach(function(v,i){ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(time*3+i)*4;ctx.fillStyle=pc;ctx.beginPath();ctx.arc(v.x,v.y,6,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('x'+i,v.x,v.y-10)});
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Constraint graph pulsing',W/2,16);
+break;
+case'attention':clear();
+var n=8,sz=W/n;
+for(var i=0;i<n;i++){for(var j=0;j<n;j++){var fx=Math.sin(time*0.7)*n*0.4+n*0.5;var fy=Math.cos(time*0.5)*n*0.4+n*0.5;var v=Math.exp(-((i-fx)*(i-fx)+(j-fy)*(j-fy))/6);var hue=(time*30+i*j*5)%360;ctx.fillStyle='hsla('+hue+',60%,'+Math.round(v*50)+'%,'+v+')';ctx.fillRect(j*sz,i*sz,sz-1,sz-1);if(v>0.3){ctx.fillStyle=fg;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(v.toFixed(2),j*sz+sz/2,i*sz+sz/2)}}}
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Attention heatmap shifting',W/2,16);
+break;
+case'godel':clear();
+var cx=W/2,cy=H/2,rad=Math.min(W,H)*.22;
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.shadowColor=pc;ctx.shadowBlur=10;
+ctx.beginPath();ctx.arc(cx,cy,rad,time,time+Math.PI*1.5);ctx.stroke();
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;
+ctx.beginPath();ctx.arc(cx,cy,rad*0.7,-time,-time+Math.PI*1.2);ctx.stroke();
+ctx.shadowBlur=0;
+ctx.fillStyle=pc;ctx.font='14px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('G(F)',cx,cy+5);
+ctx.fillStyle=mt;ctx.font='9px monospace';
+ctx.fillText('"Not provable in F"',cx,cy+22);
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';
+ctx.fillText('Self-referential loop rotating',W/2,16);
+break;
+case'kolmogorov':clear();
+var progs=['01','0101','print(1)','fn(x)','solve()','if p then q','while true loop','function f() return g()'];
+progs.forEach(function(p,i){var x=15,y=15+i*(H-35)/progs.length;var w=p.length*7;var weight=Math.pow(2,-p.length/3)*(0.8+0.2*Math.sin(time*2+i));ctx.shadowColor=pc;ctx.shadowBlur=6*weight;ctx.fillStyle='rgba(194,65,12,'+weight+')';ctx.fillRect(x,y,w,10);ctx.shadowBlur=0;ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText(p,x+w+5,y+8);ctx.fillStyle=mt;ctx.fillText('w='+weight.toFixed(3),x+w+5,y+18)});
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Solomonoff weights pulsing',W/2,16);
+break;
+case'holographic':clear();
+var cx=W/2,cy=H/2,rad=Math.min(W,H)*.28;var pulse=1+Math.sin(time*1.5)*0.05;
+ctx.shadowColor=pc;ctx.shadowBlur=20*pulse;
+var g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad*pulse);
+g.addColorStop(0,'#000');g.addColorStop(0.6,'#1a0a05');g.addColorStop(0.85,pc+'aa');g.addColorStop(1,pc);
+ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,rad*pulse,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1;ctx.globalAlpha=0.4;ctx.beginPath();ctx.arc(cx,cy,rad*0.95,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;
+ctx.fillStyle='#FFD700';ctx.font='10px monospace';ctx.textAlign='center';
+ctx.fillText('S = '+Math.round(rad*pulse*rad*pulse/100)+' units',cx,cy+rad+18);
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.fillText('Black hole horizon pulsing',W/2,16);
+break;
+case'teleportation':clear();
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.setLineDash([5,5]);
+ctx.beginPath();ctx.moveTo(30,H/2);ctx.quadraticCurveTo(W/2,20+Math.sin(time)*15,W-30,H/2);ctx.stroke();ctx.setLineDash([]);
+var t=(time%2)/2;var px2=30+(W-60)*t;var py2=H/2+Math.sin(t*Math.PI)*(-H/3+Math.sin(time)*15);
+ctx.shadowColor=pc;ctx.shadowBlur=12;ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(px2,py2,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+var steps=5;ctx.fillStyle=pc;
+for(var i=0;i<steps;i++){var sx=30+(W-60)*i/(steps-1);ctx.globalAlpha=0.3+0.7*Math.max(0,Math.sin(time-i*0.3));ctx.beginPath();ctx.arc(sx,H/2+15,3,0,Math.PI*2);ctx.fill()}
+ctx.globalAlpha=1;ctx.font='9px monospace';ctx.fillStyle=mt;ctx.textAlign='center';
+ctx.fillText('s0',30,H/2+18);ctx.fillText('g*',W-30,H/2+18);
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.fillText('Teleportation vs path-finding',W/2,16);
+break;
+case'bottleneck':clear();
+var boxes=[{x:30,l:'X',w:30},{x:W/2-15,l:'Z',w:30},{x:W-50,l:'Y',w:30}];
+boxes.forEach(function(b){ctx.shadowColor=pc;ctx.shadowBlur=8;ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.strokeRect(b.x,H/2-20,b.w,40);ctx.shadowBlur=0;ctx.fillStyle=fg;ctx.font='14px Georgia,serif';ctx.textAlign='center';ctx.fillText(b.l,b.x+b.w/2,H/2+5)});
+for(var i=0;i<3;i++){var fT=((time*0.5+i/3)%1);var fx=60+(W/2-75)*fT;ctx.fillStyle=pc;ctx.globalAlpha=1-fT*0.5;ctx.beginPath();ctx.arc(fx,H/2,3,0,Math.PI*2);ctx.fill();var fy2=W/2+15+(W-50-W/2-15)*fT;ctx.fillStyle='#FFD700';ctx.globalAlpha=1-fT*0.3;ctx.beginPath();ctx.arc(fy2,H/2,3,0,Math.PI*2);ctx.fill()}
+ctx.globalAlpha=1;ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='center';
+ctx.fillText('I(X;Z)',(60+W/2-15)/2,H/2-10);ctx.fillText('b*I(Z;Y)',(W/2+15+W-50)/2,H/2-10);
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.fillText('Information flowing',W/2,16);
+break;
+case'loeb':clear();
+var cx=W/2,cy=H/2-10;var pulse=1+Math.sin(time*2)*0.15;
+ctx.shadowColor=pc;ctx.shadowBlur=12*pulse;ctx.strokeStyle=pc;ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(cx,cy,30*pulse,-Math.PI/2,Math.PI*1.5);ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle=pc;var ax=cx+30*pulse,ay=cy;ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(ax-5,ay-5);ctx.lineTo(ax-5,ay+5);ctx.fill();
+for(var i=0;i<3;i++){var wt=(time*0.3+i/3)%1;ctx.globalAlpha=(1-wt)*0.3;ctx.strokeStyle=pc;ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,30+wt*40,0,Math.PI*2);ctx.stroke()}
+ctx.globalAlpha=1;ctx.font='12px Georgia,serif';ctx.fillStyle=fg;ctx.textAlign='center';ctx.fillText('Box P -> P',cx,cy-35);
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.fillText('Self-trust pulsing',W/2,16);
+break;
+case'unitary':clear();
+var gates=['H','H','Oracle','H','H'];var gw=W/gates.length;
+gates.forEach(function(g,i){var x=i*gw+gw/2;var act=Math.sin(time*2+i*0.5)>0.5;ctx.shadowColor=pc;ctx.shadowBlur=act?12:4;ctx.strokeStyle=pc;ctx.lineWidth=act?2:1;ctx.strokeRect(x-20,H/2-15,40,30);ctx.shadowBlur=0;ctx.fillStyle=act?'#FFD700':fg;ctx.font='10px monospace';ctx.textAlign='center';ctx.fillText(g,x,H/2+4);ctx.strokeStyle='rgba(194,65,12,'+(act?0.8:0.3)+')';ctx.lineWidth=act?2:1;ctx.beginPath();ctx.moveTo(i*gw+10,H/2);ctx.lineTo((i+1)*gw-10,H/2);ctx.stroke()});
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';ctx.fillText('Quantum circuit activating',W/2,16);
+break;
+case'aixi':clear();
+var cx=W/2,cy=H/2,rad=Math.min(W,H)*.22;
+ctx.shadowColor=pc;ctx.shadowBlur=15;ctx.fillStyle=pc;ctx.beginPath();ctx.arc(cx,cy,6,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='bold 14px Georgia,serif';ctx.textAlign='center';ctx.fillText('a*',cx,cy+25);
+var labels=['mu1','mu2','mu3','mu4','mu5','mu6','mu7','mu8'];
+labels.forEach(function(lb,i){var a=i/labels.length*Math.PI*2+time*0.5;var r2=rad*(0.5+0.5*Math.sin(time+i));var weight=Math.pow(2,-i-1);var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;ctx.globalAlpha=weight*2;ctx.shadowColor=pc;ctx.shadowBlur=weight*20;ctx.fillStyle=pc;ctx.beginPath();ctx.arc(x,y,2+weight*4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=fg;ctx.font='7px monospace';ctx.fillText(lb+':'+weight.toFixed(2),x,y-8)});
+ctx.globalAlpha=1;
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';ctx.fillText('AIXI programs orbiting',W/2,16);
+break;
 default:clear();label('Demo: '+id,W/2,H/2)}}
 
 // Animation + new functions
