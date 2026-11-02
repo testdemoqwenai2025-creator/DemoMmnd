@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="version" content="2026-11-02-v2">
 <title>Chem-Math · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -637,6 +641,12 @@ chk('drawDemo function',function(){return typeof drawDemo==='function'});
 chk('drawMolecule function',function(){return typeof drawMolecule==='function'});
 chk('drawChemFuturistic',function(){return typeof drawChemFuturistic==='function'});
 chk('CHEM_FUTURES data',function(){return typeof CHEM_FUTURES==='object'&&Object.keys(CHEM_FUTURES).length>=6});
+chk('Expression-specific dipole',function(){return CHEM_FUTURES&&CHEM_FUTURES['dipole']&&CHEM_FUTURES['dipole'][0].n==='Real-time dipole MD'});
+chk('Expression-specific polarizability',function(){return CHEM_FUTURES&&CHEM_FUTURES['polarizability']&&CHEM_FUTURES['polarizability'][0].n==='Raman ML'});
+chk('Expression-specific NMR',function(){return CHEM_FUTURES&&CHEM_FUTURES['nmr_shielding']&&CHEM_FUTURES['nmr_shielding'][0].n==='NMR spectra ML'});
+chk('Expression-specific energy',function(){return CHEM_FUTURES&&CHEM_FUTURES['energy_prediction']&&CHEM_FUTURES['energy_prediction'][0].n==='MD acceleration'});
+chk('currentExpr updates',function(){return typeof currentExpr==='string'||currentExpr===null});
+chk('Version tag',function(){return document.querySelector('meta[name=version]')!==null});
 var badge=document.getElementById('audit'),txt=document.getElementById('auditText');
 if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
 console.log('AUDIT: '+p+' passed, '+f+' failed');
