@@ -44,16 +44,25 @@ p{margin-bottom:1rem}
 .lang-pill{font-size:.5625rem;padding:.125rem .375rem;border-radius:.25rem;background:var(--accent-bg);color:var(--primary)}
 .popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
 .popup-overlay.active{display:flex}
-.popup{background:var(--glass);backdrop-filter:blur(24px);border:1px solid rgba(194,65,12,.15);border-radius:1rem;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 48px rgba(0,0,0,.2)}
+.popup{background:linear-gradient(135deg,rgba(10,9,8,0.97),rgba(20,15,10,0.95));backdrop-filter:blur(24px);border:1px solid rgba(194,65,12,.2);border-radius:1rem;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 96px rgba(194,65,12,.15),0 0 1px rgba(255,255,255,.05) inset;position:relative}
+.popup::before{content:'';position:absolute;inset:0;border-radius:1rem;background:radial-gradient(circle at 30% 20%,rgba(194,65,12,.06),transparent 60%);pointer-events:none;z-index:0}
+.code-float-bg{position:absolute;inset:0;overflow:hidden;border-radius:1rem;pointer-events:none;z-index:0;opacity:.12}
+.code-float-line{position:absolute;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.6875rem;color:#c2410c;white-space:nowrap;animation:codeFloat 20s linear infinite}
+@keyframes codeFloat{0%{transform:translateY(0);opacity:.12}50%{opacity:.18}100%{transform:translateY(-30px);opacity:.12}}
+.gradient-title{font-family:Georgia,serif;font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
+.gradient-title span{display:inline-block}
+.phase-bar{display:flex;align-items:center;gap:.5rem;margin-top:.75rem;padding:.5rem;background:rgba(0,0,0,.3);border-radius:.375rem}
+.phase-gradient{flex:1;height:.5rem;border-radius:.25rem;background:linear-gradient(90deg,#ff0000,#ffa500,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000)}
+.phase-label{font-size:.5625rem;color:var(--muted);white-space:nowrap}
 .popup-header{padding:1.5rem 1.5rem 0;border-bottom:1px solid var(--border)}
-.popup-title{font-family:Georgia,serif;font-size:1.25rem;font-weight:600}
+.popup-title{font-family:Georgia,serif;font-size:1.25rem;font-weight:600;position:relative;z-index:1}
 .popup-close{float:right;width:2rem;height:2rem;border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.5rem;border-radius:50%}
 .popup-close:hover{background:var(--accent-bg);color:var(--primary)}
 .popup-tabs{display:flex;border-bottom:2px solid var(--border);margin-top:1rem;overflow-x:auto}
 .popup-tab{padding:.625rem 1rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.8125rem;font-weight:500;color:var(--muted);white-space:nowrap}
 .popup-tab:hover{color:var(--fg)}
 .popup-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
-.popup-body{padding:1.5rem}
+.popup-body{padding:1.5rem;position:relative;z-index:1}
 .popup-pane{display:none}
 .popup-pane.active{display:block}
 .popup-pane h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem}
@@ -184,6 +193,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 
 <div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
 <div class="popup">
+<div class="code-float-bg" id="codeFloatBg"></div>
 <div class="popup-header">
 <button class="popup-close" onclick="closePopup()">&times;</button>
 <div class="popup-title" id="pTitle"></div>
@@ -265,14 +275,23 @@ var futAnim=null;
 function openPopup(key){
 var e=CODE[key];
 currentExpr=key;
-document.getElementById('pTitle').textContent=e.name;
+// Gradient title: each letter gets a different color
+var colors=['#FFD700','#32CD32','#00CED1','#9370DB','#FF69B4','#FA8072','#FFA500','#40E0D0','#FF6347','#98FB98','#87CEEB','#DDA0DD'];
+var nameChars=e.name.split('');
+var titleHtml='';
+nameChars.forEach(function(ch,i){
+var c=colors[i%colors.length];
+if(ch===' ')titleHtml+='<span style="display:inline-block;width:.3em"></span>';
+else titleHtml+='<span style="color:'+c+';text-shadow:0 0 12px '+c+'66">'+esc(ch)+'</span>';
+});
+document.getElementById('pTitle').innerHTML='<div class="gradient-title">'+titleHtml+'</div>';
 var th='';
 TABS.forEach(function(t,i){th+='<button class="popup-tab'+(i===0?' active':'')+'" onclick="switchTab(\''+t.id+'\',this)">'+t.icon+' '+t.label+'</button>'});
 document.getElementById('pTabs').innerHTML=th;
 var b=document.getElementById('pBody');
 var h='';
 // Math
-h+='<div class="popup-pane active" id="pane-math"><h3>Expression</h3><div class="expr-rendered">$$'+e.latex+'$$</div><h3>Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
+h+='<div class="popup-pane active" id="pane-math"><h3>Expression</h3><div class="expr-rendered" style="background:rgba(10,9,8,.6);border-color:rgba(194,65,12,.3);padding:2rem">$$'+e.latex+'$$</div><div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div><h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
 // Code
 h+='<div class="popup-pane" id="pane-code">';
 if(e.mapping){h+='<h3>Math \u2192 Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'</td><td class="map-arrow">\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
@@ -317,6 +336,21 @@ h+='</div></div>';
 b.innerHTML=h;
 document.getElementById('popup').classList.add('active');
 if(typeof renderMathInElement!=='undefined')renderMathInElement(b,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+// Inject floating code snippets into the background
+var fbg=document.getElementById('codeFloatBg');
+if(fbg){fbg.innerHTML='';var codeLines=[];
+for(var lang in e.langs){var lines=e.langs[lang].split('\n');for(var li=0;li<lines.length;li+=2){codeLines.push(lang+': '+lines[li])}}
+codeLines.forEach(function(line,i){
+var div=document.createElement('div');div.className='code-float-line';
+div.textContent=line.substring(0,60);
+div.style.left=Math.random()*60+5+'%';
+div.style.top=(i*8+Math.random()*15)+'%';
+div.style.animationDelay=(i*1.5)+'s';
+fbg.appendChild(div);
+});
+// Add phase bar to demo canvas area
+var demoPanes=document.querySelectorAll('.demo-canvas');
+}
 }
 
 // Expression-specific demos
