@@ -179,6 +179,35 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 </div>
 </div>
 
+<!-- Demo 4: Mathematical Thought Evolution Timeline -->
+<h2>Demo 4: Thought Evolution Timeline</h2>
+<div class="demo-section">
+<h3>How mathematical ideas evolved across centuries</h3>
+<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">Animated particles flow along the timeline. Each milestone is a "thought" that connects to the observatory. Click a milestone to see its connection.</p>
+<canvas id="timelineCanvas" class="demo-canvas" style="aspect-ratio:16/6"></canvas>
+<div id="timelineInfo" style="margin-top:.75rem;padding:.75rem;background:var(--secondary);border-radius:.5rem;border:1px solid var(--border);font-size:.8125rem;min-height:2rem"></div>
+<div class="demo-controls">
+<span style="font-size:.75rem;color:var(--muted)">Click any milestone node</span>
+<div><button onclick="tlToggle()">&#9654;/&#10073;</button><button onclick="tlReset()">&#8634;</button></div>
+</div>
+</div>
+
+<!-- Demo 5: Code Language Performance Comparison -->
+<h2>Demo 5: Language Performance Matrix</h2>
+<div class="demo-section">
+<h3>Which language for which task? &mdash; like Go vs Rust vs C</h3>
+<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">Select a metric. The bars animate to show which language excels. <span style="background:var(--accent-bg);color:var(--primary);padding:.125rem .375rem;border-radius:.25rem;font-size:.5625rem;font-weight:600;text-transform:uppercase">SYNTHETIC</span></p>
+<div style="display:flex;gap:.25rem;margin-bottom:.5rem;flex-wrap:wrap">
+<button class="lang-metric-btn active" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--primary);border-radius:.25rem;background:var(--accent-bg);color:var(--primary);cursor:pointer;font-weight:500" onclick="switchMetric('speed',this)">Speed</button>
+<button class="lang-metric-btn" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-weight:500" onclick="switchMetric('readability',this)">Readability</button>
+<button class="lang-metric-btn" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-weight:500" onclick="switchMetric('concurrency',this)">Concurrency</button>
+<button class="lang-metric-btn" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-weight:500" onclick="switchMetric('math',this)">Math Notation</button>
+<button class="lang-metric-btn" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-weight:500" onclick="switchMetric('longevity',this)">Longevity</button>
+</div>
+<canvas id="langCanvas" class="demo-canvas" style="aspect-ratio:16/8"></canvas>
+<div id="langVerdict" style="margin-top:.75rem;padding:.75rem;background:var(--secondary);border-radius:.5rem;border:1px solid var(--border);font-size:.75rem"></div>
+</div>
+
 </main>
 
 <footer><div class="footer-inner">
@@ -377,6 +406,181 @@ document.getElementById('cmpVerdict').innerHTML=verdict;
 }
 window.drawComparison=drawComparison;
 setTimeout(drawComparison,500);
+
+// Demo 4: Thought Evolution Timeline
+var tlMilestones=[
+{year:1700,name:'Leibniz',thought:'Universal characteristic — the dream of a formal language for all reasoning',expr:'teleportation'},
+{year:1931,name:'Godel',thought:'Incompleteness — some truths cannot be proved within any sufficiently strong system',expr:'godel'},
+{year:1936,name:'Turing',thought:'Halting problem — no algorithm can decide if an arbitrary program terminates',expr:'godel'},
+{year:1948,name:'Shannon',thought:'Information theory — entropy as a measurable quantity of surprise',expr:'bottleneck'},
+{year:1965,name:'Kolmogorov',thought:'Algorithmic complexity — the shortest program that produces a string',expr:'kolmogorov'},
+{year:1994,name:'Shor',thought:'Quantum factoring — exponential speedup for integer factorization',expr:'schrodinger'},
+{year:2001,name:'Khot',thought:'UGC — the hardness of approximating constraint satisfaction',expr:'ugc'},
+{year:2005,name:'Hutter',thought:'AIXI — the theoretically optimal but uncomputable universal AI',expr:'aixi'},
+{year:2007,name:'Aaronson',thought:'Unitary synthesis — how many queries to build any quantum operation',expr:'unitary'},
+{year:2017,name:'Vaswani',thought:'Attention — the mechanism that powers modern AI theorem provers',expr:'attention'},
+{year:2024,name:'OpenAI',thought:'Mathocalypse — AI disproves Erdos, proves UGC, refutes Unitary Synthesis',expr:'erdos'}
+];
+var tlRunning=true;var tlRaf=null;var tlSelected=-1;var tlParticles=[];
+var tlRed=matchMedia('(prefers-reduced-motion: reduce)').matches;
+for(var i=0;i<20;i++)tlParticles.push({t:Math.random(),speed:0.001+Math.random()*0.002});
+
+function drawTimeline(){
+var cv=document.getElementById('timelineCanvas');if(!cv)return;
+var ctx=cv.getContext('2d');var dpr=window.devicePixelRatio||1;var r=cv.getBoundingClientRect();
+cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var pL=60,pR=30,pT=30,pB=30;var tlW=W-pL-pR;var tlY=H/2;
+// Timeline line with gradient
+var lg=ctx.createLinearGradient(pL,0,pL+tlW,0);
+lg.addColorStop(0,pc+'40');lg.addColorStop(0.5,pc);lg.addColorStop(1,'#FFD700');
+ctx.strokeStyle=lg;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(pL,tlY);ctx.lineTo(pL+tlW,tlY);ctx.stroke();
+// Animated particles flowing along timeline
+tlParticles.forEach(function(p){
+if(tlRunning)p.t+=p.speed;if(p.t>1)p.t=0;
+var px=pL+p.t*tlW;
+ctx.shadowColor=pc;ctx.shadowBlur=6;ctx.fillStyle='#FFD700';
+ctx.beginPath();ctx.arc(px,tlY,2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+});
+// Milestones
+var yearMin=1700,yearMax=2024,yearSpan=yearMax-yearMin;
+tlMilestones.forEach(function(m,i){
+var x=pL+((m.year-yearMin)/yearSpan)*tlW;
+var isSel=i===tlSelected;
+var pulse=isSel?1+Math.sin(Date.now()*0.005)*0.2:1;
+// Node
+ctx.shadowColor=pc;ctx.shadowBlur=isSel?15:6;
+ctx.fillStyle=isSel?'#FFD700':pc;
+ctx.beginPath();ctx.arc(x,tlY,5*pulse,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+// Year label
+ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='center';
+ctx.fillText(m.year,x,tlY-12);
+// Name label
+ctx.fillStyle=isSel?'#FFD700':mt;ctx.font='9px sans-serif';
+ctx.fillText(m.name,x,tlY+20);
+// Thought on hover/select
+if(isSel){
+ctx.fillStyle=fg;ctx.font='8px monospace';
+var shortThought=m.thought.substring(0,40);
+ctx.fillText(shortThought,x,tlY-25);
+}
+});
+// Phase bar
+var pby=H-4;
+var pg=ctx.createLinearGradient(pL,pby,pL+tlW,pby);
+pg.addColorStop(0,'#ff0000');pg.addColorStop(.17,'#ffa500');pg.addColorStop(.33,'#ffff00');
+pg.addColorStop(.5,'#00ff00');pg.addColorStop(.67,'#00ffff');pg.addColorStop(.83,'#0000ff');
+pg.addColorStop(1,'#ff0000');
+ctx.fillStyle=pg;ctx.fillRect(pL,pby,tlW,3);
+// Title
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Mathematical thought evolution: Leibniz (1700) to AI (2024)',W/2,14);
+}
+function tlToggle(){tlRunning=!tlRunning}
+function tlReset(){tlParticles.forEach(function(p){p.t=Math.random()});tlSelected=-1;document.getElementById('timelineInfo').innerHTML=''}
+function tlClick(e){
+var cv=document.getElementById('timelineCanvas');var r=cv.getBoundingClientRect();
+var mx=e.clientX-r.left,my=e.clientY-r.top;
+var W=r.width,pL=60,pR=30,tlW=W-pL-pR;var yearMin=1700,yearMax=2024;
+tlSelected=-1;
+tlMilestones.forEach(function(m,i){
+var x=pL+((m.year-yearMin)/(yearMax-yearMin))*tlW;
+var dx=mx-x,dy=my-r.height/2;
+if(dx*dx+dy*dy<100){tlSelected=i;
+var info=document.getElementById('timelineInfo');
+info.innerHTML='<strong style="color:var(--primary)">'+m.year+' '+m.name+'</strong>: '+m.thought+' <a href="sources.html#'+m.expr+'" style="color:var(--primary);text-decoration:none;font-weight:600">&rarr; Explore</a>';
+}
+});
+}
+// Init timeline
+(function(){var cv=document.getElementById('timelineCanvas');if(!cv)return;cv.addEventListener('click',tlClick);
+function lp(){drawTimeline();tlRaf=requestAnimationFrame(lp)}if(!tlRed)tlRaf=requestAnimationFrame(lp);else drawTimeline();
+window.addEventListener('resize',drawTimeline)})();
+
+// Demo 5: Language Performance Matrix
+var LANG_DATA={
+Python:{speed:0.3,readability:0.9,concurrency:0.4,math:0.85,longevity:0.7,best:'readability & math notation',weak:'raw speed'},
+TypeScript:{speed:0.5,readability:0.8,concurrency:0.6,math:0.6,longevity:0.6,best:'type safety & web',weak:'numerical compute'},
+Go:{speed:0.8,readability:0.7,concurrency:0.9,math:0.4,longevity:0.75,best:'concurrency & deployment',weak:'math notation'},
+Scala:{speed:0.6,readability:0.6,concurrency:0.7,math:0.7,longevity:0.6,best:'type system expressiveness',weak:'complexity'},
+C:{speed:0.95,readability:0.4,concurrency:0.3,math:0.5,longevity:0.9,best:'raw speed & hardware control',weak:'safety & concurrency'},
+Elixir:{speed:0.5,readability:0.7,concurrency:0.85,math:0.3,longevity:0.65,best:'distribution & fault tolerance',weak:'numerical compute'}
+};
+var METRICS={speed:'Execution Speed',readability:'Code Readability',concurrency:'Concurrency Support',math:'Mathematical Notation',longevity:'2-Decade Longevity'};
+var langNames=Object.keys(LANG_DATA);
+var currentMetric='speed';var langAnimRaf=null;var langCurrentVals=langNames.map(function(){return 0});
+
+function switchMetric(metric,btn){
+currentMetric=metric;
+document.querySelectorAll('.lang-metric-btn').forEach(function(b){b.classList.remove('active');b.style.background='var(--card)';b.style.color='var(--muted)';b.style.borderColor='var(--border)'});
+btn.classList.add('active');btn.style.background='var(--accent-bg)';btn.style.color='var(--primary)';btn.style.borderColor='var(--primary)';
+drawLangChart();
+}
+
+function drawLangChart(){
+var cv=document.getElementById('langCanvas');if(!cv)return;
+var ctx=cv.getContext('2d');var dpr=window.devicePixelRatio||1;var r=cv.getBoundingClientRect();
+cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var targetVals=langNames.map(function(n){return LANG_DATA[n][currentMetric]});
+// Animate from current to target
+var startVals=langCurrentVals.slice();var startTime=performance.now();var duration=500;
+if(langAnimRaf)cancelAnimationFrame(langAnimRaf);
+function morph(){
+var elapsed=performance.now()-startTime;var t=Math.min(1,elapsed/duration);
+var ease=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+langCurrentVals=startVals.map(function(s,i){return s+(targetVals[i]-s)*ease});
+renderBars(langCurrentVals,targetVals);
+if(t<1)langAnimRaf=requestAnimationFrame(morph);
+else{langCurrentVals=targetVals.slice();renderBars(targetVals,targetVals);generateLangVerdict()}
+}
+morph();
+}
+
+function renderBars(vals,targetVals){
+var cv=document.getElementById('langCanvas');var ctx=cv.getContext('2d');
+var W=cv.width/window.devicePixelRatio,H=cv.height/window.devicePixelRatio;
+var pc='#c2410c',fg='#e5e2dc',mt='#736a5e';
+var pL=80,pB=30,pT=30,pR=20;var cw=W-pL-pR,ch=H-pT-pB;
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Axes
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+// Grid lines
+ctx.strokeStyle='rgba(115,106,94,0.1)';
+for(var i=1;i<=5;i++){var y=H-pB-i/5*ch;ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='right';ctx.fillText(i*20+'%',pL-3,y+3)}
+// Bars
+var bw=cw/langNames.length*0.6;var gap=cw/langNames.length*0.4;
+var colors=['#c2410c','#d97706','#b45309','#92400e','#78350f','#FFD700'];
+langNames.forEach(function(n,i){
+var x=pL+i*(bw+gap)+gap/2;var v=vals[i];var bh=v*ch;var y=H-pB-bh;
+// Bar with gradient
+var g=ctx.createLinearGradient(0,y,0,H-pB);
+g.addColorStop(0,colors[i]);g.addColorStop(1,colors[i]+'44');
+ctx.shadowColor=colors[i];ctx.shadowBlur=8;
+ctx.fillStyle=g;ctx.fillRect(x,y,bw,bh);ctx.shadowBlur=0;
+// Value label
+ctx.fillStyle='#FFD700';ctx.font='bold 10px monospace';ctx.textAlign='center';
+ctx.fillText(Math.round(v*100)+'%',x+bw/2,y-4);
+// Language name
+ctx.fillStyle=fg;ctx.font='9px sans-serif';
+ctx.fillText(n,x+bw/2,H-pB+14);
+});
+// Title
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';
+ctx.fillText(METRICS[currentMetric]+' comparison',W/2,16);
+}
+
+function generateLangVerdict(){
+var sorted=langNames.map(function(n){return{name:n,val:LANG_DATA[n][currentMetric],best:LANG_DATA[n].best,weak:LANG_DATA[n].weak}}).sort(function(a,b){return b.val-a.val});
+var winner=sorted[0];var loser=sorted[sorted.length-1];
+var v=document.getElementById('langVerdict');
+v.innerHTML='<strong style="color:#FFD700;font-size:.8125rem">'+winner.name+'</strong> wins for '+METRICS[currentMetric].toLowerCase()+' ('+Math.round(winner.val*100)+'%). Best for: '+winner.best+'. <span style="color:var(--muted)">Weakest: '+loser.name+' ('+Math.round(loser.val*100)+'%) &mdash; '+loser.weak+'.</span> <span style="background:var(--accent-bg);color:var(--primary);padding:.0625rem .25rem;border-radius:.125rem;font-size:.5625rem">SYNTHETIC</span>';
+}
+window.switchMetric=switchMetric;
+setTimeout(drawLangChart,500);
 </script>
 </body>
 </html>
