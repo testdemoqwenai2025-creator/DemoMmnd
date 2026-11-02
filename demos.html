@@ -279,20 +279,46 @@ var EXPR_DATA={
 'teleportation':{name:'Teleportation',dims:[0.4,0.6,0.3,0.7,0.8],best:['AI-human collaboration','proof mining','pedagogical reconstruction'],weak:['closed-form math','physical simulation']}
 };
 var DIM_NAMES=['Numerical','Symbolic','Parallelizable','Foundational','Practical'];
+var cmpAnimRaf=null;var cmpCurrentDims=[0.9,0.3,0.7,0.8,0.6];var cmpCurrentDimsB=[0.8,0.9,0.6,0.5,0.9];
 
 function drawComparison(){
+var aKey=document.getElementById('cmpA').value;
+var bKey=document.getElementById('cmpB').value;
+var aData=EXPR_DATA[aKey]||EXPR_DATA['schrodinger'];
+var bData=EXPR_DATA[bKey]||EXPR_DATA['attention'];
+// Start morph animation from current to target
+var startDimsA=cmpCurrentDims.slice();
+var startDimsB=cmpCurrentDimsB.slice();
+var targetDimsA=aData.dims.slice();
+var targetDimsB=bData.dims.slice();
+var startTime=performance.now();var duration=600;
+if(cmpAnimRaf)cancelAnimationFrame(cmpAnimRaf);
+function morph(){
+var elapsed=performance.now()-startTime;
+var t=Math.min(1,elapsed/duration);
+var ease=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+var interpA=startDimsA.map(function(s,i){return s+(targetDimsA[i]-s)*ease});
+var interpB=startDimsB.map(function(s,i){return s+(targetDimsB[i]-s)*ease});
+cmpCurrentDims=interpA;cmpCurrentDimsB=interpB;
+drawRadar(interpA,interpB,aData,bData);
+if(t<1){cmpAnimRaf=requestAnimationFrame(morph)}
+else{cmpCurrentDims=targetDimsA;cmpCurrentDimsB=targetDimsB;drawRadar(targetDimsA,targetDimsB,aData,bData);generateVerdict(aData,bData)}
+}
+morph();
+}
+
+function drawRadar(dimsA,dimsB,aData,bData){
 var cv=document.getElementById('cmpCanvas');if(!cv)return;
 var ctx=cv.getContext('2d');var dpr=window.devicePixelRatio||1;var r=cv.getBoundingClientRect();
 cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-var aKey=document.getElementById('cmpA').value;
-var bKey=document.getElementById('cmpB').value;
-var aData=EXPR_DATA[aKey]||EXPR_DATA['schrodinger'];
-var bData=EXPR_DATA[bKey]||EXPR_DATA['attention'];
-// Radar chart with two overlaid polygons
-var cx=W*0.35,cy=H/2,rad=Math.min(W*0.3,H*0.35);
-var n=5;
+var cx=W*0.35,cy=H/2,rad=Math.min(W*0.3,H*0.35);var n=5;
+// Animated background glow
+var glowGrad=ctx.createRadialGradient(cx,cy,0,cx,cy,rad*1.5);
+glowGrad.addColorStop(0,'rgba(194,65,12,0.05)');
+glowGrad.addColorStop(1,'rgba(194,65,12,0)');
+ctx.fillStyle=glowGrad;ctx.fillRect(0,0,W,H);
 // Grid rings
 ctx.strokeStyle='rgba(194,65,12,0.1)';ctx.lineWidth=.5;
 for(var ring=1;ring<=5;ring++){
@@ -303,45 +329,53 @@ ctx.closePath();ctx.stroke();
 // Axis lines
 ctx.strokeStyle='rgba(194,65,12,0.15)';
 for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad);ctx.stroke()}
-// Expression A polygon
+// Expression A polygon (with glow)
+ctx.shadowColor=pc;ctx.shadowBlur=8;
 ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.fillStyle='rgba(194,65,12,0.15)';
 ctx.beginPath();
-for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=aData.dims[i]*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
-ctx.closePath();ctx.fill();ctx.stroke();
-// Expression B polygon
+for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=dimsA[i]*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.closePath();ctx.fill();ctx.stroke();ctx.shadowBlur=0;
+// Expression B polygon (with glow)
+ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
 ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.fillStyle='rgba(255,215,0,0.1)';
 ctx.beginPath();
-for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=bData.dims[i]*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
-ctx.closePath();ctx.fill();ctx.stroke();
+for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=dimsB[i]*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.closePath();ctx.fill();ctx.stroke();ctx.shadowBlur=0;
 // Labels
 ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='center';
 for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;ctx.fillText(DIM_NAMES[i],cx+Math.cos(a)*(rad+15),cy+Math.sin(a)*(rad+15))}
-// Legend
-ctx.fillStyle=pc;ctx.fillRect(W*0.7,H*0.3,8,8);
+// Animated dots at vertices
+ctx.fillStyle=pc;
+for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=dimsA[i]*rad;ctx.beginPath();ctx.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,3,0,Math.PI*2);ctx.fill()}
+ctx.fillStyle='#FFD700';
+for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=dimsB[i]*rad;ctx.beginPath();ctx.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,3,0,Math.PI*2);ctx.fill()}
+// Legend + values
+ctx.fillStyle=pc;ctx.fillRect(W*0.7,H*0.25,8,8);
 ctx.fillStyle=fg;ctx.font='9px sans-serif';ctx.textAlign='left';
-ctx.fillText(aData.name,W*0.7+12,H*0.3+7);
-ctx.fillStyle='#FFD700';ctx.fillRect(W*0.7,H*0.4,8,8);
-ctx.fillStyle=fg;ctx.fillText(bData.name,W*0.7+12,H*0.4+7);
-// Dimension values
+ctx.fillText(aData.name,W*0.7+12,H*0.25+7);
+ctx.fillStyle='#FFD700';ctx.fillRect(W*0.7,H*0.32,8,8);
+ctx.fillStyle=fg;ctx.fillText(bData.name,W*0.7+12,H*0.32+7);
 ctx.fillStyle=mt;ctx.font='7px monospace';
-for(var i=0;i<n;i++){ctx.fillText(DIM_NAMES[i]+': '+Math.round(aData.dims[i]*100)+'% vs '+Math.round(bData.dims[i]*100)+'%',W*0.7,H*0.5+i*12)}
+for(var i=0;i<n;i++){ctx.fillText(DIM_NAMES[i]+': '+Math.round(dimsA[i]*100)+'% vs '+Math.round(dimsB[i]*100)+'%',W*0.7,H*0.42+i*11)}
 // Title
 ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';
 ctx.fillText(aData.name+' vs '+bData.name,W/2,14);
-// Generate verdict
+}
+
+function generateVerdict(aData,bData){
+var pc='#c2410c';
 var verdict='<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">';
-verdict+='<div><strong style="color:'+pc+';font-size:.75rem">'+aData.name+'</strong> is better for:<ul style="margin:.25rem 0 0 1rem;padding:0;font-size:.6875rem">';
-aData.best.forEach(function(b){verdict+='<li>'+b+'</li>'});
-verdict+='</ul><strong style="color:var(--muted);font-size:.625rem">Weaker at:</strong> '+aData.weak.join(', ')+'</div>';
-verdict+='<div><strong style="color:#FFD700;font-size:.75rem">'+bData.name+'</strong> is better for:<ul style="margin:.25rem 0 0 1rem;padding:0;font-size:.6875rem">';
-bData.best.forEach(function(b){verdict+='<li>'+b+'</li>'});
-verdict+='</ul><strong style="color:var(--muted);font-size:.625rem">Weaker at:</strong> '+bData.weak.join(', ')+'</div>';
-verdict+='</div>';
-verdict+='<p style="margin-top:.5rem;font-size:.6875rem;color:var(--muted);border-top:1px solid var(--border);padding-top:.5rem"><strong style="color:var(--primary)">Verdict:</strong> Choose '+aData.name+' for '+aData.best[0]+'. Choose '+bData.name+' for '+bData.best[0]+'. Both have value &mdash; like Go vs Rust, neither is universally better. <span style="background:var(--accent-bg);color:var(--primary);padding:.0625rem .25rem;border-radius:.125rem;font-size:.5625rem">SYNTHETIC</span></p>';
+verdict+='<div><strong style="color:'+pc+';font-size:.75rem">'+aData.name+'<\/strong> is better for:<ul style="margin:.25rem 0 0 1rem;padding:0;font-size:.6875rem">';
+aData.best.forEach(function(b){verdict+='<li>'+b+'<\/li>'});
+verdict+='<\/ul><strong style="color:var(--muted);font-size:.625rem">Weaker at:<\/strong> '+aData.weak.join(', ')+'<\/div>';
+verdict+='<div><strong style="color:#FFD700;font-size:.75rem">'+bData.name+'<\/strong> is better for:<ul style="margin:.25rem 0 0 1rem;padding:0;font-size:.6875rem">';
+bData.best.forEach(function(b){verdict+='<li>'+b+'<\/li>'});
+verdict+='<\/ul><strong style="color:var(--muted);font-size:.625rem">Weaker at:<\/strong> '+bData.weak.join(', ')+'<\/div>';
+verdict+='<\/div>';
+verdict+='<p style="margin-top:.5rem;font-size:.6875rem;color:var(--muted);border-top:1px solid var(--border);padding-top:.5rem"><strong style="color:var(--primary)">Verdict:<\/strong> Choose '+aData.name+' for '+aData.best[0]+'. Choose '+bData.name+' for '+bData.best[0]+'. Both have value &mdash; like Go vs Rust, neither is universally better. <span style="background:var(--accent-bg);color:var(--primary);padding:.0625rem .25rem;border-radius:.125rem;font-size:.5625rem">SYNTHETIC<\/span><\/p>';
 document.getElementById('cmpVerdict').innerHTML=verdict;
 }
 window.drawComparison=drawComparison;
-// Initialize
 setTimeout(drawComparison,500);
 </script>
 </body>
