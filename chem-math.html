@@ -283,20 +283,21 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 function toggleTheme(){var d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
 ;(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
 
-var CODE=null;
-var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
-var TABS=[{id:'mol',icon:'\ud83e\udd1b',label:'Molecular'},{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
+;var CODE=null;
+;var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
+;var TABS=[{id:'mol',icon:'\ud83e\udd1b',label:'Molecular'},{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
 
-var CHEM_FUTURES={
+;var CHEM_FUTURES={
 'dipole':[{n:'Real-time dipole MD',y:2027,p:0.45,t:'Instant dipole prediction during molecular dynamics'},{n:'Drug polarity screen',y:2028,p:0.40,t:'Pharma screening for solubility via dipole'},{n:'IR spectra ML',y:2029,p:0.35,t:'Infrared spectra from predicted dipoles'},{n:'Ferromagnetism',y:2032,p:0.20,t:'Magnetic dipole prediction for materials'},{n:'Dipole surfaces',y:2035,p:0.25,t:'2D material dipole mapping'}],
 'polarizability':[{n:'Raman ML',y:2027,p:0.40,t:'Raman spectra from predicted polarizability'},{n:'Nonlinear optics',y:2029,p:0.30,t:'Hyperpolarizability for NLO materials'},{n:'Refractive index',y:2028,p:0.45,t:'Bulk refractive index from molecular alpha'},{n:'Optoelectronics',y:2032,p:0.25,t:'Solar cell material screening'},{n:'Stark effect',y:2035,p:0.20,t:'Field-dependent polarizability dynamics'}],
 'nmr_shielding':[{n:'NMR spectra ML',y:2027,p:0.50,t:'Full NMR spectra from predicted shielding'},{n:'Structure elucidation',y:2028,p:0.40,t:'AI-assisted NMR structure determination'},{n:'Reaction monitoring',y:2029,p:0.35,t:'Real-time NMR for reaction tracking'},{n:'Metabolomics',y:2031,p:0.30,t:'NMR-based metabolomics at scale'},{n:'MRI contrast',y:2035,p:0.15,t:'Molecular MRI contrast design'}],
 'electron_density':[{n:'ESP surfaces ML',y:2027,p:0.50,t:'Instant electrostatic potential surfaces'},{n:'Docking ML',y:2028,p:0.45,t:'Drug docking with ML electron density'},{n:'Catalysis design',y:2030,p:0.30,t:'Catalyst screening via ESP patterns'},{n:'Density functional',y:2032,p:0.25,t:'ML density functional approximation'},{n:'Quantum embedding',y:2035,p:0.20,t:'ML density for embedding methods'}],
 'equivariant_attention':[{n:'Equivariant GNNs',y:2027,p:0.50,t:'Equivariant GNNs becoming standard'},{n:'Large mol GNN',y:2029,p:0.35,t:'Protein-scale equivariant prediction'},{n:'Equivariant AGI',y:2032,p:0.20,t:'Symmetry-aware reasoning in AI'},{n:'Causal equivariance',y:2034,p:0.15,t:'Causal models with equivariance'},{n:'Unification',y:2038,p:0.10,t:'Unified equivariant ML theory'}],
-'energy_prediction':[{n:'MD acceleration',y:2027,p:0.55,t:'ML-MD replacing DFT-MD in routine tasks'},{n:'Reaction paths',y:2028,p:0.40,t:'AI finding reaction pathways'},{n:'Catalyst screening',y:2029,p:0.45,t:'High-throughput catalyst design'},{n:'Material discovery',y:2031,p:0.30,t:'Novel materials via energy landscapes'},{n:'Protein folding',y:2033,p:0.25,t:'ML energy for protein folding'}
+'energy_prediction':[{n:'MD acceleration',y:2027,p:0.55,t:'ML-MD replacing DFT-MD in routine tasks'},{n:'Reaction paths',y:2028,p:0.40,t:'AI finding reaction pathways'},{n:'Catalyst screening',y:2029,p:0.45,t:'High-throughput catalyst design'},{n:'Material discovery',y:2031,p:0.30,t:'Novel materials via energy landscapes'},{n:'Protein folding',y:2033,p:0.25,t:'ML energy for protein folding'}]
 };
 
 fetch('code-data.json').then(function(r){return r.json()}).then(function(data){}).catch(function(){})
+;
 
 // Load chem data from inline JSON
 try{CODE=JSON.parse(document.getElementById('codeData').textContent)}catch(e){console.error('Parse error:',e)}
@@ -324,7 +325,7 @@ var q=(document.getElementById('searchInput').value||'').toLowerCase();
 document.querySelectorAll('.expr-card').forEach(function(c){var t=c.textContent.toLowerCase();c.style.display=(!q||t.indexOf(q)>=0)?'':'none'});
 }
 
-var currentExpr=null;var demoAnim=null;var futRaf=null;var futAnimT=0;
+;var currentExpr=null;var demoAnim=null;var futRaf=null;var futAnimT=0;
 
 function openPopup(key){
 var e=CODE[key];if(!e)return;currentExpr=key;
