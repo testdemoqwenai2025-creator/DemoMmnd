@@ -630,7 +630,7 @@ if(pyodideReady)return Promise.resolve(pyodideReady);
 if(pyodideLoading)return pyodideLoading;
 if(typeof loadPyodide==='undefined')return Promise.resolve(null);
 pyodideLoading=loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'}).then(function(py){
-pyodideReady=py;console.log('Pyodide ready for sources.html');return py;
+pyodideReady=py;console.log('Pyodide ready, loading numpy...');py.loadPackage('numpy').then(function(){console.log('numpy loaded')});return py;
 }).catch(function(e){console.log('Pyodide failed:',e.message);pyodideReady=null;return null});
 return pyodideLoading;
 }
