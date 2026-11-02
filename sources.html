@@ -320,18 +320,22 @@ h+='<div class="popup-pane" id="pane-deep"><h3>Deeper analysis</h3><p style="fon
 // Compare
 h+='<div class="popup-pane" id="pane-cmp"><h3>Cross-era context</h3><p style="font-size:.875rem;color:var(--muted)">Part of a conversation spanning centuries. The same question asked by G\u00f6del (1931), Turing (1936), and Aaronson (2020s).</p></div>';
 // Future
-h+='<div class="popup-pane" id="pane-fut"><h3>Synthetic data — projected evolution</h3>';
-h+='<p style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">Adjust the AI capability growth rate to see how this domain might evolve:</p>';
-h+='<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem"><label style="font-size:.75rem;color:var(--muted)">Growth rate:</label><input type="range" id="growthSlider" min="0.5" max="3" step="0.1" value="1.5" style="flex:1" oninput="drawFuturistic(currentExpr)"><span id="growthVal" style="font-size:.75rem;color:var(--primary);font-weight:600;min-width:2rem">1.5x</span></div>';
+h+='<div class="popup-pane" id="pane-fut"><h3>Synthetic data \u2014 probability evolution (animated)</h3>';
+h+='<p style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">Probability cones grow over time. Each cone is a mathematical thought evolving toward a breakthrough. Adjust the growth rate.</p>';
+h+='<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem"><label style="font-size:.75rem;color:var(--muted)">Growth rate:</label><input type="range" id="growthSlider" min="0.5" max="3" step="0.1" value="1.5" style="flex:1" oninput="drawFuturistic(currentExpr);renderDataset()"><span id="growthVal" style="font-size:.75rem;color:var(--primary);font-weight:600;min-width:2rem">1.5x</span></div>';
 h+='<canvas id="futChart" class="demo-canvas" style="aspect-ratio:16/9"></canvas>';
 h+='<div id="futMilestones" style="font-size:.6875rem;color:var(--muted);margin-top:.5rem"></div>';
-h+='<h3 style="margin-top:1rem">Deeper thoughts on the conversation</h3>';
-h+='<div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--secondary);font-size:.8125rem;line-height:1.7;color:var(--fg)">';
+h+='<h3 style="margin-top:1.5rem">Synthetic dataset \u2014 generated thoughts</h3>';
+h+='<div id="datasetTable" style="font-size:.6875rem;margin-bottom:1rem;max-height:12rem;overflow-y:auto;border:1px solid var(--border);border-radius:.5rem"></div>';
+h+='<h3 style="margin-top:1rem">Code: generating the synthetic dataset</h3>';
+h+='<pre style="background:var(--code-bg);border:1px solid var(--border);border-radius:.5rem;padding:1rem;overflow-x:auto;font-size:.6875rem;line-height:1.6;color:var(--code-fg);white-space:pre"><code>import numpy as np\n\nproblems = [\n    {"name": "Riemann Hyp.", "year": 2028, "base": 0.30,\n     "thought": "Erdos disproved via alg. number theory"},\n    {"name": "P vs NP", "year": 2030, "base": 0.20,\n     "thought": "UGC verified; separation needs new techniques"},\n    {"name": "Navier-Stokes", "year": 2032, "base": 0.40,\n     "thought": "PDEs are AI-friendly; high-dim automated"},\n    {"name": "Hodge Conj.", "year": 2035, "base": 0.25,\n     "thought": "Alg. geometry; AI pattern matching"},\n    {"name": "Birch-Swinn.", "year": 2038, "base": 0.35,\n     "thought": "L-functions; numerical evidence AI-gen"}\n]\n\ndef prob_at_year(pb, year, growth=1.5):\n    tau = (pb["year"] - 2025) / growth\n    t = year - 2025\n    return min(1.0, max(0.0, 1 - np.exp(-t/tau))) * pb["base"]</code></pre>';
+h+='<h3 style="margin-top:1.5rem">Deeper thoughts on the conversation</h3>';
+h+='<div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:rgba(10,9,8,.6);font-size:.8125rem;line-height:1.7;color:var(--fg)">';
 h+='<p style="margin-bottom:.5rem"><strong style="color:var(--primary)">The Mathocalypse is not hyperbole.</strong> Three named breakthroughs \u2014 Erd\u0151s disproved, UGC Lean-verified, Unitary Synthesis refuted \u2014 are real results that were open for decades. AI didn\u2019t just \u201chelp\u201d; it produced solutions humans had failed to find in 60+ years.</p>';
-h+='<p style="margin-bottom:.5rem"><strong style="color:var(--primary)">The archaeologist framing is precise.</strong> The human isn\u2019t being replaced; the function is shifting from creation to interpretation. Like what happened in astronomy when photography replaced visual observation \u2014 the astronomer didn\u2019t disappear, but their role shifted from seeing to interpreting.</p>';
-h+='<p style="margin-bottom:.5rem"><strong style="color:var(--primary)">The alignment concern is the most important point.</strong> Aaronson\u2019s call for NTSB/FAA-style oversight is about ensuring that when AI makes mistakes (which it will), there\u2019s a system to learn from them independently. Commercial aviation is safe not because planes don\u2019t fail, but because failures are investigated and lessons are shared.</p>';
-h+='<p style="margin-bottom:.5rem"><strong style="color:var(--primary)">The consciousness distinction is genuinely new.</strong> Aaronson\u2019s clonable vs. unclonable framing reframes the question from \u201ccan AI think?\u201d to \u201cdoes unclonability matter for moral standing?\u201d This is a contribution the discourse hasn\u2019t seen before.</p>';
-h+='<p><strong style="color:var(--primary)">The two-decade horizon is appropriate.</strong> The conversation doesn\u2019t dismiss AI (it\u2019s too capable) or catastrophize (it\u2019s not conscious). The measured tone is itself a contribution. The observatory is built to last long enough to see whether these projections hold.</p>';
+h+='<p style="margin-bottom:.5rem"><strong style="color:var(--primary)">The archaeologist framing is precise.</strong> The human isn\u2019t being replaced; the function is shifting from creation to interpretation.</p>';
+h+='<p style="margin-bottom:.5rem"><strong style="color:var(--primary)">The alignment concern is the most important point.</strong> NTSB/FAA-style oversight ensures failures are investigated independently.</p>';
+h+='<p style="margin-bottom:.5rem"><strong style="color:var(--primary)">The consciousness distinction is genuinely new.</strong> Clonable vs unclonable reframes moral standing.</p>';
+h+='<p><strong style="color:var(--primary)">The two-decade horizon is appropriate.</strong> The measured tone is itself a contribution.</p>';
 h+='</div></div>';
 b.innerHTML=h;
 document.getElementById('popup').classList.add('active');
@@ -438,88 +442,121 @@ var cv=document.getElementById('futChart');if(!cv)return;
 var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();
 cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
-// Dark cinematic background
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
 var growth=1.5;var sl=document.getElementById('growthSlider');if(sl)growth=parseFloat(sl.value);
 var gv=document.getElementById('growthVal');if(gv)gv.textContent=growth.toFixed(1)+'x';
-// Open problems as probability scenarios — same visual language as Schrödinger
 var problems=[
-{name:'Riemann Hyp.',year:2028,prob:0.3},
-{name:'P vs NP',year:2030,prob:0.2},
-{name:'Navier-Stokes',year:2032,prob:0.4},
-{name:'Hodge Conj.',year:2035,prob:0.25},
-{name:'Birch-Swinn.',year:2038,prob:0.35}
+{name:'Riemann Hyp.',year:2028,prob:0.30,thought:'Erdos disproved; Riemann needs deeper analytic structure'},
+{name:'P vs NP',year:2030,prob:0.20,thought:'UGC verified; separation needs new techniques'},
+{name:'Navier-Stokes',year:2032,prob:0.40,thought:'PDEs are AI-friendly; high-dim automated'},
+{name:'Hodge Conj.',year:2035,prob:0.25,thought:'Alg. geometry; AI pattern matching excels'},
+{name:'Birch-Swinn.',year:2038,prob:0.35,thought:'L-functions; numerical evidence AI-generated'}
 ];
-var pL=80,pB=30,pT=40,pR=20,cw=W-pL-pR,ch=H-pT-pB;
+var pL=90,pB=30,pT=35,pR=20,cw=W-pL-pR,ch=H-pT-pB;
 var yearStart=2025,yearEnd=2046,yearSpan=yearEnd-yearStart;
-// Draw timeline grid (like the Schrödinger 3x3 grid but for years)
-ctx.strokeStyle='rgba(194,65,12,0.1)';ctx.lineWidth=.5;
+// Use animation time for growing cones
+var animT=(futAnimT||0);
+var growProgress=Math.min(1,animT/3);
+// Timeline grid
+ctx.strokeStyle='rgba(194,65,12,0.08)';ctx.lineWidth=.5;
 for(var y=yearStart;y<=yearEnd;y+=3){
 var x=pL+((y-yearStart)/yearSpan)*cw;
 ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();
-ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='center';
-ctx.fillText(y,x,H-pB+12);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';
+ctx.fillText(y,x,H-pB+10);
 }
-// Draw probability cones for each problem (same glowing bar style as Schrödinger)
+// Draw probability cones with animation
 problems.forEach(function(pb,i){
 var rowY=pT+(i+0.5)*ch/problems.length;
-var barH=ch/problems.length*0.6;
-// Draw probability curve across the timeline
+var barH=ch/problems.length*0.55;
+// Animated curve
 ctx.beginPath();
 for(var t=0;t<=100;t++){
 var year=yearStart+(t/100)*yearSpan;
+var tau=(pb.year-yearStart)/growth;
+var rawProb=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/tau))))*pb.prob;
+var probAtYear=rawProb*growProgress;
 var x=pL+(t/100)*cw;
-var yearsAway=pb.year-yearStart;
-var probAtYear=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/(yearsAway/growth)))))*pb.prob;
 var y=rowY-barH/2-probAtYear*barH;
 if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
 }
 ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
-// Fill with gradient (same golden glow as Schrödinger cones)
 var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);
-grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'66');grad.addColorStop(1,'#FFD70088');
+grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'44');grad.addColorStop(1,'#FFD70066');
 ctx.fillStyle=grad;ctx.fill();
-// Glow
-ctx.shadowColor=pc;ctx.shadowBlur=10;ctx.strokeStyle=pc;ctx.lineWidth=1;
+// Glow stroke
+ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=pc;ctx.lineWidth=1.5;
 ctx.beginPath();
 for(var t=0;t<=100;t++){
 var year=yearStart+(t/100)*yearSpan;
+var tau=(pb.year-yearStart)/growth;
+var rawProb=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/tau))))*pb.prob;
+var probAtYear=rawProb*growProgress;
 var x=pL+(t/100)*cw;
-var probAtYear=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/(pb.year-yearStart)/growth))))*pb.prob;
 var y=rowY-barH/2-probAtYear*barH;
 if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
 }
 ctx.stroke();ctx.shadowBlur=0;
-// Problem name label
-ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='right';
+// Problem name
+ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='right';
 ctx.fillText(pb.name,pL-5,rowY+3);
-// Probability % at the problem's projected year
+// Probability at projected year
 var projX=pL+((pb.year-yearStart)/yearSpan)*cw;
-var probAtYear=Math.min(1,Math.max(0,(1-Math.exp(-(pb.year-yearStart)/(pb.year-yearStart)/growth))))*pb.prob*100;
-ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='center';
-ctx.fillText(probAtYear.toFixed(0)+'%',projX,rowY-barH/2-probAtYear*barH*100-4);
+var tau2=(pb.year-yearStart)/growth;
+var probAtProjYear=Math.min(1,Math.max(0,(1-Math.exp(-(pb.year-yearStart)/tau2))))*pb.prob*growProgress*100;
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='center';
+ctx.fillText(probAtProjYear.toFixed(0)+'%',projX,rowY-barH/2-probAtProjYear*barH*100/100-4);
+// Thought label (abbreviated)
+ctx.fillStyle=mt;ctx.font='6px monospace';
+var shortThought=pb.thought.substring(0,25);
+ctx.fillText(shortThought,pL+cw*0.7,rowY+barH/2+8);
 });
-// Phase bar at bottom (same as Schrödinger)
-var pby=H-8;
+// Phase bar
+var pby=H-6;
 var pgrad=ctx.createLinearGradient(pL,pby,W-pR,pby);
 pgrad.addColorStop(0,'#ff0000');pgrad.addColorStop(.14,'#ffa500');pgrad.addColorStop(.28,'#ffff00');
 pgrad.addColorStop(.42,'#00ff00');pgrad.addColorStop(.57,'#00ffff');pgrad.addColorStop(.71,'#0000ff');
 pgrad.addColorStop(.85,'#ff00ff');pgrad.addColorStop(1,'#ff0000');
 ctx.fillStyle=pgrad;ctx.fillRect(pL,pby,cw,3);
-ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='left';
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='left';
 ctx.fillText('Phase 0',pL,pby-2);ctx.textAlign='right';ctx.fillText('2\\u03c0',W-pR,pby-2);
 // Title
-ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';
-ctx.fillText('P(breakthrough) \\u2014 probability amplitude over time',W/2,18);
-// Update milestones text
-var ms=[
-{y:2025,l:'Now',v:0.1},{y:2027,l:'Phase 2',v:0.1+0.15*growth},
-{y:2030,l:'Phase 3',v:0.1+0.3*growth},{y:2035,l:'Phase 5',v:0.1+0.5*growth},
-{y:2040,l:'Horizon',v:0.1+0.7*growth},{y:2046,l:'20yr',v:0.1+0.85*growth}
-];
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('P(breakthrough) \\u2014 probability amplitude evolving',W/2,14);
+// Milestones
+var ms=[{y:2025,l:'Now',v:0.1},{y:2027,l:'Phase 2',v:0.1+0.15*growth},{y:2030,l:'Phase 3',v:0.1+0.3*growth},{y:2035,l:'Phase 5',v:0.1+0.5*growth},{y:2040,l:'Horizon',v:0.1+0.7*growth},{y:2046,l:'20yr',v:0.1+0.85*growth}];
 var mo=document.getElementById('futMilestones');
 if(mo){mo.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.l+' ('+Math.round(m.v*100)+'%)'}).join(' &bull; ')}
 }
+
+// Render synthetic dataset table
+function renderDataset(){
+var dt=document.getElementById('datasetTable');if(!dt)return;
+var growth=1.5;var sl=document.getElementById('growthSlider');if(sl)growth=parseFloat(sl.value);
+var problems=[
+{name:'Riemann Hyp.',year:2028,base:0.30,thought:'Erdos disproved; Riemann needs deeper structure'},
+{name:'P vs NP',year:2030,base:0.20,thought:'UGC verified; separation needs new techniques'},
+{name:'Navier-Stokes',year:2032,base:0.40,thought:'PDEs AI-friendly; high-dim automated'},
+{name:'Hodge Conj.',year:2035,base:0.25,thought:'Alg. geometry; AI pattern matching'},
+{name:'Birch-Swinn.',year:2038,base:0.35,thought:'L-functions; AI numerical evidence'}
+];
+var rows='<table style="width:100%;border-collapse:collapse"><tr style="background:var(--accent-bg)"><th style="text-align:left;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">Year</th><th style="text-align:left;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">Problem</th><th style="text-align:right;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">P%</th><th style="text-align:right;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">CI</th><th style="text-align:left;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">Thought</th></tr>';
+problems.forEach(function(pb){
+[2025,2028,2031,2034,2037,2040,2046].forEach(function(year){
+var tau=(pb.year-2025)/growth;
+var p=Math.min(1,Math.max(0,(1-Math.exp(-(year-2025)/tau))))*pb.base;
+var ci=p*0.8;
+rows+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:.15rem .4rem;color:var(--muted)">'+year+'</td><td style="padding:.15rem .4rem;color:var(--fg)">'+pb.name+'</td><td style="padding:.15rem .4rem;text-align:right;color:#FFD700">'+(p*100).toFixed(1)+'%</td><td style="padding:.15rem .4rem;text-align:right;color:var(--muted)">'+(ci*100).toFixed(1)+'%</td><td style="padding:.15rem .4rem;color:var(--muted);font-style:italic">'+pb.thought+'</td></tr>';
+});
+});
+rows+='</table>';
+dt.innerHTML=rows;
+}
+
+// Futuristic animation
+var futAnimT=0;var futRaf=null;
+function startFutAnim(){stopFutAnim();futAnimT=0;function loop(){futAnimT+=0.04;if(futAnimT<10){drawFuturistic(currentExpr);futRaf=requestAnimationFrame(loop)}}loop()}
+function stopFutAnim(){if(futRaf){cancelAnimationFrame(futRaf);futRaf=null}}
 
 function drawObsGraph(cv){if(!cv||!CODE)return;drawGraphType(cv,currentGraphType||'Bar')}
 
@@ -615,8 +652,8 @@ var total=data.reduce(function(s,d){return s+d.val},0);var cx=W/2,cy=H/2,rad=Mat
 }
 }
 
-function closePopup(){stopAnimDemo();document.getElementById('popup').classList.remove('active')}
-function switchTab(id,btn){stopAnimDemo();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnimDemo(currentExpr,cv)},50);var og=document.getElementById('obsGraph');if(og)setTimeout(function(){drawGraphType(og,currentGraphType)},50);var ng=document.getElementById('obsNetGraph');if(ng)setTimeout(function(){drawNetGraph(ng)},50)}if(id==='fut'&&currentExpr){var fc=document.getElementById('futChart');if(fc)setTimeout(function(){drawFuturistic(currentExpr)},50)}}
+function closePopup(){stopAnimDemo();stopFutAnim();document.getElementById('popup').classList.remove('active')}
+function switchTab(id,btn){stopAnimDemo();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnimDemo(currentExpr,cv)},50);var og=document.getElementById('obsGraph');if(og)setTimeout(function(){drawGraphType(og,currentGraphType)},50);var ng=document.getElementById('obsNetGraph');if(ng)setTimeout(function(){drawNetGraph(ng)},50)}if(id==='fut'&&currentExpr){stopFutAnim();var fc=document.getElementById('futChart');if(fc){startFutAnim();renderDataset()}}}
 function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
 
 function loadDataset(cat){var o=document.getElementById('dsOut');if(!cat){o.innerHTML='';return}var d={'quant-ph':['Aaronson arXiv:0910.4698','Shor arXiv:quant-ph/9508027','Grover arXiv:quant-ph/9605043'],'cs.AI':['Aaronson "Alignment" OpenAI 2022','Christiano arXiv:1706.03741'],'math.LO':['G\u00f6del 1931','L\u00f6b 1955'],'cs.LG':['Vaswani arXiv:1706.03762','Tishby 1999']};var p=d[cat]||[];o.innerHTML='<strong>'+cat+'</strong> '+p.length+' papers:<br>'+p.map(function(x){return '&bull; '+x}).join('<br>')}
