@@ -219,9 +219,12 @@ function toggleTheme(){var d=document.documentElement.classList.toggle('dark');l
 
 var CODE=null;
 var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
-var TABS=[{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'cmp',icon:'\ud83d\udd2c',label:'Comparison'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
+var TABS=[{id:'mol',icon:'\ud83e\udd1b',label:'Molecular'},{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'cmp',icon:'\ud83d\udd2c',label:'Comparison'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
 
 // Load code data
+// Load molecules.json for molecular visualizations
+;var SOURCES_MOL=null;
+fetch('molecules.json').then(function(r){return r.json()}).then(function(data){SOURCES_MOL=data;console.log('Loaded molecules for sources.html')}).catch(function(e){console.log('molecules.json not loaded:',e.message)});
 fetch('code-data.json').then(function(r){return r.json()}).then(function(data){
 CODE=data;
 renderCards();
@@ -292,8 +295,22 @@ TABS.forEach(function(t,i){th+='<button class="popup-tab'+(i===0?' active':'')+'
 document.getElementById('pTabs').innerHTML=th;
 var b=document.getElementById('pBody');
 var h='';
+// Molecular (for applicable expressions)
+var MOL_FOR_SOURCES={'schrodinger':'water','attention':'ethanol','bottleneck':'benzene','kolmogorov':'methane','holographic':'acetylene','teleportation':'ammonia','erdos':'formaldehyde','godel':'methane','aixi':'ammonia','loeb':'formaldehyde','unitary':'hydrogen_peroxide','ugc':'benzene'};
+if(MOL_FOR_SOURCES[key]){
+h+='<div class="popup-pane active" id="pane-mol"><h3>Molecular structure<\/h3><canvas id="molCanvas" class="demo-canvas"><\/canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">Real molecular data from crystallographic structures. Drag to rotate.<\/p>';
+var molName=MOL_FOR_SOURCES[key];
+if(SOURCES_MOL&&SOURCES_MOL.molecules&&SOURCES_MOL.molecules[molName]){
+h+='<p style="font-size:.6875rem;color:var(--primary)">'+SOURCES_MOL.molecules[molName].name+' ('+SOURCES_MOL.molecules[molName].formula+') — '+SOURCES_MOL.molecules[molName].atoms.length+' atoms<\/p>';
+}
+h+='<p style="font-size:.6875rem;color:var(--muted);margin-top:.5rem">Connection: This expression applies to molecular '+key.replace('_',' ')+' analysis.<\/p><\/div>';
+// Make math tab NOT active (mol is active first)
+h+='<div class="popup-pane" id="pane-math">';
+} else {
 // Math
-h+='<div class="popup-pane active" id="pane-math"><h3>Expression</h3><div class="expr-rendered" style="background:rgba(10,9,8,.6);border-color:rgba(194,65,12,.3);padding:2rem">$$'+e.latex+'$$</div><div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div><h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
+h+='<div class="popup-pane active" id="pane-math">';
+}
+// Math content<h3>Expression</h3><div class="expr-rendered" style="background:rgba(10,9,8,.6);border-color:rgba(194,65,12,.3);padding:2rem">$$'+e.latex+'$$</div><div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div><h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
 // Code
 h+='<div class="popup-pane" id="pane-code">';
 if(e.mapping){h+='<h3>Math \u2192 Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'</td><td class="map-arrow">\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
@@ -734,7 +751,7 @@ var total=data.reduce(function(s,d){return s+d.val},0);var cx=W/2,cy=H/2,rad=Mat
 }
 
 function closePopup(){stopAnimDemo();stopFutAnim();document.getElementById('popup').classList.remove('active')}
-function switchTab(id,btn){stopAnimDemo();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnimDemo(currentExpr,cv)},50);var og=document.getElementById('obsGraph');if(og)setTimeout(function(){drawGraphType(og,currentGraphType)},50);var ng=document.getElementById('obsNetGraph');if(ng)setTimeout(function(){drawNetGraph(ng)},50)}if(id==='fut'&&currentExpr){stopFutAnim();var fc=document.getElementById('futChart');if(fc){startFutAnim();renderDataset()}}}
+function switchTab(id,btn){stopAnimDemo();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='mol'&&currentExpr){var mc=document.getElementById('molCanvas');if(mc)setTimeout(function(){startSMolAnim(currentExpr,mc)},50)}if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnimDemo(currentExpr,cv)},50);var og=document.getElementById('obsGraph');if(og)setTimeout(function(){drawGraphType(og,currentGraphType)},50);var ng=document.getElementById('obsNetGraph');if(ng)setTimeout(function(){drawNetGraph(ng)},50)}if(id==='fut'&&currentExpr){stopFutAnim();var fc=document.getElementById('futChart');if(fc){startFutAnim();renderDataset()}}}
 function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
 
 function loadDataset(cat){var o=document.getElementById('dsOut');if(!cat){o.innerHTML='';return}var d={'quant-ph':['Aaronson arXiv:0910.4698','Shor arXiv:quant-ph/9508027','Grover arXiv:quant-ph/9605043'],'cs.AI':['Aaronson "Alignment" OpenAI 2022','Christiano arXiv:1706.03741'],'math.LO':['G\u00f6del 1931','L\u00f6b 1955'],'cs.LG':['Vaswani arXiv:1706.03762','Tishby 1999']};var p=d[cat]||[];o.innerHTML='<strong>'+cat+'</strong> '+p.length+' papers:<br>'+p.map(function(x){return '&bull; '+x}).join('<br>')}
@@ -779,6 +796,9 @@ chk('JSON fetched',function(){return CODE!==null});
 chk('Mappings present',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].mapping)return false;return true});
 chk('Demos configured',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].demo)return false;return true});
 chk('drawDemo function',function(){return typeof drawDemo==='function'});
+chk('Molecular tab',function(){return typeof drawSourceMolecule==='function'});
+chk('Molecules loaded',function(){return SOURCES_MOL!==null});
+chk('drawSourceMolecule',function(){return typeof drawSourceMolecule==='function'});
 chk('drawFuturistic function',function(){return typeof drawFuturistic==='function'});
 chk('drawObsGraph function',function(){return typeof drawObsGraph==='function'});
 chk('startAnimDemo function',function(){return typeof startAnimDemo==='function'});;
