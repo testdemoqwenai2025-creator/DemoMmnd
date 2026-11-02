@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blog Post · Mmnd</title>
+<title>Erdős, Algebraic Number Theory · Blog · Mmnd</title>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85)}
 .dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
@@ -35,21 +35,25 @@ footer p{font-size:.75rem;color:var(--muted)}
 <body>
 <header><nav>
 <a href="../index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
-<div class="nav-links"><a href="../index.html">Home</a><a href="../sources.html">Sources</a><a href="../blog.html">Blog</a><a href="../demos.html">Demos</a><a href="../about.html">About</a></div>
+<div class="nav-links"><a href="../index.html">Home</a><a href="../sources.html">Sources</a><a href="../chem-math.html">Chem-Math</a><a href="../blog.html">Blog</a><a href="../demos.html">Demos</a><a href="../about.html">About</a></div>
 <button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
 </nav></header>
 <main>
 <a href="../blog.html" class="back-link">&larr; Back to blog</a>
-<p class="eyebrow">Full article</p>
-<h1>erdos-search</h1>
-<p class="meta">This post's full content is being prepared. The excerpt and expression links are available on the <a href="../blog.html" style="color:var(--primary)">blog index</a>.</p>
-<p>Each blog post connects to specific mathematical expressions in the observatory. Use the links below to explore them directly.</p>
-<div class="cta"><p><a href="../sources.html">Explore all expressions &rarr;</a></p></div>
+<p class="eyebrow">January 20, 2026 &middot; 6 min read</p>
+<h1>Erdős, Algebraic Number Theory, and the Power of Parallel Search</h1>
+<p class="meta">Filed under: AI cognition, Erdős, Kolmogorov, creativity</p>
+<p>How did AI disprove a 1946 conjecture that had stumped combinatorial geometers for 80 years? Not by being smarter than Erdős, but by being <strong>tireless</strong> &mdash; it tried thousands of obscure constructions from algebraic number theory without fatigue or discouragement.</p>
+<p>The Erdős unit distance conjecture posited that the maximum number of unit-distance pairs among n points in the plane is achieved by a regular square grid. For 80 years, mathematicians tried to prove it. The grid seemed optimal. The intuition was strong.</p>
+<p>But AI found something humans hadn't: a construction from <strong>algebraic number theory</strong> &mdash; a domain that combinatorial geometers rarely visit &mdash; that yields strictly more unit-distance pairs than the grid. The construction is not elegant in the traditional sense. It's not something a human mathematician would have tried, because it lives in a different part of the mathematical landscape.</p>
+<p>The formal insight: AI's advantage is not intelligence in the human sense. It is the <strong>absence of psychological cost</strong>. A human mathematician cannot try construction #847 after constructions #1-846 have failed. An AI can. This is the operational substrate of the Mathocalypse.</p>
+<p>When we formalize this with <strong>Kolmogorov complexity</strong>, the picture sharpens: AI discovered a low-Kolmogorov-complexity bridge between combinatorial geometry and algebraic number theory. The bridge was always there in the mathematical landscape. No human found it because the search space is vast and the psychological cost of failure is high.</p>
+<div class="cta"><p><a href="../sources.html#erdos">Explore the Erdős expression &rarr;</a> &middot; <a href="../sources.html#kolmogorov">Explore Kolmogorov complexity &rarr;</a></p></div>
 </main>
-<footer><p>&copy; 2026 Mmnd Collective</p></footer>
+<footer><p>&copy; 2026 Mmnd Collective &middot; <a href="../blog.html" style="color:var(--primary)">More posts</a></p></footer>
 <script>
 function toggleTheme(){var d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
-(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+;(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
 </script>
 </body>
 </html>
