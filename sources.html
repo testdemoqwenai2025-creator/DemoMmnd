@@ -360,7 +360,64 @@ function label(s,x,y){ctx.fillStyle=fg;ctx.font='11px sans-serif';ctx.textAlign=
 switch(id){
 case'erdos':clear();var pts=[];for(var i=0;i<20;i++)pts.push({x:20+Math.random()*(W-40),y:20+Math.random()*(H-40)});ctx.strokeStyle='rgba(194,65,12,0.15)';ctx.lineWidth=.5;for(var i=0;i<pts.length;i++)for(var j=i+1;j<pts.length;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<60){ctx.strokeStyle='rgba(194,65,12,0.5)';ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.stroke()}}ctx.fillStyle=pc;pts.forEach(function(p){ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill()});label('Points with unit-distance pairs',W/2,H-8);break;
 case'ugc':clear();var vs=6;var vx=[];for(var i=0;i<vs;i++){var a=i/vs*Math.PI*2;vx.push({x:W/2+Math.cos(a)*W*.3,y:H/2+Math.sin(a)*H*.3})}ctx.strokeStyle='rgba(194,65,12,0.2)';ctx.lineWidth=1;for(var i=0;i<vs;i++)for(var j=i+1;j<vs;j++){ctx.beginPath();ctx.moveTo(vx[i].x,vx[i].y);ctx.lineTo(vx[j].x,vx[j].y);ctx.stroke()}ctx.fillStyle=pc;vx.forEach(function(v,i){ctx.beginPath();ctx.arc(v.x,v.y,6,0,Math.PI*2);ctx.fill()});label('Variables (nodes) + constraints (edges)',W/2,H-8);break;
-case'schrodinger':clear();ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();for(var x=0;x<W;x++){var tt=x/W*Math.PI*4+time*2;var y=H/2+Math.sin(tt)*H*.3*Math.exp(-x/W*0.5);if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.strokeStyle='rgba(194,65,12,0.3)';ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();label('Real part of \u03a8(r,t) — wave evolving',W/2,H-8);break;
+case'schrodinger':clear();
+// Grover-style: 3x3 grid with probability cones evolving over time
+var grid3=3, cellW=W/(grid3+1), cellH=H/(grid3+1);
+var cx0=W/2-cellW*grid3/2, cy0=H/2-cellH*grid3/2;
+// Draw grid cells
+for(var gi=0;gi<grid3;gi++){
+for(var gj=0;gj<grid3;gj++){
+var px=cx0+gi*cellW, py=cy0+gj*cellH;
+// Probability = Gaussian wave packet at this position
+var dx=gi-(grid3-1)/2+Math.sin(time*0.5)*1.2;
+var dy=gj-(grid3-1)/2;
+var dist2=dx*dx+dy*dy;
+var prob=Math.exp(-dist2*0.5)*100;
+var phase=(time+gi*0.5+gj*0.3)%(Math.PI*2);
+var hue=phase/(Math.PI*2)*360;
+// Cell background with phase color
+ctx.fillStyle='hsla('+hue+',60%,30%,0.15)';
+ctx.fillRect(px+2,py+2,cellW-4,cellH-4);
+// Grid border
+ctx.strokeStyle='rgba(194,65,12,0.2)';ctx.lineWidth=.5;
+ctx.strokeRect(px+2,py+2,cellW-4,cellH-4);
+// Probability cone (glowing bar)
+if(prob>1){
+var coneH=prob/100*(cellH-8);
+var coneX=px+cellW/2;
+var g2=ctx.createLinearGradient(coneX-cellW/4,py+cellH-coneH,coneX+cellW/4,py+cellH);
+g2.addColorStop(0,pc+'00');
+g2.addColorStop(0.5,pc);
+g2.addColorStop(1,'#FFD700');
+ctx.fillStyle=g2;
+ctx.fillRect(coneX-cellW/4,py+cellH-coneH,cellW/2,coneH);
+// Glow
+ctx.shadowColor=pc;ctx.shadowBlur=15;
+ctx.fillStyle=pc+'44';
+ctx.fillRect(coneX-cellW/4,py+cellH-coneH,cellW/2,coneH);
+ctx.shadowBlur=0;
+}
+// Probability label
+ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='center';
+ctx.fillText(prob.toFixed(0)+'%',px+cellW/2,py+cellH-6);
+// State label
+ctx.fillStyle=mt;ctx.font='8px monospace';
+ctx.fillText('|'+gi+','+gj+'\\u27e9',px+cellW/2,py+12);
+}
+}
+// Phase bar at bottom
+var pby=H-12;
+var grad=ctx.createLinearGradient(0,pby,W,pby);
+grad.addColorStop(0,'#ff0000');grad.addColorStop(.14,'#ffa500');grad.addColorStop(.28,'#ffff00');
+grad.addColorStop(.42,'#00ff00');grad.addColorStop(.57,'#00ffff');grad.addColorStop(.71,'#0000ff');
+grad.addColorStop(.85,'#ff00ff');grad.addColorStop(1,'#ff0000');
+ctx.fillStyle=grad;ctx.fillRect(0,pby,W,4);
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='left';
+ctx.fillText('Phase 0',2,pby-2);ctx.textAlign='right';ctx.fillText('2\\u03c0',W-2,pby-2);
+// Title
+ctx.fillStyle=pc;ctx.font='bold 14px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('|\\u03a8(r,t)|\\u00b2 \\u2014 probability density',W/2,18);
+break;
 case'attention':clear();var n=8,sz=W/n;for(var i=0;i<n;i++)for(var j=0;j<n;j++){var v=Math.exp(-((i-j)*(i-j))/8);ctx.fillStyle='rgba(194,65,12,'+v+')';ctx.fillRect(j*sz,i*sz,sz-1,sz-1)}label('Attention weights (QK^T/\u221ad_k)',W/2,H-8);break;
 case'godel':clear();ctx.strokeStyle=pc;ctx.lineWidth=2;var cx=W/2,cy=H/2,rad=Math.min(W,H)*.25;ctx.beginPath();ctx.arc(cx,cy,rad,time,time+Math.PI*1.8);ctx.stroke();ctx.fillStyle=pc;ctx.font='14px Georgia,serif';ctx.textAlign='center';ctx.fillText('G(F)',cx,cy+5);ctx.font='10px sans-serif';ctx.fillStyle=mt;ctx.fillText('"This is not provable in F"',cx,cy+22);label('Self-referential loop — G(F) refers to itself',W/2,H-8);break;
 case'kolmogorov':clear();var progs=['ab','xyz','abc123','qwert','fn(a,b)','solve(x)','if(p)then(q)','while(true)loop','function f(){return g()}'];ctx.fillStyle=pc;progs.forEach(function(p,i){var x=20,y=20+i*(H-30)/progs.length;var w=p.length*8;ctx.globalAlpha=Math.pow(2,-p.length/4);ctx.fillRect(x,y,w,12);ctx.globalAlpha=1;ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='left';ctx.fillText(p,x+w+5,y+10);ctx.fillStyle=pc});label('Program length vs weight (2^{|p|})',W/2,H-8);break;
@@ -376,7 +433,93 @@ default:clear();label('Demo: '+id,W/2,H/2)}}
 function stopAnimDemo(){if(demoAnim){cancelAnimationFrame(demoAnim);demoAnim=null}}
 function startAnimDemo(id,cv){stopAnimDemo();var t=0;function frame(){drawDemo(id,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
 function drawNetGraph(cv){if(!cv||!CODE)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);var keys=Object.keys(CODE);var cols=Math.ceil(Math.sqrt(keys.length));var nodes=keys.map(function(k,i){return{x:15+(i%cols)*(W-30)/cols,y:15+Math.floor(i/cols)*(H-30)/Math.ceil(keys.length/cols),k:k}});ctx.strokeStyle='rgba(194,65,12,0.15)';ctx.lineWidth=1;for(var i=0;i<nodes.length;i++)for(var j=i+1;j<nodes.length;j++){if(Math.abs(i-j)<=2){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke()}}nodes.forEach(function(n){var isCur=n.k===currentExpr;ctx.fillStyle=isCur?'#c2410c':'#736a5e';ctx.beginPath();ctx.arc(n.x,n.y,isCur?6:3,0,Math.PI*2);ctx.fill()})}
-function drawFuturistic(id){var cv=document.getElementById('futChart');if(!cv)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);var growth=1.5;var sl=document.getElementById('growthSlider');if(sl)growth=parseFloat(sl.value);var gv=document.getElementById('growthVal');if(gv)gv.textContent=growth.toFixed(1)+'x';var ms=[{y:2025,l:'Now',v:0.1},{y:2027,l:'Phase 2',v:0.1+0.15*growth},{y:2030,l:'Phase 3',v:0.1+0.3*growth},{y:2035,l:'Phase 5',v:0.1+0.5*growth},{y:2040,l:'Horizon',v:0.1+0.7*growth},{y:2046,l:'20yr',v:0.1+0.85*growth}];var pL=50,pB=35,pT=15,pR=15,cw=W-pL-pR,ch=H-pT-pB;ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();ctx.strokeStyle='#c2410c';ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<=100;i++){var tt=i/100;var x=pL+tt*cw;var y=H-pB-(0.1+Math.pow(tt,1.5)*0.8*growth)*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.fillStyle='#c2410c';ctx.font='10px sans-serif';ctx.textAlign='center';ms.forEach(function(m){var x=pL+((m.y-2025)/21)*cw;var y=H-pB-m.v*ch;ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();ctx.fillStyle='#e5e2dc';ctx.fillText(m.l,x,y-8);ctx.fillStyle='#c2410c'});ctx.fillStyle='#736a5e';ctx.font='9px sans-serif';ctx.fillText('Year',W/2,H-3);var mo=document.getElementById('futMilestones');if(mo){mo.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.l+' ('+Math.round(m.v*100)+'%)'}).join(' &bull; ')}}
+function drawFuturistic(id){
+var cv=document.getElementById('futChart');if(!cv)return;
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();
+cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+// Dark cinematic background
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var growth=1.5;var sl=document.getElementById('growthSlider');if(sl)growth=parseFloat(sl.value);
+var gv=document.getElementById('growthVal');if(gv)gv.textContent=growth.toFixed(1)+'x';
+// Open problems as probability scenarios — same visual language as Schrödinger
+var problems=[
+{name:'Riemann Hyp.',year:2028,prob:0.3},
+{name:'P vs NP',year:2030,prob:0.2},
+{name:'Navier-Stokes',year:2032,prob:0.4},
+{name:'Hodge Conj.',year:2035,prob:0.25},
+{name:'Birch-Swinn.',year:2038,prob:0.35}
+];
+var pL=80,pB=30,pT=40,pR=20,cw=W-pL-pR,ch=H-pT-pB;
+var yearStart=2025,yearEnd=2046,yearSpan=yearEnd-yearStart;
+// Draw timeline grid (like the Schrödinger 3x3 grid but for years)
+ctx.strokeStyle='rgba(194,65,12,0.1)';ctx.lineWidth=.5;
+for(var y=yearStart;y<=yearEnd;y+=3){
+var x=pL+((y-yearStart)/yearSpan)*cw;
+ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='center';
+ctx.fillText(y,x,H-pB+12);
+}
+// Draw probability cones for each problem (same glowing bar style as Schrödinger)
+problems.forEach(function(pb,i){
+var rowY=pT+(i+0.5)*ch/problems.length;
+var barH=ch/problems.length*0.6;
+// Draw probability curve across the timeline
+ctx.beginPath();
+for(var t=0;t<=100;t++){
+var year=yearStart+(t/100)*yearSpan;
+var x=pL+(t/100)*cw;
+var yearsAway=pb.year-yearStart;
+var probAtYear=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/(yearsAway/growth)))))*pb.prob;
+var y=rowY-barH/2-probAtYear*barH;
+if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+}
+ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
+// Fill with gradient (same golden glow as Schrödinger cones)
+var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);
+grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'66');grad.addColorStop(1,'#FFD70088');
+ctx.fillStyle=grad;ctx.fill();
+// Glow
+ctx.shadowColor=pc;ctx.shadowBlur=10;ctx.strokeStyle=pc;ctx.lineWidth=1;
+ctx.beginPath();
+for(var t=0;t<=100;t++){
+var year=yearStart+(t/100)*yearSpan;
+var x=pL+(t/100)*cw;
+var probAtYear=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/(pb.year-yearStart)/growth))))*pb.prob;
+var y=rowY-barH/2-probAtYear*barH;
+if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+}
+ctx.stroke();ctx.shadowBlur=0;
+// Problem name label
+ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='right';
+ctx.fillText(pb.name,pL-5,rowY+3);
+// Probability % at the problem's projected year
+var projX=pL+((pb.year-yearStart)/yearSpan)*cw;
+var probAtYear=Math.min(1,Math.max(0,(1-Math.exp(-(pb.year-yearStart)/(pb.year-yearStart)/growth))))*pb.prob*100;
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='center';
+ctx.fillText(probAtYear.toFixed(0)+'%',projX,rowY-barH/2-probAtYear*barH*100-4);
+});
+// Phase bar at bottom (same as Schrödinger)
+var pby=H-8;
+var pgrad=ctx.createLinearGradient(pL,pby,W-pR,pby);
+pgrad.addColorStop(0,'#ff0000');pgrad.addColorStop(.14,'#ffa500');pgrad.addColorStop(.28,'#ffff00');
+pgrad.addColorStop(.42,'#00ff00');pgrad.addColorStop(.57,'#00ffff');pgrad.addColorStop(.71,'#0000ff');
+pgrad.addColorStop(.85,'#ff00ff');pgrad.addColorStop(1,'#ff0000');
+ctx.fillStyle=pgrad;ctx.fillRect(pL,pby,cw,3);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='left';
+ctx.fillText('Phase 0',pL,pby-2);ctx.textAlign='right';ctx.fillText('2\\u03c0',W-pR,pby-2);
+// Title
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('P(breakthrough) \\u2014 probability amplitude over time',W/2,18);
+// Update milestones text
+var ms=[
+{y:2025,l:'Now',v:0.1},{y:2027,l:'Phase 2',v:0.1+0.15*growth},
+{y:2030,l:'Phase 3',v:0.1+0.3*growth},{y:2035,l:'Phase 5',v:0.1+0.5*growth},
+{y:2040,l:'Horizon',v:0.1+0.7*growth},{y:2046,l:'20yr',v:0.1+0.85*growth}
+];
+var mo=document.getElementById('futMilestones');
+if(mo){mo.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.l+' ('+Math.round(m.v*100)+'%)'}).join(' &bull; ')}
+}
 
 function drawObsGraph(cv){if(!cv||!CODE)return;drawGraphType(cv,currentGraphType||'Bar')}
 
