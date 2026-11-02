@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="2026-11-02-v3-pyodide-3d">
+<meta name="version" content="2026-11-02-v5-mol-anim-fix">
 <title>Chem-Math · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -347,7 +347,7 @@ h+='<div class="popup-pane" id="pane-code">';
 if(e.mapping){h+='<h3>Math \u2192 Code mapping<\/h3><div class="map-table"><table><tr><th>Symbol<\/th><th><\/th><th>Code<\/th><th>Note<\/th><\/tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'<\/td><td class="map-arrow">\u2192<\/td><td class="map-code">'+esc(m.code)+'<\/td><td class="map-note">'+m.note+'<\/td><\/tr>'});h+='<\/table><\/div>'}
 h+='<h3>Click a language tab<\/h3><div class="code-tabs">';
 LANGS.forEach(function(l,i){h+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchCode(\''+l+'\',this)">'+l+'<\/button>'});
-h+='<<\/div>';
+h+='<\/div>';
 LANGS.forEach(function(l,i){h+='<div class="code-content'+(i===0?' active':'')+'" id="cc-'+l+'"><pre>'+esc(e.langs[l])+'<\/pre><\/div>'});
 h+='<div style="margin-top:.75rem"><button style="padding:.375rem .75rem;font-size:.75rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600" onclick="runCode(\''+key+'\')">&#9654; Run &amp; observe output<\/button><span id="runStatus" style="font-size:.6875rem;color:var(--muted);margin-left:.5rem"><\/span><\/div>';
 h+='<div id="codeOutput" style="margin-top:.5rem;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;min-height:3rem;max-height:12rem;overflow-y:auto;display:none;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre-wrap"><\/div>';
@@ -364,6 +364,8 @@ h+='<div class="popup-pane" id="pane-fut"><h3>Synthetic data \\u2014 probability
 b.innerHTML=h;
 document.getElementById('popup').classList.add('active');
 if(typeof renderMathInElement!=='undefined')renderMathInElement(b,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+// Start molecular 3D animation on popup open (Molecular is the default active tab)
+var mc0=document.getElementById('molCanvas');if(mc0)setTimeout(function(){startMolAnim(currentExpr,mc0)},80)
 // Floating code
 var fbg=document.getElementById('codeFloatBg');if(fbg){fbg.innerHTML='';var codeLines=[];for(var lang in e.langs){var lines=e.langs[lang].split('\n');for(var li=0;li<lines.length;li+=2){codeLines.push(lang+': '+lines[li])}}
 codeLines.forEach(function(line,i){var div=document.createElement('div');div.className='code-float-line';div.textContent=line.substring(0,60);div.style.left=Math.random()*60+5+'%';div.style.top=(i*8+Math.random()*15)+'%';div.style.animationDelay=(i*1.5)+'s';fbg.appendChild(div)})}
@@ -702,7 +704,7 @@ chk('Each has 6 langs',function(){if(!CODE)return false;for(var k in CODE)if(Obj
 chk('Mappings present',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].mapping)return false;return true});
 chk('Demos configured',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].demo)return false;return true});
 chk('drawDemo function',function(){return typeof drawDemo==='function'});
-chk('drawMolecule function',function(){return typeof drawMolecule==='function'});
+chk('drawMolecule function',function(){return typeof drawMolecule3D==='function'})
 chk('drawChemFuturistic',function(){return typeof drawChemFuturistic==='function'});
 chk('CHEM_FUTURES data',function(){return typeof CHEM_FUTURES==='object'&&Object.keys(CHEM_FUTURES).length>=6});
 chk('Expression-specific dipole',function(){return CHEM_FUTURES&&CHEM_FUTURES['dipole']&&CHEM_FUTURES['dipole'][0].n==='Real-time dipole MD'});
