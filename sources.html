@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-02-v6-fut-anim-fix">
+<meta name="version" content="2026-11-02-v7-audit-regression">
 <title>Sources · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -60,7 +60,7 @@ p{margin-bottom:1rem}
 .phase-label{font-size:.5625rem;color:var(--muted);white-space:nowrap}
 .popup-header{padding:1.5rem 1.5rem 0;border-bottom:1px solid var(--border)}
 .popup-title{font-family:Georgia,serif;font-size:1.25rem;font-weight:600;position:relative;z-index:1}
-.popup-close{float:right;width:2rem;height:2rem;border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.5rem;border-radius:50%}
+.popup-close{float:right;width:2rem;height:2rem;border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.5rem;border-radius:50%;position:relative;z-index:10}
 .popup-close:hover{background:var(--accent-bg);color:var(--primary)}
 .popup-tabs{display:flex;border-bottom:2px solid var(--border);margin-top:1rem;overflow-x:auto}
 .popup-tab{padding:.625rem 1rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.8125rem;font-weight:500;color:var(--muted);white-space:nowrap}
@@ -312,7 +312,7 @@ h+='<div class="popup-pane active" id="pane-math">';
 // Math
 h+='<div class="popup-pane active" id="pane-math">';
 }
-h+='<h3>Expression</h3><div class="expr-rendered" style="background:rgba(10,9,8,.6);border-color:rgba(194,65,12,.3);padding:2rem">$$'+e.latex+'$$</div><div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div><h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
+h+='<h3>Expression</h3><div class="expr-rendered" style="background:rgba(10,9,8,.6);border-color:rgba(194,65,12,.3);padding:2rem;color:#e5e2dc">$$'+e.latex+'$$</div><div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div><h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
 // Code
 h+='<div class="popup-pane" id="pane-code">';
 if(e.mapping){h+='<h3>Math \u2192 Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'</td><td class="map-arrow">\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
@@ -848,6 +848,13 @@ chk('startAnimDemo function',function(){return typeof startAnimDemo==='function'
 chk('Version tag',function(){return document.querySelector('meta[name=version]')!==null});
 chk('Each expr has latex',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].latex)return false;return true});
 chk('Math tab is first',function(){return TABS[0].id==='math'});
+// Regression checks for previously-fixed bugs
+chk('Math pane not commented out',function(){return openPopup.toString().indexOf('// Math content')===-1});
+chk('Futuristic anim no freeze',function(){return startFutAnim.toString().indexOf('futAnimT<10')===-1});
+chk('Futuristic has flowing particles',function(){return drawFuturistic.toString().indexOf('Flowing particles')>=0});
+chk('Close button has z-index',function(){var t=document.createElement('button');t.className='popup-close';document.body.appendChild(t);var s=getComputedStyle(t);var ok=s.position==='relative'&&parseInt(s.zIndex)>=10;document.body.removeChild(t);return ok});
+chk('Math expr has contrast color',function(){var t=document.createElement('div');t.className='expr-rendered';t.style.background='rgba(10,9,8,.6)';document.body.appendChild(t);var s=getComputedStyle(t);var c=s.color;document.body.removeChild(t);return c!=='rgb(0, 0, 0)'&&c!=='rgba(0, 0, 0, 0)'});
+chk('Cache-Control no-store',function(){var m=document.querySelector('meta[http-equiv=Cache-Control]');return m&&m.content.indexOf('no-store')>=0});
 var badge=document.getElementById('audit'),txt=document.getElementById('auditText');
 if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
 r.forEach(function(x){console.log(x)});
