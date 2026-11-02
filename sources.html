@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-02-v7-audit-regression">
+<meta name="version" content="2026-11-02-v8-schrodinger-codeviz">
 <title>Sources · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -322,6 +322,7 @@ h+='</div>';
 LANGS.forEach(function(l,i){h+='<div class="code-content'+(i===0?' active':'')+'" id="cc-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});
 h+='<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap"><button style="padding:.375rem .75rem;font-size:.75rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600" onclick="runCode(\''+key+'\')">&#9654; Run &amp; observe output</button><span id="runStatus" style="font-size:.6875rem;color:var(--muted)"></span></div>';
 h+='<div id="codeOutput" style="margin-top:.5rem;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;min-height:3rem;max-height:12rem;overflow-y:auto;display:none;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre-wrap"></div>';
+h+='<div id="codeVizWrap" style="margin-top:.5rem;display:none"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas id="codeVizCanvas" class="demo-canvas" style="aspect-ratio:16/7"></canvas></div>';
 h+='</div>';
 // Obs
 h+='<div class="popup-pane" id="pane-obs">';
@@ -531,6 +532,43 @@ ctx.globalAlpha=1;
 drawPhaseBar(ctx,W,H);
 ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';ctx.fillText('AIXI programs orbiting',W/2,16);
 break;
+case'schrodinger':clear();
+var cx2=W/2,cy2=H/2,scaleX=W*0.38,scaleY=H*0.28;
+// Harmonic oscillator potential (parabola)
+ctx.strokeStyle='rgba(115,106,94,0.4)';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+ctx.beginPath();
+for(var px=-1;px<=1;px+=0.02){var py=px*px*0.5;ctx.moveTo(cx2+px*scaleX,cy2+py*scaleY);ctx.lineTo(cx2+(px+0.02)*scaleX,cy2+(py+0.02*px)*scaleY*0.5)}
+ctx.stroke();ctx.setLineDash([]);
+// Oscillating wave packet center
+var oscX=Math.sin(time*0.4)*0.5;var sigma=0.15;
+// Draw |psi|^2 (probability density) as filled curve
+var grad=ctx.createLinearGradient(0,cy2-scaleY,0,cy2+scaleY);
+grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'66');grad.addColorStop(1,pc+'00');
+ctx.fillStyle=grad;ctx.beginPath();ctx.moveTo(cx2-scaleX,cy2+scaleY);
+for(var px=-1;px<=1;px+=0.01){
+var dx=px-oscX;var psi2=Math.exp(-dx*dx/(2*sigma*sigma));var py=psi2*0.9;
+ctx.lineTo(cx2+px*scaleX,cy2-py*scaleY);
+}
+ctx.lineTo(cx2+scaleX,cy2+scaleY);ctx.closePath();ctx.fill();
+// Real part of psi (oscillating wave inside the packet)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;
+ctx.beginPath();
+for(var px=-1;px<=1;px+=0.01){
+var dx=px-oscX;var env=Math.exp(-dx*dx/(2*sigma*sigma));var k=15;
+var re=env*Math.cos(k*px-time*3);var py=re*0.6;
+if(px===-1)ctx.moveTo(cx2+px*scaleX,cy2+py*scaleY);else ctx.lineTo(cx2+px*scaleX,cy2+py*scaleY);
+}
+ctx.stroke();ctx.shadowBlur=0;
+// Center marker
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=10;
+ctx.beginPath();ctx.arc(cx2+oscX*scaleX,cy2,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+// Labels
+ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('|Ψ|²',cx2-scaleX+5,cy2-scaleY*0.7);
+ctx.fillStyle='#FFD700';ctx.fillText('Re(Ψ)',cx2+scaleX*0.5,cy2-scaleY*0.7);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('V(x)=½x²',cx2,cy2+scaleY*0.9);
+drawPhaseBar(ctx,W,H);
+ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';ctx.fillText('Wave packet evolving in harmonic trap',W/2,16);
+break;
 default:clear();label('Demo: '+id,W/2,H/2)}}
 
 // Animation + new functions
@@ -700,6 +738,7 @@ var e=CODE[key];if(!e)return;
 var out=document.getElementById('codeOutput');var st=document.getElementById('runStatus');
 if(!out||!st)return;
 st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap');if(viz)viz.style.display='none';
 var lang='Python';document.querySelectorAll('.code-tab').forEach(function(t){if(t.classList.contains('active'))lang=t.dataset.lang||t.textContent.trim()});
 var code=e.langs[lang]||'';
 // Real Pyodide execution for Python
@@ -711,9 +750,11 @@ pyodideReady.setStdout({batched:function(s){out.textContent+=s+'\n';out.scrollTo
 pyodideReady.setStderr({batched:function(s){out.textContent+='[stderr] '+s+'\n'}});
 pyodideReady.runPythonAsync(code).then(function(){
 st.textContent='Done (real Python via Pyodide)';
+startCodeViz(key);
 }).catch(function(err){
 out.textContent+='\n[error] '+err.message+'\n';
 st.textContent='Error (see output)';
+startCodeViz(key);
 });
 }catch(err){
 out.textContent+='[Pyodide error] '+err.message+'\nFalling back...\n\n';
@@ -722,6 +763,15 @@ runSimulated(key,lang,out,st);
 return;
 }
 runSimulated(key,lang,out,st);
+}
+// Output visualization — animates the code result using drawDemo
+function startCodeViz(key){
+var wrap=document.getElementById('codeVizWrap');if(!wrap)return;
+var cv=document.getElementById('codeVizCanvas');if(!cv)return;
+wrap.style.display='block';
+stopAnimDemo();
+var t=0;function frame(){drawDemo(key,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}
+setTimeout(function(){frame()},100);
 }
 function runSimulated(key,lang,out,st){
 var lines=[];
@@ -745,7 +795,7 @@ var outputs={
 };
 var out2=outputs[key]||['Running...','Output: '+e.intent.substring(0,60)];
 var i=0;var interval=setInterval(function(){
-if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+' \u2014 simulated)';return}
+if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+' \u2014 simulated)';startCodeViz(key);return}
 lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200)
 }
 
@@ -855,6 +905,11 @@ chk('Futuristic has flowing particles',function(){return drawFuturistic.toString
 chk('Close button has z-index',function(){var t=document.createElement('button');t.className='popup-close';document.body.appendChild(t);var s=getComputedStyle(t);var ok=s.position==='relative'&&parseInt(s.zIndex)>=10;document.body.removeChild(t);return ok});
 chk('Math expr has contrast color',function(){var t=document.createElement('div');t.className='expr-rendered';t.style.background='rgba(10,9,8,.6)';document.body.appendChild(t);var s=getComputedStyle(t);var c=s.color;document.body.removeChild(t);return c!=='rgb(0, 0, 0)'&&c!=='rgba(0, 0, 0, 0)'});
 chk('Cache-Control no-store',function(){var m=document.querySelector('meta[http-equiv=Cache-Control]');return m&&m.content.indexOf('no-store')>=0});
+// New regression checks for schrodinger demo + code output visualization
+chk('Schrodinger drawDemo case',function(){return drawDemo.toString().indexOf("case'schrodinger'")>=0});
+chk('All 12 exprs have drawDemo',function(){var s=drawDemo.toString();var ids=['erdos','ugc','schrodinger','attention','godel','kolmogorov','holographic','teleportation','bottleneck','loeb','unitary','aixi'];for(var i=0;i<ids.length;i++)if(s.indexOf("case'"+ids[i]+"'")===-1)return false;return true});
+chk('Code output has viz canvas',function(){return runCode.toString().indexOf('startCodeViz')>=0});
+chk('startCodeViz function',function(){return typeof startCodeViz==='function'});
 var badge=document.getElementById('audit'),txt=document.getElementById('auditText');
 if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
 r.forEach(function(x){console.log(x)});
