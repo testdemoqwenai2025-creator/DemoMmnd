@@ -437,6 +437,22 @@ default:clear();label('Demo: '+id,W/2,H/2)}}
 function stopAnimDemo(){if(demoAnim){cancelAnimationFrame(demoAnim);demoAnim=null}}
 function startAnimDemo(id,cv){stopAnimDemo();var t=0;function frame(){drawDemo(id,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
 function drawNetGraph(cv){if(!cv||!CODE)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);var keys=Object.keys(CODE);var cols=Math.ceil(Math.sqrt(keys.length));var nodes=keys.map(function(k,i){return{x:15+(i%cols)*(W-30)/cols,y:15+Math.floor(i/cols)*(H-30)/Math.ceil(keys.length/cols),k:k}});ctx.strokeStyle='rgba(194,65,12,0.15)';ctx.lineWidth=1;for(var i=0;i<nodes.length;i++)for(var j=i+1;j<nodes.length;j++){if(Math.abs(i-j)<=2){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke()}}nodes.forEach(function(n){var isCur=n.k===currentExpr;ctx.fillStyle=isCur?'#c2410c':'#736a5e';ctx.beginPath();ctx.arc(n.x,n.y,isCur?6:3,0,Math.PI*2);ctx.fill()})}
+// Expression-specific future problems (global for both drawFuturistic and renderDataset)
+window.FUTURES_DATA={
+'erdos':[{n:'Hadwiger Conj.',y:2029,p:0.35,t:'Erdos disproved; combinatorial geometry accelerating'},{n:'Ramsey R(5,5)',y:2031,p:0.40,t:'Computational search now feasible for small Ramsey'},{n:'Falconer Conj.',y:2034,p:0.25,t:'Fractal geometry needs deeper analytic tools'},{n:'Moser Problem',y:2036,p:0.30,t:'Unit distance variants still open but tractable'},{n:'Hales Proof',y:2038,p:0.45,t:'Sphere packing verified; extensions likely'}],
+'ugc':[{n:'P vs NP',y:2030,p:0.20,t:'UGC verified; separation needs new techniques'},{n:'Circuit Lower Bnds',y:2032,p:0.30,t:'NEXP not in ACC0 opened the door'},{n:'Unique Games Alg.',y:2034,p:0.35,t:'If UGC is false, algorithm may exist'},{n:'SDP Hardness',y:2037,p:0.25,t:'Tight SDP bounds for all CSPs'},{n:'PCP Theorem',y:2040,p:0.40,t:'PCP variants are AI-amenable'}],
+'schrodinger':[{n:'Quantum Supremacy',y:2027,p:0.50,t:'Already demonstrated; scaling is the question'},{n:'Error Correction',y:2030,p:0.35,t:'Surface code threshold theory mature'},{n:'Shor 2048-bit',y:2033,p:0.25,t:'Requires millions of qubits'},{n:'Quantum Chemistry',y:2028,p:0.45,t:'Drug discovery via quantum simulation'},{n:'Topological QC',y:2038,p:0.20,t:'Majorana fermions still unconfirmed'}],
+'attention':[{n:'Interpretability',y:2028,p:0.40,t:'Mechanistic interp making progress'},{n:'AGI Threshold',y:2032,p:0.25,t:'Multi-agent theorem proving at human level'},{n:'Alignment Solve',y:2035,p:0.20,t:'Formal verification of AI behavior'},{n:'Context Window Inf',y:2029,p:0.45,t:'Infinite context via retrieval + attention'},{n:'Consciousness Test',y:2040,p:0.15,t:'No agreed definition of consciousness'}],
+'godel':[{n:'Large Cardinals',y:2030,p:0.25,t:'Woodin work on inner models'},{n:'Proof Assistant AGI',y:2028,p:0.40,t:'Lean already proves at research level'},{n:'Continuum Hyp.',y:2035,p:0.15,t:'Independence is structural, not technical'},{n:'V=L Consequence',y:2038,p:0.20,t:'Axiom of constructibility implications'},{n:'Reverse Math',y:2032,p:0.35,t:'Classification of theorem strength'}],
+'kolmogorov':[{n:'Chaitin Omega',y:2030,p:0.30,t:'Computing digits of randomness'},{n:'MINICRYPT vs P',y:2033,p:0.25,t:'Cryptographic complexity classes'},{n:'Solomonoff Ind.',y:2028,p:0.35,t:'Universal prediction getting practical'},{n:'AIT Bounds',y:2036,p:0.20,t:'Algorithmic information theory limits'},{n:'Computability',y:2040,p:0.15,t:'New undecidable problems discovered'}],
+'holographic':[{n:'Firewall Paradox',y:2029,p:0.30,t:'Harlow-Hayden complexity bound'},{n:'AdS/CFT Verified',y:2032,p:0.25,t:'Numerical holography advancing'},{n:'Black Hole Info',y:2030,p:0.35,t:'Page curve computation now understood'},{n:'ER=EPR',y:2035,p:0.20,t:'Wormhole = entanglement equivalence'},{n:'Quantum Gravity',y:2040,p:0.15,t:'Full theory still elusive'}],
+'teleportation':[{n:'Auto Theorem Gen',y:2028,p:0.40,t:'AI generating novel theorems daily'},{n:'Proof Mining AI',y:2030,p:0.45,t:'Extracting insights from AI proofs'},{n:'Pedagogical AI',y:2032,p:0.35,t:'Reconstructing human-understandable paths'},{n:'Collab Centaur',y:2027,p:0.50,t:'Human+AI teams outperforming either alone'},{n:'Autonomous Math',y:2038,p:0.25,t:'AI posing and solving its own problems'}],
+'bottleneck':[{n:'Deep Learning Theory',y:2029,p:0.35,t:'IB principle explains generalization'},{n:'Compression Theory',y:2032,p:0.30,t:'Rate-distortion in neural nets'},{n:'Overparam Bounds',y:2028,p:0.40,t:'Double descent explained by IB'},{n:'Optimal Arch',y:2035,p:0.25,t:'Information-theoretic architecture design'},{n:'Generalization',y:2030,p:0.35,t:'Why deep nets generalize: IB answer'}],
+'loeb':[{n:'AI Self-Verify',y:2028,p:0.30,t:'Can AI safely trust own proofs?'},{n:'Alignment Formal',y:2031,p:0.25,t:'Formal verification of utility functions'},{n:'Provability Logic',y:2034,p:0.20,t:'GL modal logic in AI safety'},{n:'Reflection',y:2036,p:0.15,t:'AI reasoning about own reasoning'},{n:'Tiling Agents',y:2030,p:0.20,t:'Self-modifying AI that preserves goals'}],
+'unitary':[{n:'Quantum Compilation',y:2028,p:0.40,t:'Optimal circuit synthesis for any unitary'},{n:'BQP vs BPP',y:2032,p:0.25,t:'Oracle separation already known'},{n:'Quantum Advantage',y:2027,p:0.45,t:'Practical quantum advantage demonstrated'},{n:'Circuit Complexity',y:2035,p:0.20,t:'Lower bounds for quantum circuits'},{n:'Black Hole Comp',y:2038,p:0.15,t:'Unitary complexity = horizon scrambling'}],
+'aixi':[{n:'Bounded AIXI',y:2028,p:0.35,t:'Practical approximations of AIXI'},{n:'Universal AI',y:2032,p:0.20,t:'Implementable version of AIXI-tl'},{n:'Solomonoff Train',y:2030,p:0.30,t:'Training on all computable environments'},{n:'AGI Theory',y:2035,p:0.25,t:'Formal theory of general intelligence'},{n:'Computable Bounds',y:2029,p:0.40,t:'Upper/lower bounds on optimal AI'}]
+};
+
 function drawFuturistic(id){
 var cv=document.getElementById('futChart');if(!cv)return;
 var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();
@@ -445,13 +461,7 @@ var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e'
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
 var growth=1.5;var sl=document.getElementById('growthSlider');if(sl)growth=parseFloat(sl.value);
 var gv=document.getElementById('growthVal');if(gv)gv.textContent=growth.toFixed(1)+'x';
-var problems=[
-{name:'Riemann Hyp.',year:2028,prob:0.30,thought:'Erdos disproved; Riemann needs deeper analytic structure'},
-{name:'P vs NP',year:2030,prob:0.20,thought:'UGC verified; separation needs new techniques'},
-{name:'Navier-Stokes',year:2032,prob:0.40,thought:'PDEs are AI-friendly; high-dim automated'},
-{name:'Hodge Conj.',year:2035,prob:0.25,thought:'Alg. geometry; AI pattern matching excels'},
-{name:'Birch-Swinn.',year:2038,prob:0.35,thought:'L-functions; numerical evidence AI-generated'}
-];
+var problems=window.FUTURES_DATA[id]||window.FUTURES_DATA["erdos"];
 var pL=90,pB=30,pT=35,pR=20,cw=W-pL-pR,ch=H-pT-pB;
 var yearStart=2025,yearEnd=2046,yearSpan=yearEnd-yearStart;
 // Use animation time for growing cones
@@ -473,8 +483,8 @@ var barH=ch/problems.length*0.55;
 ctx.beginPath();
 for(var t=0;t<=100;t++){
 var year=yearStart+(t/100)*yearSpan;
-var tau=(pb.year-yearStart)/growth;
-var rawProb=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/tau))))*pb.prob;
+var tau=(pb.y-yearStart)/growth;
+var rawProb=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/tau))))*pb.p;
 var probAtYear=rawProb*growProgress;
 var x=pL+(t/100)*cw;
 var y=rowY-barH/2-probAtYear*barH;
@@ -489,8 +499,8 @@ ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=pc;ctx
 ctx.beginPath();
 for(var t=0;t<=100;t++){
 var year=yearStart+(t/100)*yearSpan;
-var tau=(pb.year-yearStart)/growth;
-var rawProb=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/tau))))*pb.prob;
+var tau=(pb.y-yearStart)/growth;
+var rawProb=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/tau))))*pb.p;
 var probAtYear=rawProb*growProgress;
 var x=pL+(t/100)*cw;
 var y=rowY-barH/2-probAtYear*barH;
@@ -499,16 +509,16 @@ if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
 ctx.stroke();ctx.shadowBlur=0;
 // Problem name
 ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='right';
-ctx.fillText(pb.name,pL-5,rowY+3);
+ctx.fillText(pb.n,pL-5,rowY+3);
 // Probability at projected year
-var projX=pL+((pb.year-yearStart)/yearSpan)*cw;
-var tau2=(pb.year-yearStart)/growth;
-var probAtProjYear=Math.min(1,Math.max(0,(1-Math.exp(-(pb.year-yearStart)/tau2))))*pb.prob*growProgress*100;
+var projX=pL+((pb.y-yearStart)/yearSpan)*cw;
+var tau2=(pb.y-yearStart)/growth;
+var probAtProjYear=Math.min(1,Math.max(0,(1-Math.exp(-(pb.y-yearStart)/tau2))))*pb.p*growProgress*100;
 ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='center';
 ctx.fillText(probAtProjYear.toFixed(0)+'%',projX,rowY-barH/2-probAtProjYear*barH*100/100-4);
 // Thought label (abbreviated)
 ctx.fillStyle=mt;ctx.font='6px monospace';
-var shortThought=pb.thought.substring(0,25);
+var shortThought=pb.t.substring(0,25);
 ctx.fillText(shortThought,pL+cw*0.7,rowY+barH/2+8);
 });
 // Phase bar
@@ -533,23 +543,18 @@ if(mo){mo.innerHTML=ms.map(function(m){return '<strong style="color:var(--primar
 function renderDataset(){
 var dt=document.getElementById('datasetTable');if(!dt)return;
 var growth=1.5;var sl=document.getElementById('growthSlider');if(sl)growth=parseFloat(sl.value);
-var problems=[
-{name:'Riemann Hyp.',year:2028,base:0.30,thought:'Erdos disproved; Riemann needs deeper structure'},
-{name:'P vs NP',year:2030,base:0.20,thought:'UGC verified; separation needs new techniques'},
-{name:'Navier-Stokes',year:2032,base:0.40,thought:'PDEs AI-friendly; high-dim automated'},
-{name:'Hodge Conj.',year:2035,base:0.25,thought:'Alg. geometry; AI pattern matching'},
-{name:'Birch-Swinn.',year:2038,base:0.35,thought:'L-functions; AI numerical evidence'}
-];
+var FUTURES=window.FUTURES_DATA||{};
+var problems=FUTURES[currentExpr]||FUTURES['erdos']||[{n:'Unknown',y:2030,p:0.1,t:''}];
 var rows='<table style="width:100%;border-collapse:collapse"><tr style="background:var(--accent-bg)"><th style="text-align:left;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">Year</th><th style="text-align:left;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">Problem</th><th style="text-align:right;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">P%</th><th style="text-align:right;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">CI</th><th style="text-align:left;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">Thought</th></tr>';
 problems.forEach(function(pb){
 [2025,2028,2031,2034,2037,2040,2046].forEach(function(year){
-var tau=(pb.year-2025)/growth;
-var p=Math.min(1,Math.max(0,(1-Math.exp(-(year-2025)/tau))))*pb.base;
+var tau=(pb.y-2025)/growth;
+var p=Math.min(1,Math.max(0,(1-Math.exp(-(year-2025)/Math.max(tau,0.1)))))*pb.p;
 var ci=p*0.8;
-rows+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:.15rem .4rem;color:var(--muted)">'+year+'</td><td style="padding:.15rem .4rem;color:var(--fg)">'+pb.name+'</td><td style="padding:.15rem .4rem;text-align:right;color:#FFD700">'+(p*100).toFixed(1)+'%</td><td style="padding:.15rem .4rem;text-align:right;color:var(--muted)">'+(ci*100).toFixed(1)+'%</td><td style="padding:.15rem .4rem;color:var(--muted);font-style:italic">'+pb.thought+'</td></tr>';
+rows+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:.15rem .4rem;color:var(--muted)">'+year+'</td><td style="padding:.15rem .4rem;color:var(--fg)">'+pb.n+'</td><td style="padding:.15rem .4rem;text-align:right;color:#FFD700">'+(p*100).toFixed(1)+'%</td><td style="padding:.15rem .4rem;text-align:right;color:var(--muted)">'+(ci*100).toFixed(1)+'%</td><td style="padding:.15rem .4rem;color:var(--muted);font-style:italic">'+pb.t+'</td></tr>';
 });
 });
-rows+='</table>';
+rows+='<\/table>';
 dt.innerHTML=rows;
 }
 
