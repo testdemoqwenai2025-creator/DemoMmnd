@@ -8,7 +8,6 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(250,247,242,0.85)}
 .dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(22,20,15,0.85)}
@@ -388,6 +387,29 @@ ctx.fillStyle=grad;ctx.fillRect(0,pby,W,3);
 ctx.fillStyle='#736a5e';ctx.font='6px monospace';ctx.textAlign='left';
 ctx.fillText('0',2,pby-1);ctx.textAlign='right';ctx.fillText('2pi',W-2,pby-1);
 }
+
+
+// 3D Molecular renderer for sources.html (reuses molecules.json)
+;var sMolRotX=0;var sMolRotY=0;var sMolDragging=false;var sMolDragX=0;var sMolDragY=0;
+var MOL_FOR_S={'schrodinger':'water','attention':'ethanol','bottleneck':'benzene','kolmogorov':'methane','holographic':'acetylene','teleportation':'ammonia','erdos':'formaldehyde','godel':'methane','aixi':'ammonia','loeb':'formaldehyde','unitary':'hydrogen_peroxide','ugc':'benzene'};
+function drawSourceMolecule(eid,cv,time){
+if(!cv)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();
+cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var mk=MOL_FOR_S[eid];if(!mk||!SOURCES_MOL||!SOURCES_MOL.molecules||!SOURCES_MOL.molecules[mk]){ctx.fillStyle=fg;ctx.font='12px sans-serif';ctx.textAlign='center';ctx.fillText('Molecular data loading...',W/2,H/2);return}
+var rm=SOURCES_MOL.molecules[mk];
+var atoms=rm.atoms.map(function(a){return{x:a.x/2.5,y:a.y/2.5,z:a.z/2.5,c:a.c,r:a.r,l:a.sym,q:a.q||0}});
+var cx=W/2,cy=H/2,scale=Math.min(W,H)*0.2;
+var rotY=sMolDragging?sMolRotY:time*0.5;var rotX=sMolDragging?sMolRotX:Math.sin(time*0.3)*0.3;
+function proj(p){var x1=p.x*Math.cos(rotY)-p.z*Math.sin(rotY);var z1=p.x*Math.sin(rotY)+p.z*Math.cos(rotY);var y2=p.y*Math.cos(rotX)-z1*Math.sin(rotX);var z2=p.y*Math.sin(rotX)+z1*Math.cos(rotX);var depth=3;var f=depth/(depth+z2);return{x:cx+x1*scale*f,y:cy+y2*scale*f,z:z2,f:f}}
+var pa=atoms.map(function(a){return{p:proj(a),a:a}});pa.sort(function(a,b){return b.p.z-a.p.z});
+rm.bonds.forEach(function(b){var a=pa[b[0]],bb=pa[b[1]];if(!a||!bb)return;var pulse=(Math.sin(time*2+b[0])+1)/2;ctx.strokeStyle='rgba(194,65,12,'+(0.3+pulse*0.3)+')';ctx.lineWidth=2*Math.min(a.p.f,bb.p.f);ctx.beginPath();ctx.moveTo(a.p.x,a.p.y);ctx.lineTo(bb.p.x,bb.p.y);ctx.stroke()});
+pa.forEach(function(p){var r2=p.a.r*p.p.f;var g=ctx.createRadialGradient(p.p.x-r2*0.3,p.p.y-r2*0.3,0,p.p.x,p.p.y,r2);g.addColorStop(0,'rgba(255,255,255,0.6)');g.addColorStop(0.3,p.a.c);g.addColorStop(1,p.a.c+'99');ctx.shadowColor=p.a.c;ctx.shadowBlur=12*p.p.f;ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.p.x,p.p.y,r2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=fg;ctx.font=Math.round(9*p.p.f)+'px sans-serif';ctx.textAlign='center';ctx.fillText(p.a.l,p.p.x,p.p.y+3)});
+var pby=H-6;var grad=ctx.createLinearGradient(0,pby,W,pby);grad.addColorStop(0,'#ff0000');grad.addColorStop(.14,'#ffa500');grad.addColorStop(.28,'#ffff00');grad.addColorStop(.42,'#00ff00');grad.addColorStop(.57,'#00ffff');grad.addColorStop(.71,'#0000ff');grad.addColorStop(.85,'#ff00ff');grad.addColorStop(1,'#ff0000');ctx.fillStyle=grad;ctx.fillRect(0,pby,W,3);
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText(rm.name+' — 3D (drag to rotate)',W/2,14);
+}
+function startSMolAnim(eid,cv){stopAnimDemo();cv.addEventListener('mousedown',function(e){sMolDragging=true;sMolDragX=e.clientX;sMolDragY=e.clientY});cv.addEventListener('mousemove',function(e){if(sMolDragging){sMolRotY+=(e.clientX-sMolDragX)*0.01;sMolRotX+=(e.clientY-sMolDragY)*0.01;sMolRotX=Math.max(-1.2,Math.min(1.2,sMolRotX));sMolDragX=e.clientX;sMolDragY=e.clientY}});window.addEventListener('mouseup',function(){sMolDragging=false});var t=0;function frame(){drawSourceMolecule(eid,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
 
 function drawDemo(id,cv,time){if(!cv)return;time=time||0;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
 function clear(){ctx.fillStyle=bg;ctx.fillRect(0,0,W,H)}
