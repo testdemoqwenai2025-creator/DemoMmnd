@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(250,247,242,0.85)}
 .dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(22,20,15,0.85)}
@@ -621,32 +623,50 @@ function stopFutAnim(){if(futRaf){cancelAnimationFrame(futRaf);futRaf=null}}
 
 function drawObsGraph(cv){if(!cv||!CODE)return;drawGraphType(cv,currentGraphType||'Bar')}
 
-// Code execution output
-var pyodideReady=null;
-async function loadPyodide(){
-if(pyodideReady)return pyodideReady;
-pyodideReady='loading';
-try{
-var py=await loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'});
-pyodideReady=py;
-return py;
-}catch(e){
-console.log('Pyodide load failed, using simulated output');
-pyodideReady=null;
-return null;
+// Code execution output — Pyodide real Python + simulated fallback
+;var pyodideReady=null;var pyodideLoading=null;
+function ensurePyodide(){
+if(pyodideReady)return Promise.resolve(pyodideReady);
+if(pyodideLoading)return pyodideLoading;
+if(typeof loadPyodide==='undefined')return Promise.resolve(null);
+pyodideLoading=loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'}).then(function(py){
+pyodideReady=py;console.log('Pyodide ready for sources.html');return py;
+}).catch(function(e){console.log('Pyodide failed:',e.message);pyodideReady=null;return null});
+return pyodideLoading;
 }
-}
+if(typeof loadPyodide==='function'){setTimeout(ensurePyodide,2000)}
 function runCode(key){
 var e=CODE[key];if(!e)return;
 var out=document.getElementById('codeOutput');var st=document.getElementById('runStatus');
 if(!out||!st)return;
 st.textContent='Running...';out.style.display='block';out.textContent='';
-// Get the currently selected language
 var lang='Python';document.querySelectorAll('.code-tab').forEach(function(t){if(t.classList.contains('active'))lang=t.dataset.lang||t.textContent.trim()});
-// Generate simulated output based on expression + language
+var code=e.langs[lang]||'';
+// Real Pyodide execution for Python
+if(lang==='Python'&&pyodideReady){
+st.textContent='Executing in Pyodide (real Python)...';
+out.textContent='$ Python (Pyodide \u2014 real execution)\n';
+try{
+pyodideReady.setStdout({batched:function(s){out.textContent+=s+'\n';out.scrollTop=out.scrollHeight}});
+pyodideReady.setStderr({batched:function(s){out.textContent+='[stderr] '+s+'\n'}});
+pyodideReady.runPythonAsync(code).then(function(){
+st.textContent='Done (real Python via Pyodide)';
+}).catch(function(err){
+out.textContent+='\n[error] '+err.message+'\n';
+st.textContent='Error (see output)';
+});
+}catch(err){
+out.textContent+='[Pyodide error] '+err.message+'\nFalling back...\n\n';
+runSimulated(key,lang,out,st);
+}
+return;
+}
+runSimulated(key,lang,out,st);
+}
+function runSimulated(key,lang,out,st){
 var lines=[];
-lines.push('$ '+lang+' '+e.name.replace(/^[0-9]+\.\s/,''));
-lines.push('Loading expression: '+e.latex.substring(0,40)+'...');
+lines.push('$ '+lang+' '+CODE[key].name.replace(/^[0-9]+\\.\\s/,''));
+lines.push('Loading expression: '+CODE[key].latex.substring(0,40)+'...');
 lines.push('');
 // Expression-specific output
 var outputs={
@@ -665,7 +685,7 @@ var outputs={
 };
 var out2=outputs[key]||['Running...','Output: '+e.intent.substring(0,60)];
 var i=0;var interval=setInterval(function(){
-if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+')';return}
+if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+' \u2014 simulated)';return}
 lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200)
 }
 
