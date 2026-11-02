@@ -121,6 +121,64 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 </div>
 </div>
 
+<!-- Demo 3: Expression Comparison Arena -->
+<h2>Demo 3: Expression Comparison Arena</h2>
+<div class="demo-section">
+<h3>Compare two expressions &mdash; like Go vs Rust, each has its domain</h3>
+<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">Select two mathematical expressions. The radar chart compares them across 5 dimensions. The verdict explains when to use each. <span style="background:var(--accent-bg);color:var(--primary);padding:.125rem .375rem;border-radius:.25rem;font-size:.5625rem;font-weight:600;text-transform:uppercase">SYNTHETIC DATA</span> &mdash; placeholder until real expert analysis arrives.</p>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem">
+<div>
+<label style="font-size:.6875rem;color:var(--muted);display:block;margin-bottom:.25rem">Expression A</label>
+<select id="cmpA" style="width:100%;padding:.375rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--fg);font-size:.75rem" onchange="drawComparison()">
+<option value="schrodinger">Schr&ouml;dinger Equation</option>
+<option value="attention">Scaled Dot-Product Attention</option>
+<option value="godel">G&ouml;del/Turing Bound</option>
+<option value="kolmogorov">Kolmogorov Complexity</option>
+<option value="erdos">Erd&ouml;s Unit Distance</option>
+<option value="ugc">Unique Games Conjecture</option>
+<option value="holographic">Bekenstein-Hawking Entropy</option>
+<option value="bottleneck">Information Bottleneck</option>
+<option value="loeb">L&ouml;b's Theorem</option>
+<option value="unitary">Unitary Synthesis</option>
+<option value="aixi">AIXI (Universal AI)</option>
+<option value="teleportation">Teleportation vs Path-Finding</option>
+</select>
+</div>
+<div>
+<label style="font-size:.6875rem;color:var(--muted);display:block;margin-bottom:.25rem">Expression B</label>
+<select id="cmpB" style="width:100%;padding:.375rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--fg);font-size:.75rem" onchange="drawComparison()">
+<option value="attention">Scaled Dot-Product Attention</option>
+<option value="schrodinger">Schr&ouml;dinger Equation</option>
+<option value="kolmogorov">Kolmogorov Complexity</option>
+<option value="godel">G&ouml;del/Turing Bound</option>
+<option value="erdos">Erd&ouml;s Unit Distance</option>
+<option value="ugc">Unique Games Conjecture</option>
+<option value="holographic">Bekenstein-Hawking Entropy</option>
+<option value="bottleneck">Information Bottleneck</option>
+<option value="loeb">L&ouml;b's Theorem</option>
+<option value="unitary">Unitary Synthesis</option>
+<option value="aixi">AIXI (Universal AI)</option>
+<option value="teleportation">Teleportation vs Path-Finding</option>
+</select>
+</div>
+</div>
+
+<canvas id="cmpCanvas" class="demo-canvas" style="aspect-ratio:2/1"></canvas>
+
+<div id="cmpVerdict" style="margin-top:1rem;padding:1rem;background:var(--secondary);border-radius:.5rem;border:1px solid var(--border);font-size:.8125rem;line-height:1.7"></div>
+
+<div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+<a href="https://huggingface.co/models" target="_blank" rel="noopener" style="font-size:.6875rem;padding:.25rem .5rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--primary);text-decoration:none">&#129303; Hugging Face Models</a>
+<a href="https://github.com/testdemoqwenai2025-creator/Mmnd-Advanced" target="_blank" rel="noopener" style="font-size:.6875rem;padding:.25rem .5rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--primary);text-decoration:none">&#128187; GitHub Source</a>
+<a href="https://github.com/testdemoqwenai2025-creator/Mmnd-Advanced/issues" target="_blank" rel="noopener" style="font-size:.6875rem;padding:.25rem .5rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--primary);text-decoration:none">&#128221; Contribute Analysis</a>
+</div>
+
+<div style="margin-top:.75rem;padding:.5rem;background:rgba(194,65,12,0.05);border-radius:.375rem;border:1px dashed var(--border)">
+<p style="font-size:.6875rem;color:var(--muted);margin:0"><strong style="color:var(--primary)">Synthetic &rarr; Real transition:</strong> The comparison data below is synthetic (placeholder). When domain experts provide real analysis, it replaces the synthetic data seamlessly &mdash; same format, same structure, just better values. This is the "strong domain expertism" approach: build the structure now, evolve the content later via open-source contributions.</p>
+</div>
+</div>
+
 </main>
 
 <footer><div class="footer-inner">
@@ -204,6 +262,87 @@ var mf=document.getElementById('murderFlag');mf.textContent=murder;mf.style.colo
 }
 window.toggleSwitch=toggleSwitch;
 updateVerdict();
+
+// Demo 3: Expression Comparison Arena
+var EXPR_DATA={
+'schrodinger':{name:'Schrodinger Eq.',dims:[0.9,0.3,0.7,0.8,0.6],best:['quantum simulation','drug discovery','materials science'],weak:['combinatorial problems','logic/proofs']},
+'attention':{name:'Attention',dims:[0.8,0.9,0.6,0.5,0.9],best:['NLP','transformer models','sequence tasks'],weak:['exact arithmetic','proof verification']},
+'godel':{name:'Godel Bound',dims:[0.2,0.1,0.3,0.9,0.8],best:['foundational limits','proof theory','AI alignment theory'],weak:['practical computation','numerical tasks']},
+'kolmogorov':{name:'Kolmogorov',dims:[0.4,0.5,0.3,0.8,0.7],best:['creativity analysis','compression theory','randomness testing'],weak:['real-time computation','closed-form solutions']},
+'erdos':{name:'Erdos Dist.',dims:[0.6,0.4,0.8,0.3,0.5],best:['combinatorial geometry','discrete optimization','pattern matching'],weak:['continuous systems','quantum mechanics']},
+'ugc':{name:'UGC',dims:[0.3,0.2,0.5,0.9,0.4],best:['approximation algorithms','complexity classification','SDP optimization'],weak:['numerical simulation','physical modeling']},
+'holographic':{name:'Bekenstein-Hawking',dims:[0.7,0.2,0.4,0.6,0.5],best:['black hole physics','quantum gravity','information theory'],weak:['classical computing','everyday engineering']},
+'bottleneck':{name:'Info Bottleneck',dims:[0.5,0.7,0.4,0.6,0.8],best:['deep learning theory','generalization bounds','feature compression'],weak:['exact solutions','hardware implementation']},
+'loeb':{name:'Lob Theorem',dims:[0.1,0.1,0.2,0.9,0.7],best:['AI alignment','self-reference analysis','provability logic'],weak:['computation','numerical methods','engineering']},
+'unitary':{name:'Unitary Synth.',dims:[0.8,0.3,0.6,0.7,0.4],best:['quantum circuit design','complexity theory','black hole modeling'],weak:['classical algorithms','discrete math']},
+'aixi':{name:'AIXI',dims:[0.3,0.4,0.2,0.9,0.6],best:['universal AI theory','reinforcement learning bounds','optimal decision theory'],weak:['practical implementation','real-time inference']},
+'teleportation':{name:'Teleportation',dims:[0.4,0.6,0.3,0.7,0.8],best:['AI-human collaboration','proof mining','pedagogical reconstruction'],weak:['closed-form math','physical simulation']}
+};
+var DIM_NAMES=['Numerical','Symbolic','Parallelizable','Foundational','Practical'];
+
+function drawComparison(){
+var cv=document.getElementById('cmpCanvas');if(!cv)return;
+var ctx=cv.getContext('2d');var dpr=window.devicePixelRatio||1;var r=cv.getBoundingClientRect();
+cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var aKey=document.getElementById('cmpA').value;
+var bKey=document.getElementById('cmpB').value;
+var aData=EXPR_DATA[aKey]||EXPR_DATA['schrodinger'];
+var bData=EXPR_DATA[bKey]||EXPR_DATA['attention'];
+// Radar chart with two overlaid polygons
+var cx=W*0.35,cy=H/2,rad=Math.min(W*0.3,H*0.35);
+var n=5;
+// Grid rings
+ctx.strokeStyle='rgba(194,65,12,0.1)';ctx.lineWidth=.5;
+for(var ring=1;ring<=5;ring++){
+ctx.beginPath();
+for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=rad*ring/5;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.closePath();ctx.stroke();
+}
+// Axis lines
+ctx.strokeStyle='rgba(194,65,12,0.15)';
+for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad);ctx.stroke()}
+// Expression A polygon
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.fillStyle='rgba(194,65,12,0.15)';
+ctx.beginPath();
+for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=aData.dims[i]*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.closePath();ctx.fill();ctx.stroke();
+// Expression B polygon
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.fillStyle='rgba(255,215,0,0.1)';
+ctx.beginPath();
+for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=bData.dims[i]*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.closePath();ctx.fill();ctx.stroke();
+// Labels
+ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='center';
+for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;ctx.fillText(DIM_NAMES[i],cx+Math.cos(a)*(rad+15),cy+Math.sin(a)*(rad+15))}
+// Legend
+ctx.fillStyle=pc;ctx.fillRect(W*0.7,H*0.3,8,8);
+ctx.fillStyle=fg;ctx.font='9px sans-serif';ctx.textAlign='left';
+ctx.fillText(aData.name,W*0.7+12,H*0.3+7);
+ctx.fillStyle='#FFD700';ctx.fillRect(W*0.7,H*0.4,8,8);
+ctx.fillStyle=fg;ctx.fillText(bData.name,W*0.7+12,H*0.4+7);
+// Dimension values
+ctx.fillStyle=mt;ctx.font='7px monospace';
+for(var i=0;i<n;i++){ctx.fillText(DIM_NAMES[i]+': '+Math.round(aData.dims[i]*100)+'% vs '+Math.round(bData.dims[i]*100)+'%',W*0.7,H*0.5+i*12)}
+// Title
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';
+ctx.fillText(aData.name+' vs '+bData.name,W/2,14);
+// Generate verdict
+var verdict='<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">';
+verdict+='<div><strong style="color:'+pc+';font-size:.75rem">'+aData.name+'</strong> is better for:<ul style="margin:.25rem 0 0 1rem;padding:0;font-size:.6875rem">';
+aData.best.forEach(function(b){verdict+='<li>'+b+'</li>'});
+verdict+='</ul><strong style="color:var(--muted);font-size:.625rem">Weaker at:</strong> '+aData.weak.join(', ')+'</div>';
+verdict+='<div><strong style="color:#FFD700;font-size:.75rem">'+bData.name+'</strong> is better for:<ul style="margin:.25rem 0 0 1rem;padding:0;font-size:.6875rem">';
+bData.best.forEach(function(b){verdict+='<li>'+b+'</li>'});
+verdict+='</ul><strong style="color:var(--muted);font-size:.625rem">Weaker at:</strong> '+bData.weak.join(', ')+'</div>';
+verdict+='</div>';
+verdict+='<p style="margin-top:.5rem;font-size:.6875rem;color:var(--muted);border-top:1px solid var(--border);padding-top:.5rem"><strong style="color:var(--primary)">Verdict:</strong> Choose '+aData.name+' for '+aData.best[0]+'. Choose '+bData.name+' for '+bData.best[0]+'. Both have value &mdash; like Go vs Rust, neither is universally better. <span style="background:var(--accent-bg);color:var(--primary);padding:.0625rem .25rem;border-radius:.125rem;font-size:.5625rem">SYNTHETIC</span></p>';
+document.getElementById('cmpVerdict').innerHTML=verdict;
+}
+window.drawComparison=drawComparison;
+// Initialize
+setTimeout(drawComparison,500);
 </script>
 </body>
 </html>
