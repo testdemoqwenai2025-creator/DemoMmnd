@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="version" content="2026-11-02-v5-math-mol-fix">
 <title>Sources · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -218,7 +221,7 @@ function toggleTheme(){var d=document.documentElement.classList.toggle('dark');l
 
 var CODE=null;
 var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
-var TABS=[{id:'mol',icon:'\ud83e\udd1b',label:'Molecular'},{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'cmp',icon:'\ud83d\udd2c',label:'Comparison'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
+var TABS=[{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'mol',icon:'\ud83e\udd1b',label:'Molecular'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'cmp',icon:'\ud83d\udd2c',label:'Comparison'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
 
 // Load code data
 // Load molecules.json for molecular visualizations
@@ -297,19 +300,19 @@ var h='';
 // Molecular (for applicable expressions)
 var MOL_FOR_SOURCES={'schrodinger':'water','attention':'ethanol','bottleneck':'benzene','kolmogorov':'methane','holographic':'acetylene','teleportation':'ammonia','erdos':'formaldehyde','godel':'methane','aixi':'ammonia','loeb':'formaldehyde','unitary':'hydrogen_peroxide','ugc':'benzene'};
 if(MOL_FOR_SOURCES[key]){
-h+='<div class="popup-pane active" id="pane-mol"><h3>Molecular structure<\/h3><canvas id="molCanvas" class="demo-canvas"><\/canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">Real molecular data from crystallographic structures. Drag to rotate.<\/p>';
+h+='<div class="popup-pane" id="pane-mol"><h3>Molecular structure<\/h3><canvas id="molCanvas" class="demo-canvas"><\/canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">Real molecular data from crystallographic structures. Drag to rotate.<\/p>';
 var molName=MOL_FOR_SOURCES[key];
 if(SOURCES_MOL&&SOURCES_MOL.molecules&&SOURCES_MOL.molecules[molName]){
 h+='<p style="font-size:.6875rem;color:var(--primary)">'+SOURCES_MOL.molecules[molName].name+' ('+SOURCES_MOL.molecules[molName].formula+') — '+SOURCES_MOL.molecules[molName].atoms.length+' atoms<\/p>';
 }
 h+='<p style="font-size:.6875rem;color:var(--muted);margin-top:.5rem">Connection: This expression applies to molecular '+key.replace('_',' ')+' analysis.<\/p><\/div>';
-// Make math tab NOT active (mol is active first)
-h+='<div class="popup-pane" id="pane-math">';
+// Math pane is the default active tab
+h+='<div class="popup-pane active" id="pane-math">';
 } else {
 // Math
 h+='<div class="popup-pane active" id="pane-math">';
 }
-// Math content<h3>Expression</h3><div class="expr-rendered" style="background:rgba(10,9,8,.6);border-color:rgba(194,65,12,.3);padding:2rem">$$'+e.latex+'$$</div><div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div><h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
+h+='<h3>Expression</h3><div class="expr-rendered" style="background:rgba(10,9,8,.6);border-color:rgba(194,65,12,.3);padding:2rem">$$'+e.latex+'$$</div><div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div><h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
 // Code
 h+='<div class="popup-pane" id="pane-code">';
 if(e.mapping){h+='<h3>Math \u2192 Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'</td><td class="map-arrow">\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
@@ -824,6 +827,9 @@ chk('drawSourceMolecule',function(){return typeof drawSourceMolecule==='function
 chk('drawFuturistic function',function(){return typeof drawFuturistic==='function'});
 chk('drawObsGraph function',function(){return typeof drawObsGraph==='function'});
 chk('startAnimDemo function',function(){return typeof startAnimDemo==='function'});;
+chk('Version tag',function(){return document.querySelector('meta[name=version]')!==null});
+chk('Each expr has latex',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].latex)return false;return true});
+chk('Math tab is first',function(){return TABS[0].id==='math'});
 var badge=document.getElementById('audit'),txt=document.getElementById('auditText');
 if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
 r.forEach(function(x){console.log(x)});
