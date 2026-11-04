@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="version" content="2026-11-04-v1-physics-ml-clip1">
+<title>Physics-Informed ML · Mmnd</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden}
+#pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg);font-weight:700}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.nav-links{display:flex;gap:1.25rem;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.8125rem;font-weight:500;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{background:none;border:1px solid var(--border);border-radius:50%;width:2rem;height:2rem;cursor:pointer;font-size:1rem;color:var(--muted)}
+main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;position:relative;z-index:1}
+.hero{margin-bottom:3rem}
+.crumbs{font-size:.6875rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem}
+.tag{display:inline-block;font-size:.5625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);background:var(--accent-bg);padding:.2rem .5rem;border-radius:.25rem;margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2.5rem;line-height:1.15;margin-bottom:.75rem}
+.lead{font-size:1.0625rem;color:var(--muted);max-width:72ch}
+.source-card{margin-top:1.5rem;padding:1rem 1.25rem;background:var(--card);border:1px solid var(--border);border-radius:.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.source-card a{color:var(--primary);text-decoration:none;font-weight:600;font-size:.8125rem}
+.clip-section{margin:4rem 0;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem}
+.clip-section h2{font-family:Georgia,serif;font-size:1.875rem;margin-bottom:.25rem}
+.clip-section .subtitle{font-size:.875rem;color:var(--muted);margin-bottom:1.5rem}
+.clip-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:768px){.clip-layout{grid-template-columns:1fr}}
+.clip-canvas-wrap{position:relative;background:#0a0908;border:1px solid var(--border);border-radius:.5rem;overflow:hidden;aspect-ratio:4/3}
+.clip-canvas-wrap.light-canvas{background:#f5f0ea}
+.clip-canvas{display:block;width:100%;height:100%}
+.clip-controls{position:absolute;bottom:.5rem;left:.5rem;right:.5rem;display:flex;align-items:center;gap:.375rem;flex-wrap:wrap;background:rgba(10,9,8,.7);backdrop-filter:blur(8px);padding:.375rem .5rem;border-radius:.375rem}
+.clip-canvas-wrap.light-canvas .clip-controls{background:rgba(250,247,242,.85)}
+.clip-btn{background:none;border:1px solid rgba(255,255,255,.2);color:#e5e2dc;border-radius:.375rem;padding:.4rem .7rem;cursor:pointer;font-size:.8125rem;font-weight:600;transition:background .15s;min-width:2rem;min-height:2rem;display:inline-flex;align-items:center;justify-content:center}
+.light-canvas .clip-btn{border-color:rgba(0,0,0,.2);color:#1a1a1a}
+.clip-btn:hover{background:rgba(255,255,255,.15)}
+.light-canvas .clip-btn:hover{background:rgba(0,0,0,.1)}
+.clip-btn:active{transform:scale(.95)}
+.clip-scene-label{position:absolute;top:.5rem;left:.5rem;font-size:.6875rem;font-weight:600;color:#e5e2dc;background:rgba(10,9,8,.7);padding:.25rem .5rem;border-radius:.25rem;backdrop-filter:blur(8px)}
+.light-canvas .clip-scene-label{color:#1a1a1a;background:rgba(250,247,242,.85)}
+.zoom-control{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#e5e2dc;margin-left:auto}
+.light-canvas .zoom-control{color:#1a1a1a}
+.zoom-control input[type=range]{width:60px;accent-color:var(--primary)}
+.param-control{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#FFD700}
+.light-canvas .param-control{color:#c2410c}
+.param-control input[type=range]{width:60px;accent-color:#FFD700}
+.param-control .param-label{font-style:italic;font-family:Georgia,serif;font-weight:600}
+.clip-info{display:flex;flex-direction:column;gap:1rem}
+.scene-list{list-style:none;padding:0;margin:0}
+.scene-list li{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem .625rem;border-radius:.375rem;cursor:pointer;transition:background .15s}
+.scene-list li:hover{background:var(--accent-bg)}
+.scene-list li.active{background:var(--accent-bg);border-left:2px solid var(--primary)}
+.scene-list .num{flex-shrink:0;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--secondary);color:var(--muted);font-size:.6875rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.scene-list li.active .num{background:var(--primary);color:#fff}
+.scene-list .title{font-size:.8125rem;font-weight:600;color:var(--fg)}
+.scene-list .desc{font-size:.6875rem;color:var(--muted);margin-top:.125rem}
+.deeper-thoughts{padding:1rem;background:var(--secondary);border-radius:.375rem;border-left:3px solid var(--primary)}
+.deeper-thoughts h4{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem}
+.deeper-thoughts p{font-size:.8125rem;color:var(--fg);margin-bottom:.5rem}
+.deeper-thoughts p:last-child{margin-bottom:0}
+.future-section{margin-top:.5rem}
+.future-section h4{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem}
+.future-canvas{width:100%;aspect-ratio:16/7;background:#0a0908;border:1px solid var(--border);border-radius:.375rem;display:block}
+.future-milestones{font-size:.6875rem;color:var(--muted);margin-top:.375rem}
+.clip-code-section{margin-top:1.5rem;padding-top:1.5rem;border-top:1px dashed var(--border)}
+.clip-code-section h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem;margin-top:1rem}
+.clip-code-section h3:first-child{margin-top:0}
+.expr-rendered-cl{border:1px solid rgba(194,65,12,.2);background:rgba(10,9,8,.6);border-radius:.5rem;padding:1.5rem;text-align:center;margin-bottom:1rem;overflow-x:auto;color:#e5e2dc;font-size:1.125rem}
+.map-table-cl{margin-bottom:1rem;border:1px solid var(--border);border-radius:.5rem;overflow:hidden}
+.map-table-cl table{width:100%;border-collapse:collapse;font-size:.75rem}
+.map-table-cl th{background:var(--accent-bg);color:var(--primary);text-align:left;padding:.5rem .75rem;font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.map-table-cl td{padding:.4rem .75rem;border-bottom:1px solid var(--border)}
+.map-table-cl .map-sym{color:var(--primary);font-weight:600;font-family:Georgia,serif}
+.map-table-cl .map-code{font-family:monospace;font-size:.6875rem;color:var(--fg)}
+.map-table-cl .map-note{color:var(--muted);font-size:.6875rem}
+.code-tabs-cl{display:flex;gap:.25rem;flex-wrap:wrap;margin-bottom:.5rem}
+.code-tab-cl{padding:.375rem .625rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-size:.75rem;font-weight:500}
+.code-tab-cl.active{background:var(--accent-bg);color:var(--primary);border-color:var(--primary)}
+.code-content-cl{display:none;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;overflow-x:auto;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre;line-height:1.5}
+.code-content-cl.active{display:block}
+.run-btn-cl{padding:.5rem .875rem;font-size:.8125rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600}
+.run-btn-cl:hover{background:var(--primary);color:#fff}
+.code-output-cl{margin-top:.5rem;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;min-height:3rem;max-height:10rem;overflow-y:auto;display:none;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre-wrap}
+.code-viz-wrap-cl{margin-top:.5rem;display:none}
+.code-viz-canvas-cl{width:100%;aspect-ratio:16/7;background:#0a0908;border:1px solid var(--border);border-radius:.375rem;display:block}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+footer{max-width:1200px;margin:3rem auto;padding:1.5rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer a{color:var(--primary);text-decoration:none}
+</style>
+</head>
+<body>
+<canvas id="pbg"></canvas>
+<header>
+<nav>
+<a href="index.html" class="logo"><span class="logo-icon">⚛</span><span>Mmnd</span></a>
+<div class="nav-links"><a href="index.html">Home</a><a href="sources.html">Sources</a><a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html" class="active">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a><a href="about.html">About</a></div>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+</nav>
+</header>
+<main>
+<div class="hero">
+<div class="crumbs">Physics · Machine Learning</div>
+<span class="tag">Phase 10 · Physics-Informed ML</span>
+<h1>Physics-Informed Machine Learning</h1>
+<p class="lead">Embedding known physics into ML models and discovering new physics from data — transitioning AI from empirical "alchemy" to principled "chemistry." Based on <a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNQ0BaKuBKY43k4xMo6NSbBa" style="color:var(--primary)">Steve Brunton's Physics-Informed ML playlist</a> (23 lessons). We're building one interactive clip per video, step by step.</p>
+<div class="source-card">
+<span style="font-size:.75rem;color:var(--muted)">SOURCE PLAYLIST</span>
+<a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNQ0BaKuBKY43k4xMo6NSbBa" target="_blank">↗ Steve Brunton — Physics Informed Machine Learning (23 videos)</a>
+<span style="font-size:.6875rem;color:var(--muted)">From data-driven science to physics-informed discovery</span>
+</div>
+</div>
+
+<!-- CLIP 1: The Five Stages of Physics-Informed ML -->
+<section class="clip-section" id="clip1">
+<h2>The Five Stages of Physics-Informed ML</h2>
+<div class="subtitle">Video 1 · High-Level Overview — From alchemy to chemistry: embedding physics across the ML pipeline</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap1">
+<canvas class="clip-canvas" id="cv1"></canvas>
+<div class="clip-scene-label" id="lbl1">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP1.play()">▶</button>
+<button class="clip-btn" onclick="CLIP1.pause()">⏸</button>
+<button class="clip-btn" onclick="CLIP1.replay()">↺</button>
+<button class="clip-btn" onclick="CLIP1.prev()">◀</button>
+<button class="clip-btn" onclick="CLIP1.next()">▶|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title1">The PIML paradigm</span>
+<div class="zoom-control">🔍<input type="range" id="zoom1" min="0.5" max="3" step="0.1" value="1"><span id="zoom1v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel1">λ</span><input type="range" id="param1" min="0" max="1" step="0.05" value="0.5"><span id="param1v">0.50</span></div>
+<button class="clip-btn" onclick="CLIP1.toggleRecord()" id="rec1" title="Record WebM">●</button>
+<button class="clip-btn" onclick="CLIP1.toggleNarration()" id="narr1" title="Toggle narration">🔊</button>
+<button class="clip-btn" onclick="CLIP1.toggleLight()" id="light1">🌙</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes1"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts1"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities — PIML evolution</h4>
+<canvas class="future-canvas" id="fut1"></canvas>
+<div class="future-milestones" id="fut1m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code1">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr1">Loading...</div>
+<h3>Math → Code mapping</h3>
+<div class="map-table-cl" id="map1"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs1"></div>
+<div id="codecontent1"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClipCode('pinn')">▶ Run &amp; observe output</button>
+<span id="runStatus1" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput1"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap1"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas1"></canvas></div>
+</div>
+</section>
+</main>
+<footer>
+<div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
+<div>v1-physics-ml-clip1 · 1/23 clips</div>
+</footer>
+<script>
+// Theme
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
+
+// Particle bg
+(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(50,Math.floor(cv.width*cv.height/25000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.3})}
+function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';
+for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}
+ctx.strokeStyle=d?'rgba(234,88,12,.06)':'rgba(194,65,12,.04)';ctx.lineWidth=.5;
+for(var i=0;i<ps.length;i++)for(var j=i+1;j<ps.length;j++){var dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){ctx.globalAlpha=(1-d/100)*.15;ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.stroke()}}
+ctx.globalAlpha=1}
+function lp(){dr();raf=requestAnimationFrame(lp)}
+addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp)})();
+
+// 3D projection
+function project(v,cx,cy,sc,depth){var f=depth/(depth+v.z);return{x:cx+v.x*sc*f,y:cy+v.y*sc*f,z:v.z,s:f}}
+function drawPhaseBar(ctx,W,H){var pby=H-5;var g=ctx.createLinearGradient(0,pby,W,pby);g.addColorStop(0,'#ff0000');g.addColorStop(.14,'#ffa500');g.addColorStop(.28,'#ffff00');g.addColorStop(.42,'#00ff00');g.addColorStop(.57,'#00ffff');g.addColorStop(.71,'#0000ff');g.addColorStop(.85,'#ff00ff');g.addColorStop(1,'#ff0000');ctx.fillStyle=g;ctx.fillRect(0,pby,W,2)}
+
+// Narration (pre-recorded audio)
+var Narration={enabled:false,currentAudio:null,
+speak:function(clipKey,sceneIdx){if(!this.enabled)return;this.stop();var a=new Audio('audio/'+clipKey+'_'+sceneIdx+'.mp3');a.volume=1;this.currentAudio=a;a.play().catch(function(e){console.log('Narration play failed:',e.message)})},
+stop:function(){if(this.currentAudio){this.currentAudio.pause();this.currentAudio=null}},
+toggle:function(){this.enabled=!this.enabled;if(!this.enabled)this.stop();return this.enabled}
+};
+
+// Floating math
+var FLOATING_MATH={
+'clip1':['F=ma','L=T-V','d/dt(∂L/∂q̇)=∂L/∂q','∇·u=0','Ẋ=Θ(X)Ξ','L=L_data+λL_phys','min||Ξ||₁','∂u/∂t=F(u,∇u)','x_{k+1}=f(x_k,u_k)+w_k']
+};
+function drawFloatingMath(ctx,W,H,t,expressions){
+if(!expressions)return;ctx.textAlign='center';ctx.textBaseline='middle';
+var cycleLen=12;
+expressions.forEach(function(expr,i){
+var phase=(t*0.15+i*cycleLen/expressions.length)%cycleLen;var progress=phase/cycleLen;
+var x=progress*(W+200)-100;var baseY=H*0.15+(i%H)*H*0.11;var y=baseY+Math.sin(t*0.3+i*0.7)*15;
+var alpha=Math.sin(progress*Math.PI)*0.3;if(alpha<=0)return;
+ctx.globalAlpha=alpha;ctx.font='italic '+(13+Math.sin(t+i)*2|0)+'px Georgia,serif';
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=10;ctx.fillText(expr,x,y);ctx.shadowBlur=0;ctx.globalAlpha=1
+})
+}
+
+// Scene-specific floating math per scene
+var SCENE_MATH={
+0:['F=ma','L=T-V','alchemy→chemistry'],
+1:['d/dt(∂L/∂q̇)=∂L/∂q','L=T-V','H=T+V'],
+2:['f(T_g(x))=T\'_g(f(x))','equivariance','symmetry'],
+3:['Ẋ=Θ(X)Ξ','min||Ξ||₁','SINDy'],
+4:['L=L_data+λL_phys','N[u]=0','PINN'],
+5:['∂u/∂t=F(u,∇u)','x_{k+1}=f(x_k,u_k)','discover']
+};
+
+// Scene-specific deeper thoughts
+var SCENE_THOUGHTS=[
+'<strong style="color:var(--primary)">From alchemy to chemistry.</strong> Classical ML relies purely on data-driven optimization, discarding centuries of domain knowledge. PIML enforces known physics into models and discovers novel laws from data — transitioning AI from trial-and-error "alchemy" into principled "chemistry."',
+'<strong style="color:var(--primary)">Problem formulation.</strong> Embedding physics at the initial stage means framing the target in terms of forces ($F=ma$), Hamiltonians, or Lagrangians. The Euler-Lagrange equations $\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} - \\frac{\\partial L}{\\partial q} = 0$ guarantee energy conservation by construction.',
+'<strong style="color:var(--primary)">Data curation and equivariance.</strong> Selecting the right coordinate system (heliocentric vs geocentric) dramatically simplifies learning. Embedding symmetries — $f(T_g(\\mathbf{x})) = T\'_g(f(\\mathbf{x}))$ — lets models learn from limited data by enforcing invariance to rotation, translation, or Galilean boosts.',
+'<strong style="color:var(--primary)">Architecture as inductive bias.</strong> SINDy discovers minimal governing equations via sparse regression: $\\dot{\\mathbf{X}} = \\Theta(\\mathbf{X})\\Xi$, minimizing $\\|\\dot{\\mathbf{X}} - \\Theta\\Xi\\|_2^2 + \\lambda\\|\\Xi\\|_1$. The $L_1$ penalty selects the fewest terms that explain the data.',
+'<strong style="color:var(--primary)">Physics in the loss (PINNs).</strong> When constraints can\'t be hardcoded, PDE residuals become soft penalties: $\\mathcal{L} = \\mathcal{L}_{data} + \\lambda_{phys}\\mathcal{L}_{physics}$ where $\\mathcal{L}_{physics} = \\frac{1}{N}\\sum|\\mathcal{N}[u]|^2$. The network learns to satisfy both data and physics.',
+'<strong style="color:var(--primary)">Discovery and digital twins.</strong> PIML inverts modeling: from data, discover $\\frac{\\partial u}{\\partial t} = \\mathcal{F}(u, \\nabla u, ...)$. Combined with state-space models $\\mathbf{x}_{k+1} = f(\\mathbf{x}_k, \\mathbf{u}_k) + \\mathbf{w}_k$, this enables digital twins that estimate uncertainty in real time.'
+];
+
+// Scene-specific parameter labels
+var SCENE_PARAMS=[
+{label:'α',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'physics weight'},
+{label:'γ',min:0,max:0.5,step:0.01,default:0.05,decimals:2,desc:'damping'},
+{label:'θ',min:0,max:6.28,step:0.1,default:0,decimals:1,desc:'rotation angle'},
+{label:'λ',min:0.01,max:1,step:0.01,default:0.1,decimals:2,desc:'sparsity threshold'},
+{label:'λ_phys',min:0,max:2,step:0.1,default:1,default:1,decimals:1,desc:'physics weight'},
+{label:'σ',min:0,max:0.3,step:0.01,default:0.05,decimals:2,desc:'noise level'}
+];
+
+// CLIP FRAMEWORK
+function makeClip(opts){
+var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,param:opts.paramDefault||0.5,narrationKey:opts.narrationKey||'',recording:false,recorder:null,recChunks:[],
+cv:document.getElementById(opts.cvId),wrap:document.getElementById(opts.wrapId),lbl:document.getElementById(opts.lblId),titleEl:document.getElementById(opts.titleId),
+zoomEl:document.getElementById(opts.zoomId),zoomVal:document.getElementById(opts.zoomValId),
+paramEl:document.getElementById(opts.paramId),paramVal:document.getElementById(opts.paramValId),paramLabel:document.getElementById(opts.paramLabelId),
+lightBtn:document.getElementById(opts.lightId),narrBtn:document.getElementById(opts.narrId),recBtn:document.getElementById(opts.recId),
+sceneListEl:document.getElementById(opts.sceneListId),thoughtsEl:document.getElementById(opts.thoughtsId),scenes:opts.scenes};
+var h='';opts.scenes.forEach(function(s,i){h+='<li data-idx="'+i+'" onclick="'+opts.varName+'.seek('+i+')"><span class="num">'+(i+1)+'</span><div><div class="title">'+s.title+'</div><div class="desc">'+s.desc+'</div></div></li>'});
+state.sceneListEl.innerHTML=h;
+function updateSceneUI(){
+state.lbl.textContent='Scene '+(state.scene+1)+'/'+opts.scenes.length;
+state.titleEl.textContent=opts.scenes[state.scene].title;
+state.sceneListEl.querySelectorAll('li').forEach(function(li,i){li.classList.toggle('active',i===state.scene)});
+// Update thoughts
+if(state.thoughtsEl&&SCENE_THOUGHTS[state.scene])state.thoughtsEl.innerHTML=SCENE_THOUGHTS[state.scene];
+// Update parameter label/range
+var sp=SCENE_PARAMS[state.scene];if(sp&&state.paramLabel){
+state.paramLabel.textContent=sp.label;
+state.paramEl.min=sp.min;state.paramEl.max=sp.max;state.paramEl.step=sp.step;
+state.paramEl.value=sp.default;state.param=sp.default;
+var dec=sp.decimals||2;state.paramVal.textContent=parseFloat(sp.default).toFixed(dec);
+state.paramEl.oninput=function(){state.param=parseFloat(state.paramEl.value);state.paramVal.textContent=state.param.toFixed(dec)};
+}
+}
+function narrateCurrent(){if(state.narrationKey)Narration.speak(state.narrationKey,state.scene)}
+updateSceneUI();
+state.zoomEl.addEventListener('input',function(){state.zoom=parseFloat(state.zoomEl.value);state.zoomVal.textContent=state.zoom.toFixed(1)+'x'});
+state.toggleLight=function(){state.dark=!state.dark;state.wrap.classList.toggle('light-canvas',!state.dark);state.lightBtn.textContent=state.dark?'🌙':'☀'};
+state.toggleNarration=function(){var on=Narration.toggle();if(state.narrBtn){state.narrBtn.textContent=on?'🔊':'🔇';state.narrBtn.style.color=on?'var(--primary)':''}if(on)narrateCurrent();else Narration.stop()};
+state.toggleRecord=function(){
+if(state.recording){if(state.recorder&&state.recorder.state!=='inactive')state.recorder.stop();state.recording=false;if(state.recBtn){state.recBtn.textContent='●';state.recBtn.style.color='';state.recBtn.style.animation=''}}
+else{try{var stream=state.cv.captureStream(30);state.recChunks=[];state.recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp8'});state.recorder.ondataavailable=function(e){if(e.data&&e.data.size>0)state.recChunks.push(e.data)};state.recorder.onstop=function(){var blob=new Blob(state.recChunks,{type:'video/webm'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=state.narrationKey+'_scene'+(state.scene+1)+'_'+Date.now()+'.webm';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},1000)};state.recorder.start();state.recording=true;if(state.recBtn){state.recBtn.textContent='⏺';state.recBtn.style.color='#ff0000';state.recBtn.style.animation='pulse 1s infinite'}}catch(e){console.log('Recording failed:',e.message)}}
+};
+function frame(){if(state.playing)state.time+=0.02;opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark,state.param);state.anim=requestAnimationFrame(frame)}
+state.play=function(){state.playing=true;if(Narration.enabled)narrateCurrent()};
+state.pause=function(){state.playing=false;Narration.stop()};
+state.replay=function(){state.time=0;state.playing=true;if(Narration.enabled)narrateCurrent()};
+state.next=function(){state.scene=(state.scene+1)%opts.scenes.length;state.time=0;updateSceneUI();if(Narration.enabled)narrateCurrent()};
+state.prev=function(){state.scene=(state.scene-1+opts.scenes.length)%opts.scenes.length;state.time=0;updateSceneUI();if(Narration.enabled)narrateCurrent()};
+state.seek=function(i){state.scene=i;state.time=0;updateSceneUI();if(Narration.enabled)narrateCurrent()};
+frame();return state;
+}
+
+// CLIP 1: Five Stages of Physics-Informed ML
+var CLIP1_SCENES=[
+{title:'The PIML paradigm',desc:'From alchemy to chemistry'},
+{title:'Problem formulation',desc:'Euler-Lagrange / Hamiltonian priors'},
+{title:'Data curation',desc:'Equivariance and optimal coordinates'},
+{title:'Architecture (SINDy)',desc:'Sparse identification of dynamics'},
+{title:'Loss function (PINNs)',desc:'PDE residual as soft penalty'},
+{title:'Discovery & digital twins',desc:'Finding laws from data'}
+];
+
+var CLIP1=makeClip({varName:'CLIP1',cvId:'cv1',wrapId:'wrap1',lblId:'lbl1',titleId:'title1',zoomId:'zoom1',zoomValId:'zoom1v',paramId:'param1',paramValId:'param1v',paramLabelId:'paramLabel1',paramDefault:0.5,paramDecimals:2,lightId:'light1',narrId:'narr1',recId:'rec1',narrationKey:'piml1',sceneListId:'scenes1',thoughtsId:'thoughts1',scenes:CLIP1_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE_MATH[scene]);
+
+if(scene===0){
+// Split canvas: data-only ML (left, chaotic) vs physics-informed (right, structured)
+var splitX=W*0.5;
+// Left: chaotic data-only fitting
+ctx.fillStyle='rgba(255,0,0,0.1)';ctx.fillRect(0,0,splitX,H);
+ctx.fillStyle=mt;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Data-only ML (alchemy)',splitX/2,20);
+// Scattered points
+for(var i=0;i<20;i++){var px=splitX*0.1+Math.random()*splitX*0.8;var py=H*0.3+Math.sin(i*1.3+t)*H*0.15+Math.random()*20;
+ctx.fillStyle='rgba(194,65,12,0.6)';ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill()}
+// Messy fitting curve
+ctx.strokeStyle='rgba(255,0,0,0.4)';ctx.lineWidth=2;ctx.beginPath();
+for(var x=0;x<splitX;x+=2){var y=H*0.5+Math.sin(x*0.05+t*2)*30+Math.sin(x*0.12+t)*15+Math.sin(x*0.3)*8;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();
+// Right: physics-informed (clean)
+ctx.fillStyle='rgba(0,255,0,0.05)';ctx.fillRect(splitX,0,W-splitX,H);
+ctx.fillStyle=pc;ctx.fillText('Physics-informed ML (chemistry)',splitX+(W-splitX)/2,20);
+// Clean data points on a smooth curve
+for(var i=0;i<10;i++){var px=splitX+(W-splitX)*0.1+i*(W-splitX)*0.08;var py=H*0.5+Math.sin(i*0.5+t*0.5)*H*0.15;
+ctx.fillStyle=pc;ctx.shadowColor=pc;ctx.shadowBlur=8;ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+// Smooth fitting curve
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.shadowColor=pc;ctx.shadowBlur=6;ctx.beginPath();
+for(var x=splitX;x<W;x+=2){var y=H*0.5+Math.sin((x-splitX)*0.04+t*0.5)*H*0.15;if(x===splitX)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;
+// Divider
+ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1;ctx.setLineDash([5,5]);ctx.beginPath();ctx.moveTo(splitX,0);ctx.lineTo(splitX,H);ctx.stroke();ctx.setLineDash([]);
+// Arrow showing transition
+ctx.fillStyle='#FFD700';ctx.font='20px Georgia,serif';ctx.fillText('→',splitX,H*0.5);
+}
+else if(scene===1){
+// Pendulum with energy bars
+var cx=W*0.35,cy=H*0.3;var armLen=H*0.25*zoom;
+var angle=Math.sin(t*1.5)*(1-param*2)*1.2; // param = damping
+var bobX=cx+Math.sin(angle)*armLen;var bobY=cy+Math.cos(angle)*armLen;
+// Draw arm
+ctx.strokeStyle=mt;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(bobX,bobY);ctx.stroke();
+// Pivot
+ctx.fillStyle=fg;ctx.beginPath();ctx.arc(cx,cy,4,0,Math.PI*2);ctx.fill();
+// Bob
+ctx.shadowColor=pc;ctx.shadowBlur=15;ctx.fillStyle=pc;ctx.beginPath();ctx.arc(bobX,bobY,12,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+// Energy bars on the right
+var barX=W*0.65,barW=30,barH=H*0.5,barY=H*0.2;
+var KE=0.5*Math.cos(angle)*Math.cos(angle)*1;var PE=1-KE; // KE+PE=1 (conserved)
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.strokeRect(barX,barY,barW,barH);ctx.strokeRect(barX+barW+10,barY,barW,barH);
+ctx.fillStyle='#FFD700';ctx.fillRect(barX,barY+barH*(1-KE),barW,barH*KE);
+ctx.fillStyle='#00CED1';ctx.fillRect(barX+barW+10,barY+barH*(1-PE),barW,barH*PE);
+ctx.fillStyle=fg;ctx.font='10px monospace';ctx.textAlign='center';ctx.fillText('T (kinetic)',barX+barW/2,barY-5);ctx.fillText('V (potential)',barX+barW+10+barW/2,barY-5);
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.fillText('T+V=const',barX+barW+5,barY+barH+15);
+// Equation
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('L = T - V    →    d/dt(∂L/∂q̇) = ∂L/∂q',W/2,H-20);
+}
+else if(scene===2){
+// Equivariance: rotating shape + prediction
+var cx=W/2,cy=H/2;var rotAngle=param*1; // param = rotation angle
+// Draw coordinate axes
+ctx.strokeStyle='rgba(115,106,94,0.3)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(cx-W*0.3,cy);ctx.lineTo(cx+W*0.3,cy);ctx.moveTo(cx,cy-H*0.3);ctx.lineTo(cx,cy+H*0.3);ctx.stroke();
+// Draw original shape (triangle)
+var size=H*0.12*zoom;
+ctx.strokeStyle=pc;ctx.lineWidth=2;
+ctx.beginPath();
+for(var i=0;i<3;i++){var a=i/3*Math.PI*2;var x=cx+Math.cos(a)*size;var y=cy+Math.sin(a)*size;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.closePath();ctx.stroke();
+// Draw rotated shape (should be equivariant)
+ctx.strokeStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.lineWidth=2;
+ctx.beginPath();
+for(var i=0;i<3;i++){var a=i/3*Math.PI*2+rotAngle;var x=cx+Math.cos(a)*size*1.3;var y=cy+Math.sin(a)*size*1.3;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.closePath();ctx.stroke();ctx.shadowBlur=0;
+// Labels
+ctx.fillStyle=pc;ctx.font='10px Georgia,serif';ctx.textAlign='left';ctx.fillText('f(x)',cx-size*1.5,cy-size*1.5);
+ctx.fillStyle='#FFD700';ctx.fillText('f(T_g(x))',cx+size,cy-size*1.8);
+ctx.fillStyle=fg;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('f(T_g(x)) = T\'_g(f(x))  — equivariance',W/2,H-20);
+}
+else if(scene===3){
+// SINDy: library terms + sparse selection
+var terms=['1','x','x²','sin(x)','cos(x)','xy','x²y','eˣ'];
+var trueCoef=[0,0,-1,0,0,0,0,0]; // only x² selected (like logistic map)
+var threshold=param; // param = sparsity threshold
+var cols=terms.length;var colW=W*0.7/cols;var startX=W*0.15;var baseY=H*0.65;
+// Draw library header
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='center';
+terms.forEach(function(term,i){ctx.fillText(term,startX+i*colW+colW/2,baseY+15)});
+// Draw sparse coefficients
+terms.forEach(function(term,i){
+var c=trueCoef[i];var displayC=Math.abs(c)>threshold?c:0;
+var barH=-displayC*H*0.3;
+ctx.fillStyle=Math.abs(displayC)>0.01?'#FFD700':'rgba(115,106,94,0.2)';
+if(Math.abs(displayC)>0.01){ctx.shadowColor='#FFD700';ctx.shadowBlur=8}
+ctx.fillRect(startX+i*colW+5,baseY,colW-10,barH);ctx.shadowBlur=0;
+// Value
+ctx.fillStyle=fg;ctx.font='7px monospace';ctx.fillText(displayC.toFixed(1),startX+i*colW+colW/2,baseY+barH-5);
+});
+// Equation
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('ẋ = Θ(x)·Ξ    min ||Ẋ-ΘΞ||² + λ||Ξ||₁',W/2,H-20);
+// λ label
+ctx.fillStyle='#FFD700';ctx.font='9px Georgia,serif';ctx.fillText('λ = '+param.toFixed(2),W*0.85,H*0.3);
+}
+else if(scene===4){
+// PINN: neural net + collocation points + loss balance
+var cx=W/2,cy=H*0.45;
+// Draw simple NN
+var layers=[3,4,3,1];var layerW=W*0.5;var startX=(W-layerW)/2;
+layers.forEach(function(n,li){
+var layerSpacing=layerW/(layers.length-1);
+for(var i=0;i<n;i++){var x=startX+li*layerSpacing;var y=cy+(i-(n-1)/2)*25;
+ctx.fillStyle=pc;ctx.shadowColor=pc;ctx.shadowBlur=6;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+// Connections to next layer
+if(li<layers.length-1){var nextN=layers[li+1];var nextX=startX+(li+1)*layerSpacing;
+for(var j=0;j<nextN;j++){var nextY=cy+(j-(nextN-1)/2)*25;ctx.strokeStyle='rgba(194,65,12,0.15)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(nextX,nextY);ctx.stroke()}}
+}
+});
+// Collocation points
+for(var i=0;i<8;i++){var px=W*0.1+Math.random()*W*0.8;var py=H*0.8+Math.random()*10;
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=5;ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+// Loss balance (scale)
+var scaleCx=W*0.15;var scaleCy=H*0.7;
+ctx.strokeStyle=mt;ctx.lineWidth=2;ctx.beginPath();ctx.arc(scaleCx,scaleCy,20,Math.PI,0);ctx.stroke();
+var balance=param; // param = physics weight
+ctx.strokeStyle=pc;ctx.beginPath();ctx.moveTo(scaleCx,scaleCy);ctx.lineTo(scaleCx+(balance-0.5)*40,scaleCy-20);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('data',scaleCx-15,scaleCy+15);ctx.fillText('phys',scaleCx+15,scaleCy+15);
+// Equation
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.fillText('L = L_data + λ_phys · L_physics',W/2,H-20);
+}
+else if(scene===6||scene===5){
+// Discovery: data → equation → digital twin
+var cx=W/2,cy=H*0.4;
+// Left: data stream
+ctx.fillStyle=mt;ctx.font='9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Data',W*0.15,cy-30);
+for(var i=0;i<15;i++){var px=W*0.08+Math.random()*W*0.14;var py=cy-20+Math.random()*40;
+ctx.fillStyle='rgba(0,206,209,'+(0.3+Math.random()*0.4)+')';ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill()}
+// Arrow
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.22,cy);ctx.lineTo(W*0.35,cy);ctx.stroke();
+ctx.fillStyle=pc;ctx.beginPath();ctx.moveTo(W*0.35,cy);ctx.lineTo(W*0.32,cy-4);ctx.lineTo(W*0.32,cy+4);ctx.fill();
+// Center: discovered equation
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.fillText('∂u/∂t = F(u,∇u)',W*0.5,cy);
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1;ctx.strokeRect(W*0.38,cy-15,W*0.24,30);
+// Arrow
+ctx.strokeStyle=pc;ctx.beginPath();ctx.moveTo(W*0.65,cy);ctx.lineTo(W*0.78,cy);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.78,cy);ctx.lineTo(W*0.75,cy-4);ctx.lineTo(W*0.75,cy+4);ctx.fill();
+// Right: digital twin with uncertainty
+ctx.fillText('Digital Twin',W*0.88,cy-30);
+var noise=param;
+// Trajectory with uncertainty band
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();
+for(var s=0;s<60;s++){var x=W*0.82+s*W*0.003;var y=cy+Math.sin(s*0.1+t)*15;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();
+// Uncertainty band
+ctx.fillStyle='rgba(255,215,0,0.15)';
+ctx.beginPath();ctx.moveTo(W*0.82,cy-15);
+for(var s=0;s<60;s++){var x=W*0.82+s*W*0.003;var y=cy+Math.sin(s*0.1+t)*15-noise*50-s*0.5;ctx.lineTo(x,y)}
+for(var s=59;s>=0;s--){var x=W*0.82+s*W*0.003;var y=cy+Math.sin(s*0.1+t)*15+noise*50+s*0.5;ctx.lineTo(x,y)}
+ctx.closePath();ctx.fill();
+// State-space equation
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('x_{k+1} = f(x_k,u_k) + w_k',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+
+// Future probability data for PIML
+var FUTURES_DATA={
+'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}]
+};
+function drawFutureChart(cvId,dataId,animState){
+var cv=document.getElementById(cvId);if(!cv)return;
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#10b981',accent='#06b6d4',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var problems=FUTURES_DATA[dataId];var growth=1.3;
+var pL=70,pB=25,pT=30,pR=15,cw=W-pL-pR,ch=H-pT-pB;
+var yearStart=2025,yearEnd=2040,yearSpan=yearEnd-yearStart;
+var animT=animState.t||0;var growProgress=Math.min(1,animT/3);var breathe=Math.sin(animT*0.8)*0.04;
+ctx.strokeStyle='rgba(16,185,129,0.08)';ctx.lineWidth=.5;
+for(var y=yearStart;y<=yearEnd;y+=3){var x=pL+((y-yearStart)/yearSpan)*cw;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(y,x,H-pB+10)}
+problems.forEach(function(pb,i){
+var rowY=pT+(i+0.5)*ch/problems.length;var barH=ch/problems.length*0.55;
+ctx.beginPath();
+for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
+var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'44');grad.addColorStop(1,accent+'66');ctx.fillStyle=grad;ctx.fill();
+ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=pc;ctx.lineWidth=1.5;ctx.beginPath();
+for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;
+for(var pi=0;pi<3;pi++){var u=((animT*0.12+pi/3)%1);var s=u*100;var year=yearStart+u*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var px=pL+u*cw;var py=rowY-barH/2-pAtY*barH;var fa=0.5+0.5*Math.sin(u*Math.PI);ctx.shadowColor=accent;ctx.shadowBlur=10;ctx.fillStyle=accent;ctx.globalAlpha=fa;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.shadowBlur=0}
+ctx.fillStyle=fg;ctx.font='7px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-5,rowY+3);
+});
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('P(PIML breakthrough) evolving',W/2,14);
+var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
+}
+var futAnimState={t:0};
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);requestAnimationFrame(futLoop)}
+setTimeout(futLoop,200);
+
+// Code section — PINN implementation
+var CLIP_CODE={
+'pinn':{
+name:'Physics-Informed Neural Network (PINN)',
+latex:'\\mathcal{L} = \\mathcal{L}_{data} + \\lambda_{phys} \\mathcal{L}_{physics}',
+intent:'Embed PDE residual as soft penalty in the loss function',
+mapping:[
+{symbol:'u_θ(x,t)',code:'model(x, t)',note:'Neural network solution'},
+{symbol:'N[u]',code:'pde_residual(model, x, t)',note:'PDE operator (e.g. ∂u/∂t + u∂u/∂x)'},
+{symbol:'L_data',code:'mse(model(x_data, t_data), u_data)',note:'Data mismatch'},
+{symbol:'L_phys',code:'mse(N[u](x_f, t_f), 0)',note:'PDE residual at collocation points'},
+{symbol:'λ_phys',code:'lambda_phys',note:'Physics weight (tunable)'}
+],
+langs:{
+'Python':'import torch\nimport torch.nn as nn\n\nclass PINN(nn.Module):\n    def __init__(self, layers=[2, 32, 32, 32, 1]):\n        super().__init__()\n        net = []\n        for i in range(len(layers)-1):\n            net.append(nn.Linear(layers[i], layers[i+1]))\n            net.append(nn.Tanh())\n        self.net = nn.Sequential(*net[:-1])\n    \n    def forward(self, x, t):\n        return self.net(torch.cat([x, t], dim=1))\n\ndef pde_residual(model, x, t):\n    x.requires_grad_(True)\n    t.requires_grad_(True)\n    u = model(x, t)\n    u_t = torch.autograd.grad(u, t, grad_outputs=torch.ones_like(u), create_graph=True)[0]\n    u_x = torch.autograd.grad(u, x, grad_outputs=torch.ones_like(u), create_graph=True)[0]\n    # Burgers equation: u_t + u*u_x = nu * u_xx\n    u_xx = torch.autograd.grad(u_x, x, grad_outputs=torch.ones_like(u_x), create_graph=True)[0]\n    return u_t + u * u_x - (0.01/3.14) * u_xx\n\ndef loss(model, x_data, t_data, u_data, x_f, t_f, lambda_phys=1.0):\n    u_pred = model(x_data, t_data)\n    L_data = torch.mean((u_pred - u_data)**2)\n    f = pde_residual(model, x_f, t_f)\n    L_phys = torch.mean(f**2)\n    return L_data + lambda_phys * L_phys',
+'TypeScript':'// PINN loss function (conceptual)\nfunction pinnLoss(model: NN, data: Point[], collocation: Point[], lambdaPhys: number): number {\n  // Data loss: MSE between predictions and measurements\n  const Ldata = data.reduce((sum, p) => {\n    const pred = model.forward(p.x, p.t);\n    return sum + (pred - p.u) ** 2;\n  }, 0) / data.length;\n  \n  // Physics loss: PDE residual at collocation points\n  const Lphys = collocation.reduce((sum, p) => {\n    const residual = pdeResidual(model, p.x, p.t); // N[u] = u_t + u*u_x - nu*u_xx\n    return sum + residual ** 2;\n  }, 0) / collocation.length;\n  \n  return Ldata + lambdaPhys * Lphys;\n}',
+'Go':'// PINN loss (conceptual)\nfunc PINNLoss(model *NN, data, collocation []Point, lambdaPhys float64) float64 {\n    var lData, lPhys float64\n    for _, p := range data {\n        pred := model.Forward(p.X, p.T)\n        lData += math.Pow(pred-p.U, 2)\n    }\n    lData /= float64(len(data))\n    for _, p := range collocation {\n        r := pdeResidual(model, p.X, p.T) // N[u]\n        lPhys += r * r\n    }\n    lPhys /= float64(len(collocation))\n    return lData + lambdaPhys*lPhys\n}',
+'Scala':'// PINN loss (conceptual)\ndef pinnLoss(model: NN, data: Seq[Point], collocation: Seq[Point], lambdaPhys: Double): Double = {\n  val lData = data.map { p =>\n    math.pow(model.forward(p.x, p.t) - p.u, 2)\n  }.sum / data.length\n  \n  val lPhys = collocation.map { p =>\n    math.pow(pdeResidual(model, p.x, p.t), 2)\n  }.sum / collocation.length\n  \n  lData + lambdaPhys * lPhys\n}',
+'C':'/* PINN loss (conceptual) */\ndouble pinn_loss(NN* model, Point* data, int n_data, Point* coll, int n_coll, double lambda_phys) {\n    double l_data = 0, l_phys = 0;\n    for (int i = 0; i < n_data; i++) {\n        double pred = nn_forward(model, data[i].x, data[i].t);\n        l_data += (pred - data[i].u) * (pred - data[i].u);\n    }\n    l_data /= n_data;\n    for (int i = 0; i < n_coll; i++) {\n        double r = pde_residual(model, coll[i].x, coll[i].t);\n        l_phys += r * r;\n    }\n    l_phys /= n_coll;\n    return l_data + lambda_phys * l_phys;\n}',
+'Elixir':'# PINN loss (conceptual)\ndefp pinn_loss(model, data, collocation, lambda_phys) do\n  l_data = Enum.map(data, fn p ->\n    :math.pow(NN.forward(model, p.x, p.t) - p.u, 2)\n  end) |> Enum.sum() / length(data)\n  \n  l_phys = Enum.map(collocation, fn p ->\n    :math.pow(pde_residual(model, p.x, p.t), 2)\n  end) |> Enum.sum() / length(collocation)\n  \n  l_data + lambda_phys * l_phys\nend'
+}
+}
+};
+var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
+var CLIP_CURRENT_LANG='Python';
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+function populateCode(){
+var e=CLIP_CODE['pinn'];if(!e)return;
+var exprEl=document.getElementById('expr1');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map1');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>→</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs1');var ccEl=document.getElementById('codecontent1');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClipCode(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClipCode(lang){
+CLIP_CURRENT_LANG=lang;
+document.querySelectorAll('#tabs1 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});
+document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc-'+lang)});
+}
+var CLIP_OUTPUTS={'pinn':['Initializing PINN...','Network: [2, 32, 32, 32, 1]','Collocation points: 10000','PDE: Burgers equation (nu=0.00318)','','Epoch 100: L_data=0.034, L_phys=0.012, total=0.046','Epoch 500: L_data=0.008, L_phys=0.003, total=0.011','Epoch 1000: L_data=0.002, L_phys=0.001, total=0.003','','Converged: solution satisfies Burgers equation','Max PDE residual: 0.0012 (within tolerance)']};
+function runClipCode(key){
+var e=CLIP_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput1');var st=document.getElementById('runStatus1');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap1');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP_CURRENT_LANG+' '+e.name,''];var out2=CLIP_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+CLIP_CURRENT_LANG+' — simulated)';startClipCodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClipCodeViz(key){
+var wrap=document.getElementById('codeVizWrap1');if(!wrap)return;var cv=document.getElementById('codeVizCanvas1');if(!cv)return;
+wrap.style.display='block';var t=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Draw PINN convergence: loss decreasing over epochs
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('PINN training convergence',W/2,16);
+var pL=40,pB=30,pT=30,pR=20,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+// Data loss (decreasing)
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();
+for(var s=0;s<=100;s++){var x=pL+s*cw/100;var loss=Math.exp(-s*0.05)*(1+0.05*Math.sin(s*0.5+t));var y=H-pB-loss*ch*0.8;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Physics loss
+ctx.strokeStyle='#06b6d4';ctx.lineWidth=2;ctx.beginPath();
+for(var s=0;s<=100;s++){var x=pL+s*cw/100;var loss=Math.exp(-s*0.04)*(1+0.05*Math.cos(s*0.3+t));var y=H-pB-loss*ch*0.6;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Legend
+ctx.fillStyle='#10b981';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('L_data',pL+5,pT+10);ctx.fillStyle='#06b6d4';ctx.fillText('L_phys',pL+5,pT+22);
+drawPhaseBar(ctx,W,H);t+=0.02;requestAnimationFrame(frame)}frame();
+}
+setTimeout(populateCode,300);
+setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+</script>
+</body>
+</html>
