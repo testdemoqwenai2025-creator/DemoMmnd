@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v7-clip4-loss-engineering">
+<meta name="version" content="2026-11-04-v8-clip5-optimization">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -370,10 +370,62 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap4"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas4"></canvas></div>
 </div>
 </section>
+
+<!-- CLIP 5: Physics-Informed Optimization -->
+<section class="clip-section" id="clip5" style="display:none">
+<h2>Physics-Informed Optimization</h2>
+<div class="subtitle">Video 5 \u00b7 KKT hard enforcement, PiDMD matrix manifolds, SR3 sparse relaxation, PySR symbolic regression, Pareto frontier</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap5">
+<canvas class="clip-canvas" id="cv5"></canvas>
+<div class="clip-scene-label" id="lbl5">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP5.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP5.pause()">\u23f8</button>
+<button class="clip-btn" onclick="CLIP5.replay()">\u21ba</button>
+<button class="clip-btn" onclick="CLIP5.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP5.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title5">KKT hard enforcement</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom5" min="0.5" max="3" step="0.1" value="1"><span id="zoom5v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel5">\u03b1</span><input type="range" id="param5" min="0" max="1" step="0.05" value="0.5"><span id="param5v">0.50</span></div>
+<button class="clip-btn" onclick="CLIP5.toggleRecord()" id="rec5" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP5.toggleNarration()" id="narr5" title="Toggle narration">\ud83d\udd0a</button>
+<button class="clip-btn" onclick="CLIP5.toggleLight()" id="light5">\ud83c\udf19</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes5"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts5"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 optimization evolution</h4>
+<canvas class="future-canvas" id="fut5"></canvas>
+<div class="future-milestones" id="fut5m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code5">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr5">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map5"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs5"></div>
+<div id="codecontent5"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip5Code('kkt')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus5" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput5"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap5"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas5"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 4/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 5/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -397,7 +449,7 @@ var CLIP_CURRICULUM=[
 {n:2,title:'Deciding What to Model',desc:'Discovery vs surrogate, discrepancy, autodiff, symmetry, chaos',status:'ready'},
 {n:3,title:'Architecture Design',desc:'Function spaces, autoencoders, invariance, ResNets, FNO, PINNs, GNNs',status:'ready'},
 {n:4,title:'Loss Function Engineering',desc:'PINNs, divergence, Lagrangian, parsimony, symmetry, soft vs hard',status:'ready'},
-{n:5,title:'Autoencoders for Dynamics',desc:'Discovering coordinates',status:'upcoming'},
+{n:5,title:'Physics-Informed Optimization',desc:'KKT constraints, PiDMD manifolds, SR3, PySR, Pareto',status:'ready'},
 {n:6,title:'Neural ODEs',desc:'Continuous-depth networks',status:'upcoming'},
 {n:7,title:'Hamiltonian NNs',desc:'Energy-conserving networks',status:'upcoming'},
 {n:8,title:'Fourier Neural Operators',desc:'Learning in frequency space',status:'upcoming'},
@@ -1404,12 +1456,264 @@ ctx.fillStyle=lo.c;ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText(lo
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
 
+// ============ CLIP 5: Physics-Informed Optimization ============
+var CLIP5_SCENES=[
+{title:'KKT hard enforcement',desc:'Constrained optimization vs soft loss'},
+{title:'PiDMD manifolds',desc:'Procrustes on Hermitian/unitary matrices'},
+{title:'SR3 sparse relaxation',desc:'Fast L1 via relaxation variable W'},
+{title:'PySR symbolic regression',desc:'Evolutionary tree mutation & crossover'},
+{title:'Pareto frontier',desc:'Complexity vs error, knee detection'},
+{title:'Integration & impact',desc:'Digital twins, climate, energy, medicine'}
+];
+var CLIP5_THOUGHTS=[
+'<strong style="color:var(--primary)">Hard vs soft.</strong> Loss penalties create a trade-off where data and physics battle, yielding only approximate satisfaction. KKT constrained optimization restricts the search to the exact physical subspace: $\\min_C \\|\\dot{X} - \\Theta C\\|_F^2$ subject to $AC=b$. Physics is guaranteed, not promoted.',
+'<strong style="color:var(--primary)">Physics on manifolds.</strong> PiDMD formulates optimization over matrix submanifolds $\\mathcal{M}$ — self-adjoint ($A=A^H$), unitary ($A^TA=I$), or circulant. Procrustes optimization $\\min_{A \\in \\mathcal{M}} \\|Y-AX\\|_F^2$ forces energy conservation and shift-invariance by construction, preventing noise-induced unphysical modes.',
+'<strong style="color:var(--primary)">Relax for speed.</strong> SGD struggles with non-differentiable $L_1$ sparsity. SR3 introduces a relaxation variable $W$: $\\min_\\Xi (\\|\\dot{X}-\\Theta\\Xi\\|^2 + R_{SR3}(\\Xi,W) + \\lambda\\|W\\|_1)$. This smooths the landscape, rapidly isolating true sparse governing equations in fewer iterations.',
+'<strong style="color:var(--primary)">Evolve equations.</strong> Optimization isn\'t just gradient descent. PySR uses evolutionary algorithms — mutation, crossover, selection — on compositional function trees $\\mathcal{T}^* = \\arg\\min_\\mathcal{T}(\\mathcal{L}(\\mathcal{T}(X),Y) + \\alpha \\cdot \\text{Complexity})$. Output: explicit, human-readable analytical laws discovered from data.',
+'<strong style="color:var(--primary)">Find the knee.</strong> Sweeping $\\lambda$ generates a Pareto frontier: model complexity vs predictive error. Cross-validation on held-out data finds $\\lambda^* = \\arg\\min_\\lambda \\mathcal{L}_{val}(\\Xi^*(\\lambda))$ — the precise knee where parsimony is maximal without underfitting or overfitting. The Goldilocks zone.',
+'<strong style="color:var(--primary)">Guaranteed stability.</strong> KKT solvers and manifold optimization prevent long-term numerical drift in digital twins. Energy grids stay stable, climate models don\'t dissipate, ocean currents don\'t drift. Parsimonious symbolic models run on low-power devices — bringing physics-informed AI to resource-constrained communities worldwide.'
+];
+var CLIP5_PARAMS=[
+{label:'\\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'constraint strictness'},
+{label:'M',min:0,max:3,step:1,default:0,decimals:0,desc:'manifold type'},
+{label:'\\u03bb',min:0.01,max:1,step:0.01,default:0.1,decimals:2,desc:'sparsity weight'},
+{label:'N',min:10,max:100,step:5,default:30,decimals:0,desc:'population size'},
+{label:'\\u03bb*',min:0,max:1,step:0.05,default:0.3,decimals:2,desc:'Pareto point'},
+{label:'\\u03b5',min:0,max:0.1,step:0.005,default:0.01,decimals:3,desc:'tolerance'}
+];
+var SCENE5_MATH=[
+['min||\\u1e8a-\\u0398C||\\u00b2 s.t. AC=b','KKT','hard enforcement'],
+['A\\u2208\\u213c','A=A\\u1d34 or A\\u1d40A=I','Procrustes'],
+['R_SR3(\\u039e,W)','\\u03bb||W||\\u2081','relaxation'],
+['\\u213c*=argmin\\u213c','mutation+crossover','PySR'],
+['\\u03bb*=argmin L_val','knee point','Pareto'],
+['KKT+manifold','no drift','digital twins']
+];
+var CLIP5=makeClip({varName:'CLIP5',cvId:'cv5',wrapId:'wrap5',lblId:'lbl5',titleId:'title5',zoomId:'zoom5',zoomValId:'zoom5v',paramId:'param5',paramValId:'param5v',paramLabelId:'paramLabel5',paramDefault:0.5,paramDecimals:2,lightId:'light5',narrId:'narr5',recId:'rec5',narrationKey:'piml5',sceneListId:'scenes5',thoughtsId:'thoughts5',scenes:CLIP5_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE5_MATH[scene]);
+if(scene===0){
+// Soft vs hard optimization
+var sx=W*0.5;var strict=param;
+// Left: soft (bumpy landscape, approximate)
+ctx.fillStyle='rgba(255,0,0,0.06)';ctx.fillRect(0,0,sx,H);
+ctx.fillStyle='#ff6b6b';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Soft loss (approximate)',sx/2,20);
+// Bumpy loss surface
+ctx.strokeStyle='rgba(255,107,107,0.3)';ctx.lineWidth=1;
+for(var i=0;i<5;i++){ctx.beginPath();for(var x=0;x<sx;x+=3){var y=H*0.5+Math.sin(x*0.03+i+t)*15+Math.cos(x*0.08+i)*8;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}
+// Minimum marker (approximate)
+var minSX=sx*0.3+Math.sin(t)*5;ctx.fillStyle='#ff6b6b';ctx.beginPath();ctx.arc(minSX,H*0.5,4,0,Math.PI*2);ctx.fill();
+// Right: hard (constrained subspace, exact)
+ctx.fillStyle='rgba(0,255,136,0.06)';ctx.fillRect(sx,0,W-sx,H);
+ctx.fillStyle='#00ff88';ctx.fillText('Hard KKT (exact)',sx+(W-sx)/2,20);
+// Clean constrained subspace
+ctx.strokeStyle='rgba(0,255,136,0.4)';ctx.lineWidth=2;
+ctx.beginPath();for(var x=sx;x<W;x+=3){var y=H*0.5+Math.sin((x-sx)*0.02)*10*strict;if(x===sx)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Feasible region AC=b
+ctx.strokeStyle='rgba(0,255,136,0.6)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+ctx.beginPath();ctx.moveTo(sx+20,H*0.2);ctx.lineTo(W-20,H*0.2);ctx.lineTo(W-20,H*0.8);ctx.lineTo(sx+20,H*0.8);ctx.closePath();ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='rgba(0,255,136,0.1)';ctx.fill();
+// Exact minimum
+var minHX=sx+(W-sx)*0.5;ctx.fillStyle='#00ff88';ctx.shadowColor='#00ff88';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(minHX,H*0.5,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.fillText('min||\\u1e8a-\\u0398C||\\u00b2 s.t. AC=b',W/2,H-20);
+}else if(scene===1){
+// PiDMD: matrix manifold projection
+var manifoldType=Math.floor(param)%4;var manifoldNames=['General','Hermitian','Unitary','Circulant'];
+var cx=W*0.35,cy=H*0.45;var n=4;var cellSize=15;
+// Draw matrix grid
+for(var i=0;i<n;i++)for(var j=0;j<n;j++){
+var px=cx-cellSize*n/2+i*cellSize;var py=cy-cellSize*n/2+j*cellSize;
+var v=Math.sin(i*0.3+j*0.5+t)*0.5+0.5;
+// Apply manifold constraint to the color
+if(manifoldType===1&&i!==j){v=(v+Math.sin(j*0.3+i*0.5+t)*0.5+0.5)/2} // Hermitian: mirror
+if(manifoldType===2){v=v*0.5+0.5} // Unitary: normalized
+if(manifoldType===3&&i>0&&j>0){v=Math.sin((i+j)*0.3+t)*0.5+0.5} // Circulant
+ctx.fillStyle='rgba(234,88,12,'+v+')';ctx.fillRect(px,py,cellSize-1,cellSize-1)}
+ctx.fillStyle=fg;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('A \\u2208 \\u213c: '+manifoldNames[manifoldType],cx,cy-cellSize*n/2-10);
+// Procrustes projection arrow
+var px2=W*0.65;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;
+ctx.beginPath();ctx.moveTo(cx+cellSize*n/2+5,cy);ctx.lineTo(px2-20,cy);ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.fillText('Procrustes',cx+(px2-cx)/2,cy-8);
+// Projected matrix
+for(var i=0;i<n;i++)for(var j=0;j<n;j++){
+var pxx=px2-cellSize*n/2+i*cellSize;var pyy=cy-cellSize*n/2+j*cellSize;
+var v2=Math.sin(i*0.3+j*0.5+t)*0.5+0.5;
+if(manifoldType===1&&i!==j){v2=(v2+Math.sin(j*0.3+i*0.5+t)*0.5+0.5)/2}
+if(manifoldType===2){v2=v2*0.5+0.5}
+if(manifoldType===3&&i>0&&j>0){v2=Math.sin((i+j)*0.3+t)*0.5+0.5}
+ctx.fillStyle='rgba(255,215,0,'+v2+')';ctx.fillRect(pxx,pyy,cellSize-1,cellSize-1)}
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.fillText('min||Y-AX||\\u00b2, A\\u2208\\u213c',W/2,H-20);
+}else if(scene===2){
+// SR3: relaxation variable converging
+var lambda=param;var cx=W/2,cy=H*0.5;var nBars=10;var barW=W*0.5/nBars;var startX=(W-barW*nBars)/2;
+// True sparse coefficients (ground truth)
+var truth=[0,0.8,0,0,0,0,-0.5,0,0,0];
+// SR3 relaxation: W converges faster than standard L1
+for(var i=0;i<nBars;i++){
+var trueVal=truth[i];
+var sr3Val=trueVal*(1-Math.exp(-t*0.5))*(1-lambda*0.5);
+var stdL1Val=trueVal*(1-Math.exp(-t*0.2))*(1-lambda*0.7);
+// SR3 bar (golden, faster)
+ctx.fillStyle='#FFD700';ctx.fillRect(startX+i*barW,cy-sr3Val*H*0.15-5,barW-3,Math.abs(sr3Val*H*0.15)+5);
+// Standard L1 bar (dim, slower)
+ctx.fillStyle='rgba(115,106,94,0.4)';ctx.fillRect(startX+i*barW+barW/2,cy-stdL1Val*H*0.15-5,barW/2-3,Math.abs(stdL1Val*H*0.15)+5);
+// Truth marker
+ctx.fillStyle=pc;ctx.fillRect(startX+i*barW,cy+trueVal*H*0.15-1,barW-3,2)}
+// Legend
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('SR3 (fast)',10,25);
+ctx.fillStyle='rgba(115,106,94,0.6)';ctx.fillText('Standard L1',10,37);
+ctx.fillStyle=pc;ctx.fillText('Ground truth',10,49);
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('SR3: \\u03bb||W||\\u2081 relaxation converges faster',W/2,H-20);
+}else if(scene===3){
+// PySR: evolutionary trees
+var popSize=Math.floor(param);var cx=W/2,cy=H*0.45;
+// Show function trees being evolved
+for(var p=0;p<Math.min(popSize/5,6);p++){
+var tx=W*0.15+p*W*0.12;var ty=H*0.2+Math.sin(p+t*0.5)*10;
+// Tree nodes
+var fitness=Math.sin(p*0.5+t*0.3)*0.5+0.5;
+var nodeColor=fitness>0.5?'#FFD700':'rgba(234,88,12,0.4)';
+ctx.fillStyle=nodeColor;ctx.shadowColor=nodeColor;ctx.shadowBlur=fitness*8;
+// Root
+ctx.beginPath();ctx.arc(tx,ty,4,0,Math.PI*2);ctx.fill();
+// Children
+ctx.strokeStyle=nodeColor;ctx.lineWidth=1;
+for(var c=0;c<2;c++){var cx2=tx+(c-0.5)*15;var cy2=ty+15;
+ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(cx2,cy2);ctx.stroke();
+ctx.fillStyle=nodeColor;ctx.beginPath();ctx.arc(cx2,cy2,3,0,Math.PI*2);ctx.fill();
+// Grandchildren
+for(var gc=0;gc<2;gc++){var gx=cx2+(gc-0.5)*8;var gy=cy2+12;
+ctx.beginPath();ctx.moveTo(cx2,cy2);ctx.lineTo(gx,gy);ctx.stroke();
+ctx.fillStyle=nodeColor;ctx.beginPath();ctx.arc(gx,gy,2,0,Math.PI*2);ctx.fill()}}}
+ctx.shadowBlur=0;
+// Mutation arrows
+ctx.strokeStyle='rgba(255,0,255,0.4)';ctx.lineWidth=1;ctx.setLineDash([2,2]);
+for(var i=0;i<3;i++){var mx=W*0.1+Math.random()*W*0.8;var my=H*0.7+Math.random()*10;
+ctx.beginPath();ctx.moveTo(mx,my);ctx.lineTo(mx+Math.sin(t+i)*5,my-10);ctx.stroke()}
+ctx.setLineDash([]);
+// Best fitness curve
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();
+for(var s=0;s<60;s++){var x=W*0.7+s*W*0.005;var y=H*0.85-Math.min(1,t*0.1+s*0.01)*H*0.1;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('\\u213c*=argmin(\\u213c(X),Y)+\\u03b1\\u00b7Complexity',W/2,H-20);
+}else if(scene===4){
+// Pareto frontier
+var tradeoff=param;var cx=W/2,cy=H*0.5;var scaleX=W*0.35,scaleY=H*0.2;
+// Axes
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx-scaleX,cy);ctx.lineTo(cx+scaleX,cy);ctx.moveTo(cx,cy-scaleY);ctx.lineTo(cx,cy+scaleY);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('complexity \\u2192',cx+scaleX-55,cy-5);ctx.fillText('error \\u2191',cx+5,cy-scaleY+10);
+// Pareto curve
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.shadowColor=pc;ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<=50;i++){var u=i/50;var x=cx-scaleX+u*scaleX*2;var y=cy+scaleY-Math.pow(1-u,2)*scaleY*1.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Cross-validation error (dashed)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();
+for(var i=0;i<=50;i++){var u=i/50;var x=cx-scaleX+u*scaleX*2;var cvErr=Math.pow(1-u,2)*scaleY*1.5+Math.pow(u,3)*scaleY;if(i===0)ctx.moveTo(x,cy+scaleY-cvErr);else ctx.lineTo(x,cy+scaleY-cvErr)}ctx.stroke();ctx.setLineDash([]);
+// Knee point
+var kneeU=tradeoff;var kneeX=cx-scaleX+kneeU*scaleX*2;var kneeY=cy+scaleY-Math.pow(1-kneeU,2)*scaleY*1.5;
+ctx.fillStyle='rgba(255,215,0,0.3)';ctx.beginPath();ctx.arc(kneeX,kneeY,12,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(kneeX,kneeY,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('\\u03bb* (knee)',kneeX,kneeY-18);
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('cross-validation',cx+5,cy-scaleY+22);
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('\\u03bb*=argmin L_val(\\u039e*(\\u03bb))',W/2,H-20);
+}else if(scene===5){
+// Integration: digital twins + global impact
+var cx=W*0.35,cy=H*0.45;
+// Constrained optimization pipeline
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';
+var stages=[{x:0.1,l:'KKT'},{x:0.25,l:'PiDMD'},{x:0.4,l:'SR3'},{x:0.55,l:'PySR'}];
+stages.forEach(function(s){var px=W*s.x;
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.strokeRect(px,cy-10,35,20);
+ctx.fillStyle=pc;ctx.fillText(s.l,px+17,cy+3);
+// Arrow to next
+if(s.x<0.55){ctx.strokeStyle='#FFD700';ctx.beginPath();ctx.moveTo(px+35,cy);ctx.lineTo(px+55,cy);ctx.stroke();ctx.fillStyle='#FFD700';ctx.beginPath();ctx.moveTo(px+55,cy);ctx.lineTo(px+52,cy-3);ctx.lineTo(px+52,cy+3);ctx.fill()}});
+// Arrow to digital twin
+ctx.strokeStyle='#FFD700';ctx.beginPath();ctx.moveTo(W*0.55+35,cy);ctx.lineTo(W*0.65,cy);ctx.stroke();
+// Digital twin
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.fillText('Digital Twin',W*0.7,cy+3);
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.strokeRect(W*0.65,cy-10,55,20);
+// Impact icons
+var impacts=[{icon:'\\u26a1',l:'Energy'},{icon:'\\ud83c\\udf0c',l:'Climate'},{icon:'\\u2764',l:'Medical'}];
+impacts.forEach(function(im,i){var y=H*0.15+i*H*0.22;
+ctx.font='16px Georgia,serif';ctx.textAlign='center';ctx.fillText(im.icon,W*0.85,y);
+ctx.fillStyle=fg;ctx.font='8px Georgia,serif';ctx.fillText(im.l,W*0.85,y+15)});
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('KKT + manifold = no drift',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP5.setActive(false);
+
+// CLIP5 code section — KKT constrained least squares
+var CLIP5_CODE={
+'kkt':{
+name:'KKT Constrained Least Squares',
+latex:'\\min_{\\mathbf{C}} \\|\\dot{\\mathbf{X}} - \\Theta(\\mathbf{X})\\mathbf{C}\\|_F^2 \\quad \\text{s.t.} \\quad \\mathbf{A}\\mathbf{C} = \\mathbf{b}',
+intent:'Hard-enforce physical constraints via KKT projection onto the feasible subspace',
+mapping:[
+{symbol:'\\u0398(X)',code:'library(X)',note:'Candidate term library'},
+{symbol:'C',code:'sparse_coefs',note:'Coefficient matrix to find'},
+{symbol:'AC=b',code:'constraint(A, b)',note:'Physical constraint (e.g. energy=const)'},
+{symbol:'KKT',code:'C_unc - A\\u1d40(AA\\u1d40)\\u207b\\u00b9(AC_unc-b)',note:'Projection onto feasible subspace'},
+{symbol:'||.||_F',code:'frobenius_norm',note:'Frobenius norm of residual'}
+],
+langs:{
+'Python':'import numpy as np\n\ndef kkt_constrained_lstsq(Theta, dX, A, b):\n    """min ||dX - Theta*C||^2 s.t. A*C = b\n    Hard-enforce physics via KKT projection."""\n    # Unconstrained solution\n    C_unc = np.linalg.lstsq(Theta, dX, rcond=None)[0]\n    \n    # KKT correction: project onto feasible subspace AC=b\n    # C = C_unc - A^T (A A^T)^-1 (A C_unc - b)\n    AAT = A @ A.T\n    AAT_inv = np.linalg.inv(AAT)\n    residual = A @ C_unc - b\n    correction = A.T @ AAT_inv @ residual\n    C_constrained = C_unc - correction\n    \n    # Verify constraint satisfaction\n    assert np.allclose(A @ C_constrained, b), "Constraint violated!"\n    return C_constrained\n\n# Example: enforce energy conservation\n# A = [[1, -1, 0, ...]], b = [0]  (KE - PE = 0)',
+'TypeScript':'// KKT constrained least squares\nfunction kktConstrainedLstsq(Theta: number[][], dX: number[][],\n                            A: number[][], b: number[]): number[][] {\n  // Unconstrained: C_unc = (Theta^T Theta)^-1 Theta^T dX\n  const C_unc = leastSquares(Theta, dX);\n  \n  // KKT projection: C = C_unc - A^T (A A^T)^-1 (A C_unc - b)\n  const AAT = matMul(A, transpose(A));\n  const AAT_inv = inverse(AAT);\n  const residual = matSub(matMul(A, C_unc), b);\n  const correction = matMul(transpose(A), matMul(AAT_inv, residual));\n  const C = matSub(C_unc, correction);\n  \n  // Verify: A*C = b (hard constraint satisfied)\n  return C;\n}',
+'Go':'// KKT constrained least squares\nfunc KKTConstrainedLstsq(Theta, dX, A [][]float64, b []float64) [][]float64 {\n    C_unc := LeastSquares(Theta, dX)\n    // C = C_unc - A^T (A A^T)^-1 (A C_unc - b)\n    AT := Transpose(A)\n    AAT := MatMul(A, AT)\n    AATInv := Inverse(AAT)\n    residual := MatVecSub(MatMul(A, C_unc), b)\n    correction := MatVecMul(AT, MatVecMul(AATInv, residual))\n    C := MatVecSub(C_unc, correction)\n    return C\n}',
+'Scala':'// KKT constrained least squares\ndef kktConstrainedLstsq(Theta: Matrix, dX: Matrix,\n                      A: Matrix, b: Vector): Matrix = {\n  val C_unc = leastSquares(Theta, dX)\n  // C = C_unc - A^T (A A^T)^-1 (A C_unc - b)\n  val AT = A.t\n  val AAT = A * AT\n  val AATInv = AAT.inv\n  val residual = A * C_unc - b\n  val correction = AT * AATInv * residual\n  C_unc - correction\n}',
+'C':'/* KKT constrained least squares */\nvoid kkt_lstsq(double** Theta, double** dX, int n, int m,\n               double** A, double* b, int nc, double** C) {\n    /* Step 1: unconstrained C_unc = lstsq(Theta, dX) */\n    lstsq(Theta, dX, n, m, C);\n    /* Step 2: correction = A^T (A A^T)^-1 (A C_unc - b) */\n    double* AC = malloc(nc * sizeof(double));\n    mat_vec_mul(A, nc, m, C[0], AC);\n    for (int i = 0; i < nc; i++) AC[i] -= b[i];\n    /* ... solve (A A^T) x = AC, then C -= A^T x ... */\n    free(AC);\n}',
+'Elixir':'# KKT constrained least squares\ndefmodule KKT do\n  def constrained_lstsq(theta, dx, a, b) do\n    c_unc = least_squares(theta, dx)\n    # C = C_unc - A^T (A A^T)^-1 (A C_unc - b)\n    at = transpose(a)\n    aat = matmul(a, at)\n    aat_inv = inverse(aat)\n    residual = matsub(matvec(a, c_unc), b)\n    correction = matvec(at, matvec(aat_inv, residual))\n    matsub(c_unc, correction)\n  end\nend'
+}
+}
+};
+var CLIP5_CURRENT_LANG='Python';
+function populateCode5(){
+var e=CLIP5_CODE['kkt'];if(!e)return;
+var exprEl=document.getElementById('expr5');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map5');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs5');var ccEl=document.getElementById('codecontent5');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip5Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc5-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip5Code(lang){CLIP5_CURRENT_LANG=lang;document.querySelectorAll('#tabs5 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc5-'+lang)})}
+var CLIP5_OUTPUTS={'kkt':['Initializing KKT constrained optimization...','Library Theta(X): 15 candidate terms','Constraint: AC=b (energy conservation)','','Unconstrained solution: 8 nonzero terms','KKT projection onto feasible subspace...','','Correcting C_unc -> C_constrained','Constraint residual: ||AC-b|| = 1.2e-15 (machine precision)','','Hard constraint satisfied!','Constrained solution: 3 nonzero terms (parsimonious)','All physics enforced exactly by construction']};
+function runClip5Code(key){
+var e=CLIP5_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput5');var st=document.getElementById('runStatus5');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap5');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP5_CURRENT_LANG+' '+e.name,''];var out2=CLIP5_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip5CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip5CodeViz(key){
+var wrap=document.getElementById('codeVizWrap5');if(!wrap)return;var cv=document.getElementById('codeVizCanvas5');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('KKT: unconstrained \\u2192 constrained projection',W/2,16);
+var cx=W/2,cy=H*0.55;var barW=W*0.6/10;var startX=(W-barW*10)/2;
+// Unconstrained (red, many terms)
+ctx.fillStyle='rgba(255,107,107,0.6)';
+for(var i=0;i<10;i++){var v=Math.sin(i*1.3)*0.3+Math.cos(i*0.7)*0.2;ctx.fillRect(startX+i*barW,cy-v*H*0.15-5,barW-3,Math.abs(v*H*0.15)+5)}
+// Constrained (green, sparse, exact)
+ctx.fillStyle='#00ff88';ctx.shadowColor='#00ff88';ctx.shadowBlur=6;
+var constrained=[0,0.5,0,0,0,0,-0.3,0,0,0];
+for(var i=0;i<10;i++){if(constrained[i]!==0){ctx.fillRect(startX+i*barW,cy-constrained[i]*H*0.15-5,barW-3,Math.abs(constrained[i]*H*0.15)+5)}}
+ctx.shadowBlur=0;
+ctx.fillStyle='rgba(255,107,107,0.8)';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('Unconstrained (8 terms)',10,25);
+ctx.fillStyle='#00ff88';ctx.fillText('KKT constrained (3 terms)',10,37);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
+
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
 'piml2':[{n:'Digital twins standard',y:2029,p:0.45,t:'Every engineering asset has a live twin'},{n:'Autodiff design',y:2028,p:0.40,t:'Adjoint-free optimization ubiquitous'},{n:'Climate PIML',y:2030,p:0.35,t:'Physics-informed climate prediction'},{n:'Turbulence solved',y:2032,p:0.25,t:'ML closes RANS turbulence'},{n:'Multi-fidelity AI',y:2033,p:0.30,t:'Unified multi-fidelity surrogates'}],
 'piml3':[{n:'Equivariant NNs standard',y:2028,p:0.40,t:'Symmetry-enforcing architectures default'},{n:'FNO at scale',y:2029,p:0.35,t:'Fourier operators for billion-grid PDEs'},{n:'SINDy+AE discovery',y:2027,p:0.45,t:'Auto equation discovery from video'},{n:'GNN for physics',y:2030,p:0.35,t:'Graph networks for particle systems'},{n:'Neural ODE maturity',y:2031,p:0.30,t:'Continuous-depth models standard'}],
-'piml4':[{n:'Multi-loss automation',y:2028,p:0.40,t:'Auto-balanced multi-physics losses'},{n:'Hard constraint solvers',y:2030,p:0.30,t:'Constrained optimization in DL'},{n:'Symmetry-augmented training',y:2027,p:0.45,t:'Virtual data augmentation standard'},{n:'Parsimonious AI',y:2029,p:0.35,t:'L1 sparsity default for interpretable models'},{n:'Goldilocks auto-tuning',y:2032,p:0.25,t:'Auto Pareto-front optimization'}]
+'piml4':[{n:'Multi-loss automation',y:2028,p:0.40,t:'Auto-balanced multi-physics losses'},{n:'Hard constraint solvers',y:2030,p:0.30,t:'Constrained optimization in DL'},{n:'Symmetry-augmented training',y:2027,p:0.45,t:'Virtual data augmentation standard'},{n:'Parsimonious AI',y:2029,p:0.35,t:'L1 sparsity default for interpretable models'},{n:'Goldilocks auto-tuning',y:2032,p:0.25,t:'Auto Pareto-front optimization'}],
+'piml5':[{n:'KKT solvers in DL',y:2028,p:0.35,t:'Constrained optimization standard in training'},{n:'PiDMD widespread',y:2029,p:0.30,t:'Physics-informed DMD for engineering'},{n:'SR3 acceleration',y:2027,p:0.40,t:'Fast sparse regression default'},{n:'PySR discoveries',y:2028,p:0.35,t:'Symbolic regression finds new laws'},{n:'Manifold optimization',y:2031,p:0.25,t:'Matrix manifold training standard'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -1438,7 +1742,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -1513,6 +1817,7 @@ setTimeout(populateCode,300);
 setTimeout(populateCode2,300);
 setTimeout(populateCode3,300);
 setTimeout(populateCode4,300);
+setTimeout(populateCode5,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -1565,11 +1870,12 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('4 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===4});
+chk('5 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===5});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
 chk('Clip 4 ready',function(){return CLIP_CURRICULUM[3].status==='ready'});
+chk('Clip 5 ready',function(){return CLIP_CURRICULUM[4].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -1580,6 +1886,16 @@ chk('Clip 4 code tabs (6)',function(){return document.getElementById('tabs4')&&d
 chk('Clip 4 map table',function(){var m=document.getElementById('map4');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 4 future chart',function(){return!!document.getElementById('fut4')});
 chk('CLIP4 narration key',function(){return CLIP4.narrationKey==='piml4'});
+// Clip 5
+chk('CLIP5 exists',function(){return typeof CLIP5==='object'});
+chk('Clip 5 section exists',function(){return!!document.getElementById('clip5')});
+chk('Clip 5 canvas',function(){return!!document.getElementById('cv5')});
+chk('Clip 5 scenes (6)',function(){var s=document.getElementById('scenes5');return s&&s.children.length===6});
+chk('Clip 5 expr populated',function(){var e=document.getElementById('expr5');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 5 code tabs (6)',function(){return document.getElementById('tabs5')&&document.getElementById('tabs5').children.length===6});
+chk('Clip 5 map table',function(){var m=document.getElementById('map5');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 5 future chart',function(){return!!document.getElementById('fut5')});
+chk('CLIP5 narration key',function(){return CLIP5.narrationKey==='piml5'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
