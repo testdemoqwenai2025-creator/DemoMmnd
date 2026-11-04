@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v5-interactive-params">
+<meta name="version" content="2026-11-04-v6-record-kg-arxiv">
 <title>Mathematics with ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -76,6 +76,13 @@ h1{font-family:Georgia,serif;font-size:2.5rem;line-height:1.15;margin-bottom:.75
 .future-milestones{font-size:.6875rem;color:var(--muted);margin-top:.375rem}
 footer{max-width:1200px;margin:3rem auto;padding:1.5rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 footer a{color:var(--primary);text-decoration:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.kg-section{margin:4rem 0;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem}
+.kg-section h2{font-family:Georgia,serif;font-size:1.875rem;margin-bottom:.25rem}
+.kg-canvas{width:100%;aspect-ratio:16/9;background:#0a0908;border:1px solid var(--border);border-radius:.5rem;display:block;margin-top:1rem}
+.kg-legend{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.75rem;font-size:.75rem;color:var(--muted)}
+.kg-legend span{display:inline-flex;align-items:center;gap:.3rem}
+.kg-legend .dot{width:.6rem;height:.6rem;border-radius:50%;display:inline-block}
 .clip-code-section{margin-top:1.5rem;padding-top:1.5rem;border-top:1px dashed var(--border)}
 .clip-code-section h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem;margin-top:1rem}
 .clip-code-section h3:first-child{margin-top:0}
@@ -138,7 +145,7 @@ footer a{color:var(--primary);text-decoration:none}
 <span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title1">Token embeddings</span>
 <div class="zoom-control">🔍<input type="range" id="zoom1" min="0.5" max="3" step="0.1" value="1"><span id="zoom1v">1.0x</span></div>
 <div class="param-control" title="Temperature"><span class="param-label">τ</span><input type="range" id="param1" min="0.1" max="3" step="0.1" value="1"><span id="param1v">1.0</span></div>
-<button class="clip-btn" onclick="CLIP1.toggleNarration()" id="narr1" title="Toggle narration">🔊</button><button class="clip-btn" onclick="CLIP1.toggleLight()" id="light1">🌙</button>
+<button class="clip-btn" onclick="CLIP1.toggleRecord()" id="rec1" title="Record WebM">●</button><button class="clip-btn" onclick="CLIP1.toggleNarration()" id="narr1" title="Toggle narration">🔊</button><button class="clip-btn" onclick="CLIP1.toggleLight()" id="light1">🌙</button>
 </div>
 </div>
 <div class="clip-info">
@@ -191,7 +198,7 @@ footer a{color:var(--primary);text-decoration:none}
 <span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title2">The loss landscape</span>
 <div class="zoom-control">🔍<input type="range" id="zoom2" min="0.5" max="3" step="0.1" value="1"><span id="zoom2v">1.0x</span></div>
 <div class="param-control" title="Learning rate"><span class="param-label">η</span><input type="range" id="param2" min="0.01" max="0.5" step="0.01" value="0.05"><span id="param2v">0.05</span></div>
-<button class="clip-btn" onclick="CLIP2.toggleNarration()" id="narr2" title="Toggle narration">🔊</button><button class="clip-btn" onclick="CLIP2.toggleLight()" id="light2">🌙</button>
+<button class="clip-btn" onclick="CLIP2.toggleRecord()" id="rec2" title="Record WebM">●</button><button class="clip-btn" onclick="CLIP2.toggleNarration()" id="narr2" title="Toggle narration">🔊</button><button class="clip-btn" onclick="CLIP2.toggleLight()" id="light2">🌙</button>
 </div>
 </div>
 <div class="clip-info">
@@ -244,7 +251,7 @@ footer a{color:var(--primary);text-decoration:none}
 <span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title3">Prior beliefs</span>
 <div class="zoom-control">🔍<input type="range" id="zoom3" min="0.5" max="3" step="0.1" value="1"><span id="zoom3v">1.0x</span></div>
 <div class="param-control" title="Prior strength"><span class="param-label">α</span><input type="range" id="param3" min="0" max="1" step="0.05" value="0.5"><span id="param3v">0.50</span></div>
-<button class="clip-btn" onclick="CLIP3.toggleNarration()" id="narr3" title="Toggle narration">🔊</button><button class="clip-btn" onclick="CLIP3.toggleLight()" id="light3">🌙</button>
+<button class="clip-btn" onclick="CLIP3.toggleRecord()" id="rec3" title="Record WebM">●</button><button class="clip-btn" onclick="CLIP3.toggleNarration()" id="narr3" title="Toggle narration">🔊</button><button class="clip-btn" onclick="CLIP3.toggleLight()" id="light3">🌙</button>
 </div>
 </div>
 <div class="clip-info">
@@ -280,6 +287,22 @@ footer a{color:var(--primary);text-decoration:none}
 </div>
 </section>
 </main>
+
+<!-- PHASE D: Knowledge Graph — how the three pillars connect -->
+<section class="kg-section" id="kg">
+<h2>The Knowledge Graph</h2>
+<div class="subtitle" style="font-size:.875rem;color:var(--muted);margin-bottom:.5rem">How the three pillars of ML mathematics connect — attention uses probability, learning uses calculus on probabilistic objectives, reasoning uses information theory</div>
+<canvas class="kg-canvas" id="kgCanvas"></canvas>
+<div class="kg-legend">
+<span><span class="dot" style="background:#ea580c"></span>Linear Algebra (Clip 1)</span>
+<span><span class="dot" style="background:#10b981"></span>Calculus (Clip 2)</span>
+<span><span class="dot" style="background:#a855f7"></span>Probability (Clip 3)</span>
+<span><span class="dot" style="background:#FFD700"></span>Cross-cutting concepts</span>
+<span><span class="dot" style="background:#f5f0ea"></span>Machine Learning</span>
+</div>
+<div id="arxivData" style="margin-top:1rem;font-size:.75rem;color:var(--muted)"></div>
+</section>
+
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
 <div>v1-math-ml-clips · 3 clips · 18 scenes</div>
@@ -380,7 +403,7 @@ function drawPhaseBar(ctx,W,H){var pby=H-5;var g=ctx.createLinearGradient(0,pby,
 
 // CLIP FRAMEWORK
 function makeClip(opts){
-var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,param:opts.paramDefault||1,narrationKey:opts.narrationKey||'',cv:document.getElementById(opts.cvId),wrap:document.getElementById(opts.wrapId),lbl:document.getElementById(opts.lblId),titleEl:document.getElementById(opts.titleId),zoomEl:document.getElementById(opts.zoomId),zoomVal:document.getElementById(opts.zoomValId),paramEl:document.getElementById(opts.paramId),paramVal:document.getElementById(opts.paramValId),lightBtn:document.getElementById(opts.lightId),narrBtn:document.getElementById(opts.narrId),sceneListEl:document.getElementById(opts.sceneListId),scenes:opts.scenes};
+var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,param:opts.paramDefault||1,narrationKey:opts.narrationKey||'',recording:false,recorder:null,recChunks:[],cv:document.getElementById(opts.cvId),wrap:document.getElementById(opts.wrapId),lbl:document.getElementById(opts.lblId),titleEl:document.getElementById(opts.titleId),zoomEl:document.getElementById(opts.zoomId),zoomVal:document.getElementById(opts.zoomValId),paramEl:document.getElementById(opts.paramId),paramVal:document.getElementById(opts.paramValId),lightBtn:document.getElementById(opts.lightId),narrBtn:document.getElementById(opts.narrId),recBtn:document.getElementById(opts.recId),sceneListEl:document.getElementById(opts.sceneListId),scenes:opts.scenes};
 // Build scene list
 var h='';opts.scenes.forEach(function(s,i){h+='<li data-idx="'+i+'" onclick="'+opts.varName+'.seek('+i+')"><span class="num">'+(i+1)+'</span><div><div class="title">'+s.title+'</div><div class="desc">'+s.desc+'</div></div></div></li>'});
 state.sceneListEl.innerHTML=h;
@@ -415,6 +438,32 @@ if(state.narrBtn)state.narrBtn.textContent=on?'🔊':'🔇';
 if(state.narrBtn)state.narrBtn.style.color=on?'var(--primary)':'';
 if(on)narrateCurrent();else Narration.stop();
 };
+// Record WebM — captures the canvas stream and downloads as .webm
+state.toggleRecord=function(){
+if(state.recording){
+if(state.recorder&&state.recorder.state!=='inactive')state.recorder.stop();
+state.recording=false;
+if(state.recBtn){state.recBtn.textContent='●';state.recBtn.style.color='';state.recBtn.style.animation=''}
+}else{
+try{
+var stream=state.cv.captureStream(30);
+state.recChunks=[];
+state.recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp8'});
+state.recorder.ondataavailable=function(e){if(e.data&&e.data.size>0)state.recChunks.push(e.data)};
+state.recorder.onstop=function(){
+var blob=new Blob(state.recChunks,{type:'video/webm'});
+var url=URL.createObjectURL(blob);
+var a=document.createElement('a');a.href=url;
+a.download=state.narrationKey+'_scene'+(state.scene+1)+'_'+Date.now()+'.webm';
+document.body.appendChild(a);a.click();document.body.removeChild(a);
+setTimeout(function(){URL.revokeObjectURL(url)},1000);
+};
+state.recorder.start();
+state.recording=true;
+if(state.recBtn){state.recBtn.textContent='⏺';state.recBtn.style.color='#ff0000';state.recBtn.style.animation='pulse 1s infinite'}
+}catch(e){console.log('Recording failed:',e.message);alert('Recording not supported in this browser')}
+}
+};
 function frame(){if(state.playing)state.time+=0.02;opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark,state.param);state.anim=requestAnimationFrame(frame)}
 state.play=function(){state.playing=true;if(Narration.enabled)narrateCurrent()};
 state.pause=function(){state.playing=false;Narration.stop()};
@@ -435,7 +484,7 @@ var CLIP1_SCENES=[
 {title:'Attention weighted sum',desc:'Σ attention_i · V_i'},
 {title:'Multi-head attention',desc:'Parallel geometric views'}
 ];
-var CLIP1=makeClip({varName:'CLIP1',cvId:'cv1',wrapId:'wrap1',lblId:'lbl1',titleId:'title1',zoomId:'zoom1',zoomValId:'zoom1v',paramId:'param1',paramValId:'param1v',paramDefault:1,paramDecimals:1,lightId:'light1',narrId:'narr1',narrationKey:'clip1',sceneListId:'scenes1',scenes:CLIP1_SCENES,
+var CLIP1=makeClip({varName:'CLIP1',cvId:'cv1',wrapId:'wrap1',lblId:'lbl1',titleId:'title1',zoomId:'zoom1',zoomValId:'zoom1v',paramId:'param1',paramValId:'param1v',paramDefault:1,paramDecimals:1,lightId:'light1',narrId:'narr1',recId:'rec1',narrationKey:'clip1',sceneListId:'scenes1',scenes:CLIP1_SCENES,
 draw:function(cv,scene,t,zoom,dark,param){
 var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
@@ -553,7 +602,7 @@ var CLIP2_SCENES=[
 {title:'Convergence',desc:'Ball settles at minimum'}
 ];
 var CLIP2_TRAJ=[];
-var CLIP2=makeClip({varName:'CLIP2',cvId:'cv2',wrapId:'wrap2',lblId:'lbl2',titleId:'title2',zoomId:'zoom2',zoomValId:'zoom2v',paramId:'param2',paramValId:'param2v',paramDefault:0.05,paramDecimals:2,lightId:'light2',narrId:'narr2',narrationKey:'clip2',sceneListId:'scenes2',scenes:CLIP2_SCENES,
+var CLIP2=makeClip({varName:'CLIP2',cvId:'cv2',wrapId:'wrap2',lblId:'lbl2',titleId:'title2',zoomId:'zoom2',zoomValId:'zoom2v',paramId:'param2',paramValId:'param2v',paramDefault:0.05,paramDecimals:2,lightId:'light2',narrId:'narr2',recId:'rec2',narrationKey:'clip2',sceneListId:'scenes2',scenes:CLIP2_SCENES,
 draw:function(cv,scene,t,zoom,dark,param){
 var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
@@ -662,7 +711,7 @@ var CLIP3_SCENES=[
 {title:'Information bottleneck',desc:'compress X, preserve Y'},
 {title:'Kolmogorov complexity',desc:'K(x) — shortest program'}
 ];
-var CLIP3=makeClip({varName:'CLIP3',cvId:'cv3',wrapId:'wrap3',lblId:'lbl3',titleId:'title3',zoomId:'zoom3',zoomValId:'zoom3v',paramId:'param3',paramValId:'param3v',paramDefault:0.5,paramDecimals:2,lightId:'light3',narrId:'narr3',narrationKey:'clip3',sceneListId:'scenes3',scenes:CLIP3_SCENES,
+var CLIP3=makeClip({varName:'CLIP3',cvId:'cv3',wrapId:'wrap3',lblId:'lbl3',titleId:'title3',zoomId:'zoom3',zoomValId:'zoom3v',paramId:'param3',paramValId:'param3v',paramDefault:0.5,paramDecimals:2,lightId:'light3',narrId:'narr3',recId:'rec3',narrationKey:'clip3',sceneListId:'scenes3',scenes:CLIP3_SCENES,
 draw:function(cv,scene,t,zoom,dark,param){
 var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
@@ -978,6 +1027,95 @@ ctx.fillStyle='#e5e2dc';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillTe
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
 // Fetch code data for the code sections
 setTimeout(fetchCodeData,300);
+
+// ============ PHASE D: KNOWLEDGE GRAPH ============
+(function(){
+var cv=document.getElementById('kgCanvas');if(!cv)return;
+var ctx=cv.getContext('2d');
+var nodes=[
+{id:'linalg',l:'Linear Algebra',c:'#ea580c',x:-1.2,y:-.6,r:16,pillar:1},
+{id:'attention',l:'Attention',c:'#ea580c',x:-.6,y:.3,r:14,pillar:1},
+{id:'calc',l:'Calculus',c:'#10b981',x:0,y:-1,r:16,pillar:2},
+{id:'grad',l:'Gradient Descent',c:'#10b981',x:.6,y:-.3,r:14,pillar:2},
+{id:'prob',l:'Probability',c:'#a855f7',x:1.2,y:-.6,r:16,pillar:3},
+{id:'bayes',l:'Bayes',c:'#a855f7',x:.6,y:.5,r:14,pillar:3},
+{id:'entropy',l:'Entropy',c:'#FFD700',x:-.3,y:.8,r:13,pillar:0},
+{id:'info',l:'Information Theory',c:'#FFD700',x:.3,y:1,r:13,pillar:0},
+{id:'ml',l:'Machine Learning',c:'#f5f0ea',x:0,y:0,r:20,pillar:0}
+];
+var edges=[
+{f:'linalg',t:'attention',l:'QKᵀ'},{f:'attention',t:'ml',l:'softmax'},
+{f:'calc',t:'grad',l:'∇L'},{f:'grad',t:'ml',l:'η∇L'},
+{f:'prob',t:'bayes',l:'P(H|D)'},{f:'bayes',t:'ml',l:'inference'},
+{f:'bayes',t:'entropy',l:'uncertainty'},{f:'entropy',t:'info',l:'H=-Σp log p'},
+{f:'info',t:'attention',l:'routing'},{f:'info',t:'grad',l:'cross-entropy'}
+];
+var flowT=0;
+function draw(){
+var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+var cx=W/2,cy=H/2,sc=Math.min(W,H)*0.32,depth=3;
+// 3D project
+var proj={};nodes.forEach(function(n){var p=project({x:n.x,y:n.y,z:0},cx,cy,sc,depth);proj[n.id]=p});
+// Draw edges
+edges.forEach(function(e,i){
+var p1=proj[e.f],p2=proj[e.t];if(!p1||!p2)return;
+var pulse=(Math.sin(flowT*2+i)+1)/2;
+ctx.strokeStyle='rgba(194,65,12,'+(0.2+pulse*0.15)+')';ctx.lineWidth=1+pulse;
+ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
+// Edge label
+var mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2-8;
+ctx.fillStyle='rgba(245,240,234,0.5)';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText(e.l,mx,my);
+// Flowing particle
+var u=(flowT*0.15+i*0.3)%1;var px=p1.x+(p2.x-p1.x)*u;var py=p1.y+(p2.y-p1.y)*u;
+ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+});
+// Draw nodes
+nodes.forEach(function(n){
+var p=proj[n.id];var pulse=1+Math.sin(flowT*1.5+nodes.indexOf(n))*0.05;
+var rad=n.r*p.s*pulse;
+// Glow
+var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rad*3);g.addColorStop(0,n.c+'66');g.addColorStop(1,n.c+'00');
+ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,rad*3,0,Math.PI*2);ctx.fill();
+// Sphere
+var sg=ctx.createRadialGradient(p.x-rad*0.3,p.y-rad*0.3,0,p.x,p.y,rad);
+sg.addColorStop(0,'#fff');sg.addColorStop(0.3,n.c);sg.addColorStop(1,n.c+'88');
+ctx.shadowColor=n.c;ctx.shadowBlur=12;ctx.fillStyle=sg;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+// Label
+ctx.fillStyle='#f5f0ea';ctx.font=(n.id==='ml'?'bold ':'')+'11px Georgia,serif';ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(n.l,p.x,p.y+rad+4);ctx.textBaseline='alphabetic';
+});
+flowT+=0.02;requestAnimationFrame(draw);
+}
+draw();
+})();
+
+// ============ PHASE E: REAL ARXIV DATA ============
+(function(){
+var el=document.getElementById('arxivData');if(!el)return;
+el.innerHTML='<em>Loading real arXiv publication counts…</em>';
+var cats=[{c:'cs.LG',n:'Machine Learning'},{c:'cs.AI',n:'Artificial Intelligence'},{c:'stat.ML',n:'Statistics (ML)'},{c:'cs.CL',n:'Computation & Language'}];
+var results=[];
+var done=0;
+cats.forEach(function(cat){
+var url='https://export.arxiv.org/api/query?search_query=cat:'+cat.c+'&start=0&max_results=1';
+fetch(url).then(function(r){return r.text()}).then(function(txt){
+var m=txt.match(/<opensearch:totalResults[^>]*>(\d+)</);
+results.push({c:cat.c,n:cat.n,count:m?parseInt(m[1]):0});
+done++;
+if(done===cats.length){
+var html='<strong style="color:var(--primary)">Real arXiv publication counts (live data):</strong><br>';
+results.sort(function(a,b){return b.count-a.count});
+results.forEach(function(r){html+='<span style="display:inline-block;margin-right:1.5rem"><strong style="color:'+(['cs.LG','cs.CL'].indexOf(r.c)>=0?'#ea580c':'#10b981')+'">'+r.n+'</strong> ('+r.c+'): <span style="color:var(--fg);font-weight:600">'+r.count.toLocaleString()+'</span> papers</span>'});
+html+='<br><em style="font-size:.6875rem">Source: export.arxiv.org API — fetched live. These counts grow daily.</em>';
+el.innerHTML=html;
+}
+}).catch(function(e){
+done++;
+if(done===cats.length&&results.length===0)el.innerHTML='<em style="color:var(--muted)">arXiv data unavailable (network or CORS)</em>';
+});
+});
+})();
+
 </script>
 </body>
 </html>
