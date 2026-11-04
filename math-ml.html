@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta name="version" content="2026-11-02-v1-math-ml-clips">
+<title>Mathematics with ML · Mmnd</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden}
+#pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg);font-weight:700}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.nav-links{display:flex;gap:1.25rem;align-items:center}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.8125rem;font-weight:500;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{background:none;border:1px solid var(--border);border-radius:50%;width:2rem;height:2rem;cursor:pointer;font-size:1rem;color:var(--muted)}
+main{max-width:1200px;margin:0 auto;padding:2rem 1.5rem;position:relative;z-index:1}
+.hero{margin-bottom:3rem}
+.crumbs{font-size:.6875rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem}
+.tag{display:inline-block;font-size:.5625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);background:var(--accent-bg);padding:.2rem .5rem;border-radius:.25rem;margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2.5rem;line-height:1.15;margin-bottom:.75rem}
+.lead{font-size:1.0625rem;color:var(--muted);max-width:72ch}
+.source-card{margin-top:1.5rem;padding:1rem 1.25rem;background:var(--card);border:1px solid var(--border);border-radius:.5rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+.source-card a{color:var(--primary);text-decoration:none;font-weight:600;font-size:.8125rem}
+.clip-section{margin:4rem 0;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem}
+.clip-section h2{font-family:Georgia,serif;font-size:1.875rem;margin-bottom:.25rem}
+.clip-section .subtitle{font-size:.875rem;color:var(--muted);margin-bottom:1.5rem}
+.clip-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:768px){.clip-layout{grid-template-columns:1fr}}
+.clip-canvas-wrap{position:relative;background:#0a0908;border:1px solid var(--border);border-radius:.5rem;overflow:hidden;aspect-ratio:1/1}
+.clip-canvas-wrap.light-canvas{background:#f5f0ea}
+.clip-canvas{display:block;width:100%;height:100%}
+.clip-controls{position:absolute;bottom:.5rem;left:.5rem;right:.5rem;display:flex;align-items:center;gap:.375rem;flex-wrap:wrap;background:rgba(10,9,8,.7);backdrop-filter:blur(8px);padding:.375rem .5rem;border-radius:.375rem}
+.clip-canvas-wrap.light-canvas .clip-controls{background:rgba(250,247,242,.85)}
+.clip-btn{background:none;border:1px solid rgba(255,255,255,.15);color:#e5e2dc;border-radius:.25rem;padding:.25rem .5rem;cursor:pointer;font-size:.75rem;font-weight:500;transition:background .15s}
+.light-canvas .clip-btn{border-color:rgba(0,0,0,.15);color:#1a1a1a}
+.clip-btn:hover{background:rgba(255,255,255,.1)}
+.light-canvas .clip-btn:hover{background:rgba(0,0,0,.08)}
+.clip-btn.active{background:var(--accent-bg);border-color:var(--primary);color:var(--primary)}
+.clip-scene-label{position:absolute;top:.5rem;left:.5rem;font-size:.6875rem;font-weight:600;color:#e5e2dc;background:rgba(10,9,8,.7);padding:.25rem .5rem;border-radius:.25rem;backdrop-filter:blur(8px)}
+.light-canvas .clip-scene-label{color:#1a1a1a;background:rgba(250,247,242,.85)}
+.zoom-control{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#e5e2dc;margin-left:auto}
+.light-canvas .zoom-control{color:#1a1a1a}
+.zoom-control input[type=range]{width:60px;accent-color:var(--primary)}
+.clip-info{display:flex;flex-direction:column;gap:1rem}
+.scene-list{list-style:none;padding:0;margin:0}
+.scene-list li{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem .625rem;border-radius:.375rem;cursor:pointer;transition:background .15s}
+.scene-list li:hover{background:var(--accent-bg)}
+.scene-list li.active{background:var(--accent-bg);border-left:2px solid var(--primary)}
+.scene-list .num{flex-shrink:0;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--secondary);color:var(--muted);font-size:.6875rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.scene-list li.active .num{background:var(--primary);color:#fff}
+.scene-list .title{font-size:.8125rem;font-weight:600;color:var(--fg)}
+.scene-list .desc{font-size:.6875rem;color:var(--muted);margin-top:.125rem}
+.deeper-thoughts{padding:1rem;background:var(--secondary);border-radius:.375rem;border-left:3px solid var(--primary)}
+.deeper-thoughts h4{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem}
+.deeper-thoughts p{font-size:.8125rem;color:var(--fg);margin-bottom:.5rem}
+.deeper-thoughts p:last-child{margin-bottom:0}
+.future-section{margin-top:.5rem}
+.future-section h4{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem}
+.future-canvas{width:100%;aspect-ratio:16/7;background:#0a0908;border:1px solid var(--border);border-radius:.375rem;display:block}
+.future-milestones{font-size:.6875rem;color:var(--muted);margin-top:.375rem}
+footer{max-width:1200px;margin:3rem auto;padding:1.5rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+footer a{color:var(--primary);text-decoration:none}
+</style>
+</head>
+<body>
+<canvas id="pbg"></canvas>
+<header>
+<nav>
+<a href="index.html" class="logo"><span class="logo-icon">⚛</span><span>Mmnd</span></a>
+<div class="nav-links"><a href="index.html">Home</a><a href="sources.html">Sources</a><a href="chem-math.html">Chem-Math</a><a href="math-ml.html" class="active">Math+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a><a href="demos.html">Demos</a><a href="about.html">About</a></div>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+</nav>
+</header>
+<main>
+<div class="hero">
+<div class="crumbs">Mathematics · Machine Learning</div>
+<span class="tag">Phase 9 · Math+ML Clips</span>
+<h1>Mathematics with Machine Learning</h1>
+<p class="lead">Three interactive clips visualizing the mathematical foundations of machine learning — the geometry of attention, the calculus of learning, and the probability of truth. Each clip has scene-by-scene narration, zoom and dark/light toggles inside the demo, deeper thoughts, and future probability projections. Inspired by <a href="https://www.youtube.com/watch?v=nJphsM4obOk" style="color:var(--primary)">Mathematics of Machine Learning</a> — the four pillars: linear algebra, probability, calculus, statistics.</p>
+<div class="source-card">
+<span style="font-size:.75rem;color:var(--muted)">SOURCE VIDEO</span>
+<a href="https://www.youtube.com/watch?v=nJphsM4obOk" target="_blank">↗ Mathematics of Machine Learning — 4 pillars</a>
+<span style="font-size:.6875rem;color:var(--muted)">The big 4: linear algebra, probability theory, calculus, statistics</span>
+</div>
+</div>
+
+<!-- CLIP 1: Geometry of Attention -->
+<section class="clip-section" id="clip1">
+<h2>The Geometry of Attention</h2>
+<div class="subtitle">Linear algebra · How transformers see — the geometric structure of scaled dot-product attention</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap1">
+<canvas class="clip-canvas" id="cv1"></canvas>
+<div class="clip-scene-label" id="lbl1">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP1.play()">▶</button>
+<button class="clip-btn" onclick="CLIP1.pause()">⏸</button>
+<button class="clip-btn" onclick="CLIP1.replay()">↺</button>
+<button class="clip-btn" onclick="CLIP1.prev()">◀</button>
+<button class="clip-btn" onclick="CLIP1.next()">▶|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title1">Token embeddings</span>
+<div class="zoom-control">🔍<input type="range" id="zoom1" min="0.5" max="3" step="0.1" value="1"><span id="zoom1v">1.0x</span></div>
+<button class="clip-btn" onclick="CLIP1.toggleLight()" id="light1">🌙</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes1"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p><strong style="color:var(--primary)">Attention is geometry.</strong> The scaled dot-product attention $A = \text{softmax}(\frac{QK^T}{\sqrt{d_k}})V$ is fundamentally a geometric operation: queries and keys are directions in $\mathbb{R}^{d_k}$, and their dot product measures alignment. The softmax converts alignment scores into a probability distribution over which values to attend to.</p>
+<p><strong style="color:var(--primary)">The $\sqrt{d_k}$ scaling matters.</strong> Without it, dot products grow with dimensionality, pushing softmax into saturated regions where gradients vanish. This single scaling factor is what lets attention work at $d_k=64$ or $d_k=4096$.</p>
+<p><strong style="color:var(--primary)">Multi-head = parallel geometric views.</strong> Each head projects Q, K, V into a different subspace, attends independently, and concatenates. This is like viewing the same scene through different lenses — one head might track syntax, another semantics.</p>
+</div>
+<div class="future-section">
+<h4>Future probabilities — attention evolution</h4>
+<canvas class="future-canvas" id="fut1"></canvas>
+<div class="future-milestones" id="fut1m"></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CLIP 2: Calculus of Learning -->
+<section class="clip-section" id="clip2">
+<h2>The Calculus of Learning</h2>
+<div class="subtitle">Calculus · How machines learn — gradient descent on loss landscapes, from Newton to Adam</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap2">
+<canvas class="clip-canvas" id="cv2"></canvas>
+<div class="clip-scene-label" id="lbl2">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP2.play()">▶</button>
+<button class="clip-btn" onclick="CLIP2.pause()">⏸</button>
+<button class="clip-btn" onclick="CLIP2.replay()">↺</button>
+<button class="clip-btn" onclick="CLIP2.prev()">◀</button>
+<button class="clip-btn" onclick="CLIP2.next()">▶|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title2">The loss landscape</span>
+<div class="zoom-control">🔍<input type="range" id="zoom2" min="0.5" max="3" step="0.1" value="1"><span id="zoom2v">1.0x</span></div>
+<button class="clip-btn" onclick="CLIP2.toggleLight()" id="light2">🌙</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes2"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p><strong style="color:var(--primary)">Learning is calculus.</strong> Every neural network training step is the chain rule: $\theta_{t+1} = \theta_t - \eta \nabla_\theta \mathcal{L}$. The gradient $\nabla_\theta \mathcal{L}$ is computed by backpropagation — literally the chain rule applied layer by layer. Calculus is not adjacent to ML; it <em>is</em> ML.</p>
+<p><strong style="color:var(--primary)">The loss landscape is not random.</strong> For over-parameterized networks, almost all local minima are global (good), but saddle points proliferate (bad). Momentum and adaptive methods (Adam) navigate saddle points by accumulating gradient direction across steps.</p>
+<p><strong style="color:var(--primary)">The Schrödinger connection.</strong> Hamiltonian dynamics $\frac{d\psi}{dt} = -iH\psi$ and gradient descent $\frac{d\theta}{dt} = -\nabla L$ share the same mathematical structure: both evolve a state along the negative gradient of an energy function. Quantum mechanics and ML optimization are cousins.</p>
+</div>
+<div class="future-section">
+<h4>Future probabilities — optimization evolution</h4>
+<canvas class="future-canvas" id="fut2"></canvas>
+<div class="future-milestones" id="fut2m"></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- CLIP 3: Probability of Truth -->
+<section class="clip-section" id="clip3">
+<h2>The Probability of Truth</h2>
+<div class="subtitle">Probability & statistics · How machines reason — Bayesian inference, entropy, and the limits of compression</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap3">
+<canvas class="clip-canvas" id="cv3"></canvas>
+<div class="clip-scene-label" id="lbl3">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP3.play()">▶</button>
+<button class="clip-btn" onclick="CLIP3.pause()">⏸</button>
+<button class="clip-btn" onclick="CLIP3.replay()">↺</button>
+<button class="clip-btn" onclick="CLIP3.prev()">◀</button>
+<button class="clip-btn" onclick="CLIP3.next()">▶|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title3">Prior beliefs</span>
+<div class="zoom-control">🔍<input type="range" id="zoom3" min="0.5" max="3" step="0.1" value="1"><span id="zoom3v">1.0x</span></div>
+<button class="clip-btn" onclick="CLIP3.toggleLight()" id="light3">🌙</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes3"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p><strong style="color:var(--primary)">Bayes' theorem is the calculus of belief.</strong> $P(H|D) = \frac{P(D|H)P(H)}{P(D)}$ — the posterior is the prior updated by evidence. Every ML model that outputs a probability is implicitly Bayesian: the training data is evidence, the parameters are hypotheses, and the learned distribution is the posterior.</p>
+<p><strong style="color:var(--primary)">Entropy connects probability to physics.</strong> The Bekenstein-Hawking entropy $S = \frac{A}{4L_P^2}$ and the Shannon entropy $H = -\sum p \log p$ are the same quantity. The information bottleneck principle — compress X while preserving Y — is the variational principle of statistical learning.</p>
+<p><strong style="color:var(--primary)">Kolmogorov complexity is the ultimate prior.</strong> AIXI weights programs by $2^{-|p|}$ (Solomonoff induction) — the shortest program that explains the data is most likely. This is uncomputable but approximable. Every neural network is a computable approximation of this universal prior.</p>
+</div>
+<div class="future-section">
+<h4>Future probabilities — reasoning evolution</h4>
+<canvas class="future-canvas" id="fut3"></canvas>
+<div class="future-milestones" id="fut3m"></div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<footer>
+<div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
+<div>v1-math-ml-clips · 3 clips · 18 scenes</div>
+</footer>
+<script>
+// Theme
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
+
+// Particle bg
+(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(50,Math.floor(cv.width*cv.height/25000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.3})}
+function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';
+for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}
+ctx.strokeStyle=d?'rgba(234,88,12,.06)':'rgba(194,65,12,.04)';ctx.lineWidth=.5;
+for(var i=0;i<ps.length;i++)for(var j=i+1;j<ps.length;j++){var dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){ctx.globalAlpha=(1-d/100)*.15;ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.stroke()}}
+ctx.globalAlpha=1}
+function lp(){dr();raf=requestAnimationFrame(lp)}
+addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp)})();
+
+// 3D projection helper
+function project(v,cx,cy,sc,depth){var f=depth/(depth+v.z);return{x:cx+v.x*sc*f,y:cy+v.y*sc*f,z:v.z,s:f}}
+
+// Phase color bar
+function drawPhaseBar(ctx,W,H){var pby=H-5;var g=ctx.createLinearGradient(0,pby,W,pby);g.addColorStop(0,'#ff0000');g.addColorStop(.14,'#ffa500');g.addColorStop(.28,'#ffff00');g.addColorStop(.42,'#00ff00');g.addColorStop(.57,'#00ffff');g.addColorStop(.71,'#0000ff');g.addColorStop(.85,'#ff00ff');g.addColorStop(1,'#ff0000');ctx.fillStyle=g;ctx.fillRect(0,pby,W,2)}
+
+// CLIP FRAMEWORK
+function makeClip(opts){
+var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,cv:document.getElementById(opts.cvId),wrap:document.getElementById(opts.wrapId),lbl:document.getElementById(opts.lblId),titleEl:document.getElementById(opts.titleId),zoomEl:document.getElementById(opts.zoomId),zoomVal:document.getElementById(opts.zoomValId),lightBtn:document.getElementById(opts.lightId),sceneListEl:document.getElementById(opts.sceneListId),scenes:opts.scenes};
+// Build scene list
+var h='';opts.scenes.forEach(function(s,i){h+='<li data-idx="'+i+'" onclick="'+opts.varName+'.seek('+i+')"><span class="num">'+(i+1)+'</span><div><div class="title">'+s.title+'</div><div class="desc">'+s.desc+'</div></div></li>'});
+state.sceneListEl.innerHTML=h;
+function updateSceneUI(){
+state.lbl.textContent='Scene '+(state.scene+1)+'/'+opts.scenes.length;
+state.titleEl.textContent=opts.scenes[state.scene].title;
+state.sceneListEl.querySelectorAll('li').forEach(function(li,i){li.classList.toggle('active',i===state.scene)});
+}
+updateSceneUI();
+// Zoom
+state.zoomEl.addEventListener('input',function(){state.zoom=parseFloat(state.zoomEl.value);state.zoomVal.textContent=state.zoom.toFixed(1)+'x'});
+// Light toggle
+state.toggleLight=function(){state.dark=!state.dark;state.wrap.classList.toggle('light-canvas',!state.dark);state.lightBtn.textContent=state.dark?'🌙':'☀'};
+function frame(){if(state.playing)state.time+=0.02;opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark);state.anim=requestAnimationFrame(frame)}
+state.play=function(){state.playing=true};
+state.pause=function(){state.playing=false};
+state.replay=function(){state.time=0;state.playing=true};
+state.next=function(){state.scene=(state.scene+1)%opts.scenes.length;state.time=0;updateSceneUI()};
+state.prev=function(){state.scene=(state.scene-1+opts.scenes.length)%opts.scenes.length;state.time=0;updateSceneUI()};
+state.seek=function(i){state.scene=i;state.time=0;updateSceneUI()};
+frame();
+return state;
+}
+
+// ============ CLIP 1: Geometry of Attention ============
+var CLIP1_SCENES=[
+{title:'Token embeddings',desc:'Tokens as vectors in ℝ^d'},
+{title:'Q, K, V projection',desc:'Linear projections W_Q, W_K, W_V'},
+{title:'QK^T dot product',desc:'Query-key alignment geometry'},
+{title:'Softmax normalization',desc:'Scores → probability distribution'},
+{title:'Attention weighted sum',desc:'Σ attention_i · V_i'},
+{title:'Multi-head attention',desc:'Parallel geometric views'}
+];
+var CLIP1=makeClip({varName:'CLIP1',cvId:'cv1',wrapId:'wrap1',lblId:'lbl1',titleId:'title1',zoomId:'zoom1',zoomValId:'zoom1v',lightId:'light1',sceneListId:'scenes1',scenes:CLIP1_SCENES,
+draw:function(cv,scene,t,zoom,dark){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var cx=W/2,cy=H/2,sc=Math.min(W,H)*0.18*zoom,depth=3;
+var nTok=6;
+var tokens=[];
+for(var i=0;i<nTok;i++){var a=i/nTok*Math.PI*2;var yOff=Math.sin(t*0.3+i)*0.1;tokens.push({x:Math.cos(a)*1.2,y:yOff,z:Math.sin(a)*1.2,l:'T'+i,a:a})}
+
+function drawToken(tok,isQuery){
+var p=project(tok,cx,cy,sc,depth);var rad=12*p.s;
+var g=ctx.createRadialGradient(p.x-rad*0.3,p.y-rad*0.3,0,p.x,p.y,rad);
+g.addColorStop(0,isQuery?'#FFD700':pc);g.addColorStop(0.5,isQuery?'#FFD70099':pc);g.addColorStop(1,isQuery?'#FFD70033':pc+'33');
+ctx.shadowColor=isQuery?'#FFD700':pc;ctx.shadowBlur=15*p.s;ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle=fg;ctx.font=Math.round(9*p.s)+'px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(tok.l,p.x,p.y);
+return p;
+}
+
+if(scene===0){
+// Just tokens
+tokens.forEach(function(tk,i){drawToken(tk,false)});
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Tokens embedded in ℝ^d — rotating',W/2,16);
+}
+else if(scene===1){
+// Q, K, V vectors
+tokens.forEach(function(tk,i){var p=drawToken(tk,i%3===0);
+var roles=[{c:'#FFD700',l:'Q'},{c:'#00CED1',l:'K'},{c:'#FF69B4',l:'V'}];
+var role=roles[i%3];
+var dx=Math.cos(tk.a+1.57)*0.5,dy=0.2,dz=Math.sin(tk.a+1.57)*0.5;
+var pe=project({x:tk.x+dx,y:tk.y+dy,z:tk.z+dz},cx,cy,sc,depth);
+ctx.strokeStyle=role.c;ctx.lineWidth=2*Math.min(p.s,pe.s);ctx.shadowColor=role.c;ctx.shadowBlur=8;
+ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(pe.x,pe.y);ctx.stroke();
+ctx.fillStyle=role.c;ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText(role.l,pe.x,pe.y-6);ctx.shadowBlur=0;
+});
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Q (gold), K (cyan), V (pink) projections',W/2,16);
+}
+else if(scene===2){
+// QK^T — query-key alignment
+tokens.forEach(function(tk,i){drawToken(tk,false)});
+for(var i=0;i<nTok;i++){for(var j=0;j<nTok;j++){if(i===j)continue;
+var tq=tokens[i],tk=tokens[j];
+var align=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5;
+if(align>0.3){
+var p1=project(tq,cx,cy,sc,depth),p2=project(tk,cx,cy,sc,depth);
+ctx.strokeStyle='rgba(255,215,0,'+(align*0.6)+')';ctx.lineWidth=align*3;ctx.shadowColor='#FFD700';ctx.shadowBlur=align*8;
+ctx.beginPath();ctx.moveTo(p1.x,p1.y);
+var mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2-20*align;
+ctx.quadraticCurveTo(mx,my,p2.x,p2.y);ctx.stroke();ctx.shadowBlur=0;
+}}}
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('QK^T — alignment scores as connections',W/2,16);
+}
+else if(scene===3){
+// Softmax normalization
+tokens.forEach(function(tk,i){drawToken(tk,false)});
+for(var i=0;i<nTok;i++){var total=0;for(var j=0;j<nTok;j++){if(i===j)continue;total+=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5}
+for(var j=0;j<nTok;j++){if(i===j)continue;
+var align=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5;var prob=align/Math.max(total,0.01);
+if(prob>0.15){
+var p1=project(tokens[i],cx,cy,sc,depth),p2=project(tokens[j],cx,cy,sc,depth);
+ctx.strokeStyle='rgba(255,215,0,'+(prob*0.8)+')';ctx.lineWidth=prob*4;ctx.shadowColor='#FFD700';ctx.shadowBlur=prob*10;
+ctx.beginPath();ctx.moveTo(p1.x,p1.y);var mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2-15*prob;ctx.quadraticCurveTo(mx,my,p2.x,p2.y);ctx.stroke();ctx.shadowBlur=0;
+}}}
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Softmax(QK^T/√d) — normalized attention',W/2,16);
+}
+else if(scene===4){
+// Attention weighted sum
+var out={x:0,y:0,z:0};
+tokens.forEach(function(tk,i){
+var total=0;for(var j=0;j<nTok;j++){if(i===j)continue;total+=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5}
+drawToken(tk,false);
+for(var j=0;j<nTok;j++){if(i===j)continue;
+var align=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5;var prob=align/Math.max(total,0.01);
+if(prob>0.15){var p1=project(tokens[i],cx,cy,sc,depth),p2=project(tokens[j],cx,cy,sc,depth);
+ctx.strokeStyle='rgba(255,215,0,'+(prob*0.6)+')';ctx.lineWidth=prob*3;
+ctx.beginPath();ctx.moveTo(p1.x,p1.y);var mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2-12*prob;ctx.quadraticCurveTo(mx,my,p2.x,p2.y);ctx.stroke();
+out.x+=tokens[j].x*prob;out.y+=tokens[j].y*prob;out.z+=tokens[j].z*prob;
+}}
+});
+out.x/=nTok;out.y/=nTok;out.z/=nTok;
+var po=project(out,cx,cy,sc,depth);ctx.shadowColor='#FF69B4';ctx.shadowBlur=20;ctx.fillStyle='#FF69B4';
+ctx.beginPath();ctx.arc(po.x,po.y,8*po.s,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#FF69B4';ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('Σ attn·V',po.x,po.y-12);
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Attention weighted sum (pink = output)',W/2,16);
+}
+else if(scene===5){
+// Multi-head: show 3 heads
+for(var hd=0;hd<3;hd++){
+var ox=(hd-1)*0.8;
+ctx.globalAlpha=0.7;
+for(var i=0;i<nTok;i++){var tk={x:tokens[i].x+ox,y:tokens[i].y,z:tokens[i].z,l:tokens[i].l,a:tokens[i].a};
+var p=project(tk,cx,cy,sc,depth);var rad=8*p.s;var colors=['#FFD700','#00CED1','#FF69B4'];
+ctx.shadowColor=colors[hd];ctx.shadowBlur=10*p.s;ctx.fillStyle=colors[hd];ctx.globalAlpha=0.6;
+ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();
+ctx.globalAlpha=1;ctx.shadowBlur=0;
+for(var j=0;j<nTok;j++){if(i===j)continue;var align=Math.cos(t*0.5+hd*1.5+i*0.3+j*0.7)*0.5+0.5;
+if(align>0.5){var p2=project({x:tokens[j].x+ox,y:tokens[j].y,z:tokens[j].z},cx,cy,sc,depth);
+ctx.strokeStyle=colors[hd]+'66';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p2.x,p2.y);ctx.stroke();
+}}}
+ctx.fillStyle=colors[hd];ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('Head '+(hd+1),cx+ox*sc,cy+sc*1.5);
+}
+ctx.globalAlpha=1;
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Multi-head attention — 3 parallel views',W/2,16);
+}
+drawPhaseBar(ctx,W,H);
+}});
+
+// ============ CLIP 2: Calculus of Learning ============
+var CLIP2_SCENES=[
+{title:'The loss landscape',desc:'3D surface of L(θ₁,θ₂)'},
+{title:'The gradient vector',desc:'∇L points uphill'},
+{title:'Gradient descent',desc:'Ball rolls downhill: θ←θ-η∇L'},
+{title:'Momentum',desc:'v←γv+η∇L; accelerating descent'},
+{title:'Adam optimizer',desc:'Adaptive per-parameter rates'},
+{title:'Convergence',desc:'Ball settles at minimum'}
+];
+var CLIP2_TRAJ=[];
+var CLIP2=makeClip({varName:'CLIP2',cvId:'cv2',wrapId:'wrap2',lblId:'lbl2',titleId:'title2',zoomId:'zoom2',zoomValId:'zoom2v',lightId:'light2',sceneListId:'scenes2',scenes:CLIP2_SCENES,
+draw:function(cv,scene,t,zoom,dark){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var cx=W/2,cy=H*0.6,sc=Math.min(W,H)*0.3*zoom,depth=4;
+var rotY=t*0.15;
+
+function loss(x,z){
+// Two-well loss surface with saddle
+return 0.3*(x*x+z*z-0.8)+0.5*Math.exp(-((x-0.6)*(x-0.6)+z*z*4))+0.5*Math.exp(-((x+0.6)*(x+0.6)+z*z*4));
+}
+function grad(x,z){var h=0.01;var dx=(loss(x+h,z)-loss(x-h,z))/(2*h);var dz=(loss(x,z+h)-loss(x,z-h))/(2*h);return{x:dx,z:dz}}
+
+// Draw wireframe landscape
+var gridN=12,range=1.5;
+ctx.strokeStyle=dark?'rgba(194,65,12,0.25)':'rgba(194,65,12,0.2)';ctx.lineWidth=.5;
+for(var zi=-range;zi<=range;zi+=2*range/gridN){
+ctx.beginPath();
+var first=true;
+for(var xi=-range;xi<=range;xi+=0.05){
+var y=loss(xi,zi);
+var rx=xi*Math.cos(rotY)-zi*Math.sin(rotY);var rz=xi*Math.sin(rotY)+zi*Math.cos(rotY);
+var p=project({x:rx,y:-y,z:rz},cx,cy,sc,depth);
+if(first){ctx.moveTo(p.x,p.y);first=false}else ctx.lineTo(p.x,p.y);
+}
+ctx.stroke();
+}
+for(var xi=-range;xi<=range;xi+=2*range/gridN){
+ctx.beginPath();var first=true;
+for(var zi=-range;zi<=range;zi+=0.05){
+var y=loss(xi,zi);
+var rx=xi*Math.cos(rotY)-zi*Math.sin(rotY);var rz=xi*Math.sin(rotY)+zi*Math.cos(rotY);
+var p=project({x:rx,y:-y,z:rz},cx,cy,sc,depth);
+if(first){ctx.moveTo(p.x,p.y);first=false}else ctx.lineTo(p.x,p.y);
+}
+ctx.stroke();
+}
+
+if(scene===0){
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Loss landscape L(θ₁,θ₂) — two wells + saddle',W/2,16);
+}
+else if(scene===1){
+// Gradient arrows
+var pts=[{x:0,z:0},{x:0.5,z:0.3},{x:-0.4,z:0.5},{x:0.8,z:-0.2}];
+pts.forEach(function(pt){
+var g=grad(pt.x,pt.z);var y=loss(pt.x,pt.z);
+var rx=pt.x*Math.cos(rotY)-pt.z*Math.sin(rotY);var rz=pt.x*Math.sin(rotY)+pt.z*Math.cos(rotY);
+var p0=project({x:rx,y:-y,z:rz},cx,cy,sc,depth);
+var gmag=Math.sqrt(g.x*g.x+g.z*g.z);var gs=0.3;
+var rx2=(pt.x-g.x*gs)*Math.cos(rotY)-(pt.z-g.z*gs)*Math.sin(rotY);
+var rz2=(pt.x-g.x*gs)*Math.sin(rotY)+(pt.z-g.z*gs)*Math.cos(rotY);
+var y2=loss(pt.x-g.x*gs,pt.z-g.z*gs);
+var p1=project({x:rx2,y:-y2,z:rz2},cx,cy,sc,depth);
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;
+ctx.beginPath();ctx.moveTo(p0.x,p0.y);ctx.lineTo(p1.x,p1.y);ctx.stroke();
+var ang=Math.atan2(p1.y-p0.y,p1.x-p0.x);ctx.fillStyle='#FFD700';
+ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p1.x-5*Math.cos(ang-0.4),p1.y-5*Math.sin(ang-0.4));ctx.lineTo(p1.x-5*Math.cos(ang+0.4),p1.y-5*Math.sin(ang+0.4));ctx.fill();
+ctx.shadowBlur=0;
+ctx.fillStyle=fg;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('∇L',p1.x,p1.y-8);
+});
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Gradient ∇L — points uphill (gold arrows)',W/2,16);
+}
+else if(scene>=2){
+// Gradient descent ball
+if(scene===2||CLIP2_TRAJ.length===0){
+if(t<0.1||CLIP2_TRAJ.length===0){CLIP2_TRAJ=[{x:1.0,z:0.8}]}
+var cur=CLIP2_TRAJ[CLIP2_TRAJ.length-1];
+var g=grad(cur.x,cur.z);var lr=0.05;
+if(scene===3){var v=CLIP2_TRAJ.length>1?{x:cur.x-CLIP2_TRAJ[CLIP2_TRAJ.length-2].x,z:cur.z-CLIP2_TRAJ[CLIP2_TRAJ.length-2].z}:{x:0,z:0};
+var nv={x:0.9*v.x-0.02*g.x,z:0.9*v.z-0.02*g.z};
+cur={x:cur.x+nv.x,z:cur.z+nv.z};
+}else if(scene===4){
+var g2=g.x*g.x+g.z*g.z+1e-8;cur={x:cur.x-0.03*g.x/Math.sqrt(g2),z:cur.z-0.03*g.z/Math.sqrt(g2)};
+}else{cur={x:cur.x-lr*g.x,z:cur.z-lr*g.z}}
+CLIP2_TRAJ.push(cur);if(CLIP2_TRAJ.length>80)CLIP2_TRAJ.shift();
+}
+// Draw trajectory
+ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=2;ctx.beginPath();
+CLIP2_TRAJ.forEach(function(pt,i){
+var rx=pt.x*Math.cos(rotY)-pt.z*Math.sin(rotY);var rz=pt.x*Math.sin(rotY)+pt.z*Math.cos(rotY);
+var y=loss(pt.x,pt.z);var p=project({x:rx,y:-y-0.03,z:rz},cx,cy,sc,depth);
+if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y);
+});
+ctx.stroke();
+// Ball
+var cur=CLIP2_TRAJ[CLIP2_TRAJ.length-1];
+var rx=cur.x*Math.cos(rotY)-cur.z*Math.sin(rotY);var rz=cur.x*Math.sin(rotY)+cur.z*Math.cos(rotY);
+var y=loss(cur.x,cur.z);var pb=project({x:rx,y:-y,z:rz},cx,cy,sc,depth);
+ctx.shadowColor='#FFD700';ctx.shadowBlur=15*pb.s;
+var bg2=ctx.createRadialGradient(pb.x-3*pb.s,pb.y-3*pb.s,0,pb.x,pb.y,8*pb.s);
+bg2.addColorStop(0,'#fff');bg2.addColorStop(0.5,'#FFD700');bg2.addColorStop(1,'#FFD70066');
+ctx.fillStyle=bg2;ctx.beginPath();ctx.arc(pb.x,pb.y,8*pb.s,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+var labels=['Gradient descent: θ←θ-η∇L','Momentum: v←γv+η∇L (ball accelerates)','Adam: adaptive per-parameter learning rate','Convergence — ball settles near minimum'];
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText(labels[Math.min(scene-2,3)],W/2,16);
+}
+drawPhaseBar(ctx,W,H);
+}});
+
+// ============ CLIP 3: Probability of Truth ============
+var CLIP3_SCENES=[
+{title:'Prior beliefs',desc:'P(H) — initial distribution'},
+{title:'Likelihood',desc:'P(D|H) — evidence'},
+{title:'Posterior',desc:'P(H|D) ∝ P(D|H)P(H)'},
+{title:'Entropy',desc:'H = -Σ p log p'},
+{title:'Information bottleneck',desc:'compress X, preserve Y'},
+{title:'Kolmogorov complexity',desc:'K(x) — shortest program'}
+];
+var CLIP3=makeClip({varName:'CLIP3',cvId:'cv3',wrapId:'wrap3',lblId:'lbl3',titleId:'title3',zoomId:'zoom3',zoomValId:'zoom3v',lightId:'light3',sceneListId:'scenes3',scenes:CLIP3_SCENES,
+draw:function(cv,scene,t,zoom,dark){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var cx=W/2,cy=H/2,sc=Math.min(W,H)*0.15*zoom,depth=4;
+var rotY=t*0.1;
+
+function gauss(x,mu,sigma){return Math.exp(-((x-mu)*(x-mu))/(2*sigma*sigma))}
+function drawDist(mu,sigma,color,label,alpha){
+ctx.strokeStyle=color;ctx.lineWidth=2;ctx.globalAlpha=alpha||0.8;
+ctx.shadowColor=color;ctx.shadowBlur=8;
+var pts=[];
+for(var x=-3;x<=3;x+=0.05){
+var y=gauss(x,mu,sigma);
+var rx=x*Math.cos(rotY);var rz=x*Math.sin(rotY);
+var p=project({x:rx,y:-y*2,z:rz},cx,cy,sc,depth);
+pts.push(p);
+}
+// Fill area
+ctx.fillStyle=color+'33';ctx.beginPath();
+ctx.moveTo(pts[0].x,cy+sc);
+pts.forEach(function(p){ctx.lineTo(p.x,p.y)});
+ctx.lineTo(pts[pts.length-1].x,cy+sc);ctx.closePath();ctx.fill();
+// Stroke
+ctx.beginPath();pts.forEach(function(p,i){if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});ctx.stroke();
+ctx.shadowBlur=0;ctx.globalAlpha=1;
+ctx.fillStyle=color;ctx.font='9px monospace';ctx.textAlign='center';
+var peakP=project({x:mu*Math.cos(rotY),y:-2*gauss(mu,mu,sigma),z:mu*Math.sin(rotY)},cx,cy,sc,depth);
+ctx.fillText(label,peakP.x,peakP.y-10);
+}
+
+if(scene===0){
+// Prior — wide distribution
+var mu=Math.sin(t*0.3)*0.5;
+drawDist(mu,1.2,'#00CED1','Prior P(H)',0.9);
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Prior P(H) — initial beliefs (wide, uncertain)',W/2,16);
+}
+else if(scene===1){
+// Likelihood — narrow
+drawDist(0,1.0,'#00CED1','Prior',0.3);
+var muL=Math.sin(t*0.5)*0.3;
+drawDist(muL,0.4,'#FF69B4','Likelihood P(D|H)',0.9);
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Likelihood P(D|H) — evidence (narrow)',W/2,16);
+}
+else if(scene===2){
+// Posterior = prior * likelihood (approximation)
+drawDist(0,1.0,'#00CED1','Prior',0.25);
+drawDist(Math.sin(t*0.5)*0.3,0.4,'#FF69B4','Likelihood',0.25);
+var muP=Math.sin(t*0.5)*0.3*0.7;
+drawDist(muP,0.5,'#FFD700','Posterior P(H|D)',0.95);
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Posterior P(H|D) ∝ P(D|H)·P(H) — updated belief',W/2,16);
+}
+else if(scene===3){
+// Entropy visualization — show multiple distributions with different entropy
+var dists=[{mu:-1.5,sigma:0.3,c:'#FFD700',l:'H=0.5'},{mu:0,sigma:0.8,c:'#FF69B4',l:'H=1.5'},{mu:1.5,sigma:1.5,c:'#00CED1',l:'H=3.0'}];
+dists.forEach(function(d){drawDist(d.mu,d.sigma,d.c,d.l,0.7)});
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Entropy H=-Σp log p — wider = more uncertain',W/2,16);
+}
+else if(scene===4){
+// Information bottleneck: X → Z → Y
+var nodes=[{x:-2,y:0,z:0,l:'X',c:'#00CED1',n:8},{x:0,y:0,z:0,l:'Z',c:'#FFD700',n:3},{x:2,y:0,z:0,l:'Y',c:'#FF69B4',n:4}];
+nodes.forEach(function(nd){
+for(var i=0;i<nd.n;i++){
+var a=i/nd.n*Math.PI*2+Math.sin(t+nd.x)*0.3;
+var pt={x:nd.x+Math.cos(a)*0.3,y:Math.sin(a)*0.3,z:Math.sin(t+i)*0.1};
+var p=project(pt,cx,cy,sc*1.5,depth);
+ctx.shadowColor=nd.c;ctx.shadowBlur=8;ctx.fillStyle=nd.c;
+ctx.beginPath();ctx.arc(p.x,p.y,4*p.s,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+}
+var pn=project(nd,cx,cy,sc*1.5,depth);
+ctx.fillStyle=nd.c;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';ctx.fillText(nd.l,pn.x,pn.y+20);
+});
+// Flow particles X→Z→Y
+for(var phase=0;phase<2;phase++){
+for(var pi=0;pi<3;pi++){
+var u=((t*0.3+pi/3+phase*0.5)%1);
+var from=nodes[phase],to=nodes[phase+1];
+var pt={x:from.x+(to.x-from.x)*u,y:Math.sin(u*Math.PI)*0.3,z:0};
+var p=project(pt,cx,cy,sc*1.5,depth);
+ctx.shadowColor='#FFD700';ctx.shadowBlur=10;ctx.fillStyle='rgba(255,215,0,'+(0.5+0.5*Math.sin(u*Math.PI))+')';
+ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+}}
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Information bottleneck: compress X→Z, preserve Y',W/2,16);
+}
+else if(scene===5){
+// Kolmogorov complexity — programs with weights
+var progs=['01','0101','print(1)','fn(x)','solve()','while true','optimize()','deep_net()'];
+progs.forEach(function(p,i){
+var len=p.length;var weight=Math.pow(2,-len/4)*(0.8+0.2*Math.sin(t*2+i));
+var y=i*(0.8/progs.length)-0.4;var x=-2+len*0.08;
+var pt={x:x+Math.sin(t+i)*0.05,y:y,z:0};
+var pr=project(pt,cx,cy,sc*1.5,depth);
+ctx.shadowColor=pc;ctx.shadowBlur=weight*15;ctx.fillStyle='rgba(194,65,12,'+weight+')';
+ctx.fillRect(pr.x-len*2,pr.y-4,len*4,8);
+ctx.shadowBlur=0;ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='left';
+ctx.fillText(p,pr.x+5,pr.y+3);ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('w='+weight.toFixed(2),pr.x+5,pr.y+12);
+});
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Kolmogorov complexity — weight ∝ 2^(-|program|)',W/2,16);
+}
+drawPhaseBar(ctx,W,H);
+}});
+
+// ============ FUTURE PROBABILITY CHARTS ============
+var FUTURES_DATA={
+'clip1':[{n:'Infinite context',y:2029,p:0.45,t:'Infinite context via retrieval+attention'},{n:'Linear attention',y:2031,p:0.35,t:'O(n) attention replacing O(n²)'},{n:'Attention-free',y:2034,p:0.25,t:'SSM/Mamba replacing attention'},{n:'Multi-modal attn',y:2028,p:0.50,t:'Cross-modal attention standard'},{n:'Interpretability',y:2030,p:0.40,t:'Mechanistic interp at scale'}],
+'clip2':[{n:'2nd-order opt',y:2029,p:0.30,t:'Tractable Hessian-free 2nd order'},{n:'Meta-learning',y:2031,p:0.35,t:'Learning to learn automatically'},{n:'Quantum opt',y:2035,p:0.15,t:'Quantum optimization for ML'},{n:'Neural arch search',y:2028,p:0.45,t:'Automated architecture design'},{n:'Beyond grad desc',y:2038,p:0.20,t:'Non-gradient learning paradigm'}],
+'clip3':[{n:'Bayesian DL',y:2029,p:0.35,t:'Scalable Bayesian deep learning'},{n:'Causal inference',y:2031,p:0.40,t:'Causal reasoning in ML'},{n:'Solomonoff practical',y:2033,p:0.20,t:'Practical Solomonoff induction'},{n:'Information theory ML',y:2028,p:0.45,t:'IB principle as generalization theory'},{n:'AGI reasoning',y:2035,p:0.25,t:'Formal reasoning at human level'}]
+};
+
+function drawFutureChart(cvId,dataId,animState){
+var cv=document.getElementById(cvId);if(!cv)return;
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var problems=FUTURES_DATA[dataId];var growth=1.5;
+var pL=70,pB=25,pT=30,pR=15,cw=W-pL-pR,ch=H-pT-pB;
+var yearStart=2025,yearEnd=2040,yearSpan=yearEnd-yearStart;
+var animT=animState.t||0;var growProgress=Math.min(1,animT/3);var breathe=Math.sin(animT*0.8)*0.04;
+ctx.strokeStyle='rgba(194,65,12,0.08)';ctx.lineWidth=.5;
+for(var y=yearStart;y<=yearEnd;y+=3){var x=pL+((y-yearStart)/yearSpan)*cw;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(y,x,H-pB+10)}
+problems.forEach(function(pb,i){
+var rowY=pT+(i+0.5)*ch/problems.length;var barH=ch/problems.length*0.55;
+ctx.beginPath();
+for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
+var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'44');grad.addColorStop(1,'#FFD70066');ctx.fillStyle=grad;ctx.fill();
+ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=pc;ctx.lineWidth=1.5;ctx.beginPath();
+for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;
+// Flowing particles
+for(var pi=0;pi<3;pi++){var u=((animT*0.12+pi/3)%1);var year=yearStart+u*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var px=pL+u*cw;var py=rowY-barH/2-pAtY*barH;var fa=0.5+0.5*Math.sin(u*Math.PI);ctx.shadowColor='#FFD700';ctx.shadowBlur=10;ctx.fillStyle='rgba(255,215,0,'+fa+')';ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+ctx.fillStyle=fg;ctx.font='7px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-5,rowY+3);
+});
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('P(breakthrough) evolving',W/2,14);
+// Update milestones
+var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
+}
+
+// Animate future charts
+var futAnimState={t:0};
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','clip1',futAnimState);drawFutureChart('fut2','clip2',futAnimState);drawFutureChart('fut3','clip3',futAnimState);requestAnimationFrame(futLoop)}
+setTimeout(futLoop,200);
+
+// Render math
+setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+</script>
+</body>
+</html>
