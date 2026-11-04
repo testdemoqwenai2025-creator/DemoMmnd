@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v3-clip2-deciding-what-to-model">
+<meta name="version" content="2026-11-04-v4-bugfix-audit">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -359,13 +359,19 @@ if(targetSec)targetSec.scrollIntoView({behavior:'smooth',block:'start'});
 function updateNavButtons(){
 var prev=document.getElementById('prevClipBtn');
 var next=document.getElementById('nextClipBtn');
-if(prev){prev.classList.toggle('disabled',activeClipNum<=1)}
-if(next){next.classList.toggle('disabled',activeClipNum>=23)}
-if(next){next.textContent=activeClipNum<23?'Next clip (Clip '+(activeClipNum+1)+') →':'Last clip'}
-if(prev){prev.textContent=activeClipNum>1?'← Previous clip (Clip '+(activeClipNum-1)+')':'← First clip'}
+if(prev){
+prev.classList.toggle('disabled',activeClipNum<=1);
+prev.textContent=activeClipNum>1?'← Previous clip (Clip '+(activeClipNum-1)+')':'← First clip';
+if(activeClipNum>1)prev.setAttribute('onclick','selectClip('+(activeClipNum-1)+')');
+else prev.removeAttribute('onclick');
 }
-// Wire next button
-document.getElementById('nextClipBtn')&&document.getElementById('nextClipBtn').setAttribute('onclick','selectClip('+(activeClipNum+1)+')');
+if(next){
+next.classList.toggle('disabled',activeClipNum>=23);
+next.textContent=activeClipNum<23?'Next clip (Clip '+(activeClipNum+1)+') →':'Last clip';
+if(activeClipNum<23)next.setAttribute('onclick','selectClip('+(activeClipNum+1)+')');
+else next.removeAttribute('onclick');
+}
+}
 
 buildClipGrid();
 updateNavButtons();
@@ -971,6 +977,56 @@ setTimeout(populateCode2,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+
+// ============ AUDIT SCRIPT ============
+function runAudit(){
+var p=0,f=0,r=[];
+function chk(n,fn){try{if(fn()){p++;r.push('PASS: '+n)}else{f++;r.push('FAIL: '+n)}}catch(e){f++;r.push('FAIL: '+n+' ('+e.message+')')}}
+// Core elements
+chk('Clip grid exists',function(){return!!document.getElementById('clipGrid')});
+chk('23 grid cards',function(){return document.getElementById('clipGrid')&&document.getElementById('clipGrid').children.length===23});
+chk('Progress bar exists',function(){return!!document.getElementById('progressFill')});
+chk('Progress text correct',function(){var t=document.getElementById('progressText');return t&&t.textContent.indexOf('of 23')>=0});
+chk('Prev button exists',function(){return!!document.getElementById('prevClipBtn')});
+chk('Next button exists',function(){return!!document.getElementById('nextClipBtn')});
+// Clip 1
+chk('CLIP1 exists',function(){return typeof CLIP1==='object'});
+chk('Clip 1 section exists',function(){return!!document.getElementById('clip1')});
+chk('Clip 1 canvas',function(){var cv=document.getElementById('cv1');return cv&&cv.width>0});
+chk('Clip 1 scenes (6)',function(){return document.getElementById('scenes1')&&document.getElementById('scenes1').children.length===6});
+chk('Clip 1 expr populated',function(){var e=document.getElementById('expr1');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 1 code tabs (6)',function(){return document.getElementById('tabs1')&&document.getElementById('tabs1').children.length===6});
+chk('Clip 1 map table',function(){var m=document.getElementById('map1');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 1 future chart',function(){return!!document.getElementById('fut1')});
+chk('Clip 1 drawSourceMolecule->draw function',function(){return typeof CLIP1.draw==='function'||typeof CLIP1==='object'});
+// Clip 2
+chk('CLIP2 exists',function(){return typeof CLIP2==='object'});
+chk('Clip 2 section exists',function(){return!!document.getElementById('clip2')});
+chk('Clip 2 canvas',function(){var cv=document.getElementById('cv2');return cv&&cv.width>0});
+chk('Clip 2 scenes (6)',function(){return document.getElementById('scenes2')&&document.getElementById('scenes2').children.length===6});
+chk('Clip 2 expr populated',function(){var e=document.getElementById('expr2');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 2 code tabs (6)',function(){return document.getElementById('tabs2')&&document.getElementById('tabs2').children.length===6});
+chk('Clip 2 map table',function(){var m=document.getElementById('map2');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 2 future chart',function(){return!!document.getElementById('fut2')});
+// Nav button onclick updates
+chk('Next button has onclick',function(){var b=document.getElementById('nextClipBtn');return b&&b.getAttribute('onclick')&&b.getAttribute('onclick').indexOf('selectClip')>=0});
+chk('Prev button onclick when clip>1',function(){if(activeClipNum<=1)return true;var b=document.getElementById('prevClipBtn');return b&&b.getAttribute('onclick')&&b.getAttribute('onclick').indexOf('selectClip')>=0});
+// Narration
+chk('Narration system',function(){return typeof Narration==='object'});
+chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
+chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
+// Clip curriculum
+chk('2 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===2});
+chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
+chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
+// KaTeX
+chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
+// Output
+r.forEach(function(x){console.log(x)});
+console.log('AUDIT: '+p+' passed, '+f+' failed');
+return{passed:p,failed:f,results:r};
+}
+setTimeout(runAudit,2000);
 </script>
 </body>
 </html>
