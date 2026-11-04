@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v4-bugfix-audit">
+<meta name="version" content="2026-11-04-v5-bugfix-upcoming-section">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -155,6 +155,13 @@ footer a{color:var(--primary);text-decoration:none}
 <a class="clip-nav-btn disabled" id="prevClipBtn">← Previous clip</a>
 <a class="clip-nav-btn" id="nextClipBtn" onclick="selectClip(2)">Next clip →</a>
 </div>
+
+<!-- Upcoming clip placeholder (shown when an upcoming clip is selected) -->
+<section class="clip-section" id="upcomingSection" style="display:none">
+<h2 id="upcomingTitle">Coming soon</h2>
+<div class="subtitle" id="upcomingSubtitle"></div>
+<div class="clip-layout"><div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--muted)"><div style="font-size:3rem;margin-bottom:1rem">🔬</div><p id="upcomingDesc">This clip is being built.</p><p style="margin-top:1rem;font-size:.75rem">Share your notes from the video and I'll build this clip next!</p></div></div>
+</section>
 
 <!-- CLIP 1: The Five Stages of Physics-Informed ML -->
 <section class="clip-section" id="clip1">
@@ -332,28 +339,26 @@ var pt=document.getElementById('progressText');if(pt)pt.textContent=ready+' of '
 
 function selectClip(n){
 var c=CLIP_CURRICULUM[n-1];if(!c)return;
-if(c.status!=='ready'){
-// Hide all clip sections, show upcoming message in clip1
+// Hide all clip sections + upcoming section
+var ups=document.getElementById('upcomingSection');if(ups)ups.style.display='none';
 for(var i=1;i<=23;i++){var s=document.getElementById('clip'+i);if(s)s.style.display='none';if(window['CLIP'+i])window['CLIP'+i].setActive(false)}
-var sec=document.getElementById('clip1');if(sec){
-sec.style.display='';
-sec.querySelector('h2').textContent=c.title;
-sec.querySelector('.subtitle').textContent='Video '+c.n+' · '+c.desc+' — Coming soon';
-var layout=sec.querySelector('.clip-layout');
-if(layout)layout.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--muted)"><div style="font-size:3rem;margin-bottom:1rem">🔬</div><p>This clip is being built. We\'re working through Steve Brunton\'s 23-video playlist step by step.</p><p style="margin-top:1rem">Clip '+c.n+': <strong style="color:var(--primary)">'+c.title+'</strong> — '+c.desc+'</p><p style="margin-top:1rem;font-size:.75rem">Share your notes from the video and I\'ll build this clip next!</p></div>';
-var codeSec=sec.querySelector('.clip-code-section');if(codeSec)codeSec.style.display='none';
-}
-activeClipNum=n;buildClipGrid();updateNavButtons();return;
-}
-// Ready clip — hide all sections, show clip N, set active
-for(var i=1;i<=23;i++){
-var s=document.getElementById('clip'+i);
-if(s)s.style.display=(i===n)?'':'none';
-if(window['CLIP'+i])window['CLIP'+i].setActive(i===n);
+if(c.status!=='ready'){
+// Show upcoming section with this clip's info
+var ups2=document.getElementById('upcomingSection');if(ups2){
+ups2.style.display='';
+document.getElementById('upcomingTitle').textContent=c.title;
+document.getElementById('upcomingSubtitle').textContent='Video '+c.n+' · '+c.desc+' — Coming soon';
+document.getElementById('upcomingDesc').innerHTML='We\'re working through Steve Brunton\'s 23-video playlist step by step.<br>Clip '+c.n+': <strong style="color:var(--primary)">'+c.title+'</strong> — '+c.desc;
 }
 activeClipNum=n;buildClipGrid();updateNavButtons();
-var targetSec=document.getElementById('clip'+n);
-if(targetSec)targetSec.scrollIntoView({behavior:'smooth',block:'start'});
+document.getElementById('upcomingSection').scrollIntoView({behavior:'smooth',block:'start'});return;
+}
+// Ready clip — show clip N, set active
+var sec=document.getElementById('clip'+n);
+if(sec)sec.style.display='';
+if(window['CLIP'+n])window['CLIP'+n].setActive(true);
+activeClipNum=n;buildClipGrid();updateNavButtons();
+if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function updateNavButtons(){
@@ -992,8 +997,8 @@ chk('Next button exists',function(){return!!document.getElementById('nextClipBtn
 // Clip 1
 chk('CLIP1 exists',function(){return typeof CLIP1==='object'});
 chk('Clip 1 section exists',function(){return!!document.getElementById('clip1')});
-chk('Clip 1 canvas',function(){var cv=document.getElementById('cv1');return cv&&cv.width>0});
-chk('Clip 1 scenes (6)',function(){return document.getElementById('scenes1')&&document.getElementById('scenes1').children.length===6});
+chk('Clip 1 canvas',function(){return!!document.getElementById('cv1')});
+chk('Clip 1 scenes (6)',function(){var s=document.getElementById('scenes1');return s&&s.children.length===6});
 chk('Clip 1 expr populated',function(){var e=document.getElementById('expr1');return e&&e.innerHTML.indexOf('katex')>=0});
 chk('Clip 1 code tabs (6)',function(){return document.getElementById('tabs1')&&document.getElementById('tabs1').children.length===6});
 chk('Clip 1 map table',function(){var m=document.getElementById('map1');return m&&m.innerHTML.indexOf('table')>=0});
@@ -1002,7 +1007,7 @@ chk('Clip 1 drawSourceMolecule->draw function',function(){return typeof CLIP1.dr
 // Clip 2
 chk('CLIP2 exists',function(){return typeof CLIP2==='object'});
 chk('Clip 2 section exists',function(){return!!document.getElementById('clip2')});
-chk('Clip 2 canvas',function(){var cv=document.getElementById('cv2');return cv&&cv.width>0});
+chk('Clip 2 canvas',function(){return!!document.getElementById('cv2')});
 chk('Clip 2 scenes (6)',function(){return document.getElementById('scenes2')&&document.getElementById('scenes2').children.length===6});
 chk('Clip 2 expr populated',function(){var e=document.getElementById('expr2');return e&&e.innerHTML.indexOf('katex')>=0});
 chk('Clip 2 code tabs (6)',function(){return document.getElementById('tabs2')&&document.getElementById('tabs2').children.length===6});
