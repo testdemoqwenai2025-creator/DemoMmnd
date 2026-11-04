@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v4-prerecorded-narration">
+<meta name="version" content="2026-11-04-v5-interactive-params">
 <title>Mathematics with ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -53,6 +53,10 @@ h1{font-family:Georgia,serif;font-size:2.5rem;line-height:1.15;margin-bottom:.75
 .zoom-control{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#e5e2dc;margin-left:auto}
 .light-canvas .zoom-control{color:#1a1a1a}
 .zoom-control input[type=range]{width:60px;accent-color:var(--primary)}
+.param-control{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#FFD700}
+.light-canvas .param-control{color:#c2410c}
+.param-control input[type=range]{width:60px;accent-color:#FFD700}
+.param-control .param-label{font-style:italic;font-family:Georgia,serif;font-weight:600}
 .clip-info{display:flex;flex-direction:column;gap:1rem}
 .scene-list{list-style:none;padding:0;margin:0}
 .scene-list li{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem .625rem;border-radius:.375rem;cursor:pointer;transition:background .15s}
@@ -133,6 +137,7 @@ footer a{color:var(--primary);text-decoration:none}
 <button class="clip-btn" onclick="CLIP1.next()">▶|</button>
 <span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title1">Token embeddings</span>
 <div class="zoom-control">🔍<input type="range" id="zoom1" min="0.5" max="3" step="0.1" value="1"><span id="zoom1v">1.0x</span></div>
+<div class="param-control" title="Temperature"><span class="param-label">τ</span><input type="range" id="param1" min="0.1" max="3" step="0.1" value="1"><span id="param1v">1.0</span></div>
 <button class="clip-btn" onclick="CLIP1.toggleNarration()" id="narr1" title="Toggle narration">🔊</button><button class="clip-btn" onclick="CLIP1.toggleLight()" id="light1">🌙</button>
 </div>
 </div>
@@ -185,6 +190,7 @@ footer a{color:var(--primary);text-decoration:none}
 <button class="clip-btn" onclick="CLIP2.next()">▶|</button>
 <span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title2">The loss landscape</span>
 <div class="zoom-control">🔍<input type="range" id="zoom2" min="0.5" max="3" step="0.1" value="1"><span id="zoom2v">1.0x</span></div>
+<div class="param-control" title="Learning rate"><span class="param-label">η</span><input type="range" id="param2" min="0.01" max="0.5" step="0.01" value="0.05"><span id="param2v">0.05</span></div>
 <button class="clip-btn" onclick="CLIP2.toggleNarration()" id="narr2" title="Toggle narration">🔊</button><button class="clip-btn" onclick="CLIP2.toggleLight()" id="light2">🌙</button>
 </div>
 </div>
@@ -237,6 +243,7 @@ footer a{color:var(--primary);text-decoration:none}
 <button class="clip-btn" onclick="CLIP3.next()">▶|</button>
 <span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title3">Prior beliefs</span>
 <div class="zoom-control">🔍<input type="range" id="zoom3" min="0.5" max="3" step="0.1" value="1"><span id="zoom3v">1.0x</span></div>
+<div class="param-control" title="Prior strength"><span class="param-label">α</span><input type="range" id="param3" min="0" max="1" step="0.05" value="0.5"><span id="param3v">0.50</span></div>
 <button class="clip-btn" onclick="CLIP3.toggleNarration()" id="narr3" title="Toggle narration">🔊</button><button class="clip-btn" onclick="CLIP3.toggleLight()" id="light3">🌙</button>
 </div>
 </div>
@@ -373,9 +380,9 @@ function drawPhaseBar(ctx,W,H){var pby=H-5;var g=ctx.createLinearGradient(0,pby,
 
 // CLIP FRAMEWORK
 function makeClip(opts){
-var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,narrationKey:opts.narrationKey||'',cv:document.getElementById(opts.cvId),wrap:document.getElementById(opts.wrapId),lbl:document.getElementById(opts.lblId),titleEl:document.getElementById(opts.titleId),zoomEl:document.getElementById(opts.zoomId),zoomVal:document.getElementById(opts.zoomValId),lightBtn:document.getElementById(opts.lightId),narrBtn:document.getElementById(opts.narrId),sceneListEl:document.getElementById(opts.sceneListId),scenes:opts.scenes};
+var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,param:opts.paramDefault||1,narrationKey:opts.narrationKey||'',cv:document.getElementById(opts.cvId),wrap:document.getElementById(opts.wrapId),lbl:document.getElementById(opts.lblId),titleEl:document.getElementById(opts.titleId),zoomEl:document.getElementById(opts.zoomId),zoomVal:document.getElementById(opts.zoomValId),paramEl:document.getElementById(opts.paramId),paramVal:document.getElementById(opts.paramValId),lightBtn:document.getElementById(opts.lightId),narrBtn:document.getElementById(opts.narrId),sceneListEl:document.getElementById(opts.sceneListId),scenes:opts.scenes};
 // Build scene list
-var h='';opts.scenes.forEach(function(s,i){h+='<li data-idx="'+i+'" onclick="'+opts.varName+'.seek('+i+')"><span class="num">'+(i+1)+'</span><div><div class="title">'+s.title+'</div><div class="desc">'+s.desc+'</div></div></li>'});
+var h='';opts.scenes.forEach(function(s,i){h+='<li data-idx="'+i+'" onclick="'+opts.varName+'.seek('+i+')"><span class="num">'+(i+1)+'</span><div><div class="title">'+s.title+'</div><div class="desc">'+s.desc+'</div></div></div></li>'});
 state.sceneListEl.innerHTML=h;
 function updateSceneUI(){
 state.lbl.textContent='Scene '+(state.scene+1)+'/'+opts.scenes.length;
@@ -389,6 +396,16 @@ Narration.speak(state.narrationKey,state.scene);
 updateSceneUI();
 // Zoom
 state.zoomEl.addEventListener('input',function(){state.zoom=parseFloat(state.zoomEl.value);state.zoomVal.textContent=state.zoom.toFixed(1)+'x'});
+// Parameter (interactive)
+if(state.paramEl){
+var pDecimals=opts.paramDecimals||1;
+state.paramEl.addEventListener('input',function(){
+state.param=parseFloat(state.paramEl.value);
+state.paramVal.textContent=state.param.toFixed(pDecimals);
+// Reset trajectory for clip 2 when learning rate changes
+if(opts.varName==='CLIP2')CLIP2_TRAJ=[{x:1.0,z:0.8}];
+});
+}
 // Light toggle
 state.toggleLight=function(){state.dark=!state.dark;state.wrap.classList.toggle('light-canvas',!state.dark);state.lightBtn.textContent=state.dark?'🌙':'☀'};
 // Narration toggle
@@ -398,7 +415,7 @@ if(state.narrBtn)state.narrBtn.textContent=on?'🔊':'🔇';
 if(state.narrBtn)state.narrBtn.style.color=on?'var(--primary)':'';
 if(on)narrateCurrent();else Narration.stop();
 };
-function frame(){if(state.playing)state.time+=0.02;opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark);state.anim=requestAnimationFrame(frame)}
+function frame(){if(state.playing)state.time+=0.02;opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark,state.param);state.anim=requestAnimationFrame(frame)}
 state.play=function(){state.playing=true;if(Narration.enabled)narrateCurrent()};
 state.pause=function(){state.playing=false;Narration.stop()};
 state.replay=function(){state.time=0;state.playing=true;if(Narration.enabled)narrateCurrent()};
@@ -418,8 +435,8 @@ var CLIP1_SCENES=[
 {title:'Attention weighted sum',desc:'Σ attention_i · V_i'},
 {title:'Multi-head attention',desc:'Parallel geometric views'}
 ];
-var CLIP1=makeClip({varName:'CLIP1',cvId:'cv1',wrapId:'wrap1',lblId:'lbl1',titleId:'title1',zoomId:'zoom1',zoomValId:'zoom1v',lightId:'light1',narrId:'narr1',narrationKey:'clip1',sceneListId:'scenes1',scenes:CLIP1_SCENES,
-draw:function(cv,scene,t,zoom,dark){
+var CLIP1=makeClip({varName:'CLIP1',cvId:'cv1',wrapId:'wrap1',lblId:'lbl1',titleId:'title1',zoomId:'zoom1',zoomValId:'zoom1v',paramId:'param1',paramValId:'param1v',paramDefault:1,paramDecimals:1,lightId:'light1',narrId:'narr1',narrationKey:'clip1',sceneListId:'scenes1',scenes:CLIP1_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
 var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
@@ -461,7 +478,7 @@ else if(scene===2){
 tokens.forEach(function(tk,i){drawToken(tk,false)});
 for(var i=0;i<nTok;i++){for(var j=0;j<nTok;j++){if(i===j)continue;
 var tq=tokens[i],tk=tokens[j];
-var align=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5;
+var align=Math.pow(Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5,Math.max(0.1,1/Math.max(0.1,param)));
 if(align>0.3){
 var p1=project(tq,cx,cy,sc,depth),p2=project(tk,cx,cy,sc,depth);
 ctx.strokeStyle='rgba(255,215,0,'+(align*0.6)+')';ctx.lineWidth=align*3;ctx.shadowColor='#FFD700';ctx.shadowBlur=align*8;
@@ -474,9 +491,9 @@ ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.f
 else if(scene===3){
 // Softmax normalization
 tokens.forEach(function(tk,i){drawToken(tk,false)});
-for(var i=0;i<nTok;i++){var total=0;for(var j=0;j<nTok;j++){if(i===j)continue;total+=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5}
+for(var i=0;i<nTok;i++){var total=0;for(var j=0;j<nTok;j++){if(i===j)continue;total+=Math.pow(Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5,Math.max(0.1,1/Math.max(0.1,param)))}
 for(var j=0;j<nTok;j++){if(i===j)continue;
-var align=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5;var prob=align/Math.max(total,0.01);
+var align=Math.pow(Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5,Math.max(0.1,1/Math.max(0.1,param)));var prob=align/Math.max(total,0.01);
 if(prob>0.15){
 var p1=project(tokens[i],cx,cy,sc,depth),p2=project(tokens[j],cx,cy,sc,depth);
 ctx.strokeStyle='rgba(255,215,0,'+(prob*0.8)+')';ctx.lineWidth=prob*4;ctx.shadowColor='#FFD700';ctx.shadowBlur=prob*10;
@@ -488,10 +505,10 @@ else if(scene===4){
 // Attention weighted sum
 var out={x:0,y:0,z:0};
 tokens.forEach(function(tk,i){
-var total=0;for(var j=0;j<nTok;j++){if(i===j)continue;total+=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5}
+var total=0;for(var j=0;j<nTok;j++){if(i===j)continue;total+=Math.pow(Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5,Math.max(0.1,1/Math.max(0.1,param)))}
 drawToken(tk,false);
 for(var j=0;j<nTok;j++){if(i===j)continue;
-var align=Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5;var prob=align/Math.max(total,0.01);
+var align=Math.pow(Math.cos(t*0.5+i*0.3+j*0.7)*0.5+0.5,Math.max(0.1,1/Math.max(0.1,param)));var prob=align/Math.max(total,0.01);
 if(prob>0.15){var p1=project(tokens[i],cx,cy,sc,depth),p2=project(tokens[j],cx,cy,sc,depth);
 ctx.strokeStyle='rgba(255,215,0,'+(prob*0.6)+')';ctx.lineWidth=prob*3;
 ctx.beginPath();ctx.moveTo(p1.x,p1.y);var mx=(p1.x+p2.x)/2,my=(p1.y+p2.y)/2-12*prob;ctx.quadraticCurveTo(mx,my,p2.x,p2.y);ctx.stroke();
@@ -536,8 +553,8 @@ var CLIP2_SCENES=[
 {title:'Convergence',desc:'Ball settles at minimum'}
 ];
 var CLIP2_TRAJ=[];
-var CLIP2=makeClip({varName:'CLIP2',cvId:'cv2',wrapId:'wrap2',lblId:'lbl2',titleId:'title2',zoomId:'zoom2',zoomValId:'zoom2v',lightId:'light2',narrId:'narr2',narrationKey:'clip2',sceneListId:'scenes2',scenes:CLIP2_SCENES,
-draw:function(cv,scene,t,zoom,dark){
+var CLIP2=makeClip({varName:'CLIP2',cvId:'cv2',wrapId:'wrap2',lblId:'lbl2',titleId:'title2',zoomId:'zoom2',zoomValId:'zoom2v',paramId:'param2',paramValId:'param2v',paramDefault:0.05,paramDecimals:2,lightId:'light2',narrId:'narr2',narrationKey:'clip2',sceneListId:'scenes2',scenes:CLIP2_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
 var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
@@ -605,12 +622,12 @@ else if(scene>=2){
 if(scene===2||CLIP2_TRAJ.length===0){
 if(t<0.1||CLIP2_TRAJ.length===0){CLIP2_TRAJ=[{x:1.0,z:0.8}]}
 var cur=CLIP2_TRAJ[CLIP2_TRAJ.length-1];
-var g=grad(cur.x,cur.z);var lr=0.05;
+var g=grad(cur.x,cur.z);var lr=param||0.05;
 if(scene===3){var v=CLIP2_TRAJ.length>1?{x:cur.x-CLIP2_TRAJ[CLIP2_TRAJ.length-2].x,z:cur.z-CLIP2_TRAJ[CLIP2_TRAJ.length-2].z}:{x:0,z:0};
-var nv={x:0.9*v.x-0.02*g.x,z:0.9*v.z-0.02*g.z};
+var nv={x:0.9*v.x-lr*g.x,z:0.9*v.z-lr*g.z};
 cur={x:cur.x+nv.x,z:cur.z+nv.z};
 }else if(scene===4){
-var g2=g.x*g.x+g.z*g.z+1e-8;cur={x:cur.x-0.03*g.x/Math.sqrt(g2),z:cur.z-0.03*g.z/Math.sqrt(g2)};
+var g2=g.x*g.x+g.z*g.z+1e-8;cur={x:cur.x-lr*g.x/Math.sqrt(g2),z:cur.z-lr*g.z/Math.sqrt(g2)};
 }else{cur={x:cur.x-lr*g.x,z:cur.z-lr*g.z}}
 CLIP2_TRAJ.push(cur);if(CLIP2_TRAJ.length>80)CLIP2_TRAJ.shift();
 }
@@ -645,8 +662,8 @@ var CLIP3_SCENES=[
 {title:'Information bottleneck',desc:'compress X, preserve Y'},
 {title:'Kolmogorov complexity',desc:'K(x) — shortest program'}
 ];
-var CLIP3=makeClip({varName:'CLIP3',cvId:'cv3',wrapId:'wrap3',lblId:'lbl3',titleId:'title3',zoomId:'zoom3',zoomValId:'zoom3v',lightId:'light3',narrId:'narr3',narrationKey:'clip3',sceneListId:'scenes3',scenes:CLIP3_SCENES,
-draw:function(cv,scene,t,zoom,dark){
+var CLIP3=makeClip({varName:'CLIP3',cvId:'cv3',wrapId:'wrap3',lblId:'lbl3',titleId:'title3',zoomId:'zoom3',zoomValId:'zoom3v',paramId:'param3',paramValId:'param3v',paramDefault:0.5,paramDecimals:2,lightId:'light3',narrId:'narr3',narrationKey:'clip3',sceneListId:'scenes3',scenes:CLIP3_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
 var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
 var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
@@ -692,12 +709,16 @@ drawDist(muL,0.4,'#FF69B4','Likelihood P(D|H)',0.9);
 ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Likelihood P(D|H) — evidence (narrow)',W/2,16);
 }
 else if(scene===2){
-// Posterior = prior * likelihood (approximation)
+// Posterior = prior^(1-α) * likelihood^α — α = prior strength param
+var alpha=param||0.5;
+var likeMu=Math.sin(t*0.5)*0.3;
 drawDist(0,1.0,'#00CED1','Prior',0.25);
-drawDist(Math.sin(t*0.5)*0.3,0.4,'#FF69B4','Likelihood',0.25);
-var muP=Math.sin(t*0.5)*0.3*0.7;
-drawDist(muP,0.5,'#FFD700','Posterior P(H|D)',0.95);
-ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Posterior P(H|D) ∝ P(D|H)·P(H) — updated belief',W/2,16);
+drawDist(likeMu,0.4,'#FF69B4','Likelihood',0.25);
+// Posterior blends prior (wide) and likelihood (narrow) based on α
+var postSigma=1.0*(1-alpha)+0.4*alpha;
+var postMu=likeMu*alpha;
+drawDist(postMu,postSigma,'#FFD700','Posterior P(H|D)',0.95);
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('Posterior P(H|D) — α='+(alpha).toFixed(2)+' (prior strength)',W/2,16);
 }
 else if(scene===3){
 // Entropy visualization — show multiple distributions with different entropy
