@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Probability of Truth · Blog · Mmnd</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--fg);line-height:1.7}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500}
+.nav-links a:hover{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{max-width:700px;margin:0 auto;padding:4rem 1.5rem}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2rem;font-weight:600;line-height:1.2;margin-bottom:1rem}
+@media(min-width:640px){h1{font-size:2.5rem}}
+.meta{color:var(--muted);font-size:.8125rem;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+p{margin-bottom:1.25rem}
+strong{color:var(--primary)}
+h2{font-family:Georgia,serif;font-size:1.5rem;margin:2rem 0 .75rem}
+.back-link{display:inline-block;margin-bottom:2rem;color:var(--primary);text-decoration:none;font-size:.875rem}
+.cta{margin-top:2rem;padding:1.5rem;background:var(--secondary);border-radius:.75rem;border:1px solid var(--border)}
+.cta a{color:var(--primary);text-decoration:none;font-weight:600}
+.formula{background:var(--secondary);padding:1rem 1.5rem;border-radius:.5rem;margin:1.5rem 0;border-left:3px solid var(--primary);text-align:center;color:var(--fg);overflow-x:auto}
+footer{max-width:800px;margin:2rem auto;padding:1.5rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<header>
+<nav>
+<a href="../index.html" class="logo"><span class="logo-icon">⚛</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links"><a href="../index.html">Home</a><a href="../sources.html">Sources</a><a href="../math-ml.html">Math+ML</a><a href="../blog.html">Blog</a><a href="../about.html">About</a></div>
+<button class="theme-toggle" onclick="document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')">🌓</button>
+</nav>
+</header>
+<main>
+<a href="../blog.html" class="back-link">← Back to blog</a>
+<div class="eyebrow">Probability · Statistics · Information Theory</div>
+<h1>The Probability of Truth</h1>
+<div class="meta">November 4, 2026 · 9 min read · Part 3 of 3 in the Mathematics with ML series</div>
+
+<p>How do machines reason under uncertainty? The answer spans three mathematical traditions — probability theory, statistics, and information theory — that turn out to be three views of the same underlying structure. Every trained neural network is implicitly computing a posterior. Every compression algorithm is fighting entropy. Every claim about intelligence reduces, ultimately, to the shortest description.</p>
+
+<h2>Bayes' Theorem: The Calculus of Belief</h2>
+<div class="formula">$$P(H|D) = \frac{P(D|H) \, P(H)}{P(D)}$$</div>
+<p>The posterior $P(H|D)$ — our updated belief after seeing data $D$ — is proportional to the likelihood $P(D|H)$ times the prior $P(H)$. This single equation is the calculus of belief: every observation refines our understanding.</p>
+<p><strong>The prior</strong> encodes what we think is plausible before seeing data. It might be wide (admitting many possibilities) or narrow (reflecting strong assumptions). The prior is where domain knowledge enters Bayesian reasoning.</p>
+<p><strong>The likelihood</strong> measures how well the data fits each hypothesis. It is the evidence — what the data tells us, separate from what we believed before. Strong evidence reshapes our beliefs.</p>
+<p><strong>The posterior</strong> is the updated belief. In our interactive clip, you can adjust the prior strength $\alpha$ to see the posterior shift between the wide prior and the narrow likelihood. When $\alpha = 0$, the posterior equals the prior (we ignore data). When $\alpha = 1$, the posterior equals the likelihood (we ignore our prior). The truth is always in between.</p>
+
+<h2>Every Model Is Bayesian</h2>
+<p>Every ML model that outputs a probability is implicitly Bayesian. The training data is evidence, the parameters are hypotheses, and the learned distribution is the posterior. Maximum likelihood estimation (MLE) is Bayes with a uniform prior. Maximum a posteriori (MAP) estimation is Bayes with an explicit prior. Regularization is a prior. Dropout is a prior. Every design choice in deep learning is, implicitly, a statement about what we believed before.</p>
+
+<h2>Entropy: Uncertainty Quantified</h2>
+<div class="formula">$$H(X) = -\sum_x p(x) \log p(x)$$</div>
+<p>Entropy quantifies uncertainty. A distribution that is certain (one outcome has probability 1) has zero entropy. A uniform distribution has maximum entropy. Entropy is the expected number of bits needed to encode an outcome — it connects probability to information.</p>
+<p>Crucially, the Shannon entropy and the thermodynamic entropy are the <strong>same quantity</strong>. The formula $S = k_B \ln \Omega$ (Boltzmann) and $H = -\sum p \log p$ (Shannon) differ only by a constant. Every compression algorithm is fighting entropy. Every learning algorithm is reducing entropy — turning uncertain distributions into confident ones.</p>
+
+<h2>The Bekenstein Bound</h2>
+<p>The connection goes deeper. The Bekenstein-Hawking entropy of a black hole:</p>
+<div class="formula">$$S_{BH} = \frac{A}{4L_P^2}$$</div>
+<p>where $A$ is the horizon area and $\ell_P$ is the Planck length — this is the maximum entropy that can fit in a region of space. The universe itself has an entropy budget, and it's measured in bits. Information is physical.</p>
+
+<h2>The Information Bottleneck</h2>
+<p>Tishby and Zaslavsky (2015) proposed that deep learning is an information bottleneck: compress the input $X$ into a representation $Z$ while preserving information about the output $Y$:</p>
+<div class="formula">$$\min_{p(Z|X)} I(X; Z) - \beta \, I(Z; Y)$$</div>
+<p>The representation should contain everything about $Y$ and nothing else about $X$. This is the variational principle of deep learning — compression and prediction, balanced. This principle explains why deep networks generalize: a network that compresses has low $I(X; Z)$ and captures only the relevant structure — the structure that predicts $Y$. Generalization is compression.</p>
+
+<h2>Kolmogorov Complexity: The Ultimate Prior</h2>
+<div class="formula">$$K(x) = \min_{p: U(p) = x} |p|$$</div>
+<p>The Kolmogorov complexity of a string $x$ is the length of the shortest program $p$ that produces $x$ on a universal Turing machine $U$. It is the ultimate measure of information content — the minimum number of bits needed to describe $x$, regardless of encoding.</p>
+<p>But $K(x)$ is <strong>uncomputable</strong> — determining it would require solving the halting problem. We can never know the exact Kolmogorov complexity of anything.</p>
+
+<h2>AIXI: The Universal Intelligence</h2>
+<p>Hutter's AIXI defines universal intelligence as an agent that weights every computable program by $2^{-|p|}$ (Solomonoff induction):</p>
+<div class="formula">$$a^* = \arg\max_a \sum_\mu 2^{-|\mu|} \mathbb{E}[V | a, \mu]$$</div>
+<p>The shortest programs that explain the data are most likely. This is the mathematical ideal of intelligence — and it's uncomputable. Every neural network is a computable approximation of this universal prior.</p>
+
+<h2>The Unifying View</h2>
+<p>Probability, statistics, and information theory are not three separate fields — they are three views of the same structure:</p>
+<p><strong>Probability</strong> is the language of uncertainty.<br>
+<strong>Statistics</strong> is the practice of updating beliefs from data.<br>
+<strong>Information theory</strong> quantifies how much belief-updating is possible.</p>
+<p>Bayes' theorem connects the first two. Entropy connects the second and third. Kolmogorov complexity connects all three to computability. And machine learning sits at the intersection — a practical art built on a mathematical foundation that runs all the way down to the physics of information.</p>
+
+<div class="cta">
+<h3>Try the interactive clip</h3>
+<p>The six-scene visualization shows Bayesian inference evolving — from prior through likelihood and posterior to entropy, the information bottleneck, and Kolmogorov complexity. Adjust the prior strength $\alpha$ to see the posterior shift between data and belief. Enable narration for a guided tour.</p>
+<p><a href="../math-ml.html#clip3">→ Open "The Probability of Truth" clip</a></p>
+</div>
+
+<h2>References</h2>
+<p>Tishby, N. & Zaslavsky, N. (2015). "Deep Learning and the Information Bottleneck Principle." arXiv:1503.02406<br>
+Hutter, M. (2005). "Universal Artificial Intelligence." Springer.<br>
+Shannon, C. (1948). "A Mathematical Theory of Communication."<br>
+Bekenstein, J. (1973). "Black Holes and Entropy." Physical Review D.</p>
+</main>
+<footer>© 2026 Mmnd Collective · Apache-2.0 · <a href="../about.html" style="color:var(--primary)">About</a></footer>
+<script>if(localStorage.getItem('mmnd-theme')==='dark'||(!localStorage.getItem('mmnd-theme')&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');
+setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+</script>
+</body>
+</html>
