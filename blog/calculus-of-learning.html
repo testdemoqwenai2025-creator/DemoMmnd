@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Calculus of Learning · Blog · Mmnd</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--fg);line-height:1.7}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500}
+.nav-links a:hover{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{max-width:700px;margin:0 auto;padding:4rem 1.5rem}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2rem;font-weight:600;line-height:1.2;margin-bottom:1rem}
+@media(min-width:640px){h1{font-size:2.5rem}}
+.meta{color:var(--muted);font-size:.8125rem;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+p{margin-bottom:1.25rem}
+strong{color:var(--primary)}
+h2{font-family:Georgia,serif;font-size:1.5rem;margin:2rem 0 .75rem}
+.back-link{display:inline-block;margin-bottom:2rem;color:var(--primary);text-decoration:none;font-size:.875rem}
+.cta{margin-top:2rem;padding:1.5rem;background:var(--secondary);border-radius:.75rem;border:1px solid var(--border)}
+.cta a{color:var(--primary);text-decoration:none;font-weight:600}
+.formula{background:var(--secondary);padding:1rem 1.5rem;border-radius:.5rem;margin:1.5rem 0;border-left:3px solid var(--primary);text-align:center;color:var(--fg);overflow-x:auto}
+footer{max-width:800px;margin:2rem auto;padding:1.5rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<header>
+<nav>
+<a href="../index.html" class="logo"><span class="logo-icon">⚛</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links"><a href="../index.html">Home</a><a href="../sources.html">Sources</a><a href="../math-ml.html">Math+ML</a><a href="../blog.html">Blog</a><a href="../about.html">About</a></div>
+<button class="theme-toggle" onclick="document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')">🌓</button>
+</nav>
+</header>
+<main>
+<a href="../blog.html" class="back-link">← Back to blog</a>
+<div class="eyebrow">Calculus · Machine Learning</div>
+<h1>The Calculus of Learning</h1>
+<div class="meta">November 4, 2026 · 8 min read · Part 2 of 3 in the Mathematics with ML series</div>
+
+<p>Every neural network training step is calculus. Not adjacent to calculus, not inspired by calculus — <strong>calculus itself</strong>. The chain rule, applied layer by layer, is what we call backpropagation. And the optimization step that follows is gradient descent, the most practical application of multivariable calculus ever devised.</p>
+
+<h2>The Loss Landscape</h2>
+<p>Every neural network defines a loss function $\mathcal{L}(\theta)$ — a surface over the space of all possible parameters $\theta$. The height of this surface is the error the model makes on the training data. Training means finding the lowest point — the parameters that minimize error.</p>
+<div class="formula">$$\theta^* = \arg\min_\theta \mathcal{L}(\theta)$$</div>
+<p>This landscape can have millions of dimensions — GPT-4 has over a trillion parameters, so its loss surface lives in a trillion-dimensional space. We cannot visualize it directly, but the mathematics generalizes: gradients, saddle points, and minima all behave in higher dimensions much as they do in two.</p>
+
+<h2>The Gradient: Directional Derivative</h2>
+<p>The gradient $\nabla \mathcal{L}$ is a vector pointing in the direction of steepest increase. It is computed by the chain rule — backpropagation — differentiating the loss through every layer:</p>
+<div class="formula">$$\frac{\partial \mathcal{L}}{\partial \theta_i} = \frac{\partial \mathcal{L}}{\partial y_L} \cdot \frac{\partial y_L}{\partial y_{L-1}} \cdots \frac{\partial y_1}{\partial \theta_i}$$</div>
+<p>The gradient tells us exactly how to change each parameter to <em>increase</em> the error. To decrease it, we go the opposite way.</p>
+
+<h2>Gradient Descent</h2>
+<div class="formula">$$\theta_{t+1} = \theta_t - \eta \nabla \mathcal{L}(\theta_t)$$</div>
+<p>The learning rate $\eta$ controls step size. Too large and we overshoot the minimum; too small and we crawl. In our interactive clip, you can adjust $\eta$ in real time and watch the ball race or creep down the loss surface.</p>
+
+<h2>Momentum: The Heavy Ball</h2>
+<p>Standard gradient descent is like a ball rolling on the surface with no inertia. Momentum adds inertia — the ball accumulates velocity:</p>
+<div class="formula">$$v_t = \gamma v_{t-1} + \eta \nabla \mathcal{L}(\theta_t)$$<br>$$\theta_{t+1} = \theta_t - v_t$$</div>
+<p>The momentum coefficient $\gamma$ (typically 0.9) means the ball remembers 90% of its previous velocity. This helps it power through flat regions and escape shallow local minima — the ball's inertia carries it past small bumps.</p>
+
+<h2>Adam: Adaptive Moments</h2>
+<p>Adam (Adaptive Moment Estimation) maintains running averages of both the gradient (first moment) and its square (second moment):</p>
+<div class="formula">$$m_t = \beta_1 m_{t-1} + (1-\beta_1) g_t$$<br>$$v_t = \beta_2 v_{t-1} + (1-\beta_2) g_t^2$$</div>
+<p>These are bias-corrected and used to compute per-parameter step sizes:</p>
+<div class="formula">$$\theta_{t+1} = \theta_t - \eta \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon}$$</div>
+<p>Parameters with large consistent gradients get smaller effective steps (the denominator grows). Parameters with small or noisy gradients get larger steps. This adaptive scaling is why Adam is the default optimizer for most deep learning.</p>
+
+<h2>The Schrödinger Connection</h2>
+<p>There is a deep mathematical parallel between gradient descent and quantum mechanics. The Schrödinger equation:</p>
+<div class="formula">$$\frac{d\psi}{dt} = -iH\psi$$</div>
+<p>and gradient descent:</p>
+<div class="formula">$$\frac{d\theta}{dt} = -\nabla \mathcal{L}(\theta)$$</div>
+<p>share the same structure: both evolve a state along the negative gradient of an energy function. The Hamiltonian $H$ plays the role of the loss $\mathcal{L}$; the wavefunction $\psi$ plays the role of the parameters $\theta$. Quantum mechanics and ML optimization are mathematical cousins.</p>
+
+<h2>The Benign Landscape</h2>
+<p>For over-parameterized networks (more parameters than data points), the loss landscape is surprisingly benign. Recent theoretical results show that almost all local minima are global minima — the surface looks like a connected valley rather than a rugged mountain range. The challenge is not finding the minimum; it's finding a minimum that <em>generalizes</em> to unseen data. The trajectory matters as much as the destination.</p>
+
+<div class="cta">
+<h3>Try the interactive clip</h3>
+<p>The six-scene visualization shows gradient descent on a real loss landscape — from the wireframe surface through momentum and Adam to convergence. Adjust the learning rate $\eta$ to see the ball overshoot or crawl. Enable narration for a guided tour.</p>
+<p><a href="../math-ml.html#clip2">→ Open "The Calculus of Learning" clip</a></p>
+</div>
+
+<h2>References</h2>
+<p>Kingma, D. & Ba, J. (2014). "Adam: A Method for Stochastic Optimization." arXiv:1412.6980<br>
+Polyak, B. (1964). "Some methods of speeding up the convergence of iteration methods."<br>
+Goodfellow, I. et al. (2016). "Deep Learning." MIT Press. Chapter 4-8.</p>
+</main>
+<footer>© 2026 Mmnd Collective · Apache-2.0 · <a href="../about.html" style="color:var(--primary)">About</a></footer>
+<script>if(localStorage.getItem('mmnd-theme')==='dark'||(!localStorage.getItem('mmnd-theme')&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');
+setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+</script>
+</body>
+</html>
