@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v2-course-grid-design">
+<meta name="version" content="2026-11-04-v3-clip2-deciding-what-to-model">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -207,10 +207,62 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap1"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas1"></canvas></div>
 </div>
 </section>
+
+<!-- CLIP 2: Deciding What to Model — Discovery vs. Surrogate -->
+<section class="clip-section" id="clip2" style="display:none">
+<h2>Deciding What to Model</h2>
+<div class="subtitle">Video 2 · Discovery vs. surrogate, discrepancy modeling, autodiff, symmetry, chaos — the critical first stage of the ML pipeline</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap2">
+<canvas class="clip-canvas" id="cv2"></canvas>
+<div class="clip-scene-label" id="lbl2">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP2.play()">▶</button>
+<button class="clip-btn" onclick="CLIP2.pause()">⏸</button>
+<button class="clip-btn" onclick="CLIP2.replay()">↺</button>
+<button class="clip-btn" onclick="CLIP2.prev()">◀</button>
+<button class="clip-btn" onclick="CLIP2.next()">▶|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title2">Discovery vs. surrogate</span>
+<div class="zoom-control">🔍<input type="range" id="zoom2" min="0.5" max="3" step="0.1" value="1"><span id="zoom2v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel2">α</span><input type="range" id="param2" min="0" max="1" step="0.05" value="0.5"><span id="param2v">0.50</span></div>
+<button class="clip-btn" onclick="CLIP2.toggleRecord()" id="rec2" title="Record WebM">●</button>
+<button class="clip-btn" onclick="CLIP2.toggleNarration()" id="narr2" title="Toggle narration">🔊</button>
+<button class="clip-btn" onclick="CLIP2.toggleLight()" id="light2">🌙</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes2"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts2"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities — PIML modeling evolution</h4>
+<canvas class="future-canvas" id="fut2"></canvas>
+<div class="future-milestones" id="fut2m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code2">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr2">Loading...</div>
+<h3>Math → Code mapping</h3>
+<div class="map-table-cl" id="map2"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs2"></div>
+<div id="codecontent2"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip2Code('discrepancy')">▶ Run &amp; observe output</button>
+<span id="runStatus2" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput2"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap2"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas2"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v1-physics-ml-clip1 · 1/23 clips</div>
+<div>v2-physics-ml-clip1-2 · 2/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -231,7 +283,7 @@ addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp
 // ============ CLIP CURRICULUM (23 clips) ============
 var CLIP_CURRICULUM=[
 {n:1,title:'Five Stages of PIML',desc:'High-Level Overview',status:'ready'},
-{n:2,title:'PINNs: Introduction',desc:'Physics-Informed Neural Networks',status:'upcoming'},
+{n:2,title:'Deciding What to Model',desc:'Discovery vs surrogate, discrepancy, autodiff, symmetry, chaos',status:'ready'},
 {n:3,title:'SINDy',desc:'Sparse Identification of Dynamics',status:'upcoming'},
 {n:4,title:'Koopman Operator',desc:'Lifting nonlinear dynamics',status:'upcoming'},
 {n:5,title:'Autoencoders for Dynamics',desc:'Discovering coordinates',status:'upcoming'},
@@ -280,40 +332,28 @@ var pt=document.getElementById('progressText');if(pt)pt.textContent=ready+' of '
 
 function selectClip(n){
 var c=CLIP_CURRICULUM[n-1];if(!c)return;
-var section=document.getElementById('clip1');if(!section)return;
 if(c.status!=='ready'){
-// Save original HTML if not already saved
-if(!savedClipHTML){
-var layout=section.querySelector('.clip-layout');
-var titleH2=section.querySelector('h2');
-var subtitle=section.querySelector('.subtitle');
-savedClipHTML={h2:titleH2?titleH2.textContent:'',sub:subtitle?subtitle.textContent:'',layout:layout?layout.innerHTML:''};
+// Hide all clip sections, show upcoming message in clip1
+for(var i=1;i<=23;i++){var s=document.getElementById('clip'+i);if(s)s.style.display='none';if(window['CLIP'+i])window['CLIP'+i].setActive(false)}
+var sec=document.getElementById('clip1');if(sec){
+sec.style.display='';
+sec.querySelector('h2').textContent=c.title;
+sec.querySelector('.subtitle').textContent='Video '+c.n+' · '+c.desc+' — Coming soon';
+var layout=sec.querySelector('.clip-layout');
+if(layout)layout.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--muted)"><div style="font-size:3rem;margin-bottom:1rem">🔬</div><p>This clip is being built. We\'re working through Steve Brunton\'s 23-video playlist step by step.</p><p style="margin-top:1rem">Clip '+c.n+': <strong style="color:var(--primary)">'+c.title+'</strong> — '+c.desc+'</p><p style="margin-top:1rem;font-size:.75rem">Share your notes from the video and I\'ll build this clip next!</p></div>';
+var codeSec=sec.querySelector('.clip-code-section');if(codeSec)codeSec.style.display='none';
 }
-// Show upcoming message
-section.querySelector('h2').textContent=c.title;
-section.querySelector('.subtitle').textContent='Video '+c.n+' · '+c.desc+' — Coming soon';
-var layout2=section.querySelector('.clip-layout');
-if(layout2)layout2.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--muted)"><div style="font-size:3rem;margin-bottom:1rem">🔬</div><p>This clip is being built. We\'re working through Steve Brunton\'s 23-video playlist step by step.</p><p style="margin-top:1rem">Clip '+c.n+': <strong style="color:var(--primary)">'+c.title+'</strong> — '+c.desc+'</p><p style="margin-top:1rem;font-size:.75rem">Share your notes from the video and I\'ll build this clip next!</p></div>';
-// Hide code section
-var codeSec=section.querySelector('.clip-code-section');if(codeSec)codeSec.style.display='none';
-activeClipNum=n;
-buildClipGrid();
-updateNavButtons();
-return;
+activeClipNum=n;buildClipGrid();updateNavButtons();return;
 }
-// For ready clips — restore original content if it was saved
-if(savedClipHTML){
-section.querySelector('h2').textContent=savedClipHTML.h2;
-section.querySelector('.subtitle').textContent=savedClipHTML.sub;
-var layout3=section.querySelector('.clip-layout');if(layout3)layout3.innerHTML=savedClipHTML.layout;
-var codeSec2=section.querySelector('.clip-code-section');if(codeSec2)codeSec2.style.display='';
-savedClipHTML=null; // clear saved state
+// Ready clip — hide all sections, show clip N, set active
+for(var i=1;i<=23;i++){
+var s=document.getElementById('clip'+i);
+if(s)s.style.display=(i===n)?'':'none';
+if(window['CLIP'+i])window['CLIP'+i].setActive(i===n);
 }
-activeClipNum=n;
-buildClipGrid();
-updateNavButtons();
-// Scroll to clip section
-section.scrollIntoView({behavior:'smooth',block:'start'});
+activeClipNum=n;buildClipGrid();updateNavButtons();
+var targetSec=document.getElementById('clip'+n);
+if(targetSec)targetSec.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function updateNavButtons(){
@@ -389,7 +429,7 @@ var SCENE_PARAMS=[
 
 // CLIP FRAMEWORK
 function makeClip(opts){
-var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,param:opts.paramDefault||0.5,narrationKey:opts.narrationKey||'',recording:false,recorder:null,recChunks:[],
+var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,active:true,param:opts.paramDefault||0.5,narrationKey:opts.narrationKey||'',recording:false,recorder:null,recChunks:[],
 cv:document.getElementById(opts.cvId),wrap:document.getElementById(opts.wrapId),lbl:document.getElementById(opts.lblId),titleEl:document.getElementById(opts.titleId),
 zoomEl:document.getElementById(opts.zoomId),zoomVal:document.getElementById(opts.zoomValId),
 paramEl:document.getElementById(opts.paramId),paramVal:document.getElementById(opts.paramValId),paramLabel:document.getElementById(opts.paramLabelId),
@@ -421,13 +461,14 @@ state.toggleRecord=function(){
 if(state.recording){if(state.recorder&&state.recorder.state!=='inactive')state.recorder.stop();state.recording=false;if(state.recBtn){state.recBtn.textContent='●';state.recBtn.style.color='';state.recBtn.style.animation=''}}
 else{try{var stream=state.cv.captureStream(30);state.recChunks=[];state.recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp8'});state.recorder.ondataavailable=function(e){if(e.data&&e.data.size>0)state.recChunks.push(e.data)};state.recorder.onstop=function(){var blob=new Blob(state.recChunks,{type:'video/webm'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=state.narrationKey+'_scene'+(state.scene+1)+'_'+Date.now()+'.webm';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},1000)};state.recorder.start();state.recording=true;if(state.recBtn){state.recBtn.textContent='⏺';state.recBtn.style.color='#ff0000';state.recBtn.style.animation='pulse 1s infinite'}}catch(e){console.log('Recording failed:',e.message)}}
 };
-function frame(){if(state.playing)state.time+=0.02;opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark,state.param);state.anim=requestAnimationFrame(frame)}
+function frame(){if(state.playing&&state.active)state.time+=0.02;if(state.active)opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark,state.param);state.anim=requestAnimationFrame(frame)}
 state.play=function(){state.playing=true;if(Narration.enabled)narrateCurrent()};
 state.pause=function(){state.playing=false;Narration.stop()};
 state.replay=function(){state.time=0;state.playing=true;if(Narration.enabled)narrateCurrent()};
 state.next=function(){state.scene=(state.scene+1)%opts.scenes.length;state.time=0;updateSceneUI();if(Narration.enabled)narrateCurrent()};
 state.prev=function(){state.scene=(state.scene-1+opts.scenes.length)%opts.scenes.length;state.time=0;updateSceneUI();if(Narration.enabled)narrateCurrent()};
 state.seek=function(i){state.scene=i;state.time=0;updateSceneUI();if(Narration.enabled)narrateCurrent()};
+state.setActive=function(on){state.active=on;if(on){state.play()}else{state.pause()}};
 frame();return state;
 }
 
@@ -607,9 +648,225 @@ ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('x_{k+1} = f(x_k
 drawPhaseBar(ctx,W,H);
 }});
 
+// ============ CLIP 2: Deciding What to Model ============
+var CLIP2_SCENES=[
+{title:'Discovery vs. surrogate',desc:'Two paths: find unknown physics or accelerate known'},
+{title:'Discrepancy modeling',desc:'y = f_physics + g_ML — hybrid models'},
+{title:'Autodiff shape optimization',desc:'Adjoint-free gradients through NNs'},
+{title:'Symmetry & turbulence closure',desc:'Galilean-invariant Reynolds stress'},
+{title:'Chaos & probability',desc:'Model densities, not trajectories'},
+{title:'Multi-fidelity & impact',desc:'Hierarchical data, global applications'}
+];
+var CLIP2_THOUGHTS=[
+'<strong style="color:var(--primary)">Two paths.</strong> Machine learning serves a dual purpose in physical systems: discovering missing physics where governing equations are unknown (neuroscience, climate dynamics), or creating fast surrogate models for known physics that are computationally prohibitive (fluid turbulence, molecular dynamics). $\\dot{\\mathbf{x}} = \\mathbf{f}(\\mathbf{x}, t)$ for discovery; $\\mathbf{x}_{k+1} = \\mathbf{F}(\\mathbf{x}_k)$ for surrogates.',
+'<strong style="color:var(--primary)">The gap between ideal and real.</strong> Engineering assets change over time — wear, thermal expansion, environmental shifts. Discrepancy modeling captures this: $\\mathbf{y}_{actual} = \\mathbf{f}_{physics}(\\mathbf{x}) + \\mathbf{g}_{ML}(\\mathbf{x})$. The ML correction learns the unmodeled delta, enabling digital twins that update throughout an asset\'s lifecycle.',
+'<strong style="color:var(--primary)">Gradients for free.</strong> Neural networks are automatically differentiable via backpropagation. This enables adjoint-free shape optimization: $\\nabla_\\theta \\mathcal{J} = \\frac{\\partial \\mathcal{J}}{\\partial \\mathbf{y}} \\cdot \\frac{\\partial \\mathbf{y}_{ML}}{\\partial \\theta}$. Wings, turbines, heart valves — optimized without manual sensitivity derivations.',
+'<strong style="color:var(--primary)">Symmetry by construction.</strong> ML achieves true physical fidelity when domain symmetries are baked into the architecture. In turbulence, the Reynolds stress closure $\\tau_{ij} = \\mathcal{N}_{ij}(\\bar{\\mathbf{S}}, \\bar{\\mathbf{\\Omega}})$ is learned by networks constrained to respect Galilean invariance — rotating the input doesn\'t change the physics.',
+'<strong style="color:var(--primary)">Chaos demands humility.</strong> ML cannot bypass mathematical impossibility. Deterministic long-term prediction of chaotic systems is flawed. Instead, model probability density distributions. And practice Occam\'s razor: if DMD or linear models suffice, deep neural networks are ML overkill.',
+'<strong style="color:var(--primary)">Multi-fidelity integration.</strong> Modern engineering combines hierarchical data — cheap low-fidelity sims, high-fidelity CFD, physical measurements — into unified surrogates. Differentiable physics solvers (JAX, PyTorch) unify PDE solvers with deep learning. Impact: climate resiliency, clean energy, accessible medicine.'
+];
+var CLIP2_PARAMS=[
+{label:'α',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'discovery/surrogate balance'},
+{label:'δ',min:0,max:0.5,step:0.01,default:0.1,decimals:2,desc:'discrepancy magnitude'},
+{label:'η',min:0.01,max:0.3,step:0.01,default:0.05,decimals:2,desc:'optimization step'},
+{label:'θ',min:0,max:6.28,step:0.1,default:0,decimals:1,desc:'rotation angle'},
+{label:'T',min:1,max:50,step:1,default:10,decimals:0,desc:'prediction horizon'},
+{label:'w',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'fidelity weight'}
+];
+var SCENE2_MATH=[
+['dx/dt=f(x,t)','x_{k+1}=F(x_k)','discovery ↔ surrogate'],
+['y=f_phys+g_ML','ma=-∇V_ML','discrepancy'],
+['∇_θ J','∂J/∂y · ∂y/∂θ','autodiff'],
+['τ_ij=N(S̄,Ω̄)','Galilean','invariance'],
+['∇·u=0','u_hi=H(u_lo)','chaos → density'],
+['multi-fidelity','x_{k+1}=f+w','impact']
+];
+var CLIP2=makeClip({varName:'CLIP2',cvId:'cv2',wrapId:'wrap2',lblId:'lbl2',titleId:'title2',zoomId:'zoom2',zoomValId:'zoom2v',paramId:'param2',paramValId:'param2v',paramLabelId:'paramLabel2',paramDefault:0.5,paramDecimals:2,lightId:'light2',narrId:'narr2',recId:'rec2',narrationKey:'piml2',sceneListId:'scenes2',thoughtsId:'thoughts2',scenes:CLIP2_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE2_MATH[scene]);
+if(scene===0){
+// Split: discovery (left) vs surrogate (right)
+var sx=W*0.5;
+ctx.fillStyle='rgba(0,206,209,0.06)';ctx.fillRect(0,0,sx,H);
+ctx.fillStyle='rgba(255,165,0,0.06)';ctx.fillRect(sx,0,W-sx,H);
+ctx.fillStyle='#00CED1';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('Discover unknown physics',sx/2,20);
+ctx.fillStyle='#FFD700';ctx.fillText('Accelerate known physics',sx+(W-sx)/2,20);
+// Left: data → equation discovery
+for(var i=0;i<12;i++){var px=sx*0.15+i*sx*0.06;var py=H*0.5+Math.sin(i*0.8+t)*H*0.15;
+ctx.fillStyle='#00CED1';ctx.shadowColor='#00CED1';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+// Discovered equation terms appearing
+var terms=['dx/dt=','-0.5x','+sin(x)'];var alpha=Math.min(1,t*0.5);
+ctx.fillStyle='rgba(0,206,209,'+alpha+')';ctx.font='9px monospace';ctx.textAlign='center';
+terms.forEach(function(tr,i){ctx.fillText(tr,sx*0.3+i*50,H*0.8)});
+ctx.fillStyle='#00CED1';ctx.font='8px Georgia,serif';ctx.fillText('dx/dt = f(x,t)',sx/2,H-25);
+// Right: expensive sim → fast surrogate
+var gridSize=8;var cellW=(W-sx)*0.5/gridSize;var startX=sx+(W-sx)*0.1;
+for(var i=0;i<gridSize;i++)for(var j=0;j<gridSize;j++){
+var v=Math.sin(i*0.5+j*0.3+t)*0.5+0.5;ctx.fillStyle='rgba(255,165,0,'+v*0.5+')';
+ctx.fillRect(startX+i*cellW,H*0.25+j*cellW,cellW-1,cellW-1)}
+// Surrogate: fewer evaluations
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.fillText('x_{k+1} = F(x_k)',sx+(W-sx)/2,H-25);
+// Arrow
+ctx.fillStyle=pc;ctx.font='16px Georgia,serif';ctx.fillText('↔',sx/2,H*0.5);
+}else if(scene===1){
+// Discrepancy model: three curves
+var cx=W/2,cy=H*0.55,scaleX=W*0.35,scaleY=H*0.2;
+var disc=param;
+// f_physics (idealized, dashed)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.setLineDash([5,5]);
+ctx.beginPath();for(var x=-3;x<=3;x+=0.05){var y=Math.sin(x);ctx.lineTo(cx+x*scaleX,cy-y*scaleY)}ctx.stroke();ctx.setLineDash([]);
+// g_ML (correction, golden)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;
+ctx.beginPath();for(var x=-3;x<=3;x+=0.05){var y=disc*Math.sin(2*x+t);ctx.lineTo(cx+x*scaleX,cy-y*scaleY)}ctx.stroke();ctx.shadowBlur=0;
+// y_actual (sum, solid orange)
+ctx.strokeStyle=pc;ctx.lineWidth=3;ctx.shadowColor=pc;ctx.shadowBlur=6;
+ctx.beginPath();for(var x=-3;x<=3;x+=0.05){var y=Math.sin(x)+disc*Math.sin(2*x+t);ctx.lineTo(cx+x*scaleX,cy-y*scaleY)}ctx.stroke();ctx.shadowBlur=0;
+// Labels
+ctx.fillStyle='#00CED1';ctx.font='9px monospace';ctx.textAlign='left';ctx.fillText('f_physics (ideal)',10,H*0.2);
+ctx.fillStyle='#FFD700';ctx.fillText('g_ML (correction)',10,H*0.3);
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.fillText('y = f_physics + g_ML',W/2,H-20);
+}else if(scene===2){
+// Autodiff: wing shape + gradient arrows
+var cx=W/2,cy=H*0.45;var morph=param;
+// Wing shape (NACA-like airfoil)
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.shadowColor=pc;ctx.shadowBlur=4;
+ctx.beginPath();
+for(var i=0;i<=60;i++){var u=i/60;var x=cx-W*0.3+u*W*0.6;var thick=0.15*Math.sin(u*Math.PI)*(1+morph*Math.sin(t*0.5)*0.3);var y=cy-H*0.1*thick*Math.sin(u*Math.PI);
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+for(var i=60;i>=0;i--){var u=i/60;var x=cx-W*0.3+u*W*0.6;var thick=0.15*Math.sin(u*Math.PI)*(1+morph*Math.sin(t*0.5)*0.3);var y=cy+H*0.1*thick*Math.sin(u*Math.PI);
+ctx.lineTo(x,y)}
+ctx.closePath();ctx.stroke();ctx.shadowBlur=0;
+// Gradient arrows pointing toward optimal
+for(var i=1;i<5;i++){var u=i/5;var x=cx-W*0.3+u*W*0.6;var y=cy;var gLen=morph*20*Math.sin(u*Math.PI+t);
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;
+ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y-gLen);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.beginPath();ctx.moveTo(x,y-gLen);ctx.lineTo(x-3,y-gLen+5);ctx.lineTo(x+3,y-gLen+5);ctx.fill();ctx.shadowBlur=0}
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('∇_θ J = (∂J/∂y)(∂y_ML/∂θ)',W/2,H-20);
+}else if(scene===3){
+// Symmetry: rotating fluid field + tensor
+var rotAngle=param;
+var cx=W*0.35,cy=H*0.45;var gridN=5;var cellSize=W*0.3/gridN;
+for(var i=0;i<gridN;i++)for(var j=0;j<gridN;j++){
+var px=cx-cellSize*gridN/2+i*cellSize;var py=cy-cellSize*gridN/2+j*cellSize;
+var angle=Math.atan2(j-gridN/2,i-gridN/2)+rotAngle;var mag=0.5+Math.sin(t+i+j)*0.3;
+ctx.strokeStyle='rgba(194,65,12,'+mag+')';ctx.lineWidth=1.5;
+ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+Math.cos(angle)*cellSize*0.4*mag,py+Math.sin(angle)*cellSize*0.4*mag);ctx.stroke();
+ctx.fillStyle=pc;ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill()}
+// Reynolds stress tensor (3x3 matrix)
+var tx=W*0.7,ty=H*0.3;ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='center';
+ctx.fillText('τ_ij',tx,ty-10);
+for(var i=0;i<3;i++)for(var j=0;j<3;j++){var v=Math.sin(i*0.3+j*0.5+rotAngle+t)*0.5+0.5;
+ctx.fillStyle='rgba(255,215,0,'+v+')';ctx.fillRect(tx-30+j*20,ty+i*20,18,18);
+ctx.strokeStyle=mt;ctx.lineWidth=0.5;ctx.strokeRect(tx-30+j*20,ty+i*20,18,18)}
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.fillText('τ_ij = N(S̄,Ω̄) — Galilean invariant',W/2,H-20);
+}else if(scene===4){
+// Chaos: Lorenz attractor + probability cloud
+var cx=W/2,cy=H*0.45,scale=H*0.08;var horizon=param;
+// Attractor shape
+ctx.strokeStyle='rgba(194,65,12,0.15)';ctx.lineWidth=1;
+var x=0.1,y=0,z=0;var sigma=10,rho=28,beta=8/3;var dt=0.005;
+ctx.beginPath();ctx.moveTo(cx,cy);
+for(var i=0;i<5000;i++){var dx=sigma*(y-x);var dy=x*(rho-z)-y;var dz=x*y-beta*z;x+=dx*dt;y+=dy*dt;z+=dz*dt;
+var px=cx+x*scale;var py=cy+(z-25)*scale;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();
+// Two diverging trajectories
+var colors=['#FFD700','#00CED1'];
+for(var tr=0;tr<2;tr++){var tx=0.1+tr*0.001,ty=0,tz=0;ctx.strokeStyle=colors[tr];ctx.lineWidth=1.5;ctx.shadowColor=colors[tr];ctx.shadowBlur=3;
+ctx.beginPath();ctx.moveTo(cx,cy);
+for(var i=0;i<horizon*50;i++){var dx=sigma*(ty-tx);var dy=tx*(rho-tz)-ty;var dz=tx*ty-beta*tz;tx+=dx*dt;ty+=dy*dt;tz+=dz*dt;
+var px=cx+tx*scale;var py=cy+(tz-25)*scale;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();ctx.shadowBlur=0}
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('Chaos: model P(x), not trajectories',W/2,H-20);
+}else if(scene===5){
+// Multi-fidelity pyramid + impact
+var cx=W*0.35,cy=H*0.5;var fid=param;
+// Pyramid layers
+var layers=[{w:0.4,c:'#a855f7',l:'High-fidelity CFD'},{w:0.6,c:'#ea580c',l:'Mid-fidelity'},{w:0.8,c:'#10b981',l:'Low-fidelity'}];
+layers.forEach(function(la,i){var y=cy+(i-1)*25;var w=la.w*W*0.3;
+ctx.fillStyle=la.c+'33';ctx.strokeStyle=la.c;ctx.lineWidth=1.5;
+ctx.beginPath();ctx.moveTo(cx-w,y-12);ctx.lineTo(cx+w,y-12);ctx.lineTo(cx+w*0.8,y+12);ctx.lineTo(cx-w*0.8,y+12);ctx.closePath();ctx.fill();ctx.stroke();
+ctx.fillStyle=la.c;ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText(la.l,cx,y+3)});
+// Impact icons on right
+var ix=W*0.7;
+var impacts=[{icon:'🌍',l:'Climate'},{icon:'⚡',l:'Energy'},{icon:'❤',l:'Medical'}];
+impacts.forEach(function(im,i){var y=H*0.2+i*H*0.2;
+ctx.font='20px Georgia,serif';ctx.textAlign='center';ctx.fillText(im.icon,ix,y);
+ctx.fillStyle=fg;ctx.font='9px Georgia,serif';ctx.fillText(im.l,ix,y+20)});
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('Multi-fidelity → unified surrogate',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP2.setActive(false); // pause clip 2 until selected
+
+// CLIP2 code section — discrepancy model
+var CLIP2_CODE={
+'discrepancy':{
+name:'Discrepancy Model: y = f_physics + g_ML',
+latex:'\\mathbf{y}_{actual} = \\mathbf{f}_{physics}(\\mathbf{x}) + \\mathbf{g}_{ML}(\\mathbf{x})',
+intent:'Hybrid model: known physics + learned correction for digital twins',
+mapping:[
+{symbol:'f_physics(x)',code:'physics_model(x)',note:'Known physics (e.g. idealized CFD)'},
+{symbol:'g_ML(x)',code:'ml_correction(x)',note:'Learned discrepancy (neural net)'},
+{symbol:'y_actual',code:'physics(x) + ml(x)',note:'Hybrid prediction'},
+{symbol:'ma',code:'-grad(V_physics + V_ML)',note:'ML-corrected force field'},
+{symbol:'training',code:'ml.fit(X, y_actual - physics(X))',note:'Train on residual'}
+],
+langs:{
+'Python':'import numpy as np\nfrom sklearn.neural_network import MLPRegressor\n\nclass DiscrepancyModel:\n    """y_actual = f_physics(x) + g_ML(x)"""\n    def __init__(self, physics_fn):\n        self.physics = physics_fn\n        self.ml = MLPRegressor(hidden_layer_sizes=(64, 64),\n                               activation=\'tanh\', max_iter=1000)\n    \n    def predict(self, X):\n        return self.physics(X) + self.ml.predict(X)\n    \n    def fit(self, X, y_actual):\n        # Train g_ML on the residual\n        residual = y_actual - self.physics(X)\n        self.ml.fit(X, residual)\n        return self\n    \n    def update(self, X_new, y_new):\n        """Online update for digital twin"""\n        residual = y_new - self.physics(X_new)\n        self.ml.partial_fit(X_new, residual)\n\n# Example: idealized pendulum + ML correction\nphysics = lambda x: np.sin(x)  # idealized\nmodel = DiscrepancyModel(physics)\n# X = sensor data, y = actual measurements\n# model.fit(X, y)  # learns the wear/tear correction',
+'TypeScript':'// Discrepancy model: y = f_physics + g_ML\nclass DiscrepancyModel {\n  private physics: (x: number[]) => number[];\n  private ml: NeuralNet;\n  \n  constructor(physicsFn: (x: number[]) => number[]) {\n    this.physics = physicsFn;\n    this.ml = new NeuralNet([64, 64]);\n  }\n  \n  predict(x: number[]): number[] {\n    const physicsPred = this.physics(x);\n    const correction = this.ml.forward(x);\n    return physicsPred.map((p, i) => p + correction[i]);\n  }\n  \n  fit(X: number[][], yActual: number[][]): void {\n    // Train on residual: y_actual - f_physics(x)\n    const residuals = X.map((x, i) =>\n      yActual[i].map((y, j) => y - this.physics(x)[j])\n    );\n    this.ml.train(X, residuals);\n  }\n}',
+'Go':'// Discrepancy model (conceptual)\ntype DiscrepancyModel struct {\n    Physics func([]float64) []float64\n    ML      *NeuralNet\n}\nfunc (m *DiscrepancyModel) Predict(x []float64) []float64 {\n    p := m.Physics(x)\n    g := m.ML.Forward(x)\n    result := make([]float64, len(p))\n    for i := range p { result[i] = p[i] + g[i] }\n    return result\n}\nfunc (m *DiscrepancyModel) Fit(X [][]float64, yActual [][]float64) {\n    // Train g_ML on residual: y - f_physics(x)\n    residuals := make([][]float64, len(X))\n    for i, x := range X {\n        p := m.Physics(x)\n        residuals[i] = make([]float64, len(yActual[i]))\n        for j := range yActual[i] { residuals[i][j] = yActual[i][j] - p[j] }\n    }\n    m.ML.Train(X, residuals)\n}',
+'Scala':'// Discrepancy model\nclass DiscrepancyModel(physics: Vector[Double] => Vector[Double]) {\n  private val ml = new NeuralNet(List(64, 64))\n  def predict(x: Vector[Double]): Vector[Double] =\n    physics(x).zip(ml.forward(x)).map { case (p, g) => p + g }\n  def fit(X: Seq[Vector[Double]], yActual: Seq[Vector[Double]]): Unit = {\n    // Train on residual\n    val residuals = X.zip(yActual).map { case (x, y) =>\n      y.zip(physics(x)).map { case (yi, pi) => yi - pi }\n    }\n    ml.train(X, residuals)\n  }\n}',
+'C':'/* Discrepancy model (conceptual) */\ntypedef struct {\n    double (*physics)(double*, int);\n    NeuralNet* ml;\n} DiscrepancyModel;\nvoid discrepancy_predict(DiscrepancyModel* m, double* x, int n, double* out) {\n    double* phys = malloc(n * sizeof(double));\n    double* corr = malloc(n * sizeof(double));\n    for (int i = 0; i < n; i++) phys[i] = m->physics(x, n);\n    nn_forward(m->ml, x, n, corr);\n    for (int i = 0; i < n; i++) out[i] = phys[i] + corr[i];\n    free(phys); free(corr);\n}',
+'Elixir':'# Discrepancy model\ndefmodule DiscrepancyModel do\n  defstruct [:physics, :ml]\n  def predict(model, x) do\n    physics_pred = model.physics.(x)\n    correction = NN.forward(model.ml, x)\n    Enum.zip(physics_pred, correction) |> Enum.map(fn {p, g} -> p + g end)\n  end\n  def fit(model, x_data, y_actual) do\n    residuals = Enum.zip(x_data, y_actual)\n      |> Enum.map(fn {x, y} ->\n        phys = model.physics.(x)\n        Enum.zip(y, phys) |> Enum.map(fn {yi, pi} -> yi - pi end)\n      end)\n    ml = NN.train(model.ml, x_data, residuals)\n    %{model | ml: ml}\n  end\nend'
+}
+}
+};
+var CLIP2_CURRENT_LANG='Python';
+function populateCode2(){
+var e=CLIP2_CODE['discrepancy'];if(!e)return;
+var exprEl=document.getElementById('expr2');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map2');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>→</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs2');var ccEl=document.getElementById('codecontent2');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip2Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc2-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip2Code(lang){CLIP2_CURRENT_LANG=lang;document.querySelectorAll('#tabs2 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc2-'+lang)})}
+var CLIP2_OUTPUTS={'discrepancy':['Initializing discrepancy model...','Physics model: f(x) = sin(x) (idealized pendulum)','ML correction: MLPRegressor(64, 64)','','Training on residual: y_actual - f_physics(x)','Training samples: 1000','Epoch 100: residual MSE = 0.034','Epoch 500: residual MSE = 0.008','Epoch 1000: residual MSE = 0.002','','Digital twin updated.','Discrepancy g_ML captures wear + thermal expansion']};
+function runClip2Code(key){
+var e=CLIP2_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput2');var st=document.getElementById('runStatus2');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap2');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP2_CURRENT_LANG+' '+e.name,''];var out2=CLIP2_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip2CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip2CodeViz(key){
+var wrap=document.getElementById('codeVizWrap2');if(!wrap)return;var cv=document.getElementById('codeVizCanvas2');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('Discrepancy model: physics + ML correction',W/2,16);
+var cx=W/2,cy=H*0.55,scaleX=W*0.35,scaleY=H*0.2;
+// Physics curve (dashed cyan)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.setLineDash([5,5]);ctx.beginPath();
+for(var x=-3;x<=3;x+=0.05){ctx.lineTo(cx+x*scaleX,cy-Math.sin(x)*scaleY)}ctx.stroke();ctx.setLineDash([]);
+// Actual (physics + correction, solid orange)
+ctx.strokeStyle='#ea580c';ctx.lineWidth=2.5;ctx.beginPath();
+for(var x=-3;x<=3;x+=0.05){var y=Math.sin(x)+0.15*Math.sin(2*x+tt)*Math.exp(-x*x*0.1);ctx.lineTo(cx+x*scaleX,cy-y*scaleY)}ctx.stroke();
+// Correction (golden, filled)
+ctx.fillStyle='rgba(255,215,0,0.15)';ctx.beginPath();ctx.moveTo(cx-3*scaleX,cy);
+for(var x=-3;x<=3;x+=0.05){var y=0.15*Math.sin(2*x+tt)*Math.exp(-x*x*0.1);ctx.lineTo(cx+x*scaleX,cy-y*scaleY)}ctx.lineTo(cx+3*scaleX,cy);ctx.closePath();ctx.fill();
+ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('f_physics',10,25);ctx.fillStyle='#ea580c';ctx.fillText('y_actual',10,38);ctx.fillStyle='#FFD700';ctx.fillText('g_ML',10,51);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
+
 // Future probability data for PIML
 var FUTURES_DATA={
-'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}]
+'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
+'piml2':[{n:'Digital twins standard',y:2029,p:0.45,t:'Every engineering asset has a live twin'},{n:'Autodiff design',y:2028,p:0.40,t:'Adjoint-free optimization ubiquitous'},{n:'Climate PIML',y:2030,p:0.35,t:'Physics-informed climate prediction'},{n:'Turbulence solved',y:2032,p:0.25,t:'ML closes RANS turbulence'},{n:'Multi-fidelity AI',y:2033,p:0.30,t:'Unified multi-fidelity surrogates'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -638,7 +895,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -710,6 +967,9 @@ ctx.fillStyle='#10b981';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillTe
 drawPhaseBar(ctx,W,H);t+=0.02;requestAnimationFrame(frame)}frame();
 }
 setTimeout(populateCode,300);
+setTimeout(populateCode2,300);
+// Initialize: show clip 1, pause clip 2
+setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
 </script>
 </body>
