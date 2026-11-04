@@ -255,6 +255,7 @@ var CLIP_CURRICULUM=[
 {n:23,title:'The Future of PIML',desc:'Where the field is heading',status:'upcoming'}
 ];
 var activeClipNum=1;
+var savedClipHTML=null; // saves clip1's original HTML when an upcoming clip is viewed
 
 function buildClipGrid(){
 var grid=document.getElementById('clipGrid');if(!grid)return;
@@ -279,28 +280,40 @@ var pt=document.getElementById('progressText');if(pt)pt.textContent=ready+' of '
 
 function selectClip(n){
 var c=CLIP_CURRICULUM[n-1];if(!c)return;
+var section=document.getElementById('clip1');if(!section)return;
 if(c.status!=='ready'){
+// Save original HTML if not already saved
+if(!savedClipHTML){
+var layout=section.querySelector('.clip-layout');
+var titleH2=section.querySelector('h2');
+var subtitle=section.querySelector('.subtitle');
+savedClipHTML={h2:titleH2?titleH2.textContent:'',sub:subtitle?subtitle.textContent:'',layout:layout?layout.innerHTML:''};
+}
 // Show upcoming message
-var section=document.getElementById('clip1');
-if(section){
 section.querySelector('h2').textContent=c.title;
 section.querySelector('.subtitle').textContent='Video '+c.n+' · '+c.desc+' — Coming soon';
-var layout=section.querySelector('.clip-layout');
-if(layout)layout.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--muted)"><div style="font-size:3rem;margin-bottom:1rem">🔬</div><p>This clip is being built. We\'re working through Steve Brunton\'s 23-video playlist step by step.</p><p style="margin-top:1rem">Clip '+c.n+': <strong style="color:var(--primary)">'+c.title+'</strong> — '+c.desc+'</p><p style="margin-top:1rem;font-size:.75rem">Share your notes from the video and I\'ll build this clip next!</p></div>';
-}
+var layout2=section.querySelector('.clip-layout');
+if(layout2)layout2.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--muted)"><div style="font-size:3rem;margin-bottom:1rem">🔬</div><p>This clip is being built. We\'re working through Steve Brunton\'s 23-video playlist step by step.</p><p style="margin-top:1rem">Clip '+c.n+': <strong style="color:var(--primary)">'+c.title+'</strong> — '+c.desc+'</p><p style="margin-top:1rem;font-size:.75rem">Share your notes from the video and I\'ll build this clip next!</p></div>';
+// Hide code section
+var codeSec=section.querySelector('.clip-code-section');if(codeSec)codeSec.style.display='none';
 activeClipNum=n;
 buildClipGrid();
 updateNavButtons();
 return;
 }
-// For ready clips, reload the page to the clip (for now, only clip 1)
-if(n===1){
-activeClipNum=1;
+// For ready clips — restore original content if it was saved
+if(savedClipHTML){
+section.querySelector('h2').textContent=savedClipHTML.h2;
+section.querySelector('.subtitle').textContent=savedClipHTML.sub;
+var layout3=section.querySelector('.clip-layout');if(layout3)layout3.innerHTML=savedClipHTML.layout;
+var codeSec2=section.querySelector('.clip-code-section');if(codeSec2)codeSec2.style.display='';
+savedClipHTML=null; // clear saved state
+}
+activeClipNum=n;
 buildClipGrid();
 updateNavButtons();
 // Scroll to clip section
-document.getElementById('clip1').scrollIntoView({behavior:'smooth',block:'start'});
-}
+section.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 function updateNavButtons(){
