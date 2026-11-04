@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v5-bugfix-upcoming-section">
+<meta name="version" content="2026-11-04-v6-clip3-architecture-design">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -266,10 +266,62 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap2"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas2"></canvas></div>
 </div>
 </section>
+
+<!-- CLIP 3: Architecture Design for Physics-Informed ML -->
+<section class="clip-section" id="clip3" style="display:none">
+<h2>Architecture Design for Physics-Informed ML</h2>
+<div class="subtitle">Video 3 · Function spaces, autoencoders+SINDy, invariance by construction, ResNets as integrators, FNO, PINNs, GNNs, equivariance</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap3">
+<canvas class="clip-canvas" id="cv3"></canvas>
+<div class="clip-scene-label" id="lbl3">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP3.play()">▶</button>
+<button class="clip-btn" onclick="CLIP3.pause()">⏸</button>
+<button class="clip-btn" onclick="CLIP3.replay()">↺</button>
+<button class="clip-btn" onclick="CLIP3.prev()">◀</button>
+<button class="clip-btn" onclick="CLIP3.next()">▶|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title3">Function space</span>
+<div class="zoom-control">🔍<input type="range" id="zoom3" min="0.5" max="3" step="0.1" value="1"><span id="zoom3v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel3">d</span><input type="range" id="param3" min="1" max="10" step="1" value="3"><span id="param3v">3</span></div>
+<button class="clip-btn" onclick="CLIP3.toggleRecord()" id="rec3" title="Record WebM">●</button>
+<button class="clip-btn" onclick="CLIP3.toggleNarration()" id="narr3" title="Toggle narration">🔊</button>
+<button class="clip-btn" onclick="CLIP3.toggleLight()" id="light3">🌙</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes3"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts3"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities — PIML architecture evolution</h4>
+<canvas class="future-canvas" id="fut3"></canvas>
+<div class="future-milestones" id="fut3m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code3">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr3">Loading...</div>
+<h3>Math → Code mapping</h3>
+<div class="map-table-cl" id="map3"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs3"></div>
+<div id="codecontent3"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip3Code('sindy_ae')">▶ Run &amp; observe output</button>
+<span id="runStatus3" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput3"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap3"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas3"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v2-physics-ml-clip1-2 · 2/23 clips</div>
+<div>v3-physics-ml-clip1-2-3 · 3/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -291,7 +343,7 @@ addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp
 var CLIP_CURRICULUM=[
 {n:1,title:'Five Stages of PIML',desc:'High-Level Overview',status:'ready'},
 {n:2,title:'Deciding What to Model',desc:'Discovery vs surrogate, discrepancy, autodiff, symmetry, chaos',status:'ready'},
-{n:3,title:'SINDy',desc:'Sparse Identification of Dynamics',status:'upcoming'},
+{n:3,title:'Architecture Design',desc:'Function spaces, autoencoders, invariance, ResNets, FNO, PINNs, GNNs',status:'ready'},
 {n:4,title:'Koopman Operator',desc:'Lifting nonlinear dynamics',status:'upcoming'},
 {n:5,title:'Autoencoders for Dynamics',desc:'Discovering coordinates',status:'upcoming'},
 {n:6,title:'Neural ODEs',desc:'Continuous-depth networks',status:'upcoming'},
@@ -874,10 +926,232 @@ ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillTe
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
 
+// ============ CLIP 3: Architecture Design ============
+var CLIP3_SCENES=[
+{title:'Function space',desc:'Architecture constrains the search space'},
+{title:'Autoencoder + SINDy',desc:'Discover coordinates + equations from data'},
+{title:'Invariant tensors',desc:'Galilean invariance by construction'},
+{title:'ResNets & FNO',desc:'Time stepping + spectral operators'},
+{title:'PINNs & autodiff',desc:'Exact derivatives in loss'},
+{title:'GNNs & equivariance',desc:'Local interactions + group symmetry'}
+];
+var CLIP3_THOUGHTS=[
+'<strong style="color:var(--primary)">Architecture is function space.</strong> Designing an architecture is not picking a visual topology — it is constraining an infinite-dimensional function space into a parameterized family $f(\\mathbf{x}; \\mathbf{\\theta})$. By embedding physical assumptions (low dimensionality, multiscale) into the architecture, we restrict the search space so models learn robustly with less data: $f \\in \\mathcal{F}_{arch} \\subset \\mathcal{H}$.',
+'<strong style="color:var(--primary)">Compress, then discover.</strong> High-dimensional observations (megapixel video of a pendulum) compress via autoencoder bottlenecks into intrinsic coordinates $\\mathbf{z} = \\Phi_{encoder}(\\mathbf{x})$. Pairing with SINDy sparse regression discovers parsimonious governing equations: $\\frac{d\\mathbf{z}}{dt} = \\Theta(\\mathbf{z})\\Xi$. Occam\'s razor in action.',
+'<strong style="color:var(--primary)">Physics by construction.</strong> Rather than soft loss penalties, fundamental laws can be enforced through custom tensor layers. $\\tau = f_{tensor}(\\mathbf{S}, \\mathbf{\\Omega})$ guarantees Reynolds stress outputs remain invariant across all inertial frames: $f(g \\cdot \\mathbf{x}) = f(\\mathbf{x}) \\; \\forall g \\in \\text{Galilean}$. Physics is baked in, not learned.',
+'<strong style="color:var(--primary)">ResNets are integrators.</strong> Residual skip connections are structurally identical to Forward Euler: $\\mathbf{x}_{k+1} = \\mathbf{x}_k + \\Delta t \\cdot \\mathcal{R}(\\mathbf{x}_k) \\Leftrightarrow \\frac{d\\mathbf{x}}{dt} \\approx \\mathcal{R}(\\mathbf{x})$. Fourier Neural Operators extend this to spectral domain: $\\mathcal{K}(v) = \\mathcal{F}^{-1}(R_\\theta \\cdot \\mathcal{F}v)$, learning resolution-independent PDE operators.',
+'<strong style="color:var(--primary)">Exact gradients.</strong> Automatic differentiation engines compute exact partial derivatives through computational graphs. PINNs leverage this: $\\mathcal{L} = \\mathcal{L}_{data} + \\lambda \\|\\frac{\\partial u}{\\partial t} + \\mathcal{N}[u]\\|^2$. The PDE residual is penalized with exact analytical derivatives — not finite differences, not approximations. The gradient is mathematically precise.',
+'<strong style="color:var(--primary)">Local rules, global symmetry.</strong> GNNs parameterize invariant local interaction rules: $\\mathbf{h}_i^{(l+1)} = \\gamma(\\mathbf{h}_i, \\square_{j \\in \\mathcal{N}(i)} \\phi(\\mathbf{h}_i, \\mathbf{h}_j, \\mathbf{e}_{ij}))$. A single learned rule generalizes across variable-sized domains. And group equivariance — $f(g \\cdot \\mathbf{x}) = g \\cdot f(\\mathbf{x})$ — guarantees transformations commute with the network, reducing training data by orders of magnitude.'
+];
+var CLIP3_PARAMS=[
+{label:'d',min:1,max:10,step:1,default:3,decimals:0,desc:'latent dimension'},
+{label:'|z|',min:1,max:8,step:1,default:2,decimals:0,desc:'bottleneck width'},
+{label:'θ',min:0,max:6.28,step:0.1,default:0,decimals:1,desc:'rotation angle'},
+{label:'Δt',min:0.01,max:0.5,step:0.01,default:0.1,decimals:2,desc:'time step'},
+{label:'λ',min:0,max:2,step:0.1,default:1,decimals:1,desc:'physics weight'},
+{label:'k',min:1,max:10,step:1,default:3,decimals:0,desc:'neighbor count'}
+];
+var SCENE3_MATH=[
+['y=f(x;θ)','f∈F_arch⊂H','inductive bias'],
+['z=Φ(x)','dz/dt=Θ(z)Ξ','SINDy'],
+['τ=f(S,Ω)','f(gx)=f(x)','Galilean'],
+['x_{k+1}=x+Δt·R','F⁻¹(R·F(v))','ResNet=FNO'],
+['∂u/∂t+N[u]','L_data+λL_phys','autodiff'],
+['h_i=γ(□φ)','f(gx)=gf(x)','equivariance']
+];
+var CLIP3=makeClip({varName:'CLIP3',cvId:'cv3',wrapId:'wrap3',lblId:'lbl3',titleId:'title3',zoomId:'zoom3',zoomValId:'zoom3v',paramId:'param3',paramValId:'param3v',paramLabelId:'paramLabel3',paramDefault:3,paramDecimals:0,lightId:'light3',narrId:'narr3',recId:'rec3',narrationKey:'piml3',sceneListId:'scenes3',thoughtsId:'thoughts3',scenes:CLIP3_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE3_MATH[scene]);
+if(scene===0){
+// Function space: cloud of random curves → constrained family
+var sx=W*0.5;
+// Left: infinite function space (chaotic curves)
+ctx.fillStyle='rgba(115,106,94,0.1)';ctx.fillRect(0,0,sx,H);
+ctx.fillStyle=mt;ctx.font='9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Infinite function space H',sx/2,20);
+for(var i=0;i<8;i++){ctx.strokeStyle='rgba(115,106,94,'+(0.15+i*0.03)+')';ctx.lineWidth=1;ctx.beginPath();
+for(var x=0;x<sx;x+=3){var y=H*0.5+Math.sin(x*0.02+i+t*0.5)*20*(1+i*0.2)+Math.cos(x*0.05+i)*10;if(x===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}
+// Right: constrained parameterized family (structured)
+ctx.fillStyle='rgba(234,88,12,0.06)';ctx.fillRect(sx,0,W-sx,H);
+ctx.fillStyle=pc;ctx.fillText('Parameterized family F_arch',sx+(W-sx)/2,20);
+for(var i=0;i<param;i++){ctx.strokeStyle='rgba(234,88,12,'+(0.3+i*0.1)+')';ctx.lineWidth=2;ctx.shadowColor=pc;ctx.shadowBlur=4;ctx.beginPath();
+for(var x=sx;x<W;x+=3){var u=(x-sx)/(W-sx);var y=H*0.5+Math.sin(u*Math.PI*2*i/param+t*0.3)*H*0.15;if(x===sx)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0}
+// Arrow
+ctx.fillStyle='#FFD700';ctx.font='20px Georgia,serif';ctx.fillText('→',sx,H*0.5);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('y=f(x;θ), f∈F_arch⊂H',W/2,H-20);
+}else if(scene===1){
+// Autoencoder + SINDy: high-dim → encoder → low-dim z → SINDy
+var dim=param;
+// Left: high-dimensional data (pixel grid)
+var gridN=8;var cellW=W*0.2/gridN;var startX=W*0.05;
+for(var i=0;i<gridN;i++)for(var j=0;j<gridN;j++){var v=Math.sin(i*0.5+j*0.3+t)*0.5+0.5;ctx.fillStyle='rgba(234,88,12,'+v*0.6+')';ctx.fillRect(startX+i*cellW,H*0.25+j*cellW,cellW-1,cellW-1)}
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('x (high-dim)',startX+gridN*cellW/2,H*0.25+gridN*cellW+15);
+// Encoder arrow
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX+gridN*cellW+5,H*0.5);ctx.lineTo(startX+gridN*cellW+40,H*0.5);ctx.stroke();
+ctx.fillStyle=pc;ctx.font='8px Georgia,serif';ctx.fillText('Φ',startX+gridN*cellW+22,H*0.5-8);
+// Center: low-dim z (few dots)
+var zStartX=startX+gridN*cellW+50;
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
+for(var i=0;i<dim;i++){var px=zStartX+i*15;var py=H*0.5+Math.sin(t*0.5+i)*20;ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fill()}
+ctx.shadowBlur=0;ctx.fillStyle=mt;ctx.font='8px monospace';ctx.fillText('z (low-dim)',zStartX+dim*7,H*0.5+35);
+// SINDy arrow
+var sindyX=zStartX+dim*15+10;
+ctx.strokeStyle=pc;ctx.beginPath();ctx.moveTo(sindyX,H*0.5);ctx.lineTo(sindyX+30,H*0.5);ctx.stroke();
+// Right: discovered equation
+ctx.fillStyle='#00CED1';ctx.font='bold 10px Georgia,serif';ctx.textAlign='left';
+ctx.fillText('dz/dt = Θ(z)Ξ',sindyX+35,H*0.45);
+ctx.fillStyle=mt;ctx.font='7px monospace';
+ctx.fillText('Ξ = [0, -1, 0, 0.5]',sindyX+35,H*0.55);
+ctx.fillText('→ ẋ = -z + 0.5z²',sindyX+35,H*0.62);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('z=Φ(x), dz/dt=Θ(z)Ξ',W/2,H-20);
+}else if(scene===2){
+// Invariant tensor architecture: rotating field + invariant output
+var rotAngle=param;
+var cx=W*0.35,cy=H*0.45;var gridN=4;var cellSize=W*0.25/gridN;
+for(var i=0;i<gridN;i++)for(var j=0;j<gridN;j++){
+var px=cx-cellSize*gridN/2+i*cellSize;var py=cy-cellSize*gridN/2+j*cellSize;
+var angle=Math.atan2(j-gridN/2,i-gridN/2)+rotAngle;var mag=0.5+Math.sin(t+i+j)*0.3;
+ctx.strokeStyle='rgba(234,88,12,'+mag+')';ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+Math.cos(angle)*cellSize*0.5*mag,py+Math.sin(angle)*cellSize*0.5*mag);ctx.stroke()}
+// Output tensor (stays invariant)
+var tx=W*0.7,ty=H*0.3;ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText('τ_ij (invariant)',tx,ty-10);
+for(var i=0;i<3;i++)for(var j=0;j<3;j++){var v=Math.abs(Math.sin(i*0.7+j*0.5))*0.5+0.3;ctx.fillStyle='rgba(255,215,0,'+v+')';ctx.fillRect(tx-30+j*20,ty+i*20,18,18);ctx.strokeStyle=mt;ctx.lineWidth=0.5;ctx.strokeRect(tx-30+j*20,ty+i*20,18,18)}
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.fillText('τ=f(S,Ω), f(g·x)=f(x)',W/2,H-20);
+}else if(scene===3){
+// ResNet = Euler integrator + FNO spectral
+var dt=param;var cx=W/2,cy=H*0.4;
+// Left: ResNet skip connection
+var rnx=W*0.25;
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.shadowColor=pc;ctx.shadowBlur=4;
+for(var k=0;k<4;k++){var y=cy-60+k*30;
+// Skip connection
+ctx.strokeStyle='rgba(234,88,12,0.3)';ctx.beginPath();ctx.moveTo(rnx,y);ctx.lineTo(rnx+60,y+15);ctx.stroke();
+// Residual block
+ctx.strokeStyle=pc;ctx.strokeRect(rnx+10,y+5,40,10);
+ctx.fillStyle=fg;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('R'+k,rnx+30,y+12)}
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.fillText('ResNet',rnx+30,cy+80);
+// Right: Fourier spectrum
+var fnx=W*0.65;
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.shadowColor='#00CED1';ctx.shadowBlur=4;
+ctx.beginPath();
+for(var i=0;i<=60;i++){var u=i/60;var freq=u*10;var amp=Math.exp(-Math.pow(freq-3,2)/2)*(1+Math.sin(t)*0.2);var x=fnx+u*W*0.25;var y=cy-amp*60;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.fillText('FNO spectrum',fnx+W*0.12,cy+80);
+// Formula
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('x_{k+1}=x+Δt·R(x)  |  K=F⁻¹(R·F)',W/2,H-20);
+}else if(scene===4){
+// PINN autodiff: computational graph + PDE residual
+var cx=W/2,cy=H*0.4;
+// Forward pass (nodes)
+var layers=[2,3,2,1];var lw=W*0.5;var sx=(W-lw)/2;
+layers.forEach(function(n,li){var ls=lw/(layers.length-1);
+for(var i=0;i<n;i++){var x=sx+li*ls;var y=cy+(i-(n-1)/2)*30;
+ctx.fillStyle=pc;ctx.shadowColor=pc;ctx.shadowBlur=6;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+if(li<layers.length-1){var nn=layers[li+1];var nx=sx+(li+1)*ls;
+for(var j=0;j<nn;j++){var ny=cy+(j-(nn-1)/2)*30;ctx.strokeStyle='rgba(234,88,12,0.15)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(nx,ny);ctx.stroke()}}}});
+// Backward derivatives (golden arrows)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.setLineDash([3,3]);
+ctx.beginPath();ctx.moveTo(sx+lw,cy);ctx.lineTo(sx,cy);ctx.stroke();ctx.setLineDash([]);ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('∂u/∂t, ∂²u/∂x²',sx+lw/2,cy-40);
+// Loss formula
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.fillText('L = L_data + λ‖∂u/∂t + N[u]‖²',W/2,H-20);
+}else if(scene===5){
+// GNN + equivariance
+var cx=W*0.35,cy=H*0.45;var k=param;
+// Graph nodes
+var nodes=[];for(var i=0;i<6;i++){var a=i/6*Math.PI*2;nodes.push({x:cx+Math.cos(a)*60,y:cy+Math.sin(a)*40})}
+// Edges (message passing)
+nodes.forEach(function(n,i){nodes.forEach(function(n2,j){if(i===j)return;var d=Math.sqrt(Math.pow(n.x-n2.x,2)+Math.pow(n.y-n2.y,2));if(d<k*40+20){ctx.strokeStyle='rgba(234,88,12,'+(0.3+0.3*(1-d/100))+')';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(n2.x,n2.y);ctx.stroke()}})});
+// Nodes
+nodes.forEach(function(n,i){ctx.fillStyle=pc;ctx.shadowColor=pc;ctx.shadowBlur=8;ctx.beginPath();ctx.arc(n.x,n.y,6,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle=fg;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('h'+i,n.x,n.y-10)});
+// Equivariance diagram (right)
+var ex=W*0.7;
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('f(g·x) = g·f(x)',ex,H*0.3);
+// Commutative diagram
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;
+ctx.beginPath();ctx.arc(ex,H*0.55,20,0,Math.PI*2);ctx.stroke();
+ctx.beginPath();ctx.arc(ex+50,H*0.55,20,0,Math.PI*2);ctx.stroke();
+ctx.fillStyle=fg;ctx.font='8px monospace';ctx.fillText('x',ex,H*0.58);ctx.fillText('f(x)',ex+50,H*0.58);
+ctx.strokeStyle=pc;ctx.beginPath();ctx.moveTo(ex+20,H*0.55);ctx.lineTo(ex+30,H*0.55);ctx.stroke();
+ctx.fillStyle=pc;ctx.font='7px monospace';ctx.fillText('f',ex+25,H*0.52);
+ctx.beginPath();ctx.moveTo(ex,H*0.35);ctx.lineTo(ex+50,H*0.35);ctx.stroke();ctx.fillText('g',ex+25,H*0.33);
+ctx.beginPath();ctx.moveTo(ex+50,H*0.35);ctx.lineTo(ex+50,H*0.35+15);ctx.stroke();
+ctx.beginPath();ctx.moveTo(ex,H*0.35);ctx.lineTo(ex,H*0.35+15);ctx.stroke();
+ctx.fillText('h_i=γ(□φ)',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP3.setActive(false);
+
+// CLIP3 code section — SINDy Autoencoder
+var CLIP3_CODE={
+'sindy_ae':{
+name:'SINDy Autoencoder: Discover Equations from Data',
+latex:'\\mathbf{z} = \\Phi_{enc}(\\mathbf{x}), \\quad \\frac{d\\mathbf{z}}{dt} = \\Theta(\\mathbf{z})\\Xi',
+intent:'Autoencoder compresses data; SINDy discovers sparse governing equations in latent space',
+mapping:[
+{symbol:'Φ_enc(x)',code:'encoder(x)',note:'Compress high-dim data to latent z'},
+{symbol:'Φ_dec(z)',code:'decoder(z)',note:'Reconstruct x from latent z'},
+{symbol:'Θ(z)',code:'library(z)',note:'Candidate terms (1, z, z², sin(z), ...)'},
+{symbol:'Ξ',code:'sparse_coefs',note:'Sparse coefficient matrix (L1 penalized)'},
+{symbol:'dz/dt',code:'Theta(z) @ Xi',note:'Discovered dynamics in latent space'}
+],
+langs:{
+'Python':'import numpy as np\nfrom sklearn.linear_model import Lasso\n\nclass SINDyAutoencoder:\n    """Discover governing equations from high-dim data"""\n    def __init__(self, latent_dim=2, library_degree=3):\n        self.latent_dim = latent_dim\n        self.degree = library_degree\n        self.encoder = None  # neural net\n        self.decoder = None\n        self.xi = None  # sparse coefficients\n    \n    def build_library(self, Z):\n        """Build candidate term library Θ(Z)"""\n        n = Z.shape[0]\n        terms = [np.ones(n)]  # constant\n        for i in range(self.latent_dim):\n            terms.append(Z[:, i])  # linear\n        for i in range(self.latent_dim):\n            for j in range(self.latent_dim):\n                terms.append(Z[:, i] * Z[:, j])  # quadratic\n        return np.column_stack(terms)\n    \n    def fit(self, X, dZ_dt, threshold=0.1):\n        """STLSQ: Sequential Thresholded Least Squares"""\n        Z = self.encoder(X)  # compress\n        Theta = self.build_library(Z)  # library\n        Xi = np.linalg.lstsq(Theta, dZ_dt, rcond=None)[0]\n        # Threshold: zero out small coefficients\n        Xi[np.abs(Xi) < threshold] = 0\n        self.xi = Xi\n        return self\n    \n    def predict(self, z):\n        """dz/dt = Theta(z) @ Xi"""\n        theta = self.build_library(z.reshape(1, -1))\n        return theta @ self.xi',
+'TypeScript':'// SINDy autoencoder (conceptual)\nclass SINDyAutoencoder {\n  private encoder: NeuralNet;\n  private decoder: NeuralNet;\n  private xi: number[][]; // sparse coefs\n  \n  buildLibrary(z: number[]): number[] {\n    const terms = [1]; // constant\n    z.forEach(zi => terms.push(zi)); // linear\n    z.forEach(zi => z.forEach(zj => terms.push(zi * zj))); // quadratic\n    return terms;\n  }\n  \n  fit(X: number[][], dZdt: number[][]): void {\n    const Z = X.map(x => this.encoder.forward(x));\n    const Theta = Z.map(z => this.buildLibrary(z));\n    // STLSQ: least squares + thresholding\n    this.xi = leastSquares(Theta, dZdt);\n    this.xi = this.xi.map(row => row.map(v => Math.abs(v) < 0.1 ? 0 : v));\n  }\n  \n  predict(z: number[]): number[] {\n    const theta = this.buildLibrary(z);\n    return matMul([theta], this.xi)[0];\n  }\n}',
+'Go':'// SINDy autoencoder (conceptual)\ntype SINDyAutoencoder struct {\n    Encoder *NeuralNet\n    Decoder *NeuralNet\n    Xi      [][]float64\n}\nfunc (s *SINDyAutoencoder) BuildLibrary(z []float64) []float64 {\n    terms := []float64{1}\n    for _, zi := range z { terms = append(terms, zi) }\n    for _, zi := range z { for _, zj := range z { terms = append(terms, zi*zj) } }\n    return terms\n}\nfunc (s *SINDyAutoencoder) Fit(X [][]float64, dZdt [][]float64) {\n    Z := make([][]float64, len(X))\n    for i, x := range X { Z[i] = s.Encoder.Forward(x) }\n    // STLSQ: least squares + threshold\n    s.Xi = leastSquares(Z, dZdt)\n    for i := range s.Xi { for j := range s.Xi[i] {\n        if math.Abs(s.Xi[i][j]) < 0.1 { s.Xi[i][j] = 0 }\n    }}\n}',
+'Scala':'// SINDy autoencoder\nclass SINDyAutoencoder(val latentDim: Int) {\n  var xi: Array[Array[Double]] = _\n  def buildLibrary(z: Vector[Double]): Vector[Double] =\n    1.0 +: z ++ z.flatMap(zi => z.map(zj => zi * zj))\n  def fit(X: Seq[Vector[Double]], dZdt: Seq[Vector[Double]]): Unit = {\n    val Z = X.map(encoder.forward)\n    val Theta = Z.map(buildLibrary)\n    xi = leastSquares(Theta, dZdt)\n    xi = xi.map(_.map(v => if (math.abs(v) < 0.1) 0.0 else v))\n  }\n}',
+'C':'/* SINDy autoencoder (conceptual) */\nvoid build_library(double* z, int nz, double* theta, int* nt) {\n    int idx = 0;\n    theta[idx++] = 1.0; /* constant */\n    for (int i = 0; i < nz; i++) theta[idx++] = z[i]; /* linear */\n    for (int i = 0; i < nz; i++) for (int j = 0; j < nz; j++)\n        theta[idx++] = z[i] * z[j]; /* quadratic */\n    *nt = idx;\n}\nvoid sindy_fit(double** Z, int n, int nz, double** dZdt, double** Xi, int nterms, double thresh) {\n    /* STLSQ: least squares + threshold */\n    least_squares(Z, dZdt, n, nterms, Xi);\n    for (int i = 0; i < nterms; i++) for (int j = 0; j < nz; j++)\n        if (fabs(Xi[i][j]) < thresh) Xi[i][j] = 0;\n}',
+'Elixir':'# SINDy autoencoder\ndefmodule SINDyAutoencoder do\n  def build_library(z) do\n    constant = [1.0]\n    linear = Enum.to_list(z)\n    quadratic = for zi <- z, zj <- z, do: zi * zj\n    constant ++ linear ++ quadratic\n  end\n  def fit(x_data, dz_dt, threshold \\\\ 0.1) do\n    z_data = Enum.map(x_data, &NN.forward(encoder(), &1))\n    theta = Enum.map(z_data, &build_library/1)\n    xi = least_squares(theta, dz_dt)\n    xi = Enum.map(xi, fn row ->\n      Enum.map(row, fn v -> if abs(v) < threshold, do: 0.0, else: v end)\n    end)\n    xi\n  end\nend'
+}
+}
+};
+var CLIP3_CURRENT_LANG='Python';
+function populateCode3(){
+var e=CLIP3_CODE['sindy_ae'];if(!e)return;
+var exprEl=document.getElementById('expr3');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map3');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>→</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs3');var ccEl=document.getElementById('codecontent3');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip3Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc3-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip3Code(lang){CLIP3_CURRENT_LANG=lang;document.querySelectorAll('#tabs3 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc3-'+lang)})}
+var CLIP3_OUTPUTS={'sindy_ae':['Initializing SINDy autoencoder...','Encoder: [784, 128, 64, 2] (compress to 2D)','Decoder: [2, 64, 128, 784] (reconstruct)','','Building library Θ(z):','  [1, z1, z2, z1², z1·z2, z2², sin(z1), cos(z2)]','','STLSQ iteration 1: threshold = 0.1','  Ξ = [0, -1.0, 0, 0.5, 0, 0, 0, 0]','','Discovered equation:','  dz1/dt = -z1 + 0.5·z1²','','Parsimony: 2 nonzero terms (Occam\'s razor)']};
+function runClip3Code(key){
+var e=CLIP3_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput3');var st=document.getElementById('runStatus3');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap3');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP3_CURRENT_LANG+' '+e.name,''];var out2=CLIP3_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip3CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip3CodeViz(key){
+var wrap=document.getElementById('codeVizWrap3');if(!wrap)return;var cv=document.getElementById('codeVizCanvas3');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('SINDy: discovered dynamics in latent space',W/2,16);
+var cx=W/2,cy=H*0.55,scale=H*0.15;
+// Phase portrait of discovered system: dz/dt = -z + 0.5z²
+ctx.strokeStyle='rgba(194,65,12,0.3)';ctx.lineWidth=1;
+for(var z1=-3;z1<=3;z1+=0.5){ctx.beginPath();for(var z2=-3;z2<=3;z2+=0.05){var dz1=-z1+0.5*z1*z1;var dz2=-z2+0.3*Math.sin(z1);var px=cx+z1*scale;var py=cy+z2*scale;if(z2===-3)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke()}
+// Trajectory
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();
+var z1=2,z2=2;var dt2=0.02;
+for(var s=0;s<200;s++){var dz1=-z1+0.5*z1*z1;var dz2=-z2+0.3*Math.sin(z1);z1+=dz1*dt2;z2+=dz2*dt2;var px=cx+z1*scale;var py=cy+z2*scale;if(s===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('dz/dt = -z + 0.5z²',10,25);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
+
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
-'piml2':[{n:'Digital twins standard',y:2029,p:0.45,t:'Every engineering asset has a live twin'},{n:'Autodiff design',y:2028,p:0.40,t:'Adjoint-free optimization ubiquitous'},{n:'Climate PIML',y:2030,p:0.35,t:'Physics-informed climate prediction'},{n:'Turbulence solved',y:2032,p:0.25,t:'ML closes RANS turbulence'},{n:'Multi-fidelity AI',y:2033,p:0.30,t:'Unified multi-fidelity surrogates'}]
+'piml2':[{n:'Digital twins standard',y:2029,p:0.45,t:'Every engineering asset has a live twin'},{n:'Autodiff design',y:2028,p:0.40,t:'Adjoint-free optimization ubiquitous'},{n:'Climate PIML',y:2030,p:0.35,t:'Physics-informed climate prediction'},{n:'Turbulence solved',y:2032,p:0.25,t:'ML closes RANS turbulence'},{n:'Multi-fidelity AI',y:2033,p:0.30,t:'Unified multi-fidelity surrogates'}],
+'piml3':[{n:'Equivariant NNs standard',y:2028,p:0.40,t:'Symmetry-enforcing architectures default'},{n:'FNO at scale',y:2029,p:0.35,t:'Fourier operators for billion-grid PDEs'},{n:'SINDy+AE discovery',y:2027,p:0.45,t:'Auto equation discovery from video'},{n:'GNN for physics',y:2030,p:0.35,t:'Graph networks for particle systems'},{n:'Neural ODE maturity',y:2031,p:0.30,t:'Continuous-depth models standard'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -906,7 +1180,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -979,6 +1253,7 @@ drawPhaseBar(ctx,W,H);t+=0.02;requestAnimationFrame(frame)}frame();
 }
 setTimeout(populateCode,300);
 setTimeout(populateCode2,300);
+setTimeout(populateCode3,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -1013,6 +1288,16 @@ chk('Clip 2 expr populated',function(){var e=document.getElementById('expr2');re
 chk('Clip 2 code tabs (6)',function(){return document.getElementById('tabs2')&&document.getElementById('tabs2').children.length===6});
 chk('Clip 2 map table',function(){var m=document.getElementById('map2');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 2 future chart',function(){return!!document.getElementById('fut2')});
+// Clip 3
+chk('CLIP3 exists',function(){return typeof CLIP3==='object'});
+chk('Clip 3 section exists',function(){return!!document.getElementById('clip3')});
+chk('Clip 3 canvas',function(){return!!document.getElementById('cv3')});
+chk('Clip 3 scenes (6)',function(){var s=document.getElementById('scenes3');return s&&s.children.length===6});
+chk('Clip 3 expr populated',function(){var e=document.getElementById('expr3');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 3 code tabs (6)',function(){return document.getElementById('tabs3')&&document.getElementById('tabs3').children.length===6});
+chk('Clip 3 map table',function(){var m=document.getElementById('map3');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 3 future chart',function(){return!!document.getElementById('fut3')});
+chk('CLIP3 narration key',function(){return CLIP3.narrationKey==='piml3'});
 // Nav button onclick updates
 chk('Next button has onclick',function(){var b=document.getElementById('nextClipBtn');return b&&b.getAttribute('onclick')&&b.getAttribute('onclick').indexOf('selectClip')>=0});
 chk('Prev button onclick when clip>1',function(){if(activeClipNum<=1)return true;var b=document.getElementById('prevClipBtn');return b&&b.getAttribute('onclick')&&b.getAttribute('onclick').indexOf('selectClip')>=0});
@@ -1021,9 +1306,10 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('2 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===2});
+chk('3 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===3});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
+chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
