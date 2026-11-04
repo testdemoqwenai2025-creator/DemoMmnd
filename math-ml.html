@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v3-narration-floating-math">
+<meta name="version" content="2026-11-04-v4-prerecorded-narration">
 <title>Mathematics with ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -296,69 +296,47 @@ addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp
 // 3D projection helper
 function project(v,cx,cy,sc,depth){var f=depth/(depth+v.z);return{x:cx+v.x*sc*f,y:cy+v.y*sc*f,z:v.z,s:f}}
 
-// ============ NARRATION SYSTEM (Web Speech API — native US/UK voices) ============
+// ============ NARRATION SYSTEM (pre-recorded audio — British English "jam" voice) ============
 var Narration={
-enabled:false,voices:[],selectedVoice:null,rate:0.9,pitch:1.0,
-init:function(){
-if(typeof speechSynthesis==='undefined')return;
-var self=this;
-function loadVoices(){
-self.voices=speechSynthesis.getVoices();
-// Filter for US/UK English only — no other accents
-var en=self.voices.filter(function(v){return v.lang==='en-US'||v.lang==='en-GB'});
-if(en.length===0)en=self.voices.filter(function(v){return v.lang&&v.lang.indexOf('en')===0});
-// Priority: Google US English > Microsoft natural voices > Apple voices > first en voice
-var priority=['Google US English','Google UK English Female','Microsoft Aria','Microsoft Jenny','Microsoft Guy','Samantha','Alex','Daniel','Karen'];
-for(var i=0;i<priority.length;i++){
-for(var j=0;j<en.length;j++){
-if(en[j].name===priority[i]){self.selectedVoice=en[j];return}
-}}
-// Fallback: prefer en-US voices
-var us=en.filter(function(v){return v.lang==='en-US'});
-self.selectedVoice=us[0]||en[0]||null;
-}
-loadVoices();
-if(speechSynthesis.onvoiceschanged!==undefined)speechSynthesis.onvoiceschanged=loadVoices;
+enabled:false,currentAudio:null,
+speak:function(clipKey,sceneIdx){
+if(!this.enabled)return;
+this.stop();
+var url='audio/'+clipKey+'_'+sceneIdx+'.mp3';
+var audio=new Audio(url);
+audio.volume=1;
+this.currentAudio=audio;
+audio.play().catch(function(e){console.log('Narration audio play failed:',e.message)});
 },
-speak:function(text){
-if(!this.enabled||!text||typeof speechSynthesis==='undefined')return;
-speechSynthesis.cancel();
-var u=new SpeechSynthesisUtterance(text);
-if(this.selectedVoice)u.voice=this.selectedVoice;
-u.rate=this.rate;u.pitch=this.pitch;u.volume=1;
-u.lang=this.selectedVoice?this.selectedVoice.lang:'en-US';
-speechSynthesis.speak(u);
-},
-stop:function(){if(typeof speechSynthesis!=='undefined')speechSynthesis.cancel()},
+stop:function(){if(this.currentAudio){this.currentAudio.pause();this.currentAudio=null}},
 toggle:function(){this.enabled=!this.enabled;if(!this.enabled)this.stop();return this.enabled}
 };
-setTimeout(function(){Narration.init()},200);
 
-// Narration scripts — documentary style, based on the 4 pillars of ML math
+// Narration scripts (kept for reference / accessibility — audio is pre-recorded)
 var NARRATION={
 'clip1':[
-'Every piece of text begins as tokens. Each token is mapped to a vector in high-dimensional space — typically seven hundred sixty-eight dimensions or more. This embedding space is where the geometry of meaning begins. Similar words land near each other.',
-'Three learned matrices — Query, Key, and Value — project each embedding into three different roles. The Query asks: what am I looking for? The Key answers: what do I contain? The Value holds: what information do I carry? These roles are learned during training.',
-'The dot product of a query with every key measures alignment. Geometrically, it is the cosine of the angle between vectors — how much they point in the same direction. High alignment means high relevance. This is the heart of attention: geometry becomes semantics.',
-'Raw alignment scores are converted to probabilities by softmax. The scaling by the square root of d-k prevents dot products from growing too large in high dimensions. Without it, softmax saturates and gradients vanish. Every token now has a probability distribution over all others.',
-'The output for each token is a weighted combination of all values, weighted by the attention probabilities. Tokens that attend strongly to each other blend their information. This is how context flows through a transformer — every token learns from every other.',
-'Multiple heads run in parallel, each projecting into a different subspace. One head might track syntax, another semantics, another coreference. The outputs are concatenated and projected back. This parallel geometry is what gives transformers their power.'
+'Every piece of text begins as tokens. Each token is mapped to a vector in high-dimensional space.',
+'Three learned matrices — Query, Key, and Value — project each embedding into three different roles.',
+'The dot product of a query with every key measures alignment.',
+'Raw alignment scores are converted to probabilities by softmax.',
+'The output for each token is a weighted combination of all values.',
+'Multiple heads run in parallel, each projecting into a different subspace.'
 ],
 'clip2':[
-'Every neural network defines a loss function — a surface over the space of all possible parameters. The height of this surface is the error the model makes. Training means finding the lowest point. This landscape can have millions of dimensions.',
-'The gradient is a vector pointing in the direction of steepest increase. It is computed by the chain rule — backpropagation — differentiating the loss through every layer. The gradient tells us exactly how to change each parameter to increase error. To decrease it, we go the opposite way.',
-'Gradient descent steps in the negative gradient direction. The learning rate controls step size — too large and we overshoot, too small and we crawl. The ball rolls downhill, following the steepest path toward the minimum. This is how every neural network learns.',
-'Momentum accumulates velocity across steps, like a heavy ball rolling down a hill. It accelerates in consistent directions and dampens oscillations in narrow valleys. This simple modification of gradient descent dramatically speeds up convergence and helps escape shallow local minima.',
-'Adam adapts the learning rate for each parameter individually, based on the running averages of the gradient and its square. Parameters with large consistent gradients get smaller steps. Parameters with small or noisy gradients get larger steps. This is why Adam is the default optimizer for most deep learning.',
-'As training progresses, the ball settles into a minimum. For over-parameterized networks, most local minima are global — the loss landscape is surprisingly benign. But the journey matters: the trajectory determines which solution we find, and which solutions generalize. Optimization and generalization are deeply connected.'
+'Every neural network defines a loss function — a surface over parameter space.',
+'The gradient is a vector pointing in the direction of steepest increase.',
+'Gradient descent steps in the negative gradient direction.',
+'Momentum accumulates velocity across steps.',
+'Adam adapts the learning rate for each parameter individually.',
+'As training progresses, the ball settles into a minimum.'
 ],
 'clip3':[
-'Before seeing any data, we hold prior beliefs about the world. The prior distribution encodes what we think is plausible. It might be wide — admitting many possibilities — or narrow, reflecting strong assumptions. The prior is where domain knowledge enters Bayesian reasoning.',
-'The likelihood measures how well our data fits each hypothesis. Given a model, it tells us how probable the observed data would be. The likelihood is the evidence — it is what the data is telling us, separate from what we believed before. Strong evidence reshapes our beliefs.',
-'Bayes theorem combines prior and likelihood into the posterior — our updated belief after seeing data. The posterior is proportional to the likelihood times the prior. This is the calculus of belief: every observation refines our understanding. Every trained model is implicitly computing a posterior.',
-'Entropy quantifies uncertainty. A distribution that is certain has low entropy; one that is spread out has high entropy. Entropy connects probability to physics — the Shannon entropy and the thermodynamic entropy are the same quantity. Every compression algorithm is fighting entropy.',
-'The information bottleneck principle says: compress the input while preserving the label. The representation should contain everything about the output and nothing else about the input. This is the variational principle of deep learning — compression and prediction, balanced.',
-'The Kolmogorov complexity of a string is the length of the shortest program that produces it. It is the ultimate measure of information content — but it is uncomputable. A-I-X-I, the universal intelligence, weights every program by two to the minus its length. Every neural network is a computable approximation of this ideal.'
+'Before seeing any data, we hold prior beliefs about the world.',
+'The likelihood measures how well our data fits each hypothesis.',
+'Bayes theorem combines prior and likelihood into the posterior.',
+'Entropy quantifies uncertainty.',
+'The information bottleneck principle says compress while preserving.',
+'The Kolmogorov complexity is the length of the shortest program.'
 ]
 };
 
@@ -406,8 +384,7 @@ state.sceneListEl.querySelectorAll('li').forEach(function(li,i){li.classList.tog
 }
 function narrateCurrent(){
 if(!state.narrationKey)return;
-var scripts=NARRATION[state.narrationKey];
-if(scripts&&scripts[state.scene])Narration.speak(scripts[state.scene]);
+Narration.speak(state.narrationKey,state.scene);
 }
 updateSceneUI();
 // Zoom
