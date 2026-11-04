@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v1-physics-ml-clip1">
+<meta name="version" content="2026-11-04-v2-course-grid-design">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -97,6 +97,26 @@ h1{font-family:Georgia,serif;font-size:2.5rem;line-height:1.15;margin-bottom:.75
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 footer{max-width:1200px;margin:3rem auto;padding:1.5rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 footer a{color:var(--primary);text-decoration:none}
+/* Clip selector grid */
+.clip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.625rem;margin:2rem 0;padding:1rem;background:var(--secondary);border-radius:.5rem;border:1px solid var(--border)}
+.clip-card{padding:.75rem;background:var(--card);border:1px solid var(--border);border-radius:.375rem;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.clip-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.clip-card.active{border-color:var(--primary);background:var(--accent-bg);box-shadow:0 0 0 2px var(--primary)}
+.clip-card.upcoming{opacity:.5;cursor:not-allowed}
+.clip-card.upcoming:hover{transform:none;box-shadow:none}
+.clip-card .clip-num{font-family:Georgia,serif;font-size:1.5rem;font-weight:700;color:var(--primary);line-height:1}
+.clip-card .clip-title{font-size:.75rem;font-weight:600;color:var(--fg);margin-top:.25rem;line-height:1.3}
+.clip-card .clip-status{font-size:.5625rem;text-transform:uppercase;letter-spacing:.1em;margin-top:.375rem;color:var(--muted)}
+.clip-card.active .clip-status{color:var(--primary)}
+.clip-card.upcoming .clip-status{color:var(--muted)}
+.progress-wrap{margin:1rem 0}
+.progress-bar{height:.5rem;background:var(--secondary);border-radius:.25rem;overflow:hidden;border:1px solid var(--border)}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--primary),#FFD700);border-radius:.25rem;transition:width .3s}
+.progress-label{font-size:.75rem;color:var(--muted);margin-top:.375rem;display:flex;justify-content:space-between}
+.clip-nav-buttons{display:flex;justify-content:space-between;margin-top:1rem;gap:1rem}
+.clip-nav-btn{padding:.5rem 1rem;font-size:.8125rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600;text-decoration:none}
+.clip-nav-btn:hover{background:var(--primary);color:#fff}
+.clip-nav-btn.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
 </style>
 </head>
 <body>
@@ -119,6 +139,21 @@ footer a{color:var(--primary);text-decoration:none}
 <a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNQ0BaKuBKY43k4xMo6NSbBa" target="_blank">↗ Steve Brunton — Physics Informed Machine Learning (23 videos)</a>
 <span style="font-size:.6875rem;color:var(--muted)">From data-driven science to physics-informed discovery</span>
 </div>
+</div>
+
+<!-- Progress tracker -->
+<div class="progress-wrap">
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:4.3%"></div></div>
+<div class="progress-label"><span id="progressText">1 of 23 clips ready</span><span>Building step by step →</span></div>
+</div>
+
+<!-- Clip selector grid — 23 clips -->
+<div class="clip-grid" id="clipGrid"></div>
+
+<!-- Clip navigation buttons -->
+<div class="clip-nav-buttons">
+<a class="clip-nav-btn disabled" id="prevClipBtn">← Previous clip</a>
+<a class="clip-nav-btn" id="nextClipBtn" onclick="selectClip(2)">Next clip →</a>
 </div>
 
 <!-- CLIP 1: The Five Stages of Physics-Informed ML -->
@@ -192,6 +227,95 @@ for(var i=0;i<ps.length;i++)for(var j=i+1;j<ps.length;j++){var dx=ps[i].x-ps[j].
 ctx.globalAlpha=1}
 function lp(){dr();raf=requestAnimationFrame(lp)}
 addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp)})();
+
+// ============ CLIP CURRICULUM (23 clips) ============
+var CLIP_CURRICULUM=[
+{n:1,title:'Five Stages of PIML',desc:'High-Level Overview',status:'ready'},
+{n:2,title:'PINNs: Introduction',desc:'Physics-Informed Neural Networks',status:'upcoming'},
+{n:3,title:'SINDy',desc:'Sparse Identification of Dynamics',status:'upcoming'},
+{n:4,title:'Koopman Operator',desc:'Lifting nonlinear dynamics',status:'upcoming'},
+{n:5,title:'Autoencoders for Dynamics',desc:'Discovering coordinates',status:'upcoming'},
+{n:6,title:'Neural ODEs',desc:'Continuous-depth networks',status:'upcoming'},
+{n:7,title:'Hamiltonian NNs',desc:'Energy-conserving networks',status:'upcoming'},
+{n:8,title:'Fourier Neural Operators',desc:'Learning in frequency space',status:'upcoming'},
+{n:9,title:'Dynamic Mode Decomposition',desc:'DMD for spatiotemporal data',status:'upcoming'},
+{n:10,title:'Architecture Design',desc:'Inductive biases in NN structure',status:'upcoming'},
+{n:11,title:'Lagrangian NNs',desc:'Lagrangian mechanics in ML',status:'upcoming'},
+{n:12,title:'Galilean-Invariant NNs',desc:'Symmetry-enforcing tensor networks',status:'upcoming'},
+{n:13,title:'Data Curation & Equivariance',desc:'Optimal coordinates, symmetries',status:'upcoming'},
+{n:14,title:'Hard Constraints',desc:'Lagrange multipliers in optimization',status:'upcoming'},
+{n:15,title:'Discovery of Equations',desc:'Finding governing laws from data',status:'upcoming'},
+{n:16,title:'Digital Twins',desc:'Real-time asset modeling',status:'upcoming'},
+{n:17,title:'Sparse Sensing',desc:'Compressed sensing & SHRED',status:'upcoming'},
+{n:18,title:'Control with PIML',desc:'Physics-informed control systems',status:'upcoming'},
+{n:19,title:'RL + Physics',desc:'Physics-informed reinforcement learning',status:'upcoming'},
+{n:20,title:'Reduced-Order Models',desc:'ROM with physics constraints',status:'upcoming'},
+{n:21,title:'Uncertainty Quantification',desc:'Bayesian PIML',status:'upcoming'},
+{n:22,title:'Multi-Fidelity Models',desc:'Combining data sources',status:'upcoming'},
+{n:23,title:'The Future of PIML',desc:'Where the field is heading',status:'upcoming'}
+];
+var activeClipNum=1;
+
+function buildClipGrid(){
+var grid=document.getElementById('clipGrid');if(!grid)return;
+var h='';
+CLIP_CURRICULUM.forEach(function(c){
+var cls=c.status==='ready'?'clip-card':'clip-card upcoming';
+if(c.n===activeClipNum)cls+=' active';
+h+='<div class="'+cls+'" onclick="selectClip('+c.n+')" title="'+c.desc+'">';
+h+='<div class="clip-num">'+c.n+'</div>';
+h+='<div class="clip-title">'+c.title+'</div>';
+h+='<div class="clip-status">'+(c.status==='ready'?'✓ Ready':'Upcoming')+'</div>';
+h+='</div>';
+});
+grid.innerHTML=h;
+// Update progress
+var ready=CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length;
+var total=CLIP_CURRICULUM.length;
+var pct=Math.round(ready/total*100);
+var pf=document.getElementById('progressFill');if(pf)pf.style.width=pct+'%';
+var pt=document.getElementById('progressText');if(pt)pt.textContent=ready+' of '+total+' clips ready ('+pct+'%)';
+}
+
+function selectClip(n){
+var c=CLIP_CURRICULUM[n-1];if(!c)return;
+if(c.status!=='ready'){
+// Show upcoming message
+var section=document.getElementById('clip1');
+if(section){
+section.querySelector('h2').textContent=c.title;
+section.querySelector('.subtitle').textContent='Video '+c.n+' · '+c.desc+' — Coming soon';
+var layout=section.querySelector('.clip-layout');
+if(layout)layout.innerHTML='<div style="grid-column:1/-1;padding:3rem;text-align:center;color:var(--muted)"><div style="font-size:3rem;margin-bottom:1rem">🔬</div><p>This clip is being built. We\'re working through Steve Brunton\'s 23-video playlist step by step.</p><p style="margin-top:1rem">Clip '+c.n+': <strong style="color:var(--primary)">'+c.title+'</strong> — '+c.desc+'</p><p style="margin-top:1rem;font-size:.75rem">Share your notes from the video and I\'ll build this clip next!</p></div>';
+}
+activeClipNum=n;
+buildClipGrid();
+updateNavButtons();
+return;
+}
+// For ready clips, reload the page to the clip (for now, only clip 1)
+if(n===1){
+activeClipNum=1;
+buildClipGrid();
+updateNavButtons();
+// Scroll to clip section
+document.getElementById('clip1').scrollIntoView({behavior:'smooth',block:'start'});
+}
+}
+
+function updateNavButtons(){
+var prev=document.getElementById('prevClipBtn');
+var next=document.getElementById('nextClipBtn');
+if(prev){prev.classList.toggle('disabled',activeClipNum<=1)}
+if(next){next.classList.toggle('disabled',activeClipNum>=23)}
+if(next){next.textContent=activeClipNum<23?'Next clip (Clip '+(activeClipNum+1)+') →':'Last clip'}
+if(prev){prev.textContent=activeClipNum>1?'← Previous clip (Clip '+(activeClipNum-1)+')':'← First clip'}
+}
+// Wire next button
+document.getElementById('nextClipBtn')&&document.getElementById('nextClipBtn').setAttribute('onclick','selectClip('+(activeClipNum+1)+')');
+
+buildClipGrid();
+updateNavButtons();
 
 // 3D projection
 function project(v,cx,cy,sc,depth){var f=depth/(depth+v.z);return{x:cx+v.x*sc*f,y:cy+v.y*sc*f,z:v.z,s:f}}
