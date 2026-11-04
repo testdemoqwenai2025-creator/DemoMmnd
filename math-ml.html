@@ -398,7 +398,7 @@ function grad(x,z){var h=0.01;var dx=(loss(x+h,z)-loss(x-h,z))/(2*h);var dz=(los
 
 // Draw wireframe landscape
 var gridN=12,range=1.5;
-ctx.strokeStyle=dark?'rgba(194,65,12,0.25)':'rgba(194,65,12,0.2)';ctx.lineWidth=.5;
+ctx.strokeStyle=dark?'rgba(234,88,12,0.5)':'rgba(194,65,12,0.4)';ctx.lineWidth=1;
 for(var zi=-range;zi<=range;zi+=2*range/gridN){
 ctx.beginPath();
 var first=true;
