@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Geometry of Attention · Blog · Mmnd</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--fg);line-height:1.7}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500}
+.nav-links a:hover{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{max-width:700px;margin:0 auto;padding:4rem 1.5rem}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2rem;font-weight:600;line-height:1.2;margin-bottom:1rem}
+@media(min-width:640px){h1{font-size:2.5rem}}
+.meta{color:var(--muted);font-size:.8125rem;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+p{margin-bottom:1.25rem}
+strong{color:var(--primary)}
+h2{font-family:Georgia,serif;font-size:1.5rem;margin:2rem 0 .75rem}
+h3{font-family:Georgia,serif;font-size:1.125rem;margin:1.5rem 0 .5rem}
+.back-link{display:inline-block;margin-bottom:2rem;color:var(--primary);text-decoration:none;font-size:.875rem}
+.cta{margin-top:2rem;padding:1.5rem;background:var(--secondary);border-radius:.75rem;border:1px solid var(--border)}
+.cta a{color:var(--primary);text-decoration:none;font-weight:600}
+.formula{background:var(--secondary);padding:1rem 1.5rem;border-radius:.5rem;margin:1.5rem 0;border-left:3px solid var(--primary);text-align:center;color:var(--fg);overflow-x:auto}
+footer{max-width:800px;margin:2rem auto;padding:1.5rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<header>
+<nav>
+<a href="../index.html" class="logo"><span class="logo-icon">⚛</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links"><a href="../index.html">Home</a><a href="../sources.html">Sources</a><a href="../math-ml.html">Math+ML</a><a href="../blog.html">Blog</a><a href="../about.html">About</a></div>
+<button class="theme-toggle" onclick="document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')">🌓</button>
+</nav>
+</header>
+<main>
+<a href="../blog.html" class="back-link">← Back to blog</a>
+<div class="eyebrow">Linear Algebra · Machine Learning</div>
+<h1>The Geometry of Attention</h1>
+<div class="meta">November 4, 2026 · 8 min read · Part 1 of 3 in the Mathematics with ML series</div>
+
+<p>When Vaswani et al. published "Attention Is All You Need" in 2017, they didn't just introduce a new architecture — they revealed that the core operation of modern AI is fundamentally geometric. The scaled dot-product attention is a geometric operation disguised as a formula.</p>
+
+<h2>The Formula</h2>
+<div class="formula">$$\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$$</div>
+
+<p>This looks like matrix multiplication, and it is. But let's unpack what each piece means geometrically.</p>
+
+<h2>Queries, Keys, and Values</h2>
+<p>Each input token is embedded as a vector in $\mathbb{R}^d$. Three learned projection matrices — $W_Q$, $W_K$, $W_V$ — transform each embedding into three different roles:</p>
+<p><strong>Query</strong> ($Q = X W_Q$): "What am I looking for?"<br>
+<strong>Key</strong> ($K = X W_K$): "What do I contain?"<br>
+<strong>Value</strong> ($V = X W_V$): "What information do I carry?"</p>
+
+<p>These are not given — they are learned during training. The network discovers what to look for, what to offer, and what to transmit, all through gradient descent on the projection matrices.</p>
+
+<h2>The Dot Product Is Cosine Similarity</h2>
+<p>The core computation is $QK^T$ — the dot product of every query with every key. Geometrically, the dot product of two vectors is:</p>
+<div class="formula">$$\vec{q} \cdot \vec{k} = |\vec{q}||\vec{k}|\cos\theta$$</div>
+<p>where $\theta$ is the angle between them. After normalization, this is <strong>cosine similarity</strong> — a measure of how much two vectors point in the same direction. High alignment means high relevance. This is the heart of attention: geometry becomes semantics.</p>
+
+<h2>Why $\sqrt{d_k}$?</h2>
+<p>The scaling by $\sqrt{d_k}$ is not arbitrary. As dimensionality grows, dot products tend to grow in magnitude (the sum of $d_k$ terms). Without scaling, softmax would saturate — pushing most weights to 0 or 1, where gradients vanish. The $\sqrt{d_k}$ factor keeps the variance stable regardless of dimension:</p>
+<div class="formula">$$\text{Var}\left(\frac{QK^T}{\sqrt{d_k}}\right) \approx 1 \quad \text{for all } d_k$$</div>
+
+<h2>Softmax: From Scores to Probabilities</h2>
+<p>Softmax converts raw alignment scores into a probability distribution:</p>
+<div class="formula">$$\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}$$</div>
+<p>Every token now has a probability distribution over all other tokens. The temperature parameter $\tau$ controls sharpness: $\text{softmax}(x/\tau)$. Low $\tau$ produces sharp attention (one token dominates); high $\tau$ produces uniform attention. In our interactive clip, you can adjust $\tau$ in real time and watch the connections sharpen or flatten.</p>
+
+<h2>The Weighted Sum</h2>
+<p>The output for each token is a weighted combination of all values:</p>
+<div class="formula">$$\text{output}_i = \sum_j \text{softmax}\left(\frac{Q_i K_j^T}{\sqrt{d_k}}\right) V_j$$</div>
+<p>Tokens that attend strongly to each other blend their information. This is how context flows through a transformer — every token learns from every other, in a single matrix multiplication.</p>
+
+<h2>Multi-Head: Parallel Geometric Views</h2>
+<p>Multiple heads run in parallel, each projecting Q, K, V into a different subspace:</p>
+<div class="formula">$$\text{MultiHead}(Q,K,V) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h)W^O$$</div>
+<p>One head might track syntax, another semantics, another coreference. The outputs are concatenated and projected back. This parallel geometry is what gives transformers their power — they see the same input through multiple geometric lenses simultaneously.</p>
+
+<div class="cta">
+<h3>Try the interactive clip</h3>
+<p>The six-scene visualization lets you explore each step of attention geometrically — from token embeddings through multi-head attention. Adjust the temperature $\tau$ to see how attention sharpens and flattens. Enable narration for a guided tour.</p>
+<p><a href="../math-ml.html#clip1">→ Open "The Geometry of Attention" clip</a></p>
+</div>
+
+<h2>References</h2>
+<p>Vaswani, A. et al. (2017). "Attention Is All You Need." arXiv:1706.03762<br>
+Bahdanau, D. et al. (2014). "Neural Machine Translation by Jointly Learning to Align and Translate." arXiv:1409.0473</p>
+</main>
+<footer>© 2026 Mmnd Collective · Apache-2.0 · <a href="../about.html" style="color:var(--primary)">About</a></footer>
+<script>if(localStorage.getItem('mmnd-theme')==='dark'||(!localStorage.getItem('mmnd-theme')&&matchMedia('(prefers-color-scheme:dark)').matches))document.documentElement.classList.add('dark');
+setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+</script>
+</body>
+</html>
