@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-02-v1-math-ml-clips">
+<meta name="version" content="2026-11-04-v2-code-sections-buttons-fix">
 <title>Mathematics with ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -42,10 +42,11 @@ h1{font-family:Georgia,serif;font-size:2.5rem;line-height:1.15;margin-bottom:.75
 .clip-canvas{display:block;width:100%;height:100%}
 .clip-controls{position:absolute;bottom:.5rem;left:.5rem;right:.5rem;display:flex;align-items:center;gap:.375rem;flex-wrap:wrap;background:rgba(10,9,8,.7);backdrop-filter:blur(8px);padding:.375rem .5rem;border-radius:.375rem}
 .clip-canvas-wrap.light-canvas .clip-controls{background:rgba(250,247,242,.85)}
-.clip-btn{background:none;border:1px solid rgba(255,255,255,.15);color:#e5e2dc;border-radius:.25rem;padding:.25rem .5rem;cursor:pointer;font-size:.75rem;font-weight:500;transition:background .15s}
-.light-canvas .clip-btn{border-color:rgba(0,0,0,.15);color:#1a1a1a}
-.clip-btn:hover{background:rgba(255,255,255,.1)}
-.light-canvas .clip-btn:hover{background:rgba(0,0,0,.08)}
+.clip-btn{background:none;border:1px solid rgba(255,255,255,.2);color:#e5e2dc;border-radius:.375rem;padding:.4rem .7rem;cursor:pointer;font-size:.8125rem;font-weight:600;transition:background .15s,border-color .15s;min-width:2rem;min-height:2rem;display:inline-flex;align-items:center;justify-content:center}
+.light-canvas .clip-btn{border-color:rgba(0,0,0,.2);color:#1a1a1a}
+.clip-btn:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.35)}
+.light-canvas .clip-btn:hover{background:rgba(0,0,0,.1);border-color:rgba(0,0,0,.35)}
+.clip-btn:active{transform:scale(.95)}
 .clip-btn.active{background:var(--accent-bg);border-color:var(--primary);color:var(--primary)}
 .clip-scene-label{position:absolute;top:.5rem;left:.5rem;font-size:.6875rem;font-weight:600;color:#e5e2dc;background:rgba(10,9,8,.7);padding:.25rem .5rem;border-radius:.25rem;backdrop-filter:blur(8px)}
 .light-canvas .clip-scene-label{color:#1a1a1a;background:rgba(250,247,242,.85)}
@@ -71,6 +72,27 @@ h1{font-family:Georgia,serif;font-size:2.5rem;line-height:1.15;margin-bottom:.75
 .future-milestones{font-size:.6875rem;color:var(--muted);margin-top:.375rem}
 footer{max-width:1200px;margin:3rem auto;padding:1.5rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem}
 footer a{color:var(--primary);text-decoration:none}
+.clip-code-section{margin-top:1.5rem;padding-top:1.5rem;border-top:1px dashed var(--border)}
+.clip-code-section h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem;margin-top:1rem}
+.clip-code-section h3:first-child{margin-top:0}
+.expr-rendered-cl{border:1px solid rgba(194,65,12,.2);background:rgba(10,9,8,.6);border-radius:.5rem;padding:1.5rem;text-align:center;margin-bottom:1rem;overflow-x:auto;color:#e5e2dc;font-size:1.125rem}
+.map-table-cl{margin-bottom:1rem;border:1px solid var(--border);border-radius:.5rem;overflow:hidden}
+.map-table-cl table{width:100%;border-collapse:collapse;font-size:.75rem}
+.map-table-cl th{background:var(--accent-bg);color:var(--primary);text-align:left;padding:.5rem .75rem;font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.map-table-cl td{padding:.4rem .75rem;border-bottom:1px solid var(--border)}
+.map-table-cl .map-sym{color:var(--primary);font-weight:600;font-family:Georgia,serif}
+.map-table-cl .map-code{font-family:monospace;font-size:.6875rem;color:var(--fg)}
+.map-table-cl .map-note{color:var(--muted);font-size:.6875rem}
+.code-tabs-cl{display:flex;gap:.25rem;flex-wrap:wrap;margin-bottom:.5rem}
+.code-tab-cl{padding:.375rem .625rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-size:.75rem;font-weight:500}
+.code-tab-cl.active{background:var(--accent-bg);color:var(--primary);border-color:var(--primary)}
+.code-content-cl{display:none;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;overflow-x:auto;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre;line-height:1.5}
+.code-content-cl.active{display:block}
+.run-btn-cl{padding:.5rem .875rem;font-size:.8125rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600}
+.run-btn-cl:hover{background:var(--primary);color:#fff}
+.code-output-cl{margin-top:.5rem;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;min-height:3rem;max-height:10rem;overflow-y:auto;display:none;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre-wrap}
+.code-viz-wrap-cl{margin-top:.5rem;display:none}
+.code-viz-canvas-cl{width:100%;aspect-ratio:16/7;background:#0a0908;border:1px solid var(--border);border-radius:.375rem;display:block}
 </style>
 </head>
 <body>
@@ -129,6 +151,22 @@ footer a{color:var(--primary);text-decoration:none}
 </div>
 </div>
 </div>
+
+<div class="clip-code-section" id="code1">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr1">Loading...</div>
+<h3>Math → Code mapping</h3>
+<div class="map-table-cl" id="map1"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs1"></div>
+<div id="codecontent1"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClipCode('attention')">▶ Run &amp; observe output</button>
+<span id="runStatus1" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput1"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap1"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas1"></canvas></div>
+</div>
 </section>
 
 <!-- CLIP 2: Calculus of Learning -->
@@ -165,6 +203,22 @@ footer a{color:var(--primary);text-decoration:none}
 </div>
 </div>
 </div>
+
+<div class="clip-code-section" id="code2">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr2">Loading...</div>
+<h3>Math → Code mapping</h3>
+<div class="map-table-cl" id="map2"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs2"></div>
+<div id="codecontent2"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClipCode('schrodinger')">▶ Run &amp; observe output</button>
+<span id="runStatus2" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput2"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap2"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas2"></canvas></div>
+</div>
 </section>
 
 <!-- CLIP 3: Probability of Truth -->
@@ -200,6 +254,22 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="future-milestones" id="fut3m"></div>
 </div>
 </div>
+</div>
+
+<div class="clip-code-section" id="code3">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr3">Loading...</div>
+<h3>Math → Code mapping</h3>
+<div class="map-table-cl" id="map3"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs3"></div>
+<div id="codecontent3"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClipCode('kolmogorov')">▶ Run &amp; observe output</button>
+<span id="runStatus3" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput3"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap3"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas3"></canvas></div>
 </div>
 </section>
 </main>
@@ -603,28 +673,60 @@ var FUTURES_DATA={
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
 var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
-var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+var W=r.width,H=r.height;
+// Per-clip visual style: different colors, growth rates, and chart styles
+var STYLES={
+'clip1':{pc:'#ea580c',accent:'#FFD700',gridLine:'rgba(234,88,12,0.08)',growth:1.5,chartType:'cones',title:'P(attention breakthrough) evolving'},
+'clip2':{pc:'#10b981',accent:'#06b6d4',gridLine:'rgba(16,185,129,0.08)',growth:1.2,chartType:'bars',title:'P(optimization breakthrough) evolving'},
+'clip3':{pc:'#a855f7',accent:'#ec4899',gridLine:'rgba(168,85,247,0.08)',growth:1.8,chartType:'lines',title:'P(reasoning breakthrough) evolving'}
+};
+var st=STYLES[dataId]||STYLES['clip1'];
+var bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-var problems=FUTURES_DATA[dataId];var growth=1.5;
+var problems=FUTURES_DATA[dataId];var growth=st.growth;
 var pL=70,pB=25,pT=30,pR=15,cw=W-pL-pR,ch=H-pT-pB;
 var yearStart=2025,yearEnd=2040,yearSpan=yearEnd-yearStart;
 var animT=animState.t||0;var growProgress=Math.min(1,animT/3);var breathe=Math.sin(animT*0.8)*0.04;
-ctx.strokeStyle='rgba(194,65,12,0.08)';ctx.lineWidth=.5;
+ctx.strokeStyle=st.gridLine;ctx.lineWidth=.5;
 for(var y=yearStart;y<=yearEnd;y+=3){var x=pL+((y-yearStart)/yearSpan)*cw;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(y,x,H-pB+10)}
 problems.forEach(function(pb,i){
 var rowY=pT+(i+0.5)*ch/problems.length;var barH=ch/problems.length*0.55;
+var probFn=function(s){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;return rawP*(growProgress+breathe*rawP)};
+if(st.chartType==='cones'){
+// Filled cones (original style)
 ctx.beginPath();
-for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+for(var s=0;s<=100;s++){var pAtY=probFn(s);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
 ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
-var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'44');grad.addColorStop(1,'#FFD70066');ctx.fillStyle=grad;ctx.fill();
-ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=pc;ctx.lineWidth=1.5;ctx.beginPath();
-for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);grad.addColorStop(0,st.pc+'00');grad.addColorStop(0.5,st.pc+'44');grad.addColorStop(1,st.accent+'66');ctx.fillStyle=grad;ctx.fill();
+ctx.shadowColor=st.pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=st.pc;ctx.lineWidth=1.5;ctx.beginPath();
+for(var s=0;s<=100;s++){var pAtY=probFn(s);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
 ctx.stroke();ctx.shadowBlur=0;
-// Flowing particles
-for(var pi=0;pi<3;pi++){var u=((animT*0.12+pi/3)%1);var year=yearStart+u*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var px=pL+u*cw;var py=rowY-barH/2-pAtY*barH;var fa=0.5+0.5*Math.sin(u*Math.PI);ctx.shadowColor='#FFD700';ctx.shadowBlur=10;ctx.fillStyle='rgba(255,215,0,'+fa+')';ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+}else if(st.chartType==='bars'){
+// Animated bars (stepwise)
+var nBars=12;var barW=cw/nBars;
+for(var b=0;b<nBars;b++){var s=b/nBars*100;var pAtY=probFn(s);var bh=pAtY*barH;var bx=pL+b*barW;var by=rowY-barH/2-bh;
+ctx.fillStyle=st.pc+(Math.round(pAtY*200)+30).toString(16).padStart(2,'0');
+ctx.shadowColor=st.pc;ctx.shadowBlur=4+Math.sin(animT*3+b)*2;
+ctx.fillRect(bx+1,by,barW-2,bh);
+ctx.shadowBlur=0;
+// Bar cap
+ctx.fillStyle=st.accent;ctx.fillRect(bx+1,by,barW-2,2);
+}
+}else{
+// Flowing lines (smooth curves, no fill)
+ctx.shadowColor=st.pc;ctx.shadowBlur=6+Math.sin(animT*1.5+i)*2;ctx.strokeStyle=st.pc;ctx.lineWidth=2;ctx.beginPath();
+for(var s=0;s<=100;s++){var pAtY=probFn(s);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;
+// Accent line
+ctx.strokeStyle=st.accent+'88';ctx.lineWidth=1;ctx.beginPath();
+for(var s=0;s<=100;s++){var pAtY=probFn(s);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH*0.7;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();
+}
+// Flowing particles (per clip accent color)
+for(var pi=0;pi<3;pi++){var u=((animT*0.12+pi/3)%1);var s=u*100;var pAtY=probFn(s);var px=pL+u*cw;var py=rowY-barH/2-pAtY*barH;var fa=0.5+0.5*Math.sin(u*Math.PI);ctx.shadowColor=st.accent;ctx.shadowBlur=10;ctx.fillStyle=st.accent;ctx.globalAlpha=fa;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.shadowBlur=0}
 ctx.fillStyle=fg;ctx.font='7px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-5,rowY+3);
 });
-ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('P(breakthrough) evolving',W/2,14);
+ctx.fillStyle=st.pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText(st.title,W/2,14);
 // Update milestones
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
@@ -634,8 +736,141 @@ var futAnimState={t:0};
 function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','clip1',futAnimState);drawFutureChart('fut2','clip2',futAnimState);drawFutureChart('fut3','clip3',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
+// ============ CODE SECTIONS (fetch from code-data.json) ============
+var CLIP_CODE_KEYS={'1':'attention','2':'schrodinger','3':'kolmogorov'};
+var CLIP_CODE_DATA=null;
+var CLIP_CURRENT_LANG={'1':'Python','2':'Python','3':'Python'};
+var CLIP_VIZ_ANIM={1:null,2:null,3:null};
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
+
+function fetchCodeData(){
+fetch('code-data.json').then(function(r){return r.json()}).then(function(d){
+CLIP_CODE_DATA=d;
+for(var n=1;n<=3;n++){
+var key=CLIP_CODE_KEYS[n];
+if(!d[key])continue;
+var e=d[key];
+// Expression
+var exprEl=document.getElementById('expr'+n);
+if(exprEl){exprEl.innerHTML='$$'+e.latex+'$$'}
+// Mapping table
+var mapEl=document.getElementById('map'+n);
+if(mapEl&&e.mapping){
+var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';
+e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>→</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});
+mh+='</table>';mapEl.innerHTML=mh;
+}
+// Code tabs
+var tabsEl=document.getElementById('tabs'+n);
+var ccEl=document.getElementById('codecontent'+n);
+if(tabsEl&&ccEl){
+var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClipCode('+n+',\''+l+'\')">'+l+'</button>'});
+tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc'+n+'-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});
+ccEl.innerHTML=ch;
+}
+}
+// Re-render math
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}).catch(function(e){console.log('Code data fetch failed:',e.message)});
+}
+function switchClipCode(n,lang){
+CLIP_CURRENT_LANG[n]=lang;
+document.querySelectorAll('#tabs'+n+' .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});
+document.querySelectorAll('.code-content-cl').forEach(function(c){if(c.id&&c.id.indexOf('cc'+n+'-')===0)c.classList.toggle('active',c.id==='cc'+n+'-'+lang)});
+}
+
+// Expression-specific simulated output
+var CLIP_OUTPUTS={
+'attention':['Input: seq_len=8, d_k=64','Q shape: [8, 64], K shape: [8, 64]','Computing QK^T / sqrt(64)...','Softmax row 0: [0.12, 0.15, 0.18, 0.14, 0.11, 0.09, 0.12, 0.09]','Attention output shape: [8, 64]','Max attention weight: 0.18 (position 2)'],
+'schrodinger':['Initializing wave packet...','psi[0] = Gaussian(x=25, sigma=2)','V = harmonic trap (0.5*(x-25)^2)','Evolving 1000 steps, dt=0.001...','Final |psi|^2 integral: 1.0000 (normalized)','Energy expectation: 0.5031 hartree'],
+'kolmogorov':['Target string: "0101010101010101"','Searching programs of length 1...2...3...4...','Found: program print(01*8) length=14','K(x) <= 14 bits','Lower bound: K(x) >= 13 (compression)','K(x) is well-defined but uncomputable in general']
+};
+
+function runClipCode(key){
+var n=0;for(var k in CLIP_CODE_KEYS){if(CLIP_CODE_KEYS[k]===key)n=parseInt(k)}
+if(!n||!CLIP_CODE_DATA||!CLIP_CODE_DATA[key])return;
+var e=CLIP_CODE_DATA[key];
+var out=document.getElementById('codeOutput'+n);var st=document.getElementById('runStatus'+n);
+if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap'+n);if(viz)viz.style.display='none';
+var lang=CLIP_CURRENT_LANG[n]||'Python';
+var lines=['$ '+lang+' '+e.name.replace(/^[0-9]+\.\s/,''),'Loading expression: '+e.latex.substring(0,40)+'...',''];
+var out2=CLIP_OUTPUTS[key]||['Running...','Output: '+e.intent.substring(0,60)];
+var i=0;var interval=setInterval(function(){
+if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+' — simulated)';startClipCodeViz(n,key);return}
+lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++
+},200);
+}
+
+function startClipCodeViz(n,key){
+var wrap=document.getElementById('codeVizWrap'+n);if(!wrap)return;
+var cv=document.getElementById('codeVizCanvas'+n);if(!cv)return;
+wrap.style.display='block';
+if(CLIP_VIZ_ANIM[n])cancelAnimationFrame(CLIP_VIZ_ANIM[n]);
+var t=0;function frame(){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+// Reuse the clip's draw function for the output viz
+if(n===1)drawClip1Output(ctx,W,H,t);
+else if(n===2)drawClip2Output(ctx,W,H,t);
+else if(n===3)drawClip3Output(ctx,W,H,t);
+drawPhaseBar(ctx,W,H);
+t+=0.02;CLIP_VIZ_ANIM[n]=requestAnimationFrame(frame);
+}
+frame();
+}
+
+// Output visualizations per clip (simplified versions of the clip demos)
+function drawClip1Output(ctx,W,H,t){
+// Attention heatmap
+var n=8,sz=W/n;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#c2410c';
+ctx.fillText('Attention weight matrix [8×8]',W/2,16);
+for(var i=0;i<n;i++){for(var j=0;j<n;j++){
+var fx=Math.sin(t*0.7)*n*0.4+n*0.5;var fy=Math.cos(t*0.5)*n*0.4+n*0.5;
+var v=Math.exp(-((i-fx)*(i-fx)+(j-fy)*(j-fy))/6);
+var hue=(t*30+i*j*5)%360;ctx.fillStyle='hsla('+hue+',60%,'+Math.round(v*50)+'%,'+v+')';
+ctx.fillRect(j*sz,i*sz,sz-1,sz-1);
+if(v>0.3){ctx.fillStyle='#e5e2dc';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(v.toFixed(2),j*sz+sz/2,i*sz+sz/2)}
+}}
+}
+function drawClip2Output(ctx,W,H,t){
+// Loss curve with gradient descent
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#c2410c';
+ctx.fillText('Loss L(θ) over training steps',W/2,16);
+var pL=40,pB=30,pT=30,pR=20,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+ctx.strokeStyle='#c2410c';ctx.lineWidth=2;ctx.beginPath();
+for(var s=0;s<=100;s++){var x=pL+s*cw/100;var loss=Math.exp(-s*0.04)*(1+0.1*Math.sin(s*0.3+t));var y=H-pB-loss*ch*0.8;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();
+// Current point
+var curS=(t*5)%100;var curX=pL+curS*cw/100;var curLoss=Math.exp(-curS*0.04)*(1+0.1*Math.sin(curS*0.3+t));var curY=H-pB-curLoss*ch*0.8;
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=10;ctx.beginPath();ctx.arc(curX,curY,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+}
+function drawClip3Output(ctx,W,H,t){
+// Bayesian posterior update
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#c2410c';
+ctx.fillText('Posterior P(H|D) evolving with data',W/2,16);
+var cx=W/2,cy=H*0.7,scaleX=W*0.35,scaleY=H*0.35;
+// Prior (wide, fading)
+ctx.strokeStyle='rgba(0,206,209,0.3)';ctx.lineWidth=1.5;ctx.beginPath();
+for(var x=-3;x<=3;x+=0.05){var y=Math.exp(-x*x/2);ctx.lineTo(cx+x*scaleX,cy-y*scaleY)}ctx.stroke();
+// Posterior (narrowing over time)
+var sigma=0.5+0.3*Math.sin(t*0.3);var mu=Math.sin(t*0.2)*0.5;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();
+for(var x=-3;x<=3;x+=0.05){var y=Math.exp(-(x-mu)*(x-mu)/(2*sigma*sigma));ctx.lineTo(cx+x*scaleX,cy-y*scaleY)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#e5e2dc';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('Prior (cyan)',10,30);ctx.fillStyle='#FFD700';ctx.fillText('Posterior (gold)',10,42);
+}
+
+
 // Render math
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+// Fetch code data for the code sections
+setTimeout(fetchCodeData,300);
 </script>
 </body>
 </html>
