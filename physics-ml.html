@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v12-clip8-sindy-pde">
+<meta name="version" content="2026-11-04-v13-clip9-coordinate-discovery">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -578,10 +578,62 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap8"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas8"></canvas></div>
 </div>
 </section>
+
+<!-- CLIP 9: Coordinate Discovery & SINDy Autoencoders -->
+<section class="clip-section" id="clip9" style="display:none">
+<h2>Coordinate Discovery & SINDy Autoencoders</h2>
+<div class="subtitle">Video 9 \u00b7 Coordinate selection problem, SVD/PCA shallow AE, deep SINDy-AE normal forms, intrinsic macro variables, Takens delay embeddings</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap9">
+<canvas class="clip-canvas" id="cv9"></canvas>
+<div class="clip-scene-label" id="lbl9">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP9.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP9.pause()">||</button>
+<button class="clip-btn" onclick="CLIP9.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP9.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP9.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title9">Coordinate selection</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom9" min="0.5" max="3" step="0.1" value="1"><span id="zoom9v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel9">\u03b8</span><input type="range" id="param9" min="0" max="3.14" step="0.1" value="0"><span id="param9v">0.0</span></div>
+<button class="clip-btn" onclick="CLIP9.toggleRecord()" id="rec9" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP9.toggleNarration()" id="narr9" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP9.toggleLight()" id="light9">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes9"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts9"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 coordinate discovery evolution</h4>
+<canvas class="future-canvas" id="fut9"></canvas>
+<div class="future-milestones" id="fut9m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code9">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr9">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map9"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs9"></div>
+<div id="codecontent9"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip9Code('hankel')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus9" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput9"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap9"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas9"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 8/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 9/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -609,7 +661,7 @@ var CLIP_CURRICULUM=[
 {n:6,title:'PIML Recap & Synthesis',desc:'Small-data, OOD generalization, stage coupling, benchmarks',status:'ready'},
 {n:7,title:'Autoencoders & Coordinates',desc:'Latent discovery, SVD/PCA, SINDy-AE, Koopman, Green\'s functions',status:'ready'},
 {n:8,title:'SINDy & PDE Discovery',desc:'Sparse ID, Lorenz rediscovery, PDE-SINDy, pitfalls, constrained optimization',status:'ready'},
-{n:9,title:'Dynamic Mode Decomposition',desc:'DMD for spatiotemporal data',status:'upcoming'},
+{n:9,title:'Coordinate Discovery & SINDy-AE',desc:'Coordinate selection, SVD/PCA, deep SINDy-AE, intrinsic variables, Takens embeddings',status:'ready'},
 {n:10,title:'Architecture Design',desc:'Inductive biases in NN structure',status:'upcoming'},
 {n:11,title:'Lagrangian NNs',desc:'Lagrangian mechanics in ML',status:'upcoming'},
 {n:12,title:'Galilean-Invariant NNs',desc:'Symmetry-enforcing tensor networks',status:'upcoming'},
@@ -2497,6 +2549,227 @@ ctx.fillText('dz = xy-\\u03b2z = xy-(8/3)z',10,49);
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
 
+// ============ CLIP 9: Coordinate Discovery & SINDy Autoencoders ============
+var CLIP9_SCENES=[
+{title:'Coordinate selection',desc:'Wrong coordinates = dense, right = sparse'},
+{title:'SVD/PCA shallow AE',desc:'Linear mode compression for high-dim fields'},
+{title:'Deep SINDy-AE',desc:'Nonlinear manifold + normal form coordinates'},
+{title:'Intrinsic variables',desc:'SINDy on macro forces (lift, drag)'},
+{title:'Takens embeddings',desc:'Hankel matrix + delay coordinates for latent states'},
+{title:'Koopman from delays',desc:'Sparse linear models predict lobe switching'}
+];
+var CLIP9_THOUGHTS=[
+'<strong style="color:var(--primary)">Coordinates make or break SINDy.</strong> Standard SINDy assumes data is in the correct coordinate system. If measurements are rotated or distorted, sparse representations collapse into dense, uninterpretable models. For unmapped systems like brain activity or disease propagation, automated coordinate discovery is essential to find latent variables that admit sparse models.',
+'<strong style="color:var(--primary)">SVD is a shallow autoencoder.</strong> High-dimensional fields ($10^4$\\u2013$10^5$ DOF) cause candidate libraries to explode combinatorially. SVD compresses data into low-dimensional mode amplitudes: $\\mathbf{u}(x,y,t) \\approx \\mathbf{u}_0 + \\sum a_i(t)\\phi_i(x,y)$. This acts as a shallow linear autoencoder $\\mathbf{z} = V^T\\mathbf{x}, \\hat{\\mathbf{x}} = U\\mathbf{z}$, projecting dynamics onto an optimal orthogonal subspace.',
+'<strong style="color:var(--primary)">Deep + sparse = normal forms.</strong> When linear subspaces fail, deep autoencoders map to nonlinear manifolds $\\mathbf{z} = \\phi(\\mathbf{x})$. Augmenting with SINDy penalties $\\mathcal{L} = \\|x-\\psi(\\phi(x))\\|^2 + \\|\\dot{z}-\\Theta\\Xi\\|^2 + \\lambda\\|\\Xi\\|_1$ learns coordinates where dynamics conform to sparse polynomial terms \\u2014 grounded in classical Normal Form theory.',
+'<strong style="color:var(--primary)">Model on what you measure.</strong> SINDy doesn\'t require full-field velocity data. Accurate parsimonious models can be derived directly on macroscopic intrinsic variables: $\\mathbf{y}_{intrinsic} = [C_L, C_D]^T$, $\\dot{\\mathbf{y}} = \\Theta(\\mathbf{y})\\Xi$. Lift and drag coefficients suffice \\u2014 drastically reducing sensing requirements for engineering digital twins.',
+'<strong style="color:var(--primary)">Reconstruct latent states from delays.</strong> When key variables are unmeasured, construct a Hankel matrix of time-delayed scalar measurements: $H = [x(t), x(t+\\tau), ..., x(t+(q-1)\\tau)]$. SVD of H yields eigen-time delay coordinates. These delay embeddings reconstruct the full latent dynamics from a single sensor \\u2014 Takens\' theorem in action.',
+'<strong style="color:var(--primary)">Linear Koopman from delays.</strong> Applying SINDy to delay coordinates discovers linear Koopman models: $\\dot{\\mathbf{v}} = K\\mathbf{v}$. These sparse linear models predict chaotic regime transitions like lobe switching in the Lorenz attractor. Linear dynamics from nonlinear chaos \\u2014 enabling LQR and MPC control on edge hardware.'
+];
+var CLIP9_PARAMS=[
+{label:'\\u03b8',min:0,max:3.14,step:0.1,default:0,decimals:1,desc:'rotation angle'},
+{label:'r',min:1,max:20,step:1,default:5,decimals:0,desc:'SVD modes'},
+{label:'|z|',min:1,max:8,step:1,default:2,decimals:0,desc:'latent dimension'},
+{label:'\\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'force coupling'},
+{label:'\\u03c4',min:1,max:20,step:1,default:5,decimals:0,desc:'delay steps'},
+{label:'K',min:0,max:1,step:0.05,default:0.3,decimals:2,desc:'Koopman eigenvalue'}
+];
+var SCENE9_MATH=[
+['\\u1e8b=\\u0398(X)\\u039e','wrong coords = dense','right = sparse'],
+['z=V\\u1d40x','u\\u2248\\u03a3a_i\\u03c6_i','SVD = shallow AE'],
+['z=\\u03c6(x)','L_recon+L_dyn+\\u03bb||\\u039e||\\u2081','normal form'],
+['y=[C_L,C_D]','\\u1e8f=\\u0398(y)\\u039e','intrinsic vars'],
+['H=[x(t),x(t+\\u03c4),...]','Takens embedding','delay coords'],
+['\\u1e8b_v=Kv','Koopman linear','lobe switching']
+];
+var CLIP9=makeClip({varName:'CLIP9',cvId:'cv9',wrapId:'wrap9',lblId:'lbl9',titleId:'title9',zoomId:'zoom9',zoomValId:'zoom9v',paramId:'param9',paramValId:'param9v',paramLabelId:'paramLabel9',paramDefault:0,paramDecimals:1,lightId:'light9',narrId:'narr9',recId:'rec9',narrationKey:'piml9',sceneListId:'scenes9',thoughtsId:'thoughts9',scenes:CLIP9_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE9_MATH[scene]);
+if(scene===0){
+// Coordinate selection: wrong (dense) vs right (sparse)
+var rotAngle=param;var cx=W*0.5,cy=H*0.45;
+// Left: wrong coordinates (rotated, dense)
+ctx.fillStyle='rgba(255,107,107,0.06)';ctx.fillRect(0,0,W*0.5,H);
+ctx.fillStyle='#ff6b6b';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Wrong coordinates (dense)',W*0.25,20);
+// Dense equation (many terms)
+ctx.fillStyle='rgba(255,107,107,0.5)';ctx.font='6px monospace';
+for(var i=0;i<12;i++){ctx.fillText('+0.0'+i+'\\u00b7'+(i%3?'x':'y')+((i+2)%4),W*0.25,H*0.3+i*10)}
+// Right: correct coordinates (sparse)
+ctx.fillStyle='rgba(0,255,136,0.06)';ctx.fillRect(W*0.5,0,W*0.5,H);
+ctx.fillStyle='#00ff88';ctx.font='bold 9px Georgia,serif';ctx.fillText('Right coordinates (sparse)',W*0.75,20);
+ctx.fillStyle='#00ff88';ctx.font='10px monospace';ctx.fillText('dx = \\u03c3(y - x)',W*0.75,H*0.35);
+ctx.fillText('dy = x(\\u03c1 - z) - y',W*0.75,H*0.45);
+ctx.fillText('dz = xy - \\u03b2z',W*0.75,H*0.55);
+// Rotation indicator
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.arc(W*0.5,H*0.5,20,0,rotAngle);ctx.stroke();
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('\\u03b8='+param.toFixed(1)+' rad rotation',W/2,H-20);
+}else if(scene===1){
+// SVD/PCA as shallow autoencoder
+var modes=Math.floor(param);var cx=W/2,cy=H*0.45;
+// High-dim field (left)
+var gridN=8;var cellW=W*0.15/gridN;
+for(var i=0;i<gridN;i++)for(var j=0;j<gridN;j++){var v=Math.sin(i*0.5+j*0.3+t)*0.5+0.5;ctx.fillStyle='rgba(234,88,12,'+v*0.5+')';ctx.fillRect(W*0.05+i*cellW,H*0.25+j*cellW,cellW-1,cellW-1)}
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('u(x,y) 10\\u2074 DOF',W*0.05+gridN*cellW/2,H*0.25+gridN*cellW+12);
+// SVD modes (middle)
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.22,H*0.5);ctx.lineTo(W*0.4,H*0.5);ctx.stroke();
+ctx.fillStyle=pc;ctx.font='8px Georgia,serif';ctx.fillText('SVD',W*0.31,H*0.5-8);
+// Mode amplitudes (right)
+for(var i=0;i<modes;i++){var a=Math.sin(t*0.5+i)*0.5+0.5;var bx=W*0.45+i*15;
+ctx.fillStyle='rgba(255,215,0,'+a+')';ctx.fillRect(bx,H*0.3,12,H*0.3*a);
+ctx.fillStyle=mt;ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('a'+i,bx+6,H*0.65)}
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('r='+modes+' modes',W*0.55,H*0.75);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('z=V\\u1d40x, u\\u2248\\u03a3a_i\\u03c6_i (shallow AE)',W/2,H-20);
+}else if(scene===2){
+// Deep SINDy-AE: nonlinear manifold
+var dim=Math.floor(param);var cx=W/2,cy=H*0.45;
+// High-dim input
+var gridN=6;var cellW=W*0.1/gridN;
+for(var i=0;i<gridN;i++)for(var j=0;j<gridN;j++){var v=Math.sin(i*0.5+j*0.3+t)*0.5+0.5;ctx.fillStyle='rgba(234,88,12,'+v*0.5+')';ctx.fillRect(W*0.05+i*cellW,H*0.3+j*cellW,cellW-1,cellW-1)}
+// Encoder arrow
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.18,H*0.5);ctx.lineTo(W*0.35,H*0.5);ctx.stroke();
+ctx.fillStyle=pc;ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('\\u03c6 (deep)',W*0.26,H*0.5-8);
+// Nonlinear manifold (curved surface)
+ctx.strokeStyle='rgba(234,88,12,0.3)';ctx.lineWidth=1;
+for(var i=-2;i<=2;i++){ctx.beginPath();for(var u=0;u<=1;u+=0.05){var x=W*0.4+u*W*0.15;var y=cy+i*15+Math.sin(u*Math.PI*2+t*0.3)*12;if(u===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}
+// Latent z dots
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
+for(var i=0;i<dim;i++){var a=i/dim*Math.PI*2+t*0.5;ctx.beginPath();ctx.arc(W*0.47+Math.cos(a)*10,cy+Math.sin(a)*10,3,0,Math.PI*2);ctx.fill()}
+ctx.shadowBlur=0;
+// SINDy equation
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('\\u017c=\\u0398(z)\\u039e',W*0.55,H*0.4);
+ctx.fillText('\\u039e sparse (3 terms)',W*0.55,H*0.48);
+// Decoder
+ctx.strokeStyle=pc;ctx.beginPath();ctx.moveTo(W*0.52,H*0.5);ctx.lineTo(W*0.65,H*0.5);ctx.stroke();
+ctx.fillStyle=pc;ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('\\u03c8',W*0.58,H*0.5-8);
+// Reconstruction
+for(var i=0;i<gridN;i++)for(var j=0;j<gridN;j++){var v=Math.sin(i*0.5+j*0.3+t*0.5)*0.5+0.5;ctx.fillStyle='rgba(0,206,209,'+v*0.5+')';ctx.fillRect(W*0.68+i*cellW,H*0.3+j*cellW,cellW-1,cellW-1)}
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('z=\\u03c6(x), L=L_recon+L_dyn+\\u03bb||\\u039e||\\u2081',W/2,H-20);
+}else if(scene===3){
+// Intrinsic variables: lift/drag SINDy
+var cx=W*2,cy=H*0.45;var coupling=param;
+// Wing shape
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<=60;i++){var u=i/60;var x=W*0.2+W*0.15*u;var y=cy-H*0.05*0.15*Math.sin(u*Math.PI);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+for(var i=60;i>=0;i--){var u=i/60;var x=W*0.2+W*0.15*u;var y=cy+H*0.05*0.15*Math.sin(u*Math.PI);ctx.lineTo(x,y)}
+ctx.closePath();ctx.stroke();
+// Lift & drag arrows
+var CL=Math.sin(t)*20*coupling+20;var CD=Math.cos(t)*10*coupling+10;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;
+ctx.beginPath();ctx.moveTo(W*0.27,cy);ctx.lineTo(W*0.27,cy-CL);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.27,cy);ctx.lineTo(W*0.27+CD,cy);ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('C_L',W*0.27,cy-CL-5);ctx.fillText('C_D',W*0.27+CD+8,cy+3);
+// SINDy model on intrinsic variables
+ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.textAlign='left';
+ctx.fillText('y = [C_L, C_D]',W*0.55,H*0.3);
+ctx.fillText('dy/dt = \\u0398(y)\\u039e',W*0.55,H*0.4);
+ctx.fillStyle='#FFD700';ctx.fillText('\\u039e: 2x2 sparse matrix',W*0.55,H*0.5);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('(no full-field data needed)',W*0.55,H*0.58);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('SINDy on intrinsic vars: y=[C_L,C_D]',W/2,H-20);
+}else if(scene===4){
+// Takens delay embeddings: Hankel matrix
+var delays=Math.floor(param);var cx=W/2,cy=H*0.45;
+// Scalar signal
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<200;i++){var x=W*0.05+i*W*0.003;var y=cy+Math.sin(i*0.08+t*0.3)*20;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('x(t) single sensor',W*0.35,cy+40);
+// Hankel matrix visualization
+var hx=W*0.55;var cellS=8;
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('Hankel H',hx+delays*cellS/2,cy-delays*cellS/2-5);
+for(var i=0;i<delays;i++)for(var j=0;j<delays;j++){var v=Math.sin(i*0.3+j*0.5+t)*0.5+0.5;ctx.fillStyle='rgba(234,88,12,'+v*0.5+')';ctx.fillRect(hx+j*cellS,cy-delays*cellS/2+i*cellS,cellS-1,cellS-1)}
+// SVD arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(hx+delays*cellS+5,cy);ctx.lineTo(hx+delays*cellS+30,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('SVD',hx+delays*cellS+17,cy-5);
+// Delay coordinate dots
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;
+for(var i=0;i<3;i++){var a=i/3*Math.PI*2+t*0.5;ctx.beginPath();ctx.arc(hx+delays*cellS+45+Math.cos(a)*10,cy+Math.sin(a)*10,3,0,Math.PI*2);ctx.fill()}
+ctx.shadowBlur=0;
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('H=[x(t),x(t+\\u03c4),...]  (Takens embedding)',W/2,H-20);
+}else if(scene===5){
+// Koopman from delays: linear model predicts lobe switching
+var k=param;var cx=W*0.35,cy=H*0.45,scale=H*0.06;
+// Lorenz attractor with lobe switching
+ctx.strokeStyle='rgba(234,88,12,0.1)';ctx.lineWidth=1;
+var x=0.1,y=0,z=0;var sigma=10,rho=28,beta=8/3;var dt=0.005;
+ctx.beginPath();
+for(var i=0;i<3000;i++){var dx=sigma*(y-x);var dy=x*(rho-z)-y;var dz=x*y-beta*z;x+=dx*dt;y+=dy*dt;z+=dz*dt;
+var px=cx+x*scale;var py=cy+(z-25)*scale;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();
+// Koopman linear prediction (straight line in delay space)
+ctx.strokeStyle='#00ff88';ctx.lineWidth=2;ctx.shadowColor='#00ff88';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var px=W*0.55+i*W*0.003;var py=cy+Math.sin(i*0.05*k)*15*Math.exp(-i*0.01);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#00ff88';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('Koopman: \\u1e8b_v=Kv',W*0.7,cy+40);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('predicts lobe switching',W*0.7,cy+50);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('SINDy on delays \\u2192 \\u1e8b_v=Kv (linear Koopman)',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP9.setActive(false);
+
+// CLIP9 code section — Hankel delay embedding
+var CLIP9_CODE={
+'hankel':{
+name:'Hankel Delay Embedding + SVD for Latent Coordinates',
+latex:'\\mathbf{H} = [x(t_i), x(t_i+\\tau), \\dots, x(t_i+(q-1)\\tau)]^T, \\quad \\mathbf{H} = U\\Sigma V^T',
+intent:'Reconstruct full latent dynamics from a single scalar sensor via Takens theorem',
+mapping:[
+{symbol:'x(t)',code:'scalar_signal[i]',note:'Single-sensor measurement'},
+{symbol:'\\u03c4',code:'delay_tau',note:'Time delay between embedding columns'},
+{symbol:'q',code:'n_delays',note:'Number of delay steps (embedding dimension)'},
+{symbol:'H',code:'hankel_matrix(x, tau, q)',note:'Hankel matrix of delayed measurements'},
+{symbol:'U\\u03a3V\\u1d40',code:'svd(H)',note:'SVD yields eigen-time-delay coordinates'}
+],
+langs:{
+'Python':'import numpy as np\n\ndef hankel_embedding(x, tau=10, q=50):\n    """Build Hankel matrix from scalar signal x(t).\n    Takens theorem: delay embedding reconstructs\n    full latent dynamics from one sensor."""\n    N = len(x) - q * tau\n    H = np.zeros((q, N))\n    for i in range(q):\n        H[i, :] = x[i * tau : i * tau + N]\n    return H\n\ndef delay_coordinates(x, tau=10, q=50, r=3):\n    """Extract r-dimensional latent coordinates via SVD."""\n    H = hankel_embedding(x, tau, q)\n    U, S, Vt = np.linalg.svd(H, full_matrices=False)\n    # First r singular vectors = eigen-time-delay coordinates\n    v = U[:, :r] * S[:r]  # latent coordinates\n    return v, S\n\n# Apply SINDy on delay coordinates for Koopman model\n# dv/dt = Theta(v) * Xi  (discover sparse linear K)',
+'TypeScript':'// Hankel delay embedding\nfunction hankelMatrix(x: number[], tau: number, q: number): number[][] {\n  const N = x.length - q * tau;\n  const H: number[][] = [];\n  for (let i = 0; i < q; i++) {\n    H.push(x.slice(i * tau, i * tau + N));\n  }\n  return H;\n}\n\nfunction delayCoords(x: number[], tau: number, q: number, r: number) {\n  const H = hankelMatrix(x, tau, q);\n  const { U, S } = svd(H);\n  return U.slice(0, r).map((row, i) => row.map(v => v * S[i]));\n}',
+'Go':'// Hankel embedding (conceptual)\nfunc HankelMatrix(x []float64, tau, q int) [][]float64 {\n    n := len(x) - q*tau\n    h := make([][]float64, q)\n    for i := 0; i < q; i++ {\n        h[i] = x[i*tau : i*tau+n]\n    }\n    return h\n}\nfunc DelayCoords(x []float64, tau, q, r int) ([][]float64, []float64) {\n    h := HankelMatrix(x, tau, q)\n    u, s, _ := SVD(h)\n    // First r columns of U * S\n    return u[:r], s[:r]\n}',
+'Scala':'// Hankel delay embedding\ndef hankelMatrix(x: Vector[Double], tau: Int, q: Int): Matrix = {\n  val n = x.length - q * tau\n  Matrix.tabulate(q, n)((i, j) => x(i * tau + j))\n}\ndef delayCoords(x: Vector[Double], tau: Int, q: Int, r: Int) = {\n  val H = hankelMatrix(x, tau, q)\n  val (u, s, _) = svd(H)\n  (u(::, 0 until r) * s(0 until r), s)\n}',
+'C':'/* Hankel matrix (conceptual) */\nvoid hankel(double* x, int nx, int tau, int q, double** H) {\n    int n = nx - q * tau;\n    for (int i = 0; i < q; i++)\n        for (int j = 0; j < n; j++)\n            H[i][j] = x[i * tau + j];\n}\n/* SVD of H yields eigen-time-delay coordinates */',
+'Elixir':'# Hankel delay embedding\ndefmodule Takens do\n  def hankel_matrix(x, tau, q) do\n    n = length(x) - q * tau\n    for i <- 0..(q-1) do\n      Enum.slice(x, i*tau, n)\n    end\n  end\n  def delay_coords(x, tau, q, r) do\n    h = hankel_matrix(x, tau, q)\n    {u, s, _} = svd(h)\n    {Enum.take(u, r), Enum.take(s, r)}\n  end\nend'
+}
+}
+};
+var CLIP9_CURRENT_LANG='Python';
+function populateCode9(){
+var e=CLIP9_CODE['hankel'];if(!e)return;
+var exprEl=document.getElementById('expr9');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map9');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs9');var ccEl=document.getElementById('codecontent9');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip9Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc9-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip9Code(lang){CLIP9_CURRENT_LANG=lang;document.querySelectorAll('#tabs9 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc9-'+lang)})}
+var CLIP9_OUTPUTS={'hankel':['Building Hankel matrix from scalar signal...','Signal: Lorenz x(t), 10000 samples','Delay tau=10, embedding dim q=50','','Hankel matrix H: 50x9950','Performing SVD on H...','  Singular values: [42.3, 28.1, 12.5, 2.1, 0.8, ...]','  First 3 modes capture 97.3% energy','','Delay coordinates v (3D):','  Reconstructed Lorenz attractor from single sensor!','','Applying SINDy on delay coords...','  Discovered: dv/dt = Kv (linear Koopman)','  K = [[-0.9, 0.4, 0.1], [-0.3, -0.5, 0.2], [0.1, -0.2, -0.3]]','','Predicts lobe switching in Lorenz attractor']};
+function runClip9Code(key){
+var e=CLIP9_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput9');var st=document.getElementById('runStatus9');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap9');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP9_CURRENT_LANG+' '+e.name,''];var out2=CLIP9_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip9CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip9CodeViz(key){
+var wrap=document.getElementById('codeVizWrap9');if(!wrap)return;var cv=document.getElementById('codeVizCanvas9');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('Takens: Lorenz from single sensor via delays',W/2,16);
+var cx=W/2,cy=H*0.55,scale=H*0.06;
+// Reconstructed attractor from delay embedding
+ctx.strokeStyle='rgba(234,88,12,0.2)';ctx.lineWidth=1;
+var x=0.1,y=0,z=0;var sigma=10,rho=28,beta=8/3;var dt=0.005;
+ctx.beginPath();
+for(var i=0;i<3000;i++){var dx=sigma*(y-x);var dy=x*(rho-z)-y;var dz=x*y-beta*z;x+=dx*dt;y+=dy*dt;z+=dz*dt;
+var px=cx+x*scale;var py=cy+(z-25)*scale;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();
+// Labels
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('Reconstructed from x(t) only',10,25);
+ctx.fillStyle='#00CED1';ctx.fillText('Koopman: dv/dt = Kv',10,37);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
+
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -2506,7 +2779,8 @@ var FUTURES_DATA={
 'piml5':[{n:'KKT solvers in DL',y:2028,p:0.35,t:'Constrained optimization standard in training'},{n:'PiDMD widespread',y:2029,p:0.30,t:'Physics-informed DMD for engineering'},{n:'SR3 acceleration',y:2027,p:0.40,t:'Fast sparse regression default'},{n:'PySR discoveries',y:2028,p:0.35,t:'Symbolic regression finds new laws'},{n:'Manifold optimization',y:2031,p:0.25,t:'Matrix manifold training standard'}],
 'piml6':[{n:'PIML benchmarks standard',y:2028,p:0.40,t:'Physical benchmark datasets widespread'},{n:'Small-data AI',y:2027,p:0.45,t:'Physics-constrained models from 100 samples'},{n:'OOD generalization',y:2029,p:0.35,t:'Physics enables reliable extrapolation'},{n:'Lagrangian NNs mature',y:2028,p:0.30,t:'Structure-preserving networks default'},{n:'Disease dynamics discovery',y:2030,p:0.25,t:'PySR finds epidemiological laws'}],
 'piml7':[{n:'GoPro physics',y:2027,p:0.40,t:'Equations from video streams'},{n:'Koopman control',y:2028,p:0.35,t:'Linearized real-time control'},{n:'Deep Green\'s functions',y:2030,p:0.25,t:'Nonlinear PDE solvers'},{n:'Autoencoder discovery',y:2026,p:0.50,t:'Coordinate discovery standard'},{n:'EEG/ECG latent',y:2029,p:0.30,t:'Medical latent dynamics'}],
-'piml8':[{n:'PDE-SINDy standard',y:2027,p:0.40,t:'Automatic PDE discovery from fields'},{n:'PySINDy ecosystem',y:2026,p:0.50,t:'Open-source SINDy ubiquitous'},{n:'Navier-Stokes discovered',y:2029,p:0.30,t:'ML rediscovers NS from data'},{n:'Constrained SINDy',y:2028,p:0.35,t:'Physics-constrained sparse ID'},{n:'Disease dynamics',y:2030,p:0.25,t:'SINDy for epidemiology'}]
+'piml8':[{n:'PDE-SINDy standard',y:2027,p:0.40,t:'Automatic PDE discovery from fields'},{n:'PySINDy ecosystem',y:2026,p:0.50,t:'Open-source SINDy ubiquitous'},{n:'Navier-Stokes discovered',y:2029,p:0.30,t:'ML rediscovers NS from data'},{n:'Constrained SINDy',y:2028,p:0.35,t:'Physics-constrained sparse ID'},{n:'Disease dynamics',y:2030,p:0.25,t:'SINDy for epidemiology'}],
+'piml9':[{n:'Auto coordinate discovery',y:2026,p:0.50,t:'Automatic latent coordinate finding'},{n:'Takens embedding standard',y:2027,p:0.40,t:'Delay embeddings for latent states'},{n:'Intrinsic variable models',y:2028,p:0.35,t:'Macro-force SINDy for engineering'},{n:'Brain dynamics SINDy',y:2029,p:0.30,t:'EEG seizure prediction from delays'},{n:'Normal form learning',y:2030,p:0.25,t:'Deep AE discovers normal forms'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -2535,7 +2809,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -2614,6 +2888,7 @@ setTimeout(populateCode5,300);
 setTimeout(populateCode6,300);
 setTimeout(populateCode7,300);
 setTimeout(populateCode8,300);
+setTimeout(populateCode9,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -2666,7 +2941,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('8 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===8});
+chk('9 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===9});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -2675,6 +2950,7 @@ chk('Clip 5 ready',function(){return CLIP_CURRICULUM[4].status==='ready'});
 chk('Clip 6 ready',function(){return CLIP_CURRICULUM[5].status==='ready'});
 chk('Clip 7 ready',function(){return CLIP_CURRICULUM[6].status==='ready'});
 chk('Clip 8 ready',function(){return CLIP_CURRICULUM[7].status==='ready'});
+chk('Clip 9 ready',function(){return CLIP_CURRICULUM[8].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -2725,6 +3001,16 @@ chk('Clip 8 code tabs (6)',function(){return document.getElementById('tabs8')&&d
 chk('Clip 8 map table',function(){var m=document.getElementById('map8');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 8 future chart',function(){return!!document.getElementById('fut8')});
 chk('CLIP8 narration key',function(){return CLIP8.narrationKey==='piml8'});
+// Clip 9
+chk('CLIP9 exists',function(){return typeof CLIP9==='object'});
+chk('Clip 9 section exists',function(){return!!document.getElementById('clip9')});
+chk('Clip 9 canvas',function(){return!!document.getElementById('cv9')});
+chk('Clip 9 scenes (6)',function(){var s=document.getElementById('scenes9');return s&&s.children.length===6});
+chk('Clip 9 expr populated',function(){var e=document.getElementById('expr9');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 9 code tabs (6)',function(){return document.getElementById('tabs9')&&document.getElementById('tabs9').children.length===6});
+chk('Clip 9 map table',function(){var m=document.getElementById('map9');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 9 future chart',function(){return!!document.getElementById('fut9')});
+chk('CLIP9 narration key',function(){return CLIP9.narrationKey==='piml9'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
