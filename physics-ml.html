@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-05-v20-clip16-neural-ode">
+<meta name="version" content="2026-11-05-v21-clip17-pysr">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -991,10 +991,61 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap16"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas16"></canvas></div>
 </div>
 </section>
+<!-- CLIP 17: Python Symbolic Regression (PySR) -->
+<section class="clip-section" id="clip17" style="display:none">
+<h2>Python Symbolic Regression (PySR)</h2>
+<div class="subtitle">Video 17 \u00b7 Compositional function trees, genetic programming (mutation/crossover/simplify), Pareto parsimony, Schmidt-Lipson law discovery, Noack symbolic control, interpretable AI</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap17">
+<canvas class="clip-canvas" id="cv17"></canvas>
+<div class="clip-scene-label" id="lbl17">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP17.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP17.pause()">||</button>
+<button class="clip-btn" onclick="CLIP17.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP17.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP17.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title17">Function trees vs black-box NNs</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom17" min="0.5" max="3" step="0.1" value="1"><span id="zoom17v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel17">\u03b1</span><input type="range" id="param17" min="0" max="0.1" step="0.005" value="0.01"><span id="param17v">0.010</span></div>
+<button class="clip-btn" onclick="CLIP17.toggleRecord()" id="rec17" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP17.toggleNarration()" id="narr17" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP17.toggleLight()" id="light17">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes17"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts17"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 PySR evolution</h4>
+<canvas class="future-canvas" id="fut17"></canvas>
+<div class="future-milestones" id="fut17m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code17">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr17">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map17"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs17"></div>
+<div id="codecontent17"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip17Code('pysr')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus17" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput17"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap17"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas17"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 16/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 17/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -1030,7 +1081,7 @@ var CLIP_CURRICULUM=[
 {n:14,title:'Lagrangian Neural Networks',desc:'Scalar L(q,q\u0307), Euler-Lagrange, Hessian inversion, variational integrators, (q,q\u0307) flexibility',status:'ready'},
 {n:15,title:'Lagrangian NNs II: Architecture & Loss',desc:'T-V decomposition, naive NN blow-up, custom loss ||q\u00a8_obs \u2212 q\u00a8_LNN||\u00b2, Neural ODE extension, data efficiency, long-horizon stability',status:'ready'},
 {n:16,title:'Neural Ordinary Differential Equations',desc:'ResNet as forward Euler, continuous dx/dt=f\u03b8(x,t), adjoint sensitivity, irregular time-series, symplectic extension, SINDy discovery pipeline',status:'ready'},
-{n:17,title:'Sparse Sensing',desc:'Compressed sensing & SHRED',status:'upcoming'},
+{n:17,title:'Python Symbolic Regression (PySR)',desc:'Function trees, genetic programming (mutate/crossover/simplify), Pareto parsimony, Schmidt-Lipson law discovery, Noack symbolic control, interpretable AI',status:'ready'},
 {n:18,title:'Control with PIML',desc:'Physics-informed control systems',status:'upcoming'},
 {n:19,title:'RL + Physics',desc:'Physics-informed reinforcement learning',status:'upcoming'},
 {n:20,title:'Reduced-Order Models',desc:'ROM with physics constraints',status:'upcoming'},
@@ -4632,6 +4683,272 @@ ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillTe
 ctx.fillStyle='#10b981';ctx.fillText('NODE continuous fit',10,37);
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)} frame();
 }
+// ============ CLIP 17: Python Symbolic Regression (PySR) ============
+var CLIP17_SCENES=[
+{title:'Function trees vs black-box NNs',desc:'Compositional syntax tree T(x\u2081,..,x\u2099) inspectable; NN weight matrix opaque'},
+{title:'Genetic programming operations',desc:'Mutation, sub-tree crossover, simplification, constant optimization (biological analogy)'},
+{title:'Pareto front & principle of parsimony',desc:'Einstein: as simple as possible, no simpler; OOD generalization from parsimony'},
+{title:'Discovering governing laws & invariants',desc:'Schmidt-Lipson: rediscover Hamiltonians & differential equations from trajectory data'},
+{title:'Symbolic control laws (Noack)',desc:'Breed feedback controllers u(t)=f(x(t)) for turbulent fluid stabilization'},
+{title:'Global impact',desc:'Climate, epidemiology, edge microcontrollers, precision pharmacokinetics'}
+];
+var CLIP17_THOUGHTS=[
+'<strong style="color:var(--primary)">Trees, not matrices.</strong> A deep neural network is an opaque matrix of weights \u2014 powerful, but impossible for a domain expert to inspect. PySR instead searches over compositional function trees $T \\in \\mathcal{T}$, where each node is an operation ($+$, $\\times$, $\\sin$, $\\cos$, polynomial) and leaves are inputs or constants. The result is an explicit, human-readable expression $y = T(x_1, \\dots, x_n)$ that a physicist, biologist, or engineer can verify, simplify, and reason about. Interpretability is the default, not a post-hoc explanation.',
+'<strong style="color:var(--primary)">Evolution in function space.</strong> PySR searches the vast space of trees using operators modeled on biological reproduction: <em>mutation</em> replaces a node or sub-tree; <em>crossover</em> swaps sub-branches between parent trees; <em>simplification</em> collapses redundant operations ($x \\cdot 1 \\to x$); <em>constant optimization</em> numerically tunes coefficients. Each generation, candidate trees compete on data fit; the fittest breed. The optimizer solves $\\theta^* = \\arg\\min_\\theta \\|\\mathbf{y} - T_{\\text{child}}(\\mathbf{X}; \\theta)\\|_2^2$ where $T_{\\text{child}} = \\text{Swap}(T_1, T_2)$.',
+'<strong style="color:var(--primary)">Pareto parsimony.</strong> To avoid overfitting noisy data, PySR evaluates models across a spectrum of structural complexity (tree node count) and reports the <em>Pareto front</em> of accuracy vs complexity. The objective is $\\min_T \\big( \\mathcal{L}(y, T(X)) + \\lambda \\cdot \\text{Complexity}(T) \\big)$. Researchers pick the "elbow" \u2014 Einstein\'s rule: as simple as possible, but no simpler. Parsimonious symbolic models generalize dramatically better out-of-distribution than over-parameterized neural networks, because they capture the actual law, not the noise.',
+'<strong style="color:var(--primary)">Rediscovering physics.</strong> Schmidt and Lipson showed that symbolic regression can rediscover Hamiltonians and governing differential equations directly from raw trajectory data \u2014 no prior knowledge of the physics. Given $\\mathbf{x}(t)$ observations, PySR searches for $\\dot{\\mathbf{x}} = f_{\\text{symbolic}}(\\mathbf{x})$ or conserved quantities $H(\\mathbf{q}, \\mathbf{p}) = C$. The rediscovery of Newton\'s laws, Lagrangians, and Hamiltonians from data alone is a landmark: machine learning that produces science, not just predictions.',
+'<strong style="color:var(--primary)">Breeding control laws.</strong> Symbolic regression extends beyond discovery into control. Noack and collaborators breed closed-loop feedback controllers $u(t) = f_{\\text{control}}(\\mathbf{x}(t))$ by selecting trees that stabilize chaotic turbulent fluid systems over successive generations. The result is a compact mathematical controller that runs on cheap microcontrollers \u2014 unlike neural network controllers that require GPUs. Symbolic control is deployable in ways black-box control is not.',
+'<strong style="color:var(--primary)">Where interpretable discovery matters.</strong> Climate science: compact cloud-formation formulas replace empirical approximations in global models. Epidemiology: explicit transmission-as-function-of-humidity equations guide targeted public health. Edge microcontrollers: lightweight symbolic controllers run solar trackers and wind turbines off-grid without GPUs. Precision medicine: patient-specific pharmacokinetic equations let clinicians verify safety boundaries mathematically. PySR democratizes equation discovery for science and engineering.'
+];
+var CLIP17_PARAMS=[
+{label:'\u03bb',min:0,max:2,step:0.05,default:0.1,decimals:2,desc:'parsimony weight'},
+{label:'p_mut',min:0,max:0.5,step:0.01,default:0.05,decimals:2,desc:'mutation rate'},
+{label:'p_cross',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'crossover rate'},
+{label:'N_pop',min:50,max:500,step:10,default:100,decimals:0,desc:'population size'},
+{label:'\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'control weight'},
+{label:'\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'safety weight'}
+];
+var SCENE17_MATH=[
+['y=T(x\u2081,..,x\u2099)','syntax tree','interpretable'],
+['mutate+crossover+simplify','genetic ops','evolutionary'],
+['L+\u03bb\u00b7Complexity','Pareto front','parsimony'],
+['\u1e8b=f_sym(x), H=C','law discovery','Schmidt-Lipson'],
+['u(t)=f_ctrl(x(t))','symbolic control','Noack'],
+['climate+epi+edge+pharma','interpretable','deployable']
+];
+var CLIP17=makeClip({varName:'CLIP17',cvId:'cv17',wrapId:'wrap17',lblId:'lbl17',titleId:'title17',zoomId:'zoom17',zoomValId:'zoom17v',paramId:'param17',paramValId:'param17v',paramLabelId:'paramLabel17',paramDefault:0.01,paramDecimals:3,lightId:'light17',narrId:'narr17',recId:'rec17',narrationKey:'piml17',sceneListId:'scenes17',thoughtsId:'thoughts17',scenes:CLIP17_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE17_MATH[scene]);
+if(scene===0){
+// Function tree (left, inspectable) vs NN matrix (right, opaque)
+var cx=W/2,cy=H*0.5;
+// Function tree: T = sin(x1) + x2*x3
+ctx.fillStyle='#10b981';ctx.font='8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Function tree (inspectable)',W*0.28,H*0.12);
+// Tree nodes
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;
+ctx.beginPath();ctx.arc(W*0.28,cy-50,9,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 9px Georgia,serif';ctx.fillText('+',W*0.28,cy-47);
+ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(W*0.18,cy-15,7,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#fff';ctx.font='8px Georgia,serif';ctx.fillText('sin',W*0.18,cy-12);
+ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(W*0.38,cy-15,7,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#fff';ctx.fillText('\u00d7',W*0.38,cy-12);
+// Leaves
+ctx.fillStyle='#a855f7';ctx.beginPath();ctx.arc(W*0.13,cy+15,5,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.fillText('x\u2081',W*0.13,cy+18);
+ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(W*0.34,cy+15,5,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#000';ctx.fillText('x\u2082',W*0.34,cy+18);
+ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(W*0.43,cy+15,5,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#000';ctx.fillText('x\u2083',W*0.43,cy+18);
+// Edges
+ctx.strokeStyle='#10b981';ctx.lineWidth=1.5;ctx.beginPath();
+ctx.moveTo(W*0.28,cy-41);ctx.lineTo(W*0.18,cy-22);ctx.moveTo(W*0.28,cy-41);ctx.lineTo(W*0.38,cy-22);
+ctx.moveTo(W*0.18,cy-8);ctx.lineTo(W*0.13,cy+10);ctx.moveTo(W*0.38,cy-8);ctx.lineTo(W*0.34,cy+10);ctx.moveTo(W*0.38,cy-8);ctx.lineTo(W*0.43,cy+10);
+ctx.stroke();
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('y = sin(x\u2081) + x\u2082\u00b7x\u2083',W*0.28,cy+40);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('human-readable',W*0.28,cy+50);
+// NN matrix (right)
+ctx.fillStyle='#ff6b6b';ctx.font='8px Georgia,serif';ctx.fillText('Neural net (opaque)',W*0.75,H*0.12);
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.strokeRect(W*0.62,cy-50,80,70);
+// Dense weight matrix dots
+for(var i=0;i<8;i++){for(var j=0;j<8;j++){var alpha=Math.random()*0.5+0.2;ctx.fillStyle='rgba(255,107,107,'+alpha+')';ctx.beginPath();ctx.arc(W*0.66+i*9,cy-40+j*8,1.5,0,Math.PI*2);ctx.fill()}}
+ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('W\u2081\u00b7W\u2082\u00b7...W_L',W*0.75,cy+30);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('millions of weights',W*0.75,cy+40);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('uninterpretable',W*0.75,cy+50);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('trees (interpretable) vs matrices (opaque)',W/2,H-20);
+}else if(scene===1){
+// Genetic operations: mutation + crossover + simplify + constant opt
+var cx=W/2,cy=H*0.5;
+// Two parent trees
+ctx.fillStyle='#00CED1';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('parent T\u2081',W*0.15,H*0.12);
+ctx.fillStyle='#00CED1';ctx.shadowColor='#00CED1';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(W*0.15,cy-20,7,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='7px Georgia,serif';ctx.fillText('+',W*0.15,cy-17);
+ctx.fillStyle='#00CED1';ctx.beginPath();ctx.arc(W*0.1,cy+10,5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.fillText('x',W*0.1,cy+12);
+ctx.fillStyle='#00CED1';ctx.beginPath();ctx.arc(W*0.2,cy+10,5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.fillText('y',W*0.2,cy+12);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.15,cy-13);ctx.lineTo(W*0.1,cy+5);ctx.moveTo(W*0.15,cy-13);ctx.lineTo(W*0.2,cy+5);ctx.stroke();
+
+ctx.fillStyle='#FF69B4';ctx.font='7px Georgia,serif';ctx.fillText('parent T\u2082',W*0.85,H*0.12);
+ctx.fillStyle='#FF69B4';ctx.shadowColor='#FF69B4';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(W*0.85,cy-20,7,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.fillText('\u00d7',W*0.85,cy-17);
+ctx.fillStyle='#FF69B4';ctx.beginPath();ctx.arc(W*0.8,cy+10,5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.fillText('sin',W*0.8,cy+12);
+ctx.fillStyle='#FF69B4';ctx.beginPath();ctx.arc(W*0.9,cy+10,5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.fillText('z',W*0.9,cy+12);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.85,cy-13);ctx.lineTo(W*0.8,cy+5);ctx.moveTo(W*0.85,cy-13);ctx.lineTo(W*0.9,cy+5);ctx.stroke();
+// Crossover arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.22,cy);ctx.lineTo(W*0.78,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('crossover (swap sub-trees)',W/2,cy-5);
+// Child tree
+ctx.fillStyle='#10b981';ctx.font='7px Georgia,serif';ctx.fillText('child T_child',W/2,H*0.78);
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(W*0.5,cy+45,7,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('+',W*0.5,cy+48);
+ctx.fillStyle='#00CED1';ctx.beginPath();ctx.arc(W*0.42,cy+70,5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.fillText('x',W*0.42,cy+72);
+ctx.fillStyle='#FF69B4';ctx.beginPath();ctx.arc(W*0.58,cy+70,5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.fillText('sin',W*0.58,cy+72);
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.5,cy+52);ctx.lineTo(W*0.42,cy+65);ctx.moveTo(W*0.5,cy+52);ctx.lineTo(W*0.58,cy+65);ctx.stroke();
+// Operators list
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='left';
+ctx.fillText('operators:',10,H*0.92);
+ctx.fillStyle='#FFD700';ctx.fillText('mutate',60,H*0.92);
+ctx.fillStyle='#10b981';ctx.fillText('simplify',110,H*0.92);
+ctx.fillStyle='#a855f7';ctx.fillText('const opt',170,H*0.92);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('genetic ops: mutate + crossover + simplify',W/2,H-20);
+}else if(scene===2){
+// Pareto front: accuracy vs complexity
+var lambda=param;var cx=W/2,cy=H*0.5;
+// Axes
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.12,cy+40);ctx.lineTo(W*0.88,cy+40);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.12,cy+40);ctx.lineTo(W*0.12,H*0.1);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('complexity \u2192',cx,cy+58);
+ctx.save();ctx.translate(W*0.07,cy);ctx.rotate(-Math.PI/2);ctx.fillText('error \u2193',0,0);ctx.restore();
+// Pareto front curve (knee/elbow)
+ctx.strokeStyle='#10b981';ctx.lineWidth=2.5;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<50;i++){var x=W*0.12+i/49*W*0.76;var comp=i/49;var err=Math.exp(-comp*3)+0.05+lambda*comp*0.5;var y=H*0.1+(1-Math.min(1,err))*0.7*(cy+40-H*0.1)+H*0.1-(cy+40-H*0.1);if(i===0)ctx.moveTo(x,H*0.1+(1-Math.min(1,err))*0.8*(cy+40-H*0.1));else ctx.lineTo(x,H*0.1+(1-Math.min(1,err))*0.8*(cy+40-H*0.1))}ctx.stroke();ctx.shadowBlur=0;
+// Pareto-optimal points
+ctx.fillStyle='#FFD700';
+for(var i=0;i<8;i++){var comp=i/7;var err=Math.exp(-comp*3)+0.05;var px=W*0.12+comp*W*0.76;var py=H*0.1+(1-Math.min(1,err))*0.8*(cy+40-H*0.1);ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill()}
+// Highlight elbow (sweet spot)
+var elbowComp=0.4;var elbowErr=Math.exp(-elbowComp*3)+0.05;var ex=W*0.12+elbowComp*W*0.76;var ey=H*0.1+(1-Math.min(1,elbowErr))*0.8*(cy+40-H*0.1);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.setLineDash([3,3]);ctx.beginPath();ctx.arc(ex,ey,12,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#FF69B4';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('PARETO ELBOW',ex,ey-18);
+ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.fillText('simple, no simpler',ex,ey+22);
+// Einstein quote
+ctx.fillStyle='#FFD700';ctx.font='italic 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('"as simple as possible, but no simpler" \u2014 Einstein',cx,H*0.92);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('Pareto front: accuracy vs complexity',W/2,H-20);
+}else if(scene===3){
+// Schmidt-Lipson: rediscover Hamiltonian from trajectory data
+var cx=W/2,cy=H*0.5;
+// Trajectory data (left): double pendulum trace
+ctx.fillStyle='#00CED1';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('trajectory data',W*0.2,H*0.12);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1;ctx.beginPath();
+for(var i=0;i<150;i++){var a=i/150*Math.PI*4+t*0.3;var x=W*0.2+Math.cos(a)*15+Math.sin(a*1.3)*8;var y=cy-10+Math.sin(a)*12;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.32,cy);ctx.lineTo(W*0.48,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.fillText('PySR',W*0.4,cy-8);
+// Discovered equation (right)
+ctx.fillStyle='#10b981';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('discovered law',W*0.75,H*0.12);
+ctx.fillStyle='#0a0908';ctx.strokeStyle='#10b981';ctx.lineWidth=1.5;ctx.strokeRect(W*0.6,cy-30,80,60);
+ctx.fillStyle='#10b981';ctx.font='8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('H = p\u00b2/2m',W*0.75,cy-10);
+ctx.fillText('  + mgh',W*0.75,cy+5);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('(Hamiltonian)',W*0.75,cy+22);
+// Output forms
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';
+ctx.fillText('PySR discovers:',10,H*0.7);
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.fillText('  \u1e0b = f_sym(x)',10,H*0.78);
+ctx.fillText('  H(q, p) = C',10,H*0.86);
+ctx.fillStyle='#a855f7';ctx.font='6px monospace';ctx.fillText('  (conserved)',80,H*0.86);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Schmidt-Lipson: rediscover physics from data',W/2,H-20);
+}else if(scene===4){
+// Noack symbolic control: breed feedback controllers for turbulent fluid
+var alpha=param;var cx=W/2,cy=H*0.5;
+// Turbulent flow (left, chaotic)
+ctx.fillStyle='#ff6b6b';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('turbulent fluid',W*0.25,H*0.12);
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;
+for(var j=0;j<5;j++){ctx.beginPath();
+for(var i=0;i<60;i++){var x=W*0.1+i/60*W*0.3;var y=cy-30+j*12+Math.sin(i*0.3+j+t*0.5)*4;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}
+// Controller (middle): symbolic tree -> u(t)
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('symbolic control',W*0.5,H*0.12);
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;
+ctx.fillRect(W*0.42,cy-15,60,30);ctx.shadowBlur=0;
+ctx.fillStyle='#000';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('u(t)=f(x)',W*0.5,cy+2);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('breed over generations',W*0.5,cy+25);
+// Arrows
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.36,cy);ctx.lineTo(W*0.42,cy);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.58,cy);ctx.lineTo(W*0.64,cy);ctx.stroke();
+// Stabilized flow (right)
+ctx.fillStyle='#10b981';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('stabilized',W*0.75,H*0.12);
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=3;
+for(var j=0;j<5;j++){ctx.beginPath();
+for(var i=0;i<60;i++){var x=W*0.65+i/60*W*0.3;var y=cy-30+j*12+Math.sin(i*0.1)*0.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}ctx.shadowBlur=0;
+// Noack reference
+ctx.fillStyle='#a855f7';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('Noack: ML control',10,H*0.92);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('symbolic control: breed u(t)=f(x) for turbulence',W/2,H-20);
+}else if(scene===5){
+// Global applications
+var cx=W/2,cy=H*0.45;
+var apps=[{x:0.18,icon:'\ud83c\udf27',l:'Climate',c:'#00CED1',note:'cloud formulas'},{x:0.38,icon:'\ud83e\udec0',l:'Epidemiology',c:'#ff6b6b',note:'transmission eqs'},{x:0.58,icon:'\u26a1',l:'Edge \u00b5C',c:'#FFD700',note:'lightweight control'},{x:0.78,icon:'\ud83d\udc8a',l:'Pharma',c:'#a855f7',note:'pharmacokinetics'}];
+apps.forEach(function(ap){var px=W*ap.x;
+ctx.font='18px Georgia,serif';ctx.textAlign='center';ctx.fillText(ap.icon,px,cy-5);
+ctx.fillStyle=ap.c;ctx.font='8px Georgia,serif';ctx.fillText(ap.l,px,cy+12);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText(ap.note,px,cy+22);
+// Tiny equation
+ctx.fillStyle=ap.c;ctx.font='6px monospace';
+ctx.fillText('y = T(x)',px,cy+34)});
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('interpretable equations deployable anywhere',W/2,H*0.8);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('PySR: interpretable discovery for global impact',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP17.setActive(false);
+
+// CLIP17 code section \u2014 PySR-style symbolic regression
+var CLIP17_CODE={
+'pysr':{
+name:'Symbolic Regression (PySR-style)',
+latex:'\\min_{T \\in \\mathcal{T}} \\Big( \\mathcal{L}(y, T(X)) + \\lambda \\cdot \\text{Complexity}(T) \\Big), \\quad \\theta^* = \\arg\\min_\\theta \\| \\mathbf{y} - T_{\\text{child}}(\\mathbf{X}; \\theta) \\|_2^2',
+intent:'Genetic programming over function trees; Pareto-front selection by accuracy vs complexity',
+mapping:[
+{symbol:'T \\u2208 \\u213c',code:'ExpressionTree',note:'Compositional syntax tree (human-readable)'},
+{symbol:'mutate(T)',code:'tree.mutate()',note:'Replace a node/sub-tree randomly'},
+{symbol:'crossover(T\\u2081, T\\u2082)',code:'tree.swap(other)',note:'Swap sub-branches between parents'},
+{symbol:'simplify(T)',code:'tree.simplify()',note:'Collapse redundant operations'},
+{symbol:'\\u03b8*',code:'optimize_constants(tree, X, y)',note:'Numerical constant tuning'},
+{symbol:'Pareto front',code:'pareto_front(models)',note:'Accuracy vs complexity trade-off'}],
+langs:{
+'Python':'import numpy as np\n# PySR: Symbolic Regression in Python (wraps SymbolicRegression.jl)\nfrom pysr import PySRRegressor\n\n# === Native PySR API (Cranmer, 2023) ===\nmodel = PySRRegressor(\n    niterations=100,             # generations of genetic search\n    populations=30,              # parallel evolutionary populations\n    binary_operators=["+", "-", "*", "/"],\n    unary_operators=["sin", "cos", "exp", "log_abs"],\n    complexity_of_operators={"sin": 3, "cos": 3, "exp": 3},\n    complexity_of_constants=1,\n    parsimony=0.01,              # lambda: parsimony pressure\n    population_size=100,\n    deterministic=True,\n    procs=4,                     # parallel workers\n)\nmodel.fit(X, y)               # X: (N, n_features), y: (N,)\nprint(model.sympy())         # e.g. "sin(x0) + x1*x2"\nprint(model.latex())        # LaTeX-formatted equation\n\n# Pareto front: accuracy vs complexity\npareto = model.pareto()      # DataFrame: complexity, loss, equation\nbest = pareto.iloc[pareto.loss.idxmin()]  # pick elbow\n\n# === Manual tree-based genetic programming (sketch) ===\nclass ExpressionTree:\n    """Compositional syntax tree: node = op, leaves = vars/constants"""\n    def __init__(self, op, children=None):\n        self.op = op\n        self.children = children or []\n    \n    def evaluate(self, X):\n        if not self.children:  # leaf\n            return X[self.op] if isinstance(self.op, int) else self.op\n        return OP_TABLE[self.op](*[c.evaluate(X) for c in self.children])\n    \n    def mutate(self, rng):\n        """Replace random node with new operator / leaf"""\n        idx = rng.integers(len(self.children) + 1)\n        if idx == 0:\n            self.op = rng.choice(OP_NAMES)\n        else:\n            self.children[idx-1] = random_tree(rng)\n    \n    def crossover(self, other, rng):\n        """Swap sub-tree with other parent"""\n        branch = self._random_subtree(rng)\n        other._graft(branch, rng)\n        return other\n    \n    def complexity(self):  # node count\n        return 1 + sum(c.complexity() for c in self.children)\n\n# Genetic loop: population of trees, mutate+crossover+simplify+fit constants\nfor gen in range(niterations):\n    for tree in population:\n        if rng.random() < p_mutate:  tree.mutate(rng)\n        if rng.random() < p_cross:   tree.crossover(rng.choice(population), rng)\n        tree.simplify()\n        optimize_constants(tree, X, y)  # BFGS on numeric leaves',
+'TypeScript':'// Symbolic Regression (PySR-style, conceptual)\nimport { randInt, choice } from "random";\n\ntype Op = "+" | "-" | "*" | "/" | "sin" | "cos" | "exp";\n\nclass ExpressionTree {\n  constructor(\n    public op: Op | string,   // operator or variable name / numeric constant\n    public children: ExpressionTree[] = []\n  ) {}\n  \n  evaluate(X: Record<string, number>): number {\n    if (this.children.length === 0) {\n      return typeof this.op === "number" ? this.op : X[this.op as string];\n    }\n    const args = this.children.map(c => c.evaluate(X));\n    return applyOp(this.op as Op, args);\n  }\n  \n  mutate(rng: () => number): void {\n    const idx = randInt(0, this.children.length);\n    if (idx === 0) this.op = choice(["+", "-", "*", "/", "sin", "cos"]) as Op;\n    else this.children[idx-1] = randomTree(rng);\n  }\n  \n  crossover(other: ExpressionTree, rng: () => number): ExpressionTree {\n    const branch = this.randomSubtree(rng);\n    other.graft(branch, rng);\n    return other;\n  }\n  \n  simplify(): ExpressionTree {\n    // x * 1 -> x, x + 0 -> x, etc.\n    return simplifyTree(this);\n  }\n  \n  get complexity(): number {\n    return 1 + this.children.reduce((s, c) => s + c.complexity, 0);\n  }\n}\n\n// Genetic programming loop\nfunction pySrFit(X: number[][], y: number[], opts): ExpressionTree {\n  let pop: ExpressionTree[] = initPopulation(opts.popSize);\n  for (let gen = 0; gen < opts.niterations; gen++) {\n    pop.forEach(tree => {\n      if (Math.random() < opts.pMutate) tree.mutate(Math.random);\n      if (Math.random() < opts.pCross)\n        tree.crossover(pop[randInt(0, pop.length)], Math.random);\n      tree.simplify();\n      optimizeConstants(tree, X, y);\n    });\n    pop.sort((a, b) => loss(a, X, y) - loss(b, X, y));\n    pop = pop.slice(0, opts.popSize);  // survival of fittest\n  }\n  // Pareto front: trade off loss vs complexity\n  return paretoFront(pop)[0];\n}',
+'Go':'// Symbolic Regression (PySR-style, conceptual)\npackage pysr\n\nimport (\n    "math/rand"\n)\n\ntype Op string\nconst (\n    Add Op = "+"; Sub = "-"; Mul = "*"; Div = "/"\n    Sin = "sin"; Cos = "cos"; Exp = "exp"\n)\n\ntype Tree struct {\n    Op       Op       // operator (if internal) or variable name / numeric const\n    Children []*Tree\n}\n\nfunc (t *Tree) Evaluate(X map[string]float64) float64 {\n    if len(t.Children) == 0 {\n        if v, ok := X[string(t.Op)]; ok { return v }\n        return parseFloat(t.Op)  // constant\n    }\n    args := make([]float64, len(t.Children))\n    for i, c := range t.Children { args[i] = c.Evaluate(X) }\n    return applyOp(t.Op, args)\n}\n\nfunc (t *Tree) Mutate(rng *rand.Rand) {\n    idx := rng.Intn(len(t.Children) + 1)\n    if idx == 0 {\n        t.Op = randomOp(rng)\n    } else {\n        t.Children[idx-1] = randomTree(rng)\n    }\n}\n\nfunc (t *Tree) Crossover(other *Tree, rng *rand.Rand) *Tree {\n    branch := t.randomSubtree(rng)\n    other.graft(branch, rng)\n    return other\n}\n\nfunc (t *Tree) Complexity() int {\n    c := 1\n    for _, ch := range t.Children { c += ch.Complexity() }\n    return c\n}\n\n// Genetic loop\nfunc Fit(X []map[string]float64, y []float64, opts Opts) *Tree {\n    pop := initPopulation(opts.PopSize)\n    for gen := 0; gen < opts.NIterations; gen++ {\n        for _, tree := range pop {\n            if rng.Float64() < opts.PMutate { tree.Mutate(rng) }\n            if rng.Float64() < opts.PCross  { tree.Crossover(randChoice(pop), rng) }\n            tree.Simplify()\n            optimizeConstants(tree, X, y)\n        }\n        sortTrees(pop, func(a, b *Tree) bool { return loss(a, X, y) < loss(b, X, y) })\n        pop = pop[:opts.PopSize]\n    }\n    return paretoFront(pop)[0]\n}',
+'Scala':'// Symbolic Regression (PySR-style, conceptual)\nimport scala.util.Random\n\nsealed trait Tree {\n  def evaluate(X: Map[String, Double]): Double\n  def complexity: Int\n  def mutate(rng: Random): Tree\n  def crossover(other: Tree, rng: Random): Tree\n  def simplify: Tree\n}\ncase class Leaf(name: String) extends Tree {\n  def evaluate(X: Map[String, Double]) = X(name)\n  def complexity = 1\n  def mutate(rng: Random) = randomTree(rng)\n  def crossover(other: Tree, rng: Random) = other\n  def simplify = this\n}\ncase class Const(value: Double) extends Tree {\n  def evaluate(X: Map[String, Double]) = value\n  def complexity = 1\n  def mutate(rng: Random) = Const(value + rng.nextGaussian() * 0.1)\n  def crossover(other: Tree, rng: Random) = other\n  def simplify = this\n}\ncase class Node(op: String, children: Vector[Tree]) extends Tree {\n  def evaluate(X: Map[String, Double]) =\n    applyOp(op, children.map(_.evaluate(X)))\n  def complexity = 1 + children.map(_.complexity).sum\n  def mutate(rng: Random) =\n    if (rng.nextDouble() < 0.5) Node(randomOp(rng), children)\n    else { val i = rng.nextInt(children.length);\n           Node(op, children.updated(i, randomTree(rng))) }\n  def crossover(other: Tree, rng: Random) = other match {\n    case Node(o2, c2) => Node(o2, c2.updated(rng.nextInt(c2.length), randomSubtree(this, rng)))\n    case _ => other\n  }\n  def simplify = simplifyTree(this)\n}\n\n// Genetic loop\ndef fit(X: Vector[Map[String, Double]], y: Vector[Double], opts: Opts): Tree = {\n  var pop = initPopulation(opts.popSize)\n  for (_ <- 0 until opts.niterations) {\n    pop = pop.map { tree =>\n      var t = tree\n      if (rng.nextDouble() < opts.pMutate) t = t.mutate(rng)\n      if (rng.nextDouble() < opts.pCross)  t = t.crossover(pop(rng.nextInt(pop.length)), rng)\n      t = t.simplify\n      optimizeConstants(t, X, y)\n      t\n    }\n    pop = pop.sortBy(t => loss(t, X, y)).take(opts.popSize)\n  }\n  paretoFront(pop).head\n}',
+'C':'/* Symbolic Regression (PySR-style, conceptual) */\n#include <stdlib.h>\n#include <math.h>\n\ntypedef enum {OP_ADD, OP_SUB, OP_MUL, OP_DIV, OP_SIN, OP_COS, OP_LEAF} OpType;\n\ntypedef struct Tree {\n    OpType op;\n    double value;       /* if leaf is constant */\n    int    var_idx;     /* if leaf is variable */\n    struct Tree *left, *right;  /* children */\n} Tree;\n\ndouble tree_evaluate(Tree* t, double* X) {\n    if (!t) return 0;\n    if (t->op == OP_LEAF) {\n        return t->var_idx >= 0 ? X[t->var_idx] : t->value;\n    }\n    double l = tree_evaluate(t->left, X);\n    double r = t->right ? tree_evaluate(t->right, X) : 0;\n    switch (t->op) {\n        case OP_ADD: return l + r;\n        case OP_SUB: return l - r;\n        case OP_MUL: return l * r;\n        case OP_DIV: return l / (r + 1e-10);\n        case OP_SIN: return sin(l);\n        case OP_COS: return cos(l);\n        default:     return 0;\n    }\n}\n\nint tree_complexity(Tree* t) {\n    if (!t) return 0;\n    return 1 + tree_complexity(t->left) + tree_complexity(t->right);\n}\n\nvoid tree_mutate(Tree* t, rng_t* rng) {\n    if (rng_next(rng) < 0.5) {\n        t->op = random_op(rng);\n    } else {\n        tree_free(t->left);\n        t->left = random_tree(rng);\n    }\n}\n\nTree* tree_crossover(Tree* a, Tree* b, rng_t* rng) {\n    /* Swap a random sub-tree of a into b */\n    Tree* branch = random_subtree(a, rng);\n    graft_subtree(b, branch, rng);\n    return b;\n}\n\n/* Genetic programming loop */\nTree* pysr_fit(double** X, double* y, int N, int n_feat, Opts opts) {\n    Tree** pop = init_population(opts.pop_size, opts.rng);\n    for (int gen = 0; gen < opts.niterations; gen++) {\n        for (int i = 0; i < opts.pop_size; i++) {\n            if (rng_next(opts.rng) < opts.p_mutate) tree_mutate(pop[i], opts.rng);\n            if (rng_next(opts.rng) < opts.p_cross)\n                pop[i] = tree_crossover(pop[i], pop[rng_int(opts.rng, opts.pop_size)], opts.rng);\n            simplify(pop[i]);\n            optimize_constants(pop[i], X, y, N, n_feat);\n        }\n        qsort(pop, opts.pop_size, sizeof(Tree*), cmp_loss);\n    }\n    return pareto_front(pop, opts.pop_size)[0];\n}',
+'Elixir':'defmodule PySR do\n  @moduledoc """\n  Symbolic Regression (PySR-style): genetic programming over function trees\n  """\n\n  defmodule Tree do\n    defstruct [:op, :children, :value, :var_idx]\n    # op: :+, :-, :*, :/, :sin, :cos, :leaf\n  end\n\n  def evaluate(%Tree{op: :leaf, value: v}, _X) when not is_nil(v), do: v\n  def evaluate(%Tree{op: :leaf, var_idx: idx}, X), do: Enum.at(X, idx)\n  def evaluate(%Tree{op: op, children: children}, X) do\n    args = Enum.map(children, &evaluate(&1, X))\n    apply_op(op, args)\n  end\n\n  defp apply_op(:+, [l, r]), do: l + r\n  defp apply_op(:*, [l, r]), do: l * r\n  defp apply_op(:sin, [x]), do: :math.sin(x)\n  defp apply_op(:cos, [x]), do: :math.cos(x)\n  # ... etc\n\n  def complexity(%Tree{children: []}), do: 1\n  def complexity(%Tree{children: children}) do\n    1 + Enum.sum(Enum.map(children, &complexity/1))\n  end\n\n  def mutate(%Tree{} = t, rng) do\n    if :rand.uniform() < 0.5 do\n      %{t | op: random_op(rng)}\n    else\n      i = :rand.uniform(length(t.children)) - 1\n      %{t | children: List.replace_at(t.children, i, random_tree(rng))}\n    end\n  end\n\n  def crossover(%Tree{} = a, %Tree{} = b, rng) do\n    branch = random_subtree(a, rng)\n    graft_subtree(b, branch, rng)\n  end\n\n  def fit(X, y, opts) do\n    pop = init_population(opts.pop_size)\n    Enum.reduce(0..(opts.niterations-1), pop, fn _gen, pop ->\n      pop = Enum.map(pop, fn tree ->\n        tree = if :rand.uniform() < opts.p_mutate, do: mutate(tree, :rand), else: tree\n        tree = if :rand.uniform() < opts.p_cross,\n                do: crossover(tree, Enum.random(pop), :rand), else: tree\n        tree = simplify(tree)\n        optimize_constants(tree, X, y)\n        tree\n      end)\n      Enum.sort_by(pop, &loss(&1, X, y)) |> Enum.take(opts.pop_size)\n    end)\n    |> pareto_front()\n    |> List.first()\n  end\nend'
+}
+}
+};
+var CLIP17_CURRENT_LANG='Python';
+function populateCode17(){
+var e=CLIP17_CODE['pysr'];if(!e)return;
+var exprEl=document.getElementById('expr17');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map17');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs17');var ccEl=document.getElementById('codecontent17');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip17Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc17-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip17Code(lang){CLIP17_CURRENT_LANG=lang;document.querySelectorAll('#tabs17 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc17-'+lang)})}
+var CLIP17_OUTPUTS={'pysr':['Initializing PySR (SymbolicRegression.jl backend)...','  niterations=100, populations=30, pop_size=100','  binary_ops: + - * /','  unary_ops:  sin cos exp log_abs','  parsimony (lambda) = 0.01','','Generation 1/100:  best loss = 0.85, complexity = 12','Generation 10/100: best loss = 0.42, complexity = 8','Generation 30/100: best loss = 0.18, complexity = 6','Generation 60/100: best loss = 0.05, complexity = 5','Generation 100/100: best loss = 0.012, complexity = 4','','Pareto front (complexity vs loss):','  complexity=2  loss=0.85   y = x1','  complexity=3  loss=0.32   y = sin(x1)','  complexity=4  loss=0.012  y = sin(x1) + x2*x3   <-- ELBOW','  complexity=6  loss=0.008  y = sin(x1) + x2*x3 + 0.01*x1^4','  complexity=9  loss=0.005  y = sin(x1) + x2*x3 + 0.01*x1^4 + cos(x2)','  complexity=12 loss=0.004  (overfit)','','Discovered equation (best Pareto):','  y = sin(x0) + x1 * x2   (sympy)','  LaTeX: y = \\\\sin(x_0) + x_1 x_2','','True equation:   y = sin(x0) + x1*x2   (exact match!)','','OOD generalization:','  PySR (parsimonious):     R^2 = 0.99 on extrapolation','  Deep NN (overfit):       R^2 = 0.41 on extrapolation','','PySR: interpretable, parsimonious, OOD-robust']};
+function runClip17Code(key){
+var e=CLIP17_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput17');var st=document.getElementById('runStatus17');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap17');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP17_CURRENT_LANG+' '+e.name,''];var out2=CLIP17_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip17CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip17CodeViz(key){
+var wrap=document.getElementById('codeVizWrap17');if(!wrap)return;var cv=document.getElementById('codeVizCanvas17');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('PySR: Pareto front (accuracy vs complexity)',W/2,16);
+var cx=W/2,cy=H*0.55;
+// Axes
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(40,H-30);ctx.lineTo(W-20,H-30);ctx.stroke();
+ctx.beginPath();ctx.moveTo(40,H-30);ctx.lineTo(40,30);ctx.stroke();
+ctx.fillStyle='#736a5e';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('complexity \u2192',cx,H-12);
+// Pareto front (decreasing curve)
+ctx.strokeStyle='#10b981';ctx.lineWidth=2.5;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<50;i++){var comp=i/49;var err=Math.exp(-comp*3)+0.02;var px=40+comp*(W-60);var py=(H-30)-(1-Math.min(1,err))*(H-60);if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();ctx.shadowBlur=0;
+// Candidate points
+ctx.fillStyle='#FFD700';
+for(var i=0;i<8;i++){var comp=i/7;var err=Math.exp(-comp*3)+0.02;var px=40+comp*(W-60);var py=(H-30)-(1-Math.min(1,err))*(H-60);ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);ctx.fill()}
+// Highlight elbow
+var elbowComp=0.4;var elbowErr=Math.exp(-elbowComp*3)+0.02;var ex=40+elbowComp*(W-60);var ey=(H-30)-(1-Math.min(1,elbowErr))*(H-60);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.setLineDash([3,3]);ctx.beginPath();ctx.arc(ex,ey,12,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#FF69B4';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('PARETO ELBOW',ex,ey-18);
+ctx.fillStyle='#10b981';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('sin(x\u2080)+x\u2081\u00b7x\u2082',10,30);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)} frame();
+}
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -4649,7 +4966,8 @@ var FUTURES_DATA={
 'piml13':[{n:'HNN for orbital mechanics',y:2027,p:0.35,t:'Energy-conserving satellite tracking'},{n:'Symplectic NN default',y:2028,p:0.30,t:'Symplectic structure standard in ML'},{n:'Fusion plasma HNN',y:2030,p:0.20,t:'Tokamak control via HNN'},{n:'Molecular dynamics HNN',y:2026,p:0.40,t:'Drug discovery acceleration'},{n:'Lagrangian NN mature',y:2027,p:0.35,t:'LNN standard for robotics'}],
 'piml14':[{n:'LNN for prosthetics',y:2027,p:0.40,t:'Smooth joint control from (q,q\u0307) sensors'},{n:'LNN satellite tracking',y:2028,p:0.35,t:'No false collision warnings over decades'},{n:'Wind turbine digital twins',y:2029,p:0.30,t:'Chaotic fluid-structure LNN twins'},{n:'Biomechanics LNN',y:2026,p:0.45,t:'Gait analysis from cameras+IMU'},{n:'(q,q\u0307) models default',y:2030,p:0.25,t:'Sensor-friendly coordinate models standard'}],
 'piml15':[{n:'T-V decomposition LNNs',y:2026,p:0.45,t:'Separate T/V heads standard for interpretability'},{n:'Custom EL loss default',y:2027,p:0.40,t:'Euler-Lagrange residual loss standard in PIML'},{n:'Physics-bound Neural ODEs',y:2028,p:0.35,t:'Neural ODEs ship with physics constraints'},{n:'Small-data robotics',y:2027,p:0.40,t:'100-sample dynamics learning for prosthetics'},{n:'Decades-long orbit twins',y:2030,p:0.25,t:'LNN twins track debris for decades'}],
-'piml16':[{n:'Neural ODEs in PyTorch/JAX',y:2026,p:0.50,t:'torchdiffeq / Diffrax standard in DL toolkits'},{n:'Adjoint method default',y:2027,p:0.45,t:'Memory-efficient adjoint backprop ubiquitous'},{n:'ICU early warning NODEs',y:2028,p:0.30,t:'Continuous-time sepsis prediction deployed'},{n:'NODE+SINDy discovery',y:2028,p:0.35,t:'NODE denoising feeds SINDy for equation recovery'},{n:'Continuous-depth models',y:2030,p:0.25,t:'Continuous-time networks replace discrete ResNets'}]
+'piml16':[{n:'Neural ODEs in PyTorch/JAX',y:2026,p:0.50,t:'torchdiffeq / Diffrax standard in DL toolkits'},{n:'Adjoint method default',y:2027,p:0.45,t:'Memory-efficient adjoint backprop ubiquitous'},{n:'ICU early warning NODEs',y:2028,p:0.30,t:'Continuous-time sepsis prediction deployed'},{n:'NODE+SINDy discovery',y:2028,p:0.35,t:'NODE denoising feeds SINDy for equation recovery'},{n:'Continuous-depth models',y:2030,p:0.25,t:'Continuous-time networks replace discrete ResNets'}],
+'piml17':[{n:'PySR default for discovery',y:2026,p:0.45,t:'PySR standard tool for symbolic regression in science'},{n:'Rediscovered laws published',y:2027,p:0.35,t:'Symbolic regression publishes new physical laws'},{n:'Edge µC symbolic control',y:2028,p:0.30,t:'Compact symbolic controllers on off-grid microcontrollers'},{n:'Climate symbolic models',y:2029,p:0.25,t:'Compact climate sub-models replace empirical fits'},{n:'Pharmacokinetic equations',y:2030,p:0.20,t:'Personalized drug dynamics from symbolic regression'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -4678,7 +4996,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);drawFutureChart('fut15','piml15',futAnimState);drawFutureChart('fut16','piml16',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);drawFutureChart('fut15','piml15',futAnimState);drawFutureChart('fut16','piml16',futAnimState);drawFutureChart('fut17','piml17',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -4765,6 +5083,7 @@ setTimeout(populateCode13,300);
 setTimeout(populateCode14,300);
 setTimeout(populateCode15,300);
 setTimeout(populateCode16,300);
+setTimeout(populateCode17,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -4817,7 +5136,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('16 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===16});
+chk('17 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===17});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -4834,6 +5153,7 @@ chk('Clip 13 ready',function(){return CLIP_CURRICULUM[12].status==='ready'});
 chk('Clip 14 ready',function(){return CLIP_CURRICULUM[13].status==='ready'});
 chk('Clip 15 ready',function(){return CLIP_CURRICULUM[14].status==='ready'});
 chk('Clip 16 ready',function(){return CLIP_CURRICULUM[15].status==='ready'});
+chk('Clip 17 ready',function(){return CLIP_CURRICULUM[16].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -4964,6 +5284,16 @@ chk('Clip 16 code tabs (6)',function(){return document.getElementById('tabs16')&
 chk('Clip 16 map table',function(){var m=document.getElementById('map16');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 16 future chart',function(){return!!document.getElementById('fut16')});
 chk('CLIP16 narration key',function(){return CLIP16.narrationKey==='piml16'});
+// Clip 17
+chk('CLIP17 exists',function(){return typeof CLIP17==='object'});
+chk('Clip 17 section exists',function(){return!!document.getElementById('clip17')});
+chk('Clip 17 canvas',function(){return!!document.getElementById('cv17')});
+chk('Clip 17 scenes (6)',function(){var s=document.getElementById('scenes17');return s&&s.children.length===6});
+chk('Clip 17 expr populated',function(){var e=document.getElementById('expr17');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 17 code tabs (6)',function(){return document.getElementById('tabs17')&&document.getElementById('tabs17').children.length===6});
+chk('Clip 17 map table',function(){var m=document.getElementById('map17');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 17 future chart',function(){return!!document.getElementById('fut17')});
+chk('CLIP17 narration key',function(){return CLIP17.narrationKey==='piml17'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
