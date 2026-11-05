@@ -450,6 +450,7 @@ state.seek=function(s){state.scene=Math.max(0,Math.min(opts.scenes.length-1,s));
 state.next=function(){state.seek(state.scene+1)};
 state.prev=function(){state.seek(state.scene-1)};
 state.setActive=function(a){state.active=a;if(a){if(!state.anim)state.anim=requestAnimationFrame(frame)}else{if(state.anim){cancelAnimationFrame(state.anim);state.anim=null}}};
+state.draw=opts.draw; // expose for audit/debug
 function frame(){if(state.playing&&state.active)state.time+=0.02;if(state.active)opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark,state.param);state.anim=requestAnimationFrame(frame)}
 state.setActive(false);
 return state;
