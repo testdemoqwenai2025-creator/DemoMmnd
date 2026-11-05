@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-05-v21-clip17-pysr">
+<meta name="version" content="2026-11-05-v22-clip18-resnet">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -1042,10 +1042,61 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap17"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas17"></canvas></div>
 </div>
 </section>
+<!-- CLIP 18: Residual Networks (ResNets) -->
+<section class="clip-section" id="clip18" style="display:none">
+<h2>Residual Networks (ResNets)</h2>
+<div class="subtitle">Video 18 \u00b7 Skip connections y=x+F(x), forward Euler equivalence x_{k+1}=x_k+F(x_k), stride/dim control, Neural ODE limit, U-Net roots, ultra-deep training</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap18">
+<canvas class="clip-canvas" id="cv18"></canvas>
+<div class="clip-scene-label" id="lbl18">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP18.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP18.pause()">||</button>
+<button class="clip-btn" onclick="CLIP18.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP18.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP18.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title18">Skip connections &amp; residual learning</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom18" min="0.5" max="3" step="0.1" value="1"><span id="zoom18v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel18">\u03b1</span><input type="range" id="param18" min="0" max="0.1" step="0.005" value="0.01"><span id="param18v">0.010</span></div>
+<button class="clip-btn" onclick="CLIP18.toggleRecord()" id="rec18" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP18.toggleNarration()" id="narr18" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP18.toggleLight()" id="light18">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes18"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts18"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 ResNet evolution</h4>
+<canvas class="future-canvas" id="fut18"></canvas>
+<div class="future-milestones" id="fut18m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code18">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr18">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map18"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs18"></div>
+<div id="codecontent18"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip18Code('resnet')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus18" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput18"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap18"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas18"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 17/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 18/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -1082,7 +1133,7 @@ var CLIP_CURRICULUM=[
 {n:15,title:'Lagrangian NNs II: Architecture & Loss',desc:'T-V decomposition, naive NN blow-up, custom loss ||q\u00a8_obs \u2212 q\u00a8_LNN||\u00b2, Neural ODE extension, data efficiency, long-horizon stability',status:'ready'},
 {n:16,title:'Neural Ordinary Differential Equations',desc:'ResNet as forward Euler, continuous dx/dt=f\u03b8(x,t), adjoint sensitivity, irregular time-series, symplectic extension, SINDy discovery pipeline',status:'ready'},
 {n:17,title:'Python Symbolic Regression (PySR)',desc:'Function trees, genetic programming (mutate/crossover/simplify), Pareto parsimony, Schmidt-Lipson law discovery, Noack symbolic control, interpretable AI',status:'ready'},
-{n:18,title:'Control with PIML',desc:'Physics-informed control systems',status:'upcoming'},
+{n:18,title:'Residual Networks (ResNets)',desc:'Skip connections y=x+F(x), forward Euler equivalence x_{k+1}=x_k+F(x_k), stride/dim control, Neural ODE limit, U-Net roots, ultra-deep training',status:'ready'},
 {n:19,title:'RL + Physics',desc:'Physics-informed reinforcement learning',status:'upcoming'},
 {n:20,title:'Reduced-Order Models',desc:'ROM with physics constraints',status:'upcoming'},
 {n:21,title:'Uncertainty Quantification',desc:'Bayesian PIML',status:'upcoming'},
@@ -4949,6 +5000,274 @@ ctx.fillStyle='#FF69B4';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center'
 ctx.fillStyle='#10b981';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('sin(x\u2080)+x\u2081\u00b7x\u2082',10,30);
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)} frame();
 }
+// ============ CLIP 18: Residual Networks (ResNets) ============
+var CLIP18_SCENES=[
+{title:'Skip connections &amp; residual learning',desc:'y = x + F(x, {W_i}); identity copy preserves input across deep stacks'},
+{title:'Forward Euler equivalence',desc:'x_{k+1} = x_k + \u0394t\u00b7f(x_k) \u2192 x_{k+1} = x_k + F(x_k); layer index = time step'},
+{title:'Dimension-preserving vs downsampling',desc:'Stride=1/Pad=1 keeps spatial dims (super-res); Stride=2 halves (classification)'},
+{title:'Stepping stone to Neural ODEs &amp; U-Net',desc:'\u0394t\u21920 limit: dx/dt=f(x,t,\u03b8); skip connections inspire U-Net for diffusion'},
+{title:'Ultra-deep training unlocked',desc:'34 \u2192 101+ layers; vanishing gradient fixed; ImageNet/COCO/CIFAR benchmarks'},
+{title:'Global impact',desc:'Medical imaging super-resolution, climate downscaling for smallholder farmers'}
+];
+var CLIP18_THOUGHTS=[
+'<strong style="color:var(--primary)">Don\'t relearn the input.</strong> Before ResNet, adding more layers made networks degrade \u2014 backpropagation became ill-conditioned and the network "forgot" the input signal. ResNet\'s fix is structural: keep an identity copy of $\\mathbf{x}$, and train the convolutional layers to model only the residual $\\mathcal{F}(\\mathbf{x}, \\{\\mathcal{W}_i\\}) = \\mathbf{y} - \\mathbf{x}$. The output is $\\mathbf{y} = \\mathbf{x} + \\mathcal{F}(\\mathbf{x}, \\{\\mathcal{W}_i\\})$. The block can always choose to learn $\\mathcal{F} \\approx 0$ and pass $\\mathbf{x}$ through unchanged \u2014 depth becomes free.',
+'<strong style="color:var(--primary)">ResNet is Forward Euler.</strong> The discrete update $\\mathbf{x}_{k+1} = \\mathbf{x}_k + \\mathcal{F}(\\mathbf{x}_k)$ is exactly one step of Forward Euler integration with step size $\\Delta t = 1$: $\\mathbf{x}_{k+1} = \\mathbf{x}_k + \\Delta t \\cdot f(\\mathbf{x}_k)$. The layer index $k$ plays the role of a discrete time step. This insight (Chen et al. 2018) launched Neural ODEs \u2014 take $\\Delta t \\to 0$ and the residual stack becomes the continuous vector field $\\frac{d\\mathbf{x}}{dt} = f(\\mathbf{x}, t, \\theta)$.',
+'<strong style="color:var(--primary)">Stride controls the job.</strong> For spatial regression (super-resolution, image-to-image), use stride=1 with padding=1 so input and output dimensions match. For classification, set stride=2 and double the filter count at each block \u2014 spatial dimensions halve, feature depth doubles, information distills. A projection shortcut (1\u00d71 conv with the new stride) carries the identity when dimensions change. Same block, two purposes: dimension-preserving or feature-reducing.',
+'<strong style="color:var(--primary)">The continuous limit.</strong> Take $\\Delta t \\to 0$ in the residual update: $\\lim_{\\Delta t \\to 0} \\frac{\\mathbf{x}_{k+1} - \\mathbf{x}_k}{\\Delta t} = \\frac{d\\mathbf{x}}{dt} = f(\\mathbf{x}(t), t, \\theta)$. The discrete ResNet stack becomes a continuous vector field parameterised by weights $\\theta$. Replacing Forward Euler with Runge-Kutta or symplectic integrators yields Neural ODEs and physics-preserving HNN/LNN variants. ResNet also inspired U-Net (skip connections between encoder and decoder), the backbone of modern diffusion generative AI.',
+'<strong style="color:var(--primary)">Depth unlocked.</strong> Pre-ResNet, training beyond ~12 layers suffered optimization breakdown \u2014 vanishing gradients, exploding loss. ResNet enabled reliable training of 34, 50, 101, even 152-layer networks, sweeping ImageNet, COCO, and CIFAR-10 benchmarks in 2015. The skip connection is the architectural primitive that made modern deep learning possible: every subsequent architecture (DenseNet, U-Net, transformers with residual streams) inherits the same idea \u2014 preserve information across depth.',
+'<strong style="color:var(--primary)">Where it matters.</strong> Medical imaging super-resolution: rural clinics with low-cost MRI/ultrasound hardware run ResNet upscalers on standard laptops to reconstruct high-definition diagnostic images \u2014 detecting micro-fractures and early tumors without million-dollar scanners. Climate downscaling: global climate models run on coarse grids due to compute cost; ResNet spatiotemporal super-resolution downscales them into hyper-local forecasts for smallholder farmers, anticipating droughts, floods, and frost to protect crop yields and food security.'
+];
+var CLIP18_PARAMS=[
+{label:'L',min:1,max:200,step:1,default:34,decimals:0,desc:'network depth'},
+{label:'\u0394t',min:0.01,max:1,step:0.01,default:1,decimals:2,desc:'step size (Euler)'},
+{label:'s',min:1,max:4,step:1,default:1,decimals:0,desc:'stride'},
+{label:'\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'skip weight'},
+{label:'\u03bb',min:0,max:2,step:0.1,default:1,decimals:1,desc:'loss weight'},
+{label:'\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'safety weight'}
+];
+var SCENE18_MATH=[
+['y=x+F(x)','skip conn.','residual'],
+['x_{k+1}=x_k+F(x_k)','forward Euler','\u0394t=1'],
+['stride=1 pad=1','dim preserve','super-res'],
+['\u0394t\u21920: dx/dt=f(x,t,\u03b8)','Neural ODE','continuous'],
+['L=34\u2192101+','ultra-deep','gradient ok'],
+['MRI+climate','super-res','downscaling']
+];
+var CLIP18=makeClip({varName:'CLIP18',cvId:'cv18',wrapId:'wrap18',lblId:'lbl18',titleId:'title18',zoomId:'zoom18',zoomValId:'zoom18v',paramId:'param18',paramValId:'param18v',paramLabelId:'paramLabel18',paramDefault:0.01,paramDecimals:3,lightId:'light18',narrId:'narr18',recId:'rec18',narrationKey:'piml18',sceneListId:'scenes18',thoughtsId:'thoughts18',scenes:CLIP18_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE18_MATH[scene]);
+if(scene===0){
+// Skip connection: input x flows both through conv stack F(x) AND identity to output
+var cx=W/2,cy=H*0.5;
+// Input x (left)
+ctx.fillStyle='#00CED1';ctx.shadowColor='#00CED1';ctx.shadowBlur=6;
+ctx.fillRect(W*0.08,cy-15,30,30);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('x',W*0.08+15,cy+3);
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.fillText('input',W*0.08+15,cy+30);
+// Conv stack F(x) (middle) - 3 conv layers
+ctx.fillStyle='#FF69B4';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('F(x, {W_i})',W*0.4,cy-30);
+for(var i=0;i<3;i++){ctx.fillStyle='#FF69B4';ctx.globalAlpha=0.7+i*0.15;ctx.fillRect(W*0.32+i*22,cy-15,18,30);ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.fillText('conv'+(i+1),W*0.32+i*22+9,cy+3)}
+ctx.globalAlpha=1;
+// Arrows: x -> conv stack
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.11,cy);ctx.lineTo(W*0.32,cy);ctx.stroke();
+// F(x) output -> sum
+ctx.beginPath();ctx.moveTo(W*0.32+66,cy);ctx.lineTo(W*0.62,cy);ctx.stroke();
+// Skip connection (identity) - curved arrow above
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2.5;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();
+ctx.moveTo(W*0.08+15,cy-15);ctx.bezierCurveTo(W*0.2,cy-80,W*0.55,cy-80,W*0.62+15,cy-15);ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('identity (skip)',W*0.4,cy-65);
+// Sum node
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=6;
+ctx.beginPath();ctx.arc(W*0.62+15,cy,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('+',W*0.62+15,cy+4);
+// Output y
+ctx.fillStyle='#10b981';ctx.fillRect(W*0.85,cy-15,30,30);
+ctx.fillStyle='#fff';ctx.font='bold 9px Georgia,serif';ctx.fillText('y',W*0.85+15,cy+3);
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.fillText('output',W*0.85+15,cy+30);
+// Arrow sum -> y
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.62+25,cy);ctx.lineTo(W*0.85,cy);ctx.stroke();
+// Equation
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('y = x + F(x, {W_i})',cx,cy+58);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('skip connection: y = x + F(x)',W/2,H-20);
+}else if(scene===1){
+// Forward Euler equivalence: layer index = time step
+var dt=param;var cx=W/2,cy=H*0.5;
+// Discrete time axis
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,cy+30);ctx.lineTo(W*0.9,cy+30);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('layer index k (= discrete time step)',cx,cy+45);
+// ResNet updates: x_k -> x_{k+1} via F(x_k)
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';
+var xs=[0.15,0.32,0.49,0.66,0.83];
+xs.forEach(function(xp,i){
+var px=W*xp;var py=cy+30-Math.sin(i*0.5+t*0.3)*15;
+// State point
+ctx.fillStyle='#00CED1';ctx.shadowColor='#00CED1';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('x_'+i,cx-100+i*5,cy+10);
+ctx.fillText('x_'+i,px,py-12);
+// F(x_k) block
+if(i<xs.length-1){ctx.fillStyle='#FF69B4';ctx.globalAlpha=0.7;ctx.fillRect(px+8,py-8,18,16);ctx.globalAlpha=1;ctx.fillStyle='#fff';ctx.font='5px monospace';ctx.fillText('F',px+17,py+2);
+// Arrow to next state with delta
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(px+26,py);ctx.lineTo(W*xs[i+1]-7,py);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('+F(x_'+i+')',px+(W*(xs[i+1]-xp))/2,py-5)}});
+// Equation comparison
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Euler:  x_{k+1} = x_k + \u0394t\u00b7f(x_k)',cx,cy-30);
+ctx.fillStyle='#10b981';ctx.font='bold 8px Georgia,serif';
+ctx.fillText('ResNet: x_{k+1} = x_k + F(x_k)   (\u0394t = 1)',cx,cy-18);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('layer index k = discrete time step',cx,cy-5);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('ResNet block = forward Euler step (\u0394t=1)',W/2,H-20);
+}else if(scene===2){
+// Dimension-preserving (stride=1, pad=1) vs downsampling (stride=2)
+var stride=Math.max(1,Math.round(param*4));var cx=W/2,cy=H*0.5;
+// Left: stride=1, pad=1 — same dims
+ctx.fillStyle='#10b981';ctx.font='8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Stride=1, Pad=1',W*0.25,H*0.12);
+ctx.fillText('(dimension-preserving)',W*0.25,H*0.2);
+// Input feature map (4x4 grid)
+ctx.strokeStyle='#10b981';ctx.lineWidth=1.5;
+for(var i=0;i<4;i++)for(var j=0;j<4;j++){ctx.strokeRect(W*0.18+i*7,cy-25+j*7,7,7)}
+ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('4\u00d74 input',W*0.25,cy+18);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.22,cy);ctx.lineTo(W*0.32,cy);ctx.stroke();
+// Output (same size)
+ctx.strokeStyle='#10b981';
+for(var i=0;i<4;i++)for(var j=0;j<4;j++){ctx.strokeRect(W*0.32+i*7,cy-25+j*7,7,7)}
+ctx.fillText('4\u00d74 output',W*0.32+14,cy+18);
+ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.fillText('super-res / image-to-image',W*0.25,cy+38);
+// Right: stride=2 — dims halve
+ctx.fillStyle='#FF69B4';ctx.font='8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Stride=2',W*0.75,H*0.12);
+ctx.fillText('(spatial halving)',W*0.75,H*0.2);
+// Input 4x4
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=1.5;
+for(var i=0;i<4;i++)for(var j=0;j<4;j++){ctx.strokeRect(W*0.65+i*7,cy-25+j*7,7,7)}
+ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('4\u00d74 input',W*0.65+14,cy+18);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.69,cy);ctx.lineTo(W*0.79,cy);ctx.stroke();
+// Output 2x2 (halved)
+ctx.strokeStyle='#FF69B4';
+for(var i=0;i<2;i++)for(var j=0;j<2;j++){ctx.strokeRect(W*0.79+i*7,cy-15+j*7,7,7)}
+ctx.fillText('2\u00d72 output',W*0.79+7,cy+18);
+ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.fillText('classification / distill',W*0.75,cy+38);
+// Projection shortcut note
+ctx.fillStyle='#a855f7';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('dim mismatch? use 1\u00d71 projection shortcut',cx,cy+58);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('stride=1 (preserve) vs stride=2 (downsample)',W/2,H-20);
+}else if(scene===3){
+// Continuous limit: ResNet -> Neural ODE
+var cx=W/2,cy=H*0.5;
+// Left: discrete ResNet stack (lots of small blocks)
+ctx.fillStyle='#00CED1';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('ResNet (discrete \u0394t=1)',W*0.25,H*0.12);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;
+for(var i=0;i<8;i++){var px=W*0.13+i*W*0.03;ctx.strokeRect(px,cy-30,12,20);ctx.fillStyle='#00CED1';ctx.font='4px monospace';ctx.fillText('F',px+6,cy-18)}
+// Discrete points
+ctx.fillStyle='#00CED1';
+for(var i=0;i<8;i++){var px=W*0.13+i*W*0.03;ctx.beginPath();ctx.arc(px,cy+5,2,0,Math.PI*2);ctx.fill()}
+// Arrow -> continuous
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.4,cy-10);ctx.lineTo(W*0.55,cy-10);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('\u0394t \u2192 0',W*0.47,cy-15);
+// Right: continuous curve
+ctx.fillStyle='#10b981';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('Neural ODE (continuous)',W*0.75,H*0.12);
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.62+i/100*W*0.3;var y=cy+5+Math.sin(i*0.1+t*0.4)*10;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Vector field arrows
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.globalAlpha=0.6;
+for(var i=0;i<4;i++){var px=W*0.66+i*W*0.07;var py=cy+5+Math.sin(i+t*0.4)*5;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+8,py+2);ctx.stroke()}
+ctx.globalAlpha=1;
+// Limit equation
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('lim_{\u0394t\u21920} (x_{k+1} - x_k)/\u0394t = dx/dt = f(x, t, \u03b8)',cx,cy+45);
+// U-Net note
+ctx.fillStyle='#a855f7';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('skip conn \u2192 U-Net \u2192 diffusion generative AI',10,H*0.85);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('ResNet \u2192 Neural ODE (continuous limit)',W/2,H-20);
+}else if(scene===4){
+// Ultra-deep training: vanishing gradient fix
+var L=Math.round(param*100);var cx=W/2,cy=H*0.5;
+// Depth comparison bar chart
+ctx.fillStyle='#ff6b6b';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('pre-ResNet',W*0.25,H*0.12);
+ctx.fillStyle='#ff6b6b';ctx.fillRect(W*0.18,cy-25,30,12);ctx.fillStyle='#fff';ctx.font='5px monospace';ctx.fillText('~12 layers',W*0.18+15,cy-15);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('vanishing gradient',W*0.25,cy+5);ctx.fillText('optimization fails',W*0.25,cy+13);
+// ResNet
+ctx.fillStyle='#10b981';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('ResNet (skip conn.)',W*0.75,H*0.12);
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.fillRect(W*0.62,cy-50,50,37);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='5px monospace';ctx.fillText('34 / 50 / 101 / 152',W*0.62+25,cy-30);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('gradient flows freely',W*0.75,cy+5);ctx.fillText('depth = free',W*0.75,cy+13);
+// Skip connection arrow inside ResNet bar
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(W*0.65,cy-50);ctx.bezierCurveTo(W*0.7,cy-70,W*0.8,cy-70,W*0.85,cy-50);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.fillText('skip',W*0.75,cy-58);
+// Benchmarks
+ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('ImageNet \u00b7 COCO \u00b7 CIFAR-10 benchmarks swept (2015)',cx,cy+38);
+// Equation: gradient flows
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('\u2202L/\u2202x_k = \u2202L/\u2202x_{k+1} \u00b7 (I + \u2202F/\u2202x_k)',cx,cy+55);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('(I + dF/dx) well-conditioned thanks to skip',cx,cy+67);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('skip connections unlock 100+ layer training',W/2,H-20);
+}else if(scene===5){
+// Global applications: medical super-res + climate downscaling
+var cx=W/2,cy=H*0.45;
+var apps=[{x:0.25,icon:'\ud83e\ude7a',l:'Medical super-res',c:'#00CED1',note:'low-cost MRI/US \u2192 HD'},{x:0.75,icon:'\ud83c\udf01',l:'Climate downscaling',c:'#FFD700',note:'coarse \u2192 hyper-local'}];
+apps.forEach(function(ap){var px=W*ap.x;
+ctx.font='20px Georgia,serif';ctx.textAlign='center';ctx.fillText(ap.icon,px,cy-5);
+ctx.fillStyle=ap.c;ctx.font='8px Georgia,serif';ctx.fillText(ap.l,px,cy+12);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText(ap.note,px,cy+22);
+// Before (small low-res) -> After (large high-res)
+ctx.strokeStyle=ap.c;ctx.lineWidth=1;ctx.strokeRect(px-25,cy+30,12,12);
+ctx.strokeStyle=ap.c;ctx.lineWidth=1.5;ctx.shadowColor=ap.c;ctx.shadowBlur=3;ctx.strokeRect(px-7,cy+28,20,20);ctx.shadowBlur=0;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(px-12,cy+36);ctx.lineTo(px-9,cy+36);ctx.stroke()});
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('rural clinics + smallholder farmers benefit from cheap super-resolution',W/2,H*0.82);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('ResNet: super-resolution for global good',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP18.setActive(false);
+
+// CLIP18 code section \u2014 ResNet block with skip + projection shortcut
+var CLIP18_CODE={
+'resnet':{
+name:'Residual Network Block (with skip / projection shortcut)',
+latex:'\\mathbf{y} = \\mathbf{x} + \\mathcal{F}(\\mathbf{x}, \\{\\mathcal{W}_i\\}), \\quad \\mathbf{x}_{k+1} = \\mathbf{x}_k + \\mathcal{F}(\\mathbf{x}_k) \\quad (\\text{Forward Euler, } \\Delta t = 1)',
+intent:'Skip connection carries identity; conv stack learns residual; projection shortcut handles dim mismatch',
+mapping:[
+{symbol:'\\u0078',code:'x',note:'Input tensor (identity copy)'},
+{symbol:'F(x, {W_i})',code:'conv_stack(x)',note:'Residual mapping (3 conv blocks)'},
+{symbol:'y = x + F(x)',code:'out = x + F(x)',note:'Skip connection adds identity'},
+{symbol:'stride=1, pad=1',code:'conv(stride=1, padding=1)',note:'Dimension-preserving (super-res)'},
+{symbol:'stride=2',code:'conv(stride=2)',note:'Spatial halving (classification)'},
+{symbol:'proj shortcut',code:'downsample(x)',note:'1\u00d71 conv if dims mismatch'}],
+langs:{
+'Python':'import torch\nimport torch.nn as nn\n\nclass ResNetBlock(nn.Module):\n    """He et al. 2016: y = x + F(x, {W_i}); Forward Euler with dt=1"""\n    def __init__(self, in_ch, out_ch, stride=1):\n        super().__init__()\n        # F(x): two 3x3 convs with BatchNorm + ReLU\n        self.conv1 = nn.Conv2d(in_ch, out_ch, kernel_size=3,\n                              stride=stride, padding=1, bias=False)\n        self.bn1   = nn.BatchNorm2d(out_ch)\n        self.conv2 = nn.Conv2d(out_ch, out_ch, kernel_size=3,\n                              stride=1, padding=1, bias=False)\n        self.bn2   = nn.BatchNorm2d(out_ch)\n        self.relu  = nn.ReLU(inplace=True)\n        # Projection shortcut: 1x1 conv if dims change (stride>1 or channel change)\n        self.shortcut = nn.Sequential()\n        if stride != 1 or in_ch != out_ch:\n            self.shortcut = nn.Sequential(\n                nn.Conv2d(in_ch, out_ch, kernel_size=1,\n                         stride=stride, bias=False),\n                nn.BatchNorm2d(out_ch)\n            )\n    \n    def forward(self, x):\n        # F(x, {W_i}): residual mapping\n        F = self.relu(self.bn1(self.conv1(x)))\n        F = self.bn2(self.conv2(F))\n        # y = x + F(x): skip connection (with projection if dims change)\n        y = self.shortcut(x) + F\n        return self.relu(y)\n\nclass ResNet(nn.Module):\n    """Stack of ResNet blocks: x_{k+1} = x_k + F(x_k); layer index = time step"""\n    def __init__(self, block_counts, channels=[64, 128, 256, 512], num_classes=1000):\n        super().__init__()\n        self.stem = nn.Sequential(\n            nn.Conv2d(3, 64, kernel_size=7, stride=2, padding=3, bias=False),\n            nn.BatchNorm2d(64), nn.ReLU(inplace=True), nn.MaxPool2d(3, 2, 1)\n        )\n        layers = []\n        in_ch = 64\n        for stage, (n_blocks, out_ch) in enumerate(zip(block_counts, channels)):\n            stride = 1 if stage == 0 else 2  # downsample at each stage except first\n            layers.append(ResNetBlock(in_ch, out_ch, stride=stride))\n            for _ in range(n_blocks - 1):\n                layers.append(ResNetBlock(out_ch, out_ch, stride=1))\n            in_ch = out_ch\n        self.body = nn.Sequential(*layers)\n        self.head = nn.Linear(channels[-1], num_classes)\n    \n    def forward(self, x):\n        x = self.stem(x)\n        x = self.body(x)               # x_{k+1} = x_k + F(x_k), k = layer index\n        x = x.mean(dim=[2, 3])         # global avg pool\n        return self.head(x)\n\n# ResNet-34: block_counts = [3, 4, 6, 3]   -> 34 layers\n# ResNet-50: block_counts = [3, 4, 6, 3] (bottleneck) -> 50 layers\n# ResNet-101: block_counts = [3, 4, 23, 3] -> 101 layers',
+'TypeScript':'// Residual Network Block (conceptual)\nclass ResNetBlock {\n  private conv1: Conv2d;\n  private conv2: Conv2d;\n  private bn1: BatchNorm;\n  private bn2: BatchNorm;\n  private relu: ReLU;\n  private shortcut: ((x: Tensor) => Tensor) | Identity;\n  \n  constructor(inCh: number, outCh: number, stride: number = 1) {\n    this.conv1 = new Conv2d(inCh, outCh, /*kernel=*/3, stride, /*pad=*/1);\n    this.bn1   = new BatchNorm(outCh);\n    this.conv2 = new Conv2d(outCh, outCh, /*kernel=*/3, /*stride=*/1, /*pad=*/1);\n    this.bn2   = new BatchNorm(outCh);\n    this.relu  = new ReLU();\n    // Projection shortcut if dims change\n    this.shortcut = (stride !== 1 || inCh !== outCh)\n      ? seq(new Conv2d(inCh, outCh, /*kernel=*/1, stride), new BatchNorm(outCh))\n      : new Identity();\n  }\n  \n  forward(x: Tensor): Tensor {\n    // F(x, {W_i})\n    const F = this.relu.forward(this.bn1.forward(this.conv1.forward(x)));\n    const F2 = this.bn2.forward(this.conv2.forward(F));\n    // y = x + F(x)  (skip connection; projection if needed)\n    const y = this.shortcut.forward(x).add(F2);\n    return this.relu.forward(y);\n  }\n}\n\nclass ResNet {\n  private stem: Sequential;\n  private body: ResNetBlock[];\n  private head: Linear;\n  // x_{k+1} = x_k + F(x_k);  layer index k = discrete time step\n  forward(x: Tensor): Tensor {\n    x = this.stem.forward(x);\n    for (const block of this.body) x = block.forward(x);\n    x = globalAvgPool(x);\n    return this.head.forward(x);\n  }\n}',
+'Go':'// Residual Network Block (conceptual)\ntype ResNetBlock struct {\n    Conv1   *Conv2d     // 3x3, stride, pad=1\n    BN1     *BatchNorm\n    Conv2   *Conv2d     // 3x3, stride=1, pad=1\n    BN2     *BatchNorm\n    ReLU    *ReLU\n    Shortcut func(*Tensor) *Tensor  // identity or 1x1 conv + BN\n}\n\nfunc NewResNetBlock(inCh, outCh, stride int) *ResNetBlock {\n    b := &ResNetBlock{\n        Conv1: NewConv2d(inCh, outCh, 3, stride, 1),\n        BN1:   NewBatchNorm(outCh),\n        Conv2: NewConv2d(outCh, outCh, 3, 1, 1),\n        BN2:   NewBatchNorm(outCh),\n        ReLU:  NewReLU(),\n    }\n    if stride != 1 || inCh != outCh {\n        // Projection shortcut: 1x1 conv with stride + BN\n        b.Shortcut = func(x *Tensor) *Tensor {\n            return NewBatchNorm(outCh).Forward(NewConv2d(inCh, outCh, 1, stride, 0).Forward(x))\n        }\n    } else {\n        b.Shortcut = func(x *Tensor) *Tensor { return x }  // identity\n    }\n    return b\n}\n\nfunc (b *ResNetBlock) Forward(x *Tensor) *Tensor {\n    // F(x, {W_i})\n    F := b.ReLU.Forward(b.BN1.Forward(b.Conv1.Forward(x)))\n    F = b.BN2.Forward(b.Conv2.Forward(F))\n    // y = x + F(x)  (skip connection)\n    y := b.Shortcut(x).Add(F)\n    return b.ReLU.Forward(y)\n}\n\n// ResNet stack: x_{k+1} = x_k + F(x_k); layer k = time step\ntype ResNet struct {\n    Stem []*Layer\n    Body []*ResNetBlock\n    Head *Linear\n}\n\nfunc (m *ResNet) Forward(x *Tensor) *Tensor {\n    for _, l := range m.Stem { x = l.Forward(x) }\n    for _, b := range m.Body { x = b.Forward(x) }  // discrete Euler steps\n    x = GlobalAvgPool(x)\n    return m.Head.Forward(x)\n}',
+'Scala':'// Residual Network Block (conceptual)\nclass ResNetBlock(inCh: Int, outCh: Int, stride: Int = 1) {\n  private val conv1 = new Conv2d(inCh, outCh, kernel = 3, stride, pad = 1)\n  private val bn1   = new BatchNorm(outCh)\n  private val conv2 = new Conv2d(outCh, outCh, kernel = 3, stride = 1, pad = 1)\n  private val bn2   = new BatchNorm(outCh)\n  private val relu  = new ReLU\n  // Projection shortcut if dims change\n  private val shortcut: Tensor => Tensor =\n    if (stride != 1 || inCh != outCh)\n      (x: Tensor) => new BatchNorm(outCh).forward(new Conv2d(inCh, outCh, 1, stride, 0).forward(x))\n    else (x: Tensor) => x  // identity\n  \n  def forward(x: Tensor): Tensor = {\n    // F(x, {W_i})\n    val F = relu.forward(bn1.forward(conv1.forward(x)))\n    val F2 = bn2.forward(conv2.forward(F))\n    // y = x + F(x)  (skip connection)\n    val y = shortcut(x).add(F2)\n    relu.forward(y)\n  }\n}\n\nclass ResNet(blockCounts: Vector[Int], channels: Vector[Int] = Vector(64, 128, 256, 512), numClasses: Int = 1000) {\n  private val stem = Seq(\n    new Conv2d(3, 64, 7, 2, 3), new BatchNorm(64), new ReLU, new MaxPool(3, 2, 1)\n  )\n  private val body: Vector[ResNetBlock] = buildBody()\n  private val head = new Linear(channels.last, numClasses)\n  // x_{k+1} = x_k + F(x_k); layer index k = discrete time step\n  def forward(x: Tensor): Tensor = {\n    var h = stem.foldLeft(x)((t, l) => l.forward(t))\n    body.foreach(b => h = b.forward(h))\n    h = globalAvgPool(h)\n    head.forward(h)\n  }\n}',
+'C':'/* Residual Network Block (conceptual) */\n#include <stddef.h>\n\ntypedef struct {\n    Conv2d* conv1;   /* 3x3, stride, pad=1 */\n    BatchNorm* bn1;\n    Conv2d* conv2;   /* 3x3, stride=1, pad=1 */\n    BatchNorm* bn2;\n    ReLU* relu;\n    /* Projection shortcut: 1x1 conv + BN if dims change */\n    Conv2d*   proj_conv;   /* NULL if identity shortcut */\n    BatchNorm* proj_bn;\n} ResNetBlock;\n\nResNetBlock* resnet_block_init(int in_ch, int out_ch, int stride) {\n    ResNetBlock* b = malloc(sizeof(ResNetBlock));\n    b->conv1 = conv2d_init(in_ch, out_ch, /*k=*/3, stride, /*p=*/1);\n    b->bn1   = batchnorm_init(out_ch);\n    b->conv2 = conv2d_init(out_ch, out_ch, /*k=*/3, /*stride=*/1, /*p=*/1);\n    b->bn2   = batchnorm_init(out_ch);\n    b->relu  = relu_init();\n    if (stride != 1 || in_ch != out_ch) {\n        b->proj_conv = conv2d_init(in_ch, out_ch, /*k=*/1, stride, /*p=*/0);\n        b->proj_bn   = batchnorm_init(out_ch);\n    } else { b->proj_conv = NULL; b->proj_bn = NULL; }\n    return b;\n}\n\nTensor* resnet_block_forward(ResNetBlock* b, Tensor* x) {\n    /* F(x, {W_i}): residual mapping */\n    Tensor* F = relu_forward(b->relu, batchnorm_forward(b->bn1, conv2d_forward(b->conv1, x)));\n    F = batchnorm_forward(b->bn2, conv2d_forward(b->conv2, F));\n    /* shortcut(x): identity or projection */\n    Tensor* sx = x;\n    if (b->proj_conv) {\n        sx = batchnorm_forward(b->proj_bn, conv2d_forward(b->proj_conv, x));\n    }\n    /* y = x + F(x)  (skip connection) */\n    Tensor* y = tensor_add(sx, F);\n    return relu_forward(b->relu, y);\n}\n\n/* ResNet stack: x_{k+1} = x_k + F(x_k); layer index k = time step */\ntypedef struct {\n    ResNetBlock** blocks; int n_blocks;\n    Layer** stem; int n_stem;\n    Linear* head;\n} ResNet;\n\nTensor* resnet_forward(ResNet* m, Tensor* x) {\n    for (int i = 0; i < m->n_stem; i++) x = layer_forward(m->stem[i], x);\n    for (int i = 0; i < m->n_blocks; i++) x = resnet_block_forward(m->blocks[i], x);\n    x = global_avg_pool(x);\n    return linear_forward(m->head, x);\n}',
+'Elixir':'defmodule ResNet do\n  @moduledoc """\n  Residual Network Block: y = x + F(x, {W_i})\n  Forward Euler with dt=1: x_{k+1} = x_k + F(x_k)\n  """\n  defmodule Block do\n    defstruct [:conv1, :bn1, :conv2, :bn2, :relu, :proj_conv, :proj_bn]\n    def init(in_ch, out_ch, stride) do\n      %__MODULE__{\n        conv1: Conv2d.init(in_ch, out_ch, 3, stride, 1),\n        bn1:   BatchNorm.init(out_ch),\n        conv2: Conv2d.init(out_ch, out_ch, 3, 1, 1),\n        bn2:   BatchNorm.init(out_ch),\n        relu:  ReLU.init(),\n        proj_conv: if(stride != 1 or in_ch != out_ch, do: Conv2d.init(in_ch, out_ch, 1, stride, 0)),\n        proj_bn:   if(stride != 1 or in_ch != out_ch, do: BatchNorm.init(out_ch))\n      }\n    end\n    def forward(b, x) do\n      # F(x, {W_i})\n      f = x |> Conv2d.forward(b.conv1) |> BatchNorm.forward(b.bn1) |> ReLU.forward(b.relu)\n      f = f |> Conv2d.forward(b.conv2) |> BatchNorm.forward(b.bn2)\n      # shortcut(x): identity or projection\n      sx = if b.proj_conv do\n        x |> Conv2d.forward(b.proj_conv) |> BatchNorm.forward(b.proj_bn)\n      else\n        x\n      end\n      # y = x + F(x)  (skip connection)\n      Tensor.add(sx, f) |> ReLU.forward(b.relu)\n    end\n  end\n\n  defstruct [:stem, :body, :head]\n  # x_{k+1} = x_k + F(x_k); layer k = discrete time step\n  def forward(model, x) do\n    x = Enum.reduce(model.stem, x, fn layer, t -> Layer.forward(layer, t) end)\n    x = Enum.reduce(model.body, x, fn block, t -> Block.forward(block, t) end)\n    x = GlobalAvgPool.forward(x)\n    Linear.forward(model.head, x)\n  end\nend'
+}
+}
+};
+var CLIP18_CURRENT_LANG='Python';
+function populateCode18(){
+var e=CLIP18_CODE['resnet'];if(!e)return;
+var exprEl=document.getElementById('expr18');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map18');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs18');var ccEl=document.getElementById('codecontent18');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip18Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc18-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip18Code(lang){CLIP18_CURRENT_LANG=lang;document.querySelectorAll('#tabs18 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc18-'+lang)})}
+var CLIP18_OUTPUTS={'resnet':['Initializing ResNet...','Architecture: ResNet-34 (block_counts=[3,4,6,3])','  stem: Conv2d(3, 64, k=7, s=2) -> BN -> ReLU -> MaxPool','  stage 1: 3 blocks,  64 channels, stride=1','  stage 2: 4 blocks, 128 channels, stride=2 (downsample)','  stage 3: 6 blocks, 256 channels, stride=2 (downsample)','  stage 4: 3 blocks, 512 channels, stride=2 (downsample)','  head: Linear(512, 1000)','','Total layers: 34 (vs ~12 pre-ResNet limit)','Total parameters: 21.3M','','Forward pass:','  x_{k+1} = x_k + F(x_k)   # layer index = discrete time step','  each block: Forward Euler step with dt=1','  skip connection preserves gradient flow','','Training on ImageNet (1.28M images, 1000 classes):','  epoch 10:  top-1 acc = 0.62,  top-5 acc = 0.84','  epoch 60:  top-1 acc = 0.71,  top-5 acc = 0.90','  epoch 120: top-1 acc = 0.735, top-5 acc = 0.913','','Gradient health (vanishing gradient check):','  pre-ResNet 12-layer:  grad norm at layer 1 = 0.0001  (vanishing!)','  ResNet-34 layer 1:    grad norm at layer 1 = 0.087   (healthy)','','Stride=1, pad=1 block (dim preserve):','  input  [1, 64, 56, 56] -> output [1, 64, 56, 56]  (super-res ready)','Stride=2 block (downsample):','  input  [1, 64, 56, 56] -> output [1, 128, 28, 28] (1x1 proj shortcut)','','ResNet-34 trained successfully; ImageNet top-5 = 91.3%']};
+function runClip18Code(key){
+var e=CLIP18_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput18');var st=document.getElementById('runStatus18');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap18');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP18_CURRENT_LANG+' '+e.name,''];var out2=CLIP18_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip18CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip18CodeViz(key){
+var wrap=document.getElementById('codeVizWrap18');if(!wrap)return;var cv=document.getElementById('codeVizCanvas18');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('ResNet: gradient flows freely through skip connections',W/2,16);
+var cx=W/2,cy=H*0.55;
+// ResNet stack: 8 blocks with skip arrows
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;
+var nBlocks=8;
+for(var i=0;i<nBlocks;i++){var bx=W*0.1+i*W*0.7/nBlocks;ctx.strokeRect(bx,cy-15,W*0.7/nBlocks-3,30);ctx.fillStyle='#10b981';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('F'+i,bx+W*0.7/nBlocks/2-1,cy+3);
+// Skip arrow above each block
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(bx+2,cy-15);ctx.lineTo(bx+W*0.7/nBlocks-5,cy-15);ctx.stroke()}
+// Skip curve over the whole stack
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=3;ctx.beginPath();
+ctx.moveTo(W*0.1+5,cy-15);ctx.bezierCurveTo(W*0.3,cy-50,W*0.7,cy-50,W*0.8-5,cy-15);ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('skip connection (identity)',W/2,cy-45);
+// Gradient norm comparison
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='left';
+ctx.fillText('gradient norm at layer 1:',10,H*0.85);
+ctx.fillText('ResNet-34: 0.087 (healthy)',10,H*0.92);
+ctx.fillStyle='#ff6b6b';ctx.fillText('pre-ResNet: 0.0001 (vanishing)',W*0.5,H*0.92);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)} frame();
+}
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -4967,7 +5286,8 @@ var FUTURES_DATA={
 'piml14':[{n:'LNN for prosthetics',y:2027,p:0.40,t:'Smooth joint control from (q,q\u0307) sensors'},{n:'LNN satellite tracking',y:2028,p:0.35,t:'No false collision warnings over decades'},{n:'Wind turbine digital twins',y:2029,p:0.30,t:'Chaotic fluid-structure LNN twins'},{n:'Biomechanics LNN',y:2026,p:0.45,t:'Gait analysis from cameras+IMU'},{n:'(q,q\u0307) models default',y:2030,p:0.25,t:'Sensor-friendly coordinate models standard'}],
 'piml15':[{n:'T-V decomposition LNNs',y:2026,p:0.45,t:'Separate T/V heads standard for interpretability'},{n:'Custom EL loss default',y:2027,p:0.40,t:'Euler-Lagrange residual loss standard in PIML'},{n:'Physics-bound Neural ODEs',y:2028,p:0.35,t:'Neural ODEs ship with physics constraints'},{n:'Small-data robotics',y:2027,p:0.40,t:'100-sample dynamics learning for prosthetics'},{n:'Decades-long orbit twins',y:2030,p:0.25,t:'LNN twins track debris for decades'}],
 'piml16':[{n:'Neural ODEs in PyTorch/JAX',y:2026,p:0.50,t:'torchdiffeq / Diffrax standard in DL toolkits'},{n:'Adjoint method default',y:2027,p:0.45,t:'Memory-efficient adjoint backprop ubiquitous'},{n:'ICU early warning NODEs',y:2028,p:0.30,t:'Continuous-time sepsis prediction deployed'},{n:'NODE+SINDy discovery',y:2028,p:0.35,t:'NODE denoising feeds SINDy for equation recovery'},{n:'Continuous-depth models',y:2030,p:0.25,t:'Continuous-time networks replace discrete ResNets'}],
-'piml17':[{n:'PySR default for discovery',y:2026,p:0.45,t:'PySR standard tool for symbolic regression in science'},{n:'Rediscovered laws published',y:2027,p:0.35,t:'Symbolic regression publishes new physical laws'},{n:'Edge µC symbolic control',y:2028,p:0.30,t:'Compact symbolic controllers on off-grid microcontrollers'},{n:'Climate symbolic models',y:2029,p:0.25,t:'Compact climate sub-models replace empirical fits'},{n:'Pharmacokinetic equations',y:2030,p:0.20,t:'Personalized drug dynamics from symbolic regression'}]
+'piml17':[{n:'PySR default for discovery',y:2026,p:0.45,t:'PySR standard tool for symbolic regression in science'},{n:'Rediscovered laws published',y:2027,p:0.35,t:'Symbolic regression publishes new physical laws'},{n:'Edge µC symbolic control',y:2028,p:0.30,t:'Compact symbolic controllers on off-grid microcontrollers'},{n:'Climate symbolic models',y:2029,p:0.25,t:'Compact climate sub-models replace empirical fits'},{n:'Pharmacokinetic equations',y:2030,p:0.20,t:'Personalized drug dynamics from symbolic regression'}],
+'piml18':[{n:'ResNet medical super-res',y:2026,p:0.45,t:'Rural clinics upscale MRI/ultrasound on laptops'},{n:'Climate downscaling default',y:2027,p:0.40,t:'ResNet spatiotemporal downscaling for smallholder farmers'},{n:'U-Net diffusion standard',y:2025,p:0.50,t:'U-Net backbone ubiquitous in generative AI'},{n:'Ultra-deep 1000+ layers',y:2030,p:0.20,t:'Improved skip variants enable 1000-layer networks'},{n:'Neural ODE replaces ResNet',y:2031,p:0.25,t:'Continuous-depth networks displace discrete ResNets'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -4996,7 +5316,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);drawFutureChart('fut15','piml15',futAnimState);drawFutureChart('fut16','piml16',futAnimState);drawFutureChart('fut17','piml17',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);drawFutureChart('fut15','piml15',futAnimState);drawFutureChart('fut16','piml16',futAnimState);drawFutureChart('fut17','piml17',futAnimState);drawFutureChart('fut18','piml18',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -5084,6 +5404,7 @@ setTimeout(populateCode14,300);
 setTimeout(populateCode15,300);
 setTimeout(populateCode16,300);
 setTimeout(populateCode17,300);
+setTimeout(populateCode18,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -5136,7 +5457,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('17 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===17});
+chk('18 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===18});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -5154,6 +5475,7 @@ chk('Clip 14 ready',function(){return CLIP_CURRICULUM[13].status==='ready'});
 chk('Clip 15 ready',function(){return CLIP_CURRICULUM[14].status==='ready'});
 chk('Clip 16 ready',function(){return CLIP_CURRICULUM[15].status==='ready'});
 chk('Clip 17 ready',function(){return CLIP_CURRICULUM[16].status==='ready'});
+chk('Clip 18 ready',function(){return CLIP_CURRICULUM[17].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -5294,6 +5616,16 @@ chk('Clip 17 code tabs (6)',function(){return document.getElementById('tabs17')&
 chk('Clip 17 map table',function(){var m=document.getElementById('map17');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 17 future chart',function(){return!!document.getElementById('fut17')});
 chk('CLIP17 narration key',function(){return CLIP17.narrationKey==='piml17'});
+// Clip 18
+chk('CLIP18 exists',function(){return typeof CLIP18==='object'});
+chk('Clip 18 section exists',function(){return!!document.getElementById('clip18')});
+chk('Clip 18 canvas',function(){return!!document.getElementById('cv18')});
+chk('Clip 18 scenes (6)',function(){var s=document.getElementById('scenes18');return s&&s.children.length===6});
+chk('Clip 18 expr populated',function(){var e=document.getElementById('expr18');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 18 code tabs (6)',function(){return document.getElementById('tabs18')&&document.getElementById('tabs18').children.length===6});
+chk('Clip 18 map table',function(){var m=document.getElementById('map18');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 18 future chart',function(){return!!document.getElementById('fut18')});
+chk('CLIP18 narration key',function(){return CLIP18.narrationKey==='piml18'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
