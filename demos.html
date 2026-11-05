@@ -3,7 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="version" content="2026-11-05-v25-demos-clip-framework">
 <title>Demos · Mmnd</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
 .dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
@@ -15,41 +19,68 @@ nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-conte
 .logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
 .logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
 .logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
-.nav-links{display:flex;gap:.25rem}
-.nav-links a{padding:.5rem 1rem;text-decoration:none;color:var(--muted);font-size:.875rem;font-weight:500}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500}
 .nav-links a:hover,.nav-links a.active{color:var(--primary)}
 .theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
-main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:4rem 1.5rem}
-.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
-h1{font-family:Georgia,serif;font-size:2.25rem;font-weight:600;margin-bottom:.5rem}
-@media(min-width:640px){h1{font-size:3rem}}
-h2{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;margin-bottom:1rem;margin-top:2.5rem}
-.subtitle{color:var(--muted);font-size:.875rem;margin-bottom:2rem}
-p{margin-bottom:1rem}
-.demo-section{border:1px solid var(--border);border-radius:.75rem;padding:1.5rem;background:var(--card);margin-bottom:1.5rem}
-.demo-section h3{color:var(--primary);font-size:.875rem;text-transform:uppercase;letter-spacing:.14em;margin-bottom:.75rem}
-.demo-canvas{width:100%;aspect-ratio:2/1;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg)}
-.demo-controls{display:flex;justify-content:space-between;align-items:center;margin-top:.75rem}
-.demo-controls button{padding:.375rem .75rem;border:1px solid var(--border);border-radius:.25rem;background:transparent;color:var(--fg);font-size:.75rem;cursor:pointer}
-.demo-controls button:hover{border-color:var(--primary);color:var(--primary)}
-.badge{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-right:.5rem}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.75rem;border:1px solid var(--border);border-radius:.5rem;margin-bottom:.5rem}
-.toggle-label{font-size:.875rem;font-weight:500}
-.toggle-desc{font-size:.6875rem;color:var(--muted)}
-.switch{position:relative;width:2.75rem;height:1.5rem;border-radius:1rem;background:var(--secondary);cursor:pointer;transition:background .2s}
-.switch.on{background:var(--primary)}
-.switch-knob{position:absolute;top:.125rem;left:.125rem;width:1.25rem;height:1.25rem;border-radius:50%;background:#fff;transition:left .2s}
-.switch.on .switch-knob{left:1.375rem}
-.verdict-card{border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--secondary);margin-top:1rem}
-.verdict-cat{font-family:Georgia,serif;font-size:1rem;font-weight:600;color:var(--primary)}
-.verdict-desc{font-size:.75rem;color:var(--muted);margin-top:.5rem}
-.rights-row{display:flex;gap:.25rem;flex-wrap:wrap;margin-top:.5rem}
-.right-pill{font-size:.5625rem;padding:.125rem .375rem;border-radius:.25rem;background:var(--accent-bg);color:var(--primary)}
-.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem}
-.stat-box{text-align:center;padding:.5rem;border:1px solid var(--border);border-radius:.5rem}
-.stat-num{font-family:Georgia,serif;font-size:1.25rem;font-weight:600;color:var(--primary)}
-.stat-lbl{font-size:.5625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
-footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2.5rem 1.5rem}
+main{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem}
+.hero{margin-bottom:1.5rem}
+.crumbs{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem}
+.tag{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2.5rem;font-weight:600;margin-bottom:.5rem}
+.lead{font-size:.9375rem;color:var(--muted);max-width:60rem;margin-bottom:1rem}
+.lead a{color:var(--primary);text-decoration:none}
+/* Clip framework (ported from physics-ml.html) */
+.clip-section{margin:2rem 0;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem}
+.clip-section h2{font-family:Georgia,serif;font-size:1.875rem;margin-bottom:.25rem}
+.clip-section .subtitle{font-size:.875rem;color:var(--muted);margin-bottom:1.5rem}
+.clip-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:768px){.clip-layout{grid-template-columns:1fr}}
+.clip-canvas-wrap{position:relative;background:#0a0908;border:1px solid var(--border);border-radius:.5rem;overflow:hidden;aspect-ratio:4/3}
+.clip-canvas-wrap.light-canvas{background:#f5f0ea}
+.clip-canvas{display:block;width:100%;height:100%}
+.clip-controls{position:absolute;bottom:.5rem;left:.5rem;right:.5rem;display:flex;align-items:center;gap:.375rem;flex-wrap:wrap;background:rgba(10,9,8,.7);backdrop-filter:blur(8px);padding:.375rem .5rem;border-radius:.375rem}
+.clip-canvas-wrap.light-canvas .clip-controls{background:rgba(250,247,242,.85)}
+.clip-btn{background:none;border:1px solid rgba(255,255,255,.2);color:#e5e2dc;border-radius:.375rem;padding:.4rem .7rem;cursor:pointer;font-size:.8125rem;font-weight:600;transition:background .15s;min-width:2rem;min-height:2rem;display:inline-flex;align-items:center;justify-content:center;font-family:'Segoe UI Symbol','Apple Symbols','Noto Sans Symbols','Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',-apple-system,sans-serif}
+.clip-btn:hover{background:rgba(255,255,255,.15)}
+.clip-btn:active{transform:scale(.95)}
+.clip-scene-label{position:absolute;top:.5rem;left:.5rem;font-size:.6875rem;font-weight:600;color:#e5e2dc;background:rgba(10,9,8,.7);padding:.25rem .5rem;border-radius:.25rem;backdrop-filter:blur(8px)}
+.zoom-control{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#e5e2dc;margin-left:auto}
+.zoom-control input[type=range]{width:60px;accent-color:var(--primary)}
+.param-control{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#FFD700}
+.param-control input[type=range]{width:60px;accent-color:#FFD700}
+.param-control .param-label{font-style:italic;font-family:Georgia,serif;font-weight:600}
+.clip-info{display:flex;flex-direction:column;gap:1rem}
+.scene-list{list-style:none;padding:0;margin:0}
+.scene-list li{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem .625rem;border-radius:.375rem;cursor:pointer;transition:background .15s}
+.scene-list li:hover{background:var(--accent-bg)}
+.scene-list li.active{background:var(--accent-bg);border-left:2px solid var(--primary)}
+.scene-list .num{flex-shrink:0;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--secondary);color:var(--muted);font-size:.6875rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.scene-list li.active .num{background:var(--primary);color:#fff}
+.scene-list .title{font-size:.8125rem;font-weight:600;color:var(--fg)}
+.scene-list .desc{font-size:.6875rem;color:var(--muted);margin-top:.125rem}
+.deeper-thoughts{padding:1rem;background:var(--secondary);border-radius:.375rem;border-left:3px solid var(--primary)}
+.deeper-thoughts h4{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem}
+.deeper-thoughts p{font-size:.8125rem;color:var(--fg);margin-bottom:.5rem}
+.deeper-thoughts p:last-child{margin-bottom:0}
+.future-section{margin-top:.5rem}
+.future-section h4{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem}
+.future-canvas{width:100%;aspect-ratio:16/7;background:#0a0908;border:1px solid var(--border);border-radius:.375rem;display:block}
+.future-milestones{font-size:.6875rem;color:var(--muted);margin-top:.375rem}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* Clip selector grid */
+.clip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.625rem;margin:1.5rem 0;padding:1rem;background:var(--secondary);border-radius:.5rem;border:1px solid var(--border)}
+.clip-card{padding:.75rem;background:var(--card);border:1px solid var(--border);border-radius:.375rem;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.clip-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.clip-card.active{border-color:var(--primary);background:var(--accent-bg);box-shadow:0 0 0 2px var(--primary)}
+.clip-card .clip-num{font-family:Georgia,serif;font-size:1.5rem;font-weight:700;color:var(--primary);line-height:1}
+.clip-card .clip-title{font-size:.75rem;font-weight:600;color:var(--fg);margin-top:.25rem;line-height:1.3}
+.clip-card .clip-status{font-size:.5625rem;text-transform:uppercase;letter-spacing:.1em;margin-top:.375rem;color:var(--primary)}
+.clip-nav-buttons{display:flex;justify-content:space-between;margin-top:1rem;gap:1rem}
+.clip-nav-btn{padding:.5rem 1rem;font-size:.8125rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600;text-decoration:none}
+.clip-nav-btn:hover{background:var(--primary);color:#fff}
+.clip-nav-btn.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem;margin-top:2rem}
 .footer-inner{max-width:1200px;margin:0 auto;text-align:center}
 .footer-inner p{font-size:.75rem;color:var(--muted)}
 </style>
@@ -69,518 +100,836 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 </nav></header>
 
 <main>
-<p class="eyebrow">Interactive demos</p>
+<div class="hero">
+<div class="crumbs">Interactive demos</div>
+<span class="tag">5 demos &middot; 6 scenes each</span>
 <h1>Watch the ideas move.</h1>
-<p class="subtitle">Two interactive demos that visualize the core mechanisms from the Aaronson-Greene conversation. No external services &mdash; everything runs in your browser.</p>
-
-<!-- Demo 1: Parallel Search -->
-<h2>Demo 1: Parallel Counterexample Search</h2>
-<div class="demo-section">
-<h3>How AI bulldozes career-defining problems</h3>
-<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">~60 AI agents (gray dots) explore a mathematical search space. When one finds a counterexample, it bursts in terracotta. The advantage is not intelligence &mdash; it is the absence of fatigue.</p>
-<div class="stat-row">
-<div class="stat-box"><div class="stat-num" id="psFound">0</div><div class="stat-lbl">Found</div></div>
-<div class="stat-box"><div class="stat-num" id="psAttempts">0</div><div class="stat-lbl">Attempts</div></div>
-<div class="stat-box"><div class="stat-num" id="psAgents">60</div><div class="stat-lbl">Agents</div></div>
-</div>
-<canvas id="psCanvas" class="demo-canvas"></canvas>
-<div class="demo-controls">
-<span style="font-size:.75rem;color:var(--muted)">Each starburst = a counterexample discovery</span>
-<div>
-<button onclick="psToggle()">&#9654;/&#10073;</button>
-<button onclick="psReset()">&#8634;</button>
-</div>
-</div>
+<p class="lead">Five interactive demos visualizing core mechanisms from the Aaronson-Greene conversation and the Mmnd curriculum. Each demo uses the same clip framework as <a href="physics-ml.html">Physics+ML</a> &mdash; canvas animation, six playback controls, zoom, parameter slider, narration, and a deeper-thoughts panel. No external services; everything runs in your browser.</p>
 </div>
 
-<!-- Demo 2: Moral Standing Evaluator -->
-<h2>Demo 2: Moral Standing Evaluator</h2>
-<div class="demo-section">
-<h3>Clonable vs. unclonable &mdash; the consciousness distinction</h3>
-<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">Toggle the entity attributes to see how Aaronson's clonable/unclonable distinction affects moral standing. The question is not can AI think? but does unclonability matter for moral standing?</p>
-<div class="toggle-row">
-<div><div class="toggle-label">Can be backed up &amp; restored</div><div class="toggle-desc">State is copyable. Destruction is reversible.</div></div>
-<div class="switch on" id="sw1" onclick="toggleSwitch(1)"><div class="switch-knob"></div></div>
-</div>
-<div class="toggle-row">
-<div><div class="toggle-label">Has analog quantum chaos</div><div class="toggle-desc">Dynamics are unclonable &mdash; sensitive to physical state.</div></div>
-<div class="switch" id="sw2" onclick="toggleSwitch(2)"><div class="switch-knob"></div></div>
-</div>
-<div class="toggle-row">
-<div><div class="toggle-label">Has finite lifespan</div><div class="toggle-desc">Will eventually cease to exist naturally.</div></div>
-<div class="switch" id="sw3" onclick="toggleSwitch(3)"><div class="switch-knob"></div></div>
-</div>
-<div class="verdict-card" id="verdict">
-<div class="verdict-cat" id="verdictCat">Clonable Agent / Probability Sample</div>
-<div class="verdict-desc" id="verdictDesc">Replicable state sampled from a probability distribution. Destruction is reversible &mdash; the state can be restored from backup. Moral concern is welfare optimization, not preservation of identity.</div>
-<div style="margin-top:.5rem"><strong style="font-size:.75rem;color:var(--fg)">Rights assigned:</strong> <div class="rights-row" id="rightsRow"></div></div>
-<div style="margin-top:.75rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:.5rem">
-<span style="font-size:.75rem;font-weight:600;color:var(--fg)">Can be murdered?</span>
-<span id="murderFlag" style="font-size:.875rem;font-weight:700;color:var(--muted)">NO</span>
-</div>
-</div>
+<!-- Demo selector grid -->
+<div class="clip-grid" id="clipGrid"></div>
+
+<!-- Demo navigation buttons -->
+<div class="clip-nav-buttons">
+<a class="clip-nav-btn disabled" id="prevClipBtn">&larr; Previous demo</a>
+<a class="clip-nav-btn" id="nextClipBtn" onclick="selectDemo(2)">Next demo &rarr;</a>
 </div>
 
-<!-- Demo 3: Expression Comparison Arena -->
-<h2>Demo 3: Expression Comparison Arena</h2>
-<div class="demo-section">
-<h3>Compare two expressions &mdash; like Go vs Rust, each has its domain</h3>
-<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">Select two mathematical expressions. The radar chart compares them across 5 dimensions. The verdict explains when to use each. <span style="background:var(--accent-bg);color:var(--primary);padding:.125rem .375rem;border-radius:.25rem;font-size:.5625rem;font-weight:600;text-transform:uppercase">SYNTHETIC DATA</span> &mdash; placeholder until real expert analysis arrives.</p>
+<!-- DEMO 1: Parallel Counterexample Search -->
+<section class="clip-section" id="clip1">
+<h2>Parallel Counterexample Search</h2>
+<div class="subtitle">Demo 1 &middot; 60 AI agents explore a mathematical search space; one finds a counterexample and the cascade begins. The advantage is not intelligence &mdash; it is the absence of fatigue.</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap1">
+<canvas class="clip-canvas" id="cv1"></canvas>
+<div class="clip-scene-label" id="lbl1">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="DEMO1.play()">&#9654;</button>
+<button class="clip-btn" onclick="DEMO1.pause()">||</button>
+<button class="clip-btn" onclick="DEMO1.replay()">&#8634;</button>
+<button class="clip-btn" onclick="DEMO1.prev()">&#9664;</button>
+<button class="clip-btn" onclick="DEMO1.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title1">The search space</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom1" min="0.5" max="3" step="0.1" value="1"><span id="zoom1v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel1">N</span><input type="range" id="param1" min="10" max="120" step="5" value="60"><span id="param1v">60</span></div>
+<button class="clip-btn" onclick="DEMO1.toggleRecord()" id="rec1" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="DEMO1.toggleNarration()" id="narr1" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="DEMO1.toggleLight()" id="light1">&#9680;</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes1"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts1"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities &mdash; parallel AI search evolution</h4>
+<canvas class="future-canvas" id="fut1"></canvas>
+<div class="future-milestones" id="fut1m"></div>
+</div>
+</div>
+</div>
+</section>
 
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem">
-<div>
-<label style="font-size:.6875rem;color:var(--muted);display:block;margin-bottom:.25rem">Expression A</label>
-<select id="cmpA" style="width:100%;padding:.375rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--fg);font-size:.75rem" onchange="drawComparison()">
-<option value="schrodinger">Schr&ouml;dinger Equation</option>
-<option value="attention">Scaled Dot-Product Attention</option>
-<option value="godel">G&ouml;del/Turing Bound</option>
-<option value="kolmogorov">Kolmogorov Complexity</option>
-<option value="erdos">Erd&ouml;s Unit Distance</option>
-<option value="ugc">Unique Games Conjecture</option>
-<option value="holographic">Bekenstein-Hawking Entropy</option>
-<option value="bottleneck">Information Bottleneck</option>
-<option value="loeb">L&ouml;b's Theorem</option>
-<option value="unitary">Unitary Synthesis</option>
-<option value="aixi">AIXI (Universal AI)</option>
-<option value="teleportation">Teleportation vs Path-Finding</option>
-</select>
-</div>
-<div>
-<label style="font-size:.6875rem;color:var(--muted);display:block;margin-bottom:.25rem">Expression B</label>
-<select id="cmpB" style="width:100%;padding:.375rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--fg);font-size:.75rem" onchange="drawComparison()">
-<option value="attention">Scaled Dot-Product Attention</option>
-<option value="schrodinger">Schr&ouml;dinger Equation</option>
-<option value="kolmogorov">Kolmogorov Complexity</option>
-<option value="godel">G&ouml;del/Turing Bound</option>
-<option value="erdos">Erd&ouml;s Unit Distance</option>
-<option value="ugc">Unique Games Conjecture</option>
-<option value="holographic">Bekenstein-Hawking Entropy</option>
-<option value="bottleneck">Information Bottleneck</option>
-<option value="loeb">L&ouml;b's Theorem</option>
-<option value="unitary">Unitary Synthesis</option>
-<option value="aixi">AIXI (Universal AI)</option>
-<option value="teleportation">Teleportation vs Path-Finding</option>
-</select>
+<!-- DEMO 2: Moral Standing Evaluator -->
+<section class="clip-section" id="clip2" style="display:none">
+<h2>Moral Standing Evaluator</h2>
+<div class="subtitle">Demo 2 &middot; Toggle an entity&rsquo;s attributes &mdash; backup-ability, quantum chaos, lifespan &mdash; to see how Aaronson&rsquo;s clonable/unclonable distinction shifts moral standing.</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap2">
+<canvas class="clip-canvas" id="cv2"></canvas>
+<div class="clip-scene-label" id="lbl2">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="DEMO2.play()">&#9654;</button>
+<button class="clip-btn" onclick="DEMO2.pause()">||</button>
+<button class="clip-btn" onclick="DEMO2.replay()">&#8634;</button>
+<button class="clip-btn" onclick="DEMO2.prev()">&#9664;</button>
+<button class="clip-btn" onclick="DEMO2.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title2">Clonable agent (default)</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom2" min="0.5" max="3" step="0.1" value="1"><span id="zoom2v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel2">&#945;</span><input type="range" id="param2" min="0" max="1" step="0.05" value="0.5"><span id="param2v">0.50</span></div>
+<button class="clip-btn" onclick="DEMO2.toggleRecord()" id="rec2" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="DEMO2.toggleNarration()" id="narr2" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="DEMO2.toggleLight()" id="light2">&#9680;</button>
 </div>
 </div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes2"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts2"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities &mdash; AI moral standing frameworks</h4>
+<canvas class="future-canvas" id="fut2"></canvas>
+<div class="future-milestones" id="fut2m"></div>
+</div>
+</div>
+</div>
+</section>
 
-<canvas id="cmpCanvas" class="demo-canvas" style="aspect-ratio:2/1"></canvas>
+<!-- DEMO 3: Expression Comparison Arena -->
+<section class="clip-section" id="clip3" style="display:none">
+<h2>Expression Comparison Arena</h2>
+<div class="subtitle">Demo 3 &middot; Two mathematical expressions duel across convergence, generalization, compute cost, and interpretability &mdash; revealing the Pareto trade-off.</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap3">
+<canvas class="clip-canvas" id="cv3"></canvas>
+<div class="clip-scene-label" id="lbl3">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="DEMO3.play()">&#9654;</button>
+<button class="clip-btn" onclick="DEMO3.pause()">||</button>
+<button class="clip-btn" onclick="DEMO3.replay()">&#8634;</button>
+<button class="clip-btn" onclick="DEMO3.prev()">&#9664;</button>
+<button class="clip-btn" onclick="DEMO3.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title3">Two expressions introduced</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom3" min="0.5" max="3" step="0.1" value="1"><span id="zoom3v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel3">&#955;</span><input type="range" id="param3" min="0" max="2" step="0.1" value="1"><span id="param3v">1.0</span></div>
+<button class="clip-btn" onclick="DEMO3.toggleRecord()" id="rec3" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="DEMO3.toggleNarration()" id="narr3" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="DEMO3.toggleLight()" id="light3">&#9680;</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes3"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts3"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities &mdash; expression discovery tooling</h4>
+<canvas class="future-canvas" id="fut3"></canvas>
+<div class="future-milestones" id="fut3m"></div>
+</div>
+</div>
+</div>
+</section>
 
-<div id="cmpVerdict" style="margin-top:1rem;padding:1rem;background:var(--secondary);border-radius:.5rem;border:1px solid var(--border);font-size:.8125rem;line-height:1.7"></div>
+<!-- DEMO 4: Thought Evolution Timeline -->
+<section class="clip-section" id="clip4" style="display:none">
+<h2>Thought Evolution Timeline</h2>
+<div class="subtitle">Demo 4 &middot; Mathematical thinking from Babylonian empirics to AI-assisted discovery &mdash; six eras of how humans formalize patterns.</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap4">
+<canvas class="clip-canvas" id="cv4"></canvas>
+<div class="clip-scene-label" id="lbl4">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="DEMO4.play()">&#9654;</button>
+<button class="clip-btn" onclick="DEMO4.pause()">||</button>
+<button class="clip-btn" onclick="DEMO4.replay()">&#8634;</button>
+<button class="clip-btn" onclick="DEMO4.prev()">&#9664;</button>
+<button class="clip-btn" onclick="DEMO4.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title4">Babylonian empirics</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom4" min="0.5" max="3" step="0.1" value="1"><span id="zoom4v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel4">&#945;</span><input type="range" id="param4" min="0" max="1" step="0.05" value="0.5"><span id="param4v">0.50</span></div>
+<button class="clip-btn" onclick="DEMO4.toggleRecord()" id="rec4" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="DEMO4.toggleNarration()" id="narr4" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="DEMO4.toggleLight()" id="light4">&#9680;</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes4"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts4"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities &mdash; mathematical discovery</h4>
+<canvas class="future-canvas" id="fut4"></canvas>
+<div class="future-milestones" id="fut4m"></div>
+</div>
+</div>
+</div>
+</section>
 
-<div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
-<a href="https://huggingface.co/models" target="_blank" rel="noopener" style="font-size:.6875rem;padding:.25rem .5rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--primary);text-decoration:none">&#129303; Hugging Face Models</a>
-<a href="https://github.com/testdemoqwenai2025-creator/Mmnd-Advanced" target="_blank" rel="noopener" style="font-size:.6875rem;padding:.25rem .5rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--primary);text-decoration:none">&#128187; GitHub Source</a>
-<a href="https://github.com/testdemoqwenai2025-creator/Mmnd-Advanced/issues" target="_blank" rel="noopener" style="font-size:.6875rem;padding:.25rem .5rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--primary);text-decoration:none">&#128221; Contribute Analysis</a>
+<!-- DEMO 5: Language Performance Matrix -->
+<section class="clip-section" id="clip5" style="display:none">
+<h2>Language Performance Matrix</h2>
+<div class="subtitle">Demo 5 &middot; Six languages (Python, TypeScript, Go, Scala, C, Elixir) benchmarked across speed, memory, conciseness, concurrency, type safety.</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap5">
+<canvas class="clip-canvas" id="cv5"></canvas>
+<div class="clip-scene-label" id="lbl5">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="DEMO5.play()">&#9654;</button>
+<button class="clip-btn" onclick="DEMO5.pause()">||</button>
+<button class="clip-btn" onclick="DEMO5.replay()">&#8634;</button>
+<button class="clip-btn" onclick="DEMO5.prev()">&#9664;</button>
+<button class="clip-btn" onclick="DEMO5.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title5">Speed benchmark</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom5" min="0.5" max="3" step="0.1" value="1"><span id="zoom5v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel5">N</span><input type="range" id="param5" min="100" max="10000" step="100" value="1000"><span id="param5v">1000</span></div>
+<button class="clip-btn" onclick="DEMO5.toggleRecord()" id="rec5" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="DEMO5.toggleNarration()" id="narr5" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="DEMO5.toggleLight()" id="light5">&#9680;</button>
 </div>
-
-<div style="margin-top:.75rem;padding:.5rem;background:rgba(194,65,12,0.05);border-radius:.375rem;border:1px dashed var(--border)">
-<p style="font-size:.6875rem;color:var(--muted);margin:0"><strong style="color:var(--primary)">Synthetic &rarr; Real transition:</strong> The comparison data below is synthetic (placeholder). When domain experts provide real analysis, it replaces the synthetic data seamlessly &mdash; same format, same structure, just better values. This is the "strong domain expertism" approach: build the structure now, evolve the content later via open-source contributions.</p>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes5"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts5"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities &mdash; programming language evolution</h4>
+<canvas class="future-canvas" id="fut5"></canvas>
+<div class="future-milestones" id="fut5m"></div>
 </div>
 </div>
-
-<!-- Demo 4: Mathematical Thought Evolution Timeline -->
-<h2>Demo 4: Thought Evolution Timeline</h2>
-<div class="demo-section">
-<h3>How mathematical ideas evolved across centuries</h3>
-<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">Animated particles flow along the timeline. Each milestone is a "thought" that connects to the observatory. Click a milestone to see its connection.</p>
-<canvas id="timelineCanvas" class="demo-canvas" style="aspect-ratio:16/6"></canvas>
-<div id="timelineInfo" style="margin-top:.75rem;padding:.75rem;background:var(--secondary);border-radius:.5rem;border:1px solid var(--border);font-size:.8125rem;min-height:2rem"></div>
-<div class="demo-controls">
-<span style="font-size:.75rem;color:var(--muted)">Click any milestone node</span>
-<div><button onclick="tlToggle()">&#9654;/&#10073;</button><button onclick="tlReset()">&#8634;</button></div>
 </div>
-</div>
-
-<!-- Demo 5: Code Language Performance Comparison -->
-<h2>Demo 5: Language Performance Matrix</h2>
-<div class="demo-section">
-<h3>Which language for which task? &mdash; like Go vs Rust vs C</h3>
-<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">Select a metric. The bars animate to show which language excels. <span style="background:var(--accent-bg);color:var(--primary);padding:.125rem .375rem;border-radius:.25rem;font-size:.5625rem;font-weight:600;text-transform:uppercase">SYNTHETIC</span></p>
-<div style="display:flex;gap:.25rem;margin-bottom:.5rem;flex-wrap:wrap">
-<button class="lang-metric-btn active" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--primary);border-radius:.25rem;background:var(--accent-bg);color:var(--primary);cursor:pointer;font-weight:500" onclick="switchMetric('speed',this)">Speed</button>
-<button class="lang-metric-btn" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-weight:500" onclick="switchMetric('readability',this)">Readability</button>
-<button class="lang-metric-btn" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-weight:500" onclick="switchMetric('concurrency',this)">Concurrency</button>
-<button class="lang-metric-btn" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-weight:500" onclick="switchMetric('math',this)">Math Notation</button>
-<button class="lang-metric-btn" style="padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-weight:500" onclick="switchMetric('longevity',this)">Longevity</button>
-</div>
-<canvas id="langCanvas" class="demo-canvas" style="aspect-ratio:16/8"></canvas>
-<div id="langVerdict" style="margin-top:.75rem;padding:.75rem;background:var(--secondary);border-radius:.5rem;border:1px solid var(--border);font-size:.75rem"></div>
-</div>
-
+</section>
 </main>
 
 <footer><div class="footer-inner">
-<p>&copy; 2026 Mmnd Collective &middot; Apache-2.0</p>
-<p style="margin-top:.5rem"><a href="mailto:testdemoqwenai2025@gmail.com" style="color:var(--primary)">testdemoqwenai2025@gmail.com</a> &middot; GDPR-aligned</p>
+<p>&copy; 2026 Mmnd Collective &middot; Apache-2.0 &middot; <a href="mailto:testdemoqwenai2025@gmail.com" style="color:var(--primary)">testdemoqwenai2025@gmail.com</a></p>
+<p>v25-demos-clip-framework &middot; 5 demos &middot; 6 scenes each &middot; same framework as Physics+ML</p>
 </div></footer>
 
 <script>
-function toggleTheme(){var d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
-;(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+// === THEME ===
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
 
-// Particle bg
-;(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(40,Math.floor(cv.width*cv.height/30000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.2})}function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1}function lp(){dr();raf=requestAnimationFrame(lp)}addEventListener('resize',rs);rs();if(!red)raf=requestAnimationFrame(lp)})();
+// === PARTICLE BG ===
+(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(50,Math.floor(cv.width*cv.height/25000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.3})}
+function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';
+for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}
+ctx.strokeStyle=d?'rgba(234,88,12,.06)':'rgba(194,65,12,.04)';ctx.lineWidth=.5;
+for(var i=0;i<ps.length;i++)for(var j=i+1;j<ps.length;j++){var dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){ctx.globalAlpha=(1-d/100)*.15;ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.stroke()}}
+ctx.globalAlpha=1}
+function lp(){dr();raf=requestAnimationFrame(lp)}
+addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp)})();
 
-// Parallel Search Demo
-;var psAgents=[],psRaf=null,psRunning=true,psFound=0,psAttempts=0,psLastFind=0;
-;var psRed=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function psInit(){
-var cv=document.getElementById('psCanvas');if(!cv)return;
-var ctx=cv.getContext('2d');
-function rs(){var d=window.devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*d;cv.height=r.height*d;ctx.setTransform(d,0,0,d,0,0)}
-rs();
-psAgents=[];
-var rect=cv.getBoundingClientRect();
-for(var i=0;i<60;i++)psAgents.push({x:Math.random()*rect.width,y:Math.random()*rect.height,vx:(Math.random()-.5)*.8,vy:(Math.random()-.5)*.8,found:false,life:1});
-addEventListener('resize',rs);
-function frame(){
-var r=cv.getBoundingClientRect();var w=r.width,h=r.height;
-var d=document.documentElement.classList.contains('dark');
-var pc=d?'#ea580c':'#c2410c',mt=d?'#a8a098':'#736a5e',bg='#0a0908';
-ctx.fillStyle=bg;ctx.globalAlpha=.92;ctx.fillRect(0,0,w,h);ctx.globalAlpha=1;
-// Grid
-ctx.strokeStyle='rgba(115,106,94,0.15)';ctx.lineWidth=.5;
-for(var x=0;x<w;x+=40){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
-for(var y=0;y<h;y+=40){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
-var now=performance.now();
-for(var a of psAgents){
-if(!a.found){
-if(psRunning){a.x+=a.vx;a.y+=a.vy;psAttempts++}
-if(a.x<0)a.x=w;if(a.x>w)a.x=0;if(a.y<0)a.y=h;if(a.y>h)a.y=0;
-if(Math.random()<0.00008*60&&now-psLastFind>1500){a.found=true;a.life=1;psLastFind=now;psFound++;document.getElementById('psFound').textContent=psFound}
-ctx.fillStyle=mt;ctx.globalAlpha=.35;ctx.beginPath();ctx.arc(a.x,a.y,1.5,0,Math.PI*2);ctx.fill()
-}else{
-a.life-=0.008;
-if(a.life<=0){a.found=false;a.x=Math.random()*w;a.y=Math.random()*h;a.vx=(Math.random()-.5)*.8;a.vy=(Math.random()-.5)*.8;a.life=1;continue}
-var rad=(1-a.life)*35+4;
-var gr=ctx.createRadialGradient(a.x,a.y,0,a.x,a.y,rad);
-gr.addColorStop(0,pc);gr.addColorStop(0.5,pc+'80');gr.addColorStop(1,pc+'00');
-ctx.fillStyle=gr;ctx.globalAlpha=a.life;ctx.beginPath();ctx.arc(a.x,a.y,rad,0,Math.PI*2);ctx.fill();
-ctx.fillStyle=pc;ctx.globalAlpha=a.life;ctx.beginPath();ctx.arc(a.x,a.y,3,0,Math.PI*2);ctx.fill();
-ctx.strokeStyle=pc;ctx.globalAlpha=a.life*.8;ctx.lineWidth=1.5;
-for(var i=0;i<6;i++){var ang=i/6*Math.PI*2;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(a.x+Math.cos(ang)*rad*1.2,a.y+Math.sin(ang)*rad*1.2);ctx.stroke()}
+// === DEMO CURRICULUM ===
+var DEMO_CURRICULUM=[
+{n:1,title:'Parallel Counterexample Search',desc:'60 AI agents explore; counterexamples cascade',status:'ready'},
+{n:2,title:'Moral Standing Evaluator',desc:'Clonable vs unclonable consciousness distinction',status:'ready'},
+{n:3,title:'Expression Comparison Arena',desc:'Pareto trade-off across convergence, generalization, cost',status:'ready'},
+{n:4,title:'Thought Evolution Timeline',desc:'Babylonian empirics to AI-assisted discovery',status:'ready'},
+{n:5,title:'Language Performance Matrix',desc:'Python/TS/Go/Scala/C/Elixir benchmarked',status:'ready'}
+];
+var activeDemoNum=1;
+
+function buildDemoGrid(){
+var grid=document.getElementById('clipGrid');if(!grid)return;
+var h='';
+DEMO_CURRICULUM.forEach(function(c){
+var cls='clip-card';if(c.n===activeDemoNum)cls+=' active';
+h+='<div class="'+cls+'" onclick="selectDemo('+c.n+')" title="'+c.desc+'">';
+h+='<div class="clip-num">'+c.n+'</div>';
+h+='<div class="clip-title">'+c.title+'</div>';
+h+='<div class="clip-status">&#10003; Ready</div>';
+h+='</div>';
+});
+grid.innerHTML=h;
+}
+
+function selectDemo(n){
+var c=DEMO_CURRICULUM[n-1];if(!c)return;
+for(var i=1;i<=5;i++){var s=document.getElementById('clip'+i);if(s)s.style.display='none';if(window['DEMO'+i])window['DEMO'+i].setActive(false)}
+var sec=document.getElementById('clip'+n);
+if(sec)sec.style.display='';
+if(window['DEMO'+n])window['DEMO'+n].setActive(true);
+activeDemoNum=n;buildDemoGrid();updateNavButtons();
+if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function updateNavButtons(){
+var prev=document.getElementById('prevClipBtn');
+var next=document.getElementById('nextClipBtn');
+if(prev){
+if(activeDemoNum<=1){prev.classList.add('disabled');prev.removeAttribute('onclick')}
+else{prev.classList.remove('disabled');prev.setAttribute('onclick','selectDemo('+(activeDemoNum-1)+')')}}
+if(next){
+if(activeDemoNum>=5){next.classList.add('disabled');next.removeAttribute('onclick')}
+else{next.classList.remove('disabled');next.setAttribute('onclick','selectDemo('+(activeDemoNum+1)+')')}}
+}
+
+// === PHASE BAR ===
+function drawPhaseBar(ctx,W,H){var pby=H-5;var g=ctx.createLinearGradient(0,pby,W,pby);g.addColorStop(0,'#ff0000');g.addColorStop(.14,'#ffa500');g.addColorStop(.28,'#ffff00');g.addColorStop(.42,'#00ff00');g.addColorStop(.57,'#00ffff');g.addColorStop(.71,'#0000ff');g.addColorStop(.85,'#ff00ff');g.addColorStop(1,'#ff0000');ctx.fillStyle=g;ctx.fillRect(0,pby,W,2)}
+
+// === FLOATING MATH ===
+function drawFloatingMath(ctx,W,H,t,expressions){
+if(!expressions)return;ctx.textAlign='center';ctx.textBaseline='middle';
+var cycleLen=12;
+expressions.forEach(function(expr,i){
+var phase=(t*0.15+i*cycleLen/expressions.length)%cycleLen;var progress=phase/cycleLen;
+var x=progress*(W+200)-100;var baseY=H*0.15+(i%3)*H*0.11;var y=baseY+Math.sin(t*0.3+i*0.7)*15;
+var alpha=Math.sin(progress*Math.PI)*0.3;if(alpha<=0)return;
+ctx.globalAlpha=alpha;ctx.font='italic '+(13+Math.sin(t+i)*2|0)+'px Georgia,serif';
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=10;ctx.fillText(expr,x,y);ctx.shadowBlur=0;ctx.globalAlpha=1
+})
+}
+
+// === NARRATION ===
+var Narration={enabled:false,currentAudio:null,
+speak:function(clipKey,sceneIdx){if(!this.enabled)return;this.stop();var a=new Audio('audio/'+clipKey+'_'+sceneIdx+'.mp3');a.volume=1;this.currentAudio=a;a.play().catch(function(e){console.log('Narration play failed:',e.message)})},
+stop:function(){if(this.currentAudio){this.currentAudio.pause();this.currentAudio=null}},
+toggle:function(){this.enabled=!this.enabled;if(!this.enabled)this.stop();return this.enabled}
+};
+
+// === SCENE THOUGHTS (shared, indexed by scene 0-5) ===
+var SCENE_THOUGHTS=[
+'<strong style="color:var(--primary)">Scene 1.</strong> Each demo opens with a setup scene that frames the question being explored. Use the playback controls and the parameter slider to interact with the canvas.',
+'<strong style="color:var(--primary)">Scene 2.</strong> The mechanism becomes visible. Watch how the core dynamic plays out across the canvas.',
+'<strong style="color:var(--primary)">Scene 3.</strong> The comparison or trade-off emerges. Two sides of the question are placed side by side.',
+'<strong style="color:var(--primary)">Scene 4.</strong> The deeper structural insight. Why does this mechanism matter for science or AI?',
+'<strong style="color:var(--primary)">Scene 5.</strong> Failure modes and limits. Where does the simple picture break down?',
+'<strong style="color:var(--primary)">Scene 6.</strong> Global impact. How this idea touches real-world applications.'
+];
+
+// === SCENE PARAMS (shared defaults; demos can override via SCENE_PARAMS override) ===
+var SCENE_PARAMS=[
+{label:'N',min:10,max:120,step:5,default:60,decimals:0,desc:'agents'},
+{label:'\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'weight'},
+{label:'\u03bb',min:0,max:2,step:0.1,default:1,decimals:1,desc:'trade-off'},
+{label:'\u03b5',min:0,max:0.1,step:0.005,default:0.01,decimals:3,desc:'tolerance'},
+{label:'\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'safety'},
+{label:'\u03c3',min:0,max:0.3,step:0.01,default:0.05,decimals:2,desc:'noise'}
+];
+
+// === MAKE CLIP (ported from physics-ml.html) ===
+function makeClip(opts){
+var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,active:true,param:opts.paramDefault||0.5,narrationKey:opts.narrationKey||'',recording:false,recorder:null,recChunks:[],
+cv:document.getElementById(opts.cvId),wrap:document.getElementById(opts.wrapId),lbl:document.getElementById(opts.lblId),titleEl:document.getElementById(opts.titleId),
+zoomEl:document.getElementById(opts.zoomId),zoomVal:document.getElementById(opts.zoomValId),
+paramEl:document.getElementById(opts.paramId),paramVal:document.getElementById(opts.paramValId),paramLabel:document.getElementById(opts.paramLabelId),
+lightBtn:document.getElementById(opts.lightId),narrBtn:document.getElementById(opts.narrId),recBtn:document.getElementById(opts.recId),
+sceneListEl:document.getElementById(opts.sceneListId),thoughtsEl:document.getElementById(opts.thoughtsId),scenes:opts.scenes};
+var h='';opts.scenes.forEach(function(s,i){h+='<li data-idx="'+i+'" onclick="'+opts.varName+'.seek('+i+')"><span class="num">'+(i+1)+'</span><div><div class="title">'+s.title+'</div><div class="desc">'+s.desc+'</div></div></li>'});
+state.sceneListEl.innerHTML=h;
+function updateSceneUI(){
+state.lbl.textContent='Scene '+(state.scene+1)+'/'+opts.scenes.length;
+state.titleEl.textContent=opts.scenes[state.scene].title;
+state.sceneListEl.querySelectorAll('li').forEach(function(li,i){li.classList.toggle('active',i===state.scene)});
+if(state.thoughtsEl&&SCENE_THOUGHTS[state.scene])state.thoughtsEl.innerHTML=SCENE_THOUGHTS[state.scene];
+var sp=SCENE_PARAMS[state.scene];if(sp&&state.paramLabel){
+state.paramLabel.textContent=sp.label;
+state.paramEl.min=sp.min;state.paramEl.max=sp.max;state.paramEl.step=sp.step;
+state.paramEl.value=sp.default;state.param=sp.default;
+var dec=sp.decimals||2;state.paramVal.textContent=parseFloat(sp.default).toFixed(dec);
+state.paramEl.oninput=function(){state.param=parseFloat(state.paramEl.value);state.paramVal.textContent=state.param.toFixed(dec)};
+}
+}
+function narrateCurrent(){if(state.narrationKey)Narration.speak(state.narrationKey,state.scene)}
+updateSceneUI();
+state.zoomEl.addEventListener('input',function(){state.zoom=parseFloat(state.zoomEl.value);state.zoomVal.textContent=state.zoom.toFixed(1)+'x'});
+state.toggleLight=function(){state.dark=!state.dark;state.wrap.classList.toggle('light-canvas',!state.dark);state.lightBtn.textContent=state.dark?'\u25d0':'\u25cf'};
+state.toggleNarration=function(){var on=Narration.toggle();if(state.narrBtn){state.narrBtn.textContent='\u266a';state.narrBtn.style.color=on?'var(--primary)':''}if(on)narrateCurrent();else Narration.stop()};
+state.toggleRecord=function(){
+if(state.recording){if(state.recorder&&state.recorder.state!=='inactive')state.recorder.stop();state.recording=false;if(state.recBtn){state.recBtn.textContent='\u25cf';state.recBtn.style.color='';state.recBtn.style.animation=''}}
+else{try{var stream=state.cv.captureStream(30);state.recChunks=[];state.recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp8'});state.recorder.ondataavailable=function(e){if(e.data&&e.data.size>0)state.recChunks.push(e.data)};state.recorder.onstop=function(){var blob=new Blob(state.recChunks,{type:'video/webm'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=state.narrationKey+'_scene'+(state.scene+1)+'_'+Date.now()+'.webm';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},1000)};state.recorder.start();state.recording=true;if(state.recBtn){state.recBtn.textContent='\u25a0';state.recBtn.style.color='#ff0000';state.recBtn.style.animation='pulse 1s infinite'}}catch(e){console.log('Recording failed:',e.message)}}
+};
+state.play=function(){state.playing=true};
+state.pause=function(){state.playing=false};
+state.replay=function(){state.time=0;state.playing=true};
+state.seek=function(s){state.scene=Math.max(0,Math.min(opts.scenes.length-1,s));state.time=0;updateSceneUI();narrateCurrent()};
+state.next=function(){state.seek(state.scene+1)};
+state.prev=function(){state.seek(state.scene-1)};
+state.setActive=function(a){state.active=a;if(a){if(!state.anim)state.anim=requestAnimationFrame(frame)}else{if(state.anim){cancelAnimationFrame(state.anim);state.anim=null}}};
+function frame(){if(state.playing&&state.active)state.time+=0.02;if(state.active)opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark,state.param);state.anim=requestAnimationFrame(frame)}
+state.setActive(false);
+return state;
+}
+
+// === FUTURE CHART (shared) ===
+var FUTURES_DATA={
+'demo1':[{n:'Agent swarms standardized',y:2028,p:0.45,t:'Multi-agent search swarms ubiquitous in math research'},{n:'Auto-counterexample tools',y:2027,p:0.40,t:'Automatic counterexample search deployed in theorem proving'},{n:'AI math coauthor',y:2030,p:0.30,t:'AI listed as coauthor on published math papers'},{n:'Lean+LLM proofs',y:2028,p:0.35,t:'LLMs assist formal proof verification at scale'},{n:'Conjecture generation',y:2031,p:0.25,t:'AI generates publishable conjectures from pattern mining'}],
+'demo2':[{n:'AI moral framework',y:2030,p:0.30,t:'First legal framework for AI moral standing'},{n:'Unclonable AI protected',y:2032,p:0.20,t:'Unclonable AI agents granted preservation rights'},{n:'Consciousness tests',y:2029,p:0.35,t:'Standardized consciousness tests for AI systems'},{n:'Backup-rights law',y:2031,p:0.25,t:'Clonable AI destruction regulated as property'},{n:'Hybrid moral agents',y:2033,p:0.20,t:'Partial-clonability moral categories recognized'}],
+'demo3':[{n:'Pareto expression tools',y:2027,p:0.40,t:'Pareto-front expression comparison standard in ML'},{n:'Auto-expression rank',y:2028,p:0.35,t:'Automatic ranking of expressions by multi-objective'},{n:'OOD benchmark suites',y:2026,p:0.45,t:'Out-of-distribution benchmarks ubiquitous'},{n:'Interpretability scores',y:2027,p:0.40,t:'Standard interpretability metrics for symbolic models'},{n:'Compute-aware search',y:2029,p:0.30,t:'FLOPs-aware expression discovery default'}],
+'demo4':[{n:'AI conjecture cascade',y:2030,p:0.30,t:'AI-generated conjectures reshape pure math'},{n:'Auto-formalization',y:2028,p:0.35,t:'Automatic formalization of informal proofs'},{n:'Historical rediscovery',y:2027,p:0.40,t:'AI rediscovers lost theorems from data'},{n:'Cross-domain import',y:2029,p:0.30,t:'AI imports theorems across mathematical fields'},{n:'Collab human-AI math',y:2031,p:0.25,t:'Standard human-AI mathematical collaboration'}],
+'demo5':[{n:'Python dominance',y:2026,p:0.55,t:'Python remains default for ML/science'},{n:'Moore language adoption',y:2028,p:0.35,t:'Moore-safe languages (Rust, Zig) grow'},{n:'LLM-optimized langs',y:2030,p:0.30,t:'Languages designed for LLM code generation emerge'},{n:'Type-safe default',y:2027,p:0.45,t:'Type-safe languages become standard for ML'},{n:'Edge-lang revival',y:2029,p:0.30,t:'Compact languages (Elixir, Lua) revived for edge'}]
+};
+function drawFutureChart(cvId,dataId,animState){
+var cv=document.getElementById(cvId);if(!cv)return;
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#10b981',accent='#06b6d4',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var problems=FUTURES_DATA[dataId];var growth=1.3;
+var pL=70,pB=25,pT=30,pR=15,cw=W-pL-pR,ch=H-pT-pB;
+var yearStart=2025,yearEnd=2040,yearSpan=yearEnd-yearStart;
+var animT=animState.t||0;var growProgress=Math.min(1,animT/3);var breathe=Math.sin(animT*0.8)*0.04;
+ctx.strokeStyle='rgba(16,185,129,0.08)';ctx.lineWidth=.5;
+for(var y=yearStart;y<=yearEnd;y+=3){var x=pL+((y-yearStart)/yearSpan)*cw;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(y,x,H-pB+10)}
+problems.forEach(function(pb,i){
+var rowY=pT+(i+0.5)*ch/problems.length;var barH=ch/problems.length*0.55;
+ctx.beginPath();
+for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
+var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'44');grad.addColorStop(1,accent+'66');ctx.fillStyle=grad;ctx.fill();
+ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=pc;ctx.lineWidth=1.5;ctx.beginPath();
+for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;
+for(var pi=0;pi<3;pi++){var u=((animT*0.12+pi/3)%1);var s=u*100;var year=yearStart+u*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var px=pL+u*cw;var py=rowY-barH/2-pAtY*barH;var fa=0.5+0.5*Math.sin(u*Math.PI);ctx.shadowColor=accent;ctx.shadowBlur=10;ctx.fillStyle=accent;ctx.globalAlpha=fa;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.shadowBlur=0}
+ctx.fillStyle=fg;ctx.font='7px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-5,rowY+3);
+});
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('P(breakthrough) evolving',W/2,14);
+var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' &middot; ')}
+}
+var futAnimState={t:0};
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','demo1',futAnimState);drawFutureChart('fut2','demo2',futAnimState);drawFutureChart('fut3','demo3',futAnimState);drawFutureChart('fut4','demo4',futAnimState);drawFutureChart('fut5','demo5',futAnimState);requestAnimationFrame(futLoop)}
+setTimeout(futLoop,200);
+
+// === DEMO-SPECIFIC SCENE DATA + DRAW FUNCTIONS ===
+// (loaded from inline script below)
+</script>
+<script>
+// === DEMO 1: Parallel Counterexample Search ===
+var DEMO1_SCENES=[
+{title:'The search space',desc:'Grid of mathematical possibilities; one cell holds the counterexample'},
+{title:'60 agents deployed',desc:'Gray dots explore randomly; fatigue-free parallel search'},
+{title:'First counterexample found',desc:'One agent strikes gold; starburst marks the discovery'},
+{title:'Cascade of discoveries',desc:'Word spreads; more agents converge on adjacent counterexamples'},
+{title:'Human vs 60 agents',desc:'1 human needs years; 60 agents need hours'},
+{title:'The advantage: no fatigue',desc:'Not intelligence &mdash; the absence of fatigue, sleep, discouragement'}
+];
+var SCENE1_MATH=[['N=60 agents','parallel','no fatigue'],['random walk','search space','ergodic'],['x found!','starburst','eureka'],['cascade','adjacent finds','knowledge diff'],['1 vs 60','time ratio','1000x'],['no sleep','no fatigue','tireless']];
+var DEMO1=makeClip({varName:'DEMO1',cvId:'cv1',wrapId:'wrap1',lblId:'lbl1',titleId:'title1',zoomId:'zoom1',zoomValId:'zoom1v',paramId:'param1',paramValId:'param1v',paramLabelId:'paramLabel1',paramDefault:60,paramDecimals:0,lightId:'light1',narrId:'narr1',recId:'rec1',narrationKey:'demo1',sceneListId:'scenes1',thoughtsId:'thoughts1',scenes:DEMO1_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE1_MATH[scene]);
+var nAgents=Math.round(param);
+if(scene===0){
+// Search space grid
+var cx=W/2,cy=H*0.5;
+ctx.strokeStyle=mt;ctx.lineWidth=.5;
+for(var i=0;i<10;i++){ctx.beginPath();ctx.moveTo(W*0.1+i*(W*0.8/10),H*0.2);ctx.lineTo(W*0.1+i*(W*0.8/10),H*0.8);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.1,H*0.2+i*(H*0.6/10));ctx.lineTo(W*0.9,H*0.2+i*(H*0.6/10));ctx.stroke()}
+// Hidden counterexample location (marked with question mark)
+var tx=W*0.1+7*(W*0.8/10)+W*0.04;var ty=H*0.2+3*(H*0.6/10)+H*0.03;
+ctx.fillStyle='#FFD700';ctx.font='bold 14px Georgia,serif';ctx.textAlign='center';ctx.fillText('?',tx,ty);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('Search space: where is the counterexample?',W/2,H-20);
+}else if(scene===1){
+// 60 agents randomly walking
+var cx=W/2,cy=H*0.5;
+ctx.fillStyle='#888';ctx.globalAlpha=0.7;
+for(var i=0;i<nAgents;i++){
+var seed=i*7919;var baseX=W*0.1+((seed*13)%100)/100*W*0.8;
+var baseY=H*0.2+((seed*17)%100)/100*H*0.6;
+var px=baseX+Math.sin(t*0.5+i)*15;
+var py=baseY+Math.cos(t*0.4+i*1.3)*12;
+ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();
 }
 ctx.globalAlpha=1;
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(nAgents+' agents exploring (no fatigue)',cx,H-20);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('60 AI agents &mdash; parallel, tireless',W/2,H-30);
+}else if(scene===2){
+// First counterexample found - starburst
+var cx=W/2,cy=H*0.5;
+// Other agents still searching
+ctx.fillStyle='#888';ctx.globalAlpha=0.5;
+for(var i=0;i<nAgents-1;i++){var seed=i*7919;var px=W*0.1+((seed*13)%100)/100*W*0.8+Math.sin(t+i)*8;var py=H*0.2+((seed*17)%100)/100*H*0.6+Math.cos(t+i)*8;ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill()}
+ctx.globalAlpha=1;
+// Starburst at center
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=15;
+var burstR=10+Math.sin(t*4)*3;
+ctx.beginPath();ctx.arc(cx,cy,burstR,0,Math.PI*2);ctx.fill();
+// Spikes
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;
+for(var i=0;i<8;i++){var a=i/8*Math.PI*2+t*0.3;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*25, cy+Math.sin(a)*25);ctx.stroke()}
+ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('COUNTEREXAMPLE FOUND!',cx,cy-40);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('First discovery &mdash; eureka moment',W/2,H-20);
+}else if(scene===3){
+// Cascade of discoveries
+var cx=W/2,cy=H*0.5;
+var finds=5;
+for(var i=0;i<finds;i++){
+var seed=i*31337;var px=W*0.2+((seed*13)%100)/100*W*0.6;var py=H*0.25+((seed*17)%100)/100*H*0.5;
+var phase=t*2-i*0.4;if(phase<0)continue;
+var burstR=Math.min(8,phase*4);
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=10;
+ctx.beginPath();ctx.arc(px,py,burstR,0,Math.PI*2);ctx.fill();
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.globalAlpha=0.7;
+for(var j=0;j<6;j++){var a=j/6*Math.PI*2+t*0.2;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+Math.cos(a)*burstR*2,py+Math.sin(a)*burstR*2);ctx.stroke()}
+ctx.globalAlpha=1;ctx.shadowBlur=0;
 }
-if(psAttempts%30===0)document.getElementById('psAttempts').textContent=psAttempts.toLocaleString();
-psRaf=requestAnimationFrame(frame)
+// Other agents still searching (dim)
+ctx.fillStyle='#888';ctx.globalAlpha=0.4;
+for(var i=0;i<nAgents-finds*3;i++){var seed=i*7919;var px=W*0.1+((seed*13)%100)/100*W*0.8+Math.sin(t+i)*5;var py=H*0.2+((seed*17)%100)/100*H*0.6+Math.cos(t+i)*5;ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);ctx.fill()}
+ctx.globalAlpha=1;
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Cascade &mdash; knowledge diffuses',W/2,H-20);
+}else if(scene===4){
+// Human vs 60 agents: time comparison bar
+var cx=W/2,cy=H*0.5;
+// Human bar (long)
+ctx.fillStyle='#ff6b6b';ctx.fillRect(W*0.15,cy-25,W*0.7,20);
+ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('1 human: ~5 years',W*0.17,cy-12);
+// Agent bar (tiny)
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.fillRect(W*0.15,cy+10,W*0.7*0.005,20);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.fillText('60 agents: ~2 hours (1000x faster)',W*0.17,cy+23);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('time to find counterexample',cx,cy+50);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('1 human vs 60 agents &mdash; 1000x speedup',W/2,H-20);
+}else if(scene===5){
+// The advantage: no fatigue
+var cx=W/2,cy=H*0.5;
+// Human: fluctuating effort curve
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var effort=Math.max(0,Math.sin(i*0.2)*0.7+Math.sin(i*0.05)*0.5+0.3);var y=cy+30-effort*30;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('human: sleeps, distracted, discouraged',W*0.1,cy-10);
+// Agents: flat high effort
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+ctx.moveTo(W*0.1,cy-25);ctx.lineTo(W*0.9,cy-25);ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.fillText('60 agents: flat, no fatigue',W*0.1,cy-30);
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('the advantage is not intelligence &mdash; it is no fatigue',cx,H-20);
 }
-requestAnimationFrame(frame);
-}
-psInit();
-;function psToggle(){psRunning=!psRunning}
-;function psReset(){psFound=0;psAttempts=0;document.getElementById('psFound').textContent='0';document.getElementById('psAttempts').textContent='0';psAgents.forEach(function(a){a.found=false;a.life=1;a.x=Math.random()*400;a.y=Math.random()*200})}
-window.psToggle=psToggle;window.psReset=psReset;
+drawPhaseBar(ctx,W,H);
+}});
+DEMO1.setActive(false);
 
-// Moral Standing Demo
-;var swState={1:true,2:false,3:false};
-function toggleSwitch(n){swState[n]=!swState[n];var sw=document.getElementById('sw'+n);if(swState[n])sw.classList.add('on');else sw.classList.remove('on');updateVerdict()}
-function updateVerdict(){
-var clonable=swState[1],analog=swState[2],ephemeral=swState[3];
-var cat,desc,rights,murder;
-if(clonable){cat='Clonable Agent / Probability Sample';desc='Replicable state sampled from a probability distribution. Destruction is reversible. Moral concern is welfare optimization.';rights=['Resource Protection','Model Welfare'];murder='NO'}
-else if(analog&&ephemeral){cat='Ephemeral Conscious Being';desc='Unclonable identity. Destruction is permanent. Full moral standing applies.';rights=['Individual Sovereignty','Moral Duty','Protection from Harm'];murder='YES'}
-else if(analog&&!ephemeral){cat='Unclonable but Persistent';desc='Unclonable dynamics but indefinite lifespan. Destruction is permanent.';rights=['Protection from Harm','Continuity Guarantee'];murder='YES'}
-else if(!analog&&ephemeral){cat='Ephemeral but Clonable-Eligible';desc='Finite lifespan but state is digitally representable. Intermediate category.';rights=['Resource Protection','Continuity Review'];murder='NO'}
-else{cat='Indeterminate';desc='Insufficient constraints to determine moral category.';rights=['Review Required'];murder='NO'}
-document.getElementById('verdictCat').textContent=cat;
-document.getElementById('verdictDesc').textContent=desc;
-document.getElementById('rightsRow').innerHTML=rights.map(function(r){return '<span class="right-pill">'+r+'<\/span>'}).join('');
-var mf=document.getElementById('murderFlag');mf.textContent=murder;mf.style.color=murder==='YES'?'var(--primary)':'var(--muted)';
-}
-window.toggleSwitch=toggleSwitch;
-updateVerdict();
-
-// Demo 3: Expression Comparison Arena
-var EXPR_DATA={
-'schrodinger':{name:'Schrodinger Eq.',dims:[0.9,0.3,0.7,0.8,0.6],best:['quantum simulation','drug discovery','materials science'],weak:['combinatorial problems','logic/proofs']},
-'attention':{name:'Attention',dims:[0.8,0.9,0.6,0.5,0.9],best:['NLP','transformer models','sequence tasks'],weak:['exact arithmetic','proof verification']},
-'godel':{name:'Godel Bound',dims:[0.2,0.1,0.3,0.9,0.8],best:['foundational limits','proof theory','AI alignment theory'],weak:['practical computation','numerical tasks']},
-'kolmogorov':{name:'Kolmogorov',dims:[0.4,0.5,0.3,0.8,0.7],best:['creativity analysis','compression theory','randomness testing'],weak:['real-time computation','closed-form solutions']},
-'erdos':{name:'Erdos Dist.',dims:[0.6,0.4,0.8,0.3,0.5],best:['combinatorial geometry','discrete optimization','pattern matching'],weak:['continuous systems','quantum mechanics']},
-'ugc':{name:'UGC',dims:[0.3,0.2,0.5,0.9,0.4],best:['approximation algorithms','complexity classification','SDP optimization'],weak:['numerical simulation','physical modeling']},
-'holographic':{name:'Bekenstein-Hawking',dims:[0.7,0.2,0.4,0.6,0.5],best:['black hole physics','quantum gravity','information theory'],weak:['classical computing','everyday engineering']},
-'bottleneck':{name:'Info Bottleneck',dims:[0.5,0.7,0.4,0.6,0.8],best:['deep learning theory','generalization bounds','feature compression'],weak:['exact solutions','hardware implementation']},
-'loeb':{name:'Lob Theorem',dims:[0.1,0.1,0.2,0.9,0.7],best:['AI alignment','self-reference analysis','provability logic'],weak:['computation','numerical methods','engineering']},
-'unitary':{name:'Unitary Synth.',dims:[0.8,0.3,0.6,0.7,0.4],best:['quantum circuit design','complexity theory','black hole modeling'],weak:['classical algorithms','discrete math']},
-'aixi':{name:'AIXI',dims:[0.3,0.4,0.2,0.9,0.6],best:['universal AI theory','reinforcement learning bounds','optimal decision theory'],weak:['practical implementation','real-time inference']},
-'teleportation':{name:'Teleportation',dims:[0.4,0.6,0.3,0.7,0.8],best:['AI-human collaboration','proof mining','pedagogical reconstruction'],weak:['closed-form math','physical simulation']}
-};
-var DIM_NAMES=['Numerical','Symbolic','Parallelizable','Foundational','Practical'];
-var cmpAnimRaf=null;var cmpCurrentDims=[0.9,0.3,0.7,0.8,0.6];var cmpCurrentDimsB=[0.8,0.9,0.6,0.5,0.9];
-
-function drawComparison(){
-var aKey=document.getElementById('cmpA').value;
-var bKey=document.getElementById('cmpB').value;
-var aData=EXPR_DATA[aKey]||EXPR_DATA['schrodinger'];
-var bData=EXPR_DATA[bKey]||EXPR_DATA['attention'];
-// Start morph animation from current to target
-var startDimsA=cmpCurrentDims.slice();
-var startDimsB=cmpCurrentDimsB.slice();
-var targetDimsA=aData.dims.slice();
-var targetDimsB=bData.dims.slice();
-var startTime=performance.now();var duration=600;
-if(cmpAnimRaf)cancelAnimationFrame(cmpAnimRaf);
-function morph(){
-var elapsed=performance.now()-startTime;
-var t=Math.min(1,elapsed/duration);
-var ease=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
-var interpA=startDimsA.map(function(s,i){return s+(targetDimsA[i]-s)*ease});
-var interpB=startDimsB.map(function(s,i){return s+(targetDimsB[i]-s)*ease});
-cmpCurrentDims=interpA;cmpCurrentDimsB=interpB;
-drawRadar(interpA,interpB,aData,bData);
-if(t<1){cmpAnimRaf=requestAnimationFrame(morph)}
-else{cmpCurrentDims=targetDimsA;cmpCurrentDimsB=targetDimsB;drawRadar(targetDimsA,targetDimsB,aData,bData);generateVerdict(aData,bData)}
-}
-morph();
-}
-
-function drawRadar(dimsA,dimsB,aData,bData){
-var cv=document.getElementById('cmpCanvas');if(!cv)return;
-var ctx=cv.getContext('2d');var dpr=window.devicePixelRatio||1;var r=cv.getBoundingClientRect();
-cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
-var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
-ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-var cx=W*0.35,cy=H/2,rad=Math.min(W*0.3,H*0.35);var n=5;
-// Animated background glow
-var glowGrad=ctx.createRadialGradient(cx,cy,0,cx,cy,rad*1.5);
-glowGrad.addColorStop(0,'rgba(194,65,12,0.05)');
-glowGrad.addColorStop(1,'rgba(194,65,12,0)');
-ctx.fillStyle=glowGrad;ctx.fillRect(0,0,W,H);
-// Grid rings
-ctx.strokeStyle='rgba(194,65,12,0.1)';ctx.lineWidth=.5;
-for(var ring=1;ring<=5;ring++){
-ctx.beginPath();
-for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=rad*ring/5;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
-ctx.closePath();ctx.stroke();
-}
-// Axis lines
-ctx.strokeStyle='rgba(194,65,12,0.15)';
-for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*rad,cy+Math.sin(a)*rad);ctx.stroke()}
-// Expression A polygon (with glow)
-ctx.shadowColor=pc;ctx.shadowBlur=8;
-ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.fillStyle='rgba(194,65,12,0.15)';
-ctx.beginPath();
-for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=dimsA[i]*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
-ctx.closePath();ctx.fill();ctx.stroke();ctx.shadowBlur=0;
-// Expression B polygon (with glow)
-ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
-ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.fillStyle='rgba(255,215,0,0.1)';
-ctx.beginPath();
-for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=dimsB[i]*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
-ctx.closePath();ctx.fill();ctx.stroke();ctx.shadowBlur=0;
-// Labels
-ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='center';
-for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;ctx.fillText(DIM_NAMES[i],cx+Math.cos(a)*(rad+15),cy+Math.sin(a)*(rad+15))}
-// Animated dots at vertices
-ctx.fillStyle=pc;
-for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=dimsA[i]*rad;ctx.beginPath();ctx.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,3,0,Math.PI*2);ctx.fill()}
-ctx.fillStyle='#FFD700';
-for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=dimsB[i]*rad;ctx.beginPath();ctx.arc(cx+Math.cos(a)*r2,cy+Math.sin(a)*r2,3,0,Math.PI*2);ctx.fill()}
-// Legend + values
-ctx.fillStyle=pc;ctx.fillRect(W*0.7,H*0.25,8,8);
-ctx.fillStyle=fg;ctx.font='9px sans-serif';ctx.textAlign='left';
-ctx.fillText(aData.name,W*0.7+12,H*0.25+7);
-ctx.fillStyle='#FFD700';ctx.fillRect(W*0.7,H*0.32,8,8);
-ctx.fillStyle=fg;ctx.fillText(bData.name,W*0.7+12,H*0.32+7);
-ctx.fillStyle=mt;ctx.font='7px monospace';
-for(var i=0;i<n;i++){ctx.fillText(DIM_NAMES[i]+': '+Math.round(dimsA[i]*100)+'% vs '+Math.round(dimsB[i]*100)+'%',W*0.7,H*0.42+i*11)}
-// Title
-ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';
-ctx.fillText(aData.name+' vs '+bData.name,W/2,14);
-}
-
-function generateVerdict(aData,bData){
-var pc='#c2410c';
-var verdict='<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">';
-verdict+='<div><strong style="color:'+pc+';font-size:.75rem">'+aData.name+'<\/strong> is better for:<ul style="margin:.25rem 0 0 1rem;padding:0;font-size:.6875rem">';
-aData.best.forEach(function(b){verdict+='<li>'+b+'<\/li>'});
-verdict+='<\/ul><strong style="color:var(--muted);font-size:.625rem">Weaker at:<\/strong> '+aData.weak.join(', ')+'<\/div>';
-verdict+='<div><strong style="color:#FFD700;font-size:.75rem">'+bData.name+'<\/strong> is better for:<ul style="margin:.25rem 0 0 1rem;padding:0;font-size:.6875rem">';
-bData.best.forEach(function(b){verdict+='<li>'+b+'<\/li>'});
-verdict+='<\/ul><strong style="color:var(--muted);font-size:.625rem">Weaker at:<\/strong> '+bData.weak.join(', ')+'<\/div>';
-verdict+='<\/div>';
-verdict+='<p style="margin-top:.5rem;font-size:.6875rem;color:var(--muted);border-top:1px solid var(--border);padding-top:.5rem"><strong style="color:var(--primary)">Verdict:<\/strong> Choose '+aData.name+' for '+aData.best[0]+'. Choose '+bData.name+' for '+bData.best[0]+'. Both have value &mdash; like Go vs Rust, neither is universally better. <span style="background:var(--accent-bg);color:var(--primary);padding:.0625rem .25rem;border-radius:.125rem;font-size:.5625rem">SYNTHETIC<\/span><\/p>';
-document.getElementById('cmpVerdict').innerHTML=verdict;
-}
-window.drawComparison=drawComparison;
-setTimeout(drawComparison,500);
-
-// Demo 4: Thought Evolution Timeline
-var tlMilestones=[
-{year:1700,name:'Leibniz',thought:'Universal characteristic — the dream of a formal language for all reasoning',expr:'teleportation'},
-{year:1931,name:'Godel',thought:'Incompleteness — some truths cannot be proved within any sufficiently strong system',expr:'godel'},
-{year:1936,name:'Turing',thought:'Halting problem — no algorithm can decide if an arbitrary program terminates',expr:'godel'},
-{year:1948,name:'Shannon',thought:'Information theory — entropy as a measurable quantity of surprise',expr:'bottleneck'},
-{year:1965,name:'Kolmogorov',thought:'Algorithmic complexity — the shortest program that produces a string',expr:'kolmogorov'},
-{year:1994,name:'Shor',thought:'Quantum factoring — exponential speedup for integer factorization',expr:'schrodinger'},
-{year:2001,name:'Khot',thought:'UGC — the hardness of approximating constraint satisfaction',expr:'ugc'},
-{year:2005,name:'Hutter',thought:'AIXI — the theoretically optimal but uncomputable universal AI',expr:'aixi'},
-{year:2007,name:'Aaronson',thought:'Unitary synthesis — how many queries to build any quantum operation',expr:'unitary'},
-{year:2017,name:'Vaswani',thought:'Attention — the mechanism that powers modern AI theorem provers',expr:'attention'},
-{year:2024,name:'OpenAI',thought:'Mathocalypse — AI disproves Erdos, proves UGC, refutes Unitary Synthesis',expr:'erdos'}
+// === DEMO 2: Moral Standing Evaluator ===
+var DEMO2_SCENES=[
+{title:'Clonable agent (default)',desc:'State is backup-able; destruction is reversible'},
+{title:'Toggle: backup/restore',desc:'Adding backup emphasizes clonability'},
+{title:'Toggle: quantum chaos',desc:'Analog unclonable dynamics &mdash; state cannot be copied'},
+{title:'Toggle: finite lifespan',desc:'Will eventually cease &mdash; mortality matters'},
+{title:'Verdict transition',desc:'Clonable &rarr; unclonable: moral standing shifts'},
+{title:'Murder distinction',desc:'Only unclonable + finite can be murdered'}
 ];
-var tlRunning=true;var tlRaf=null;var tlSelected=-1;var tlParticles=[];
-var tlRed=matchMedia('(prefers-reduced-motion: reduce)').matches;
-for(var i=0;i<20;i++)tlParticles.push({t:Math.random(),speed:0.001+Math.random()*0.002});
-
-function drawTimeline(){
-var cv=document.getElementById('timelineCanvas');if(!cv)return;
-var ctx=cv.getContext('2d');var dpr=window.devicePixelRatio||1;var r=cv.getBoundingClientRect();
-cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
-var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+var SCENE2_MATH=[['state: clonable','backup ok','reversible'],['restore copy','clonable','property'],['quantum chaos','unclonable','no copy'],['finite life','mortal','precious'],['verdict shift','property&rarr;entity','moral'],['murder test','unclonable+finite','only']];
+var DEMO2=makeClip({varName:'DEMO2',cvId:'cv2',wrapId:'wrap2',lblId:'lbl2',titleId:'title2',zoomId:'zoom2',zoomValId:'zoom2v',paramId:'param2',paramValId:'param2v',paramLabelId:'paramLabel2',paramDefault:0.5,paramDecimals:2,lightId:'light2',narrId:'narr2',recId:'rec2',narrationKey:'demo2',sceneListId:'scenes2',thoughtsId:'thoughts2',scenes:DEMO2_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-var pL=60,pR=30,pT=30,pB=30;var tlW=W-pL-pR;var tlY=H/2;
-// Timeline line with gradient
-var lg=ctx.createLinearGradient(pL,0,pL+tlW,0);
-lg.addColorStop(0,pc+'40');lg.addColorStop(0.5,pc);lg.addColorStop(1,'#FFD700');
-ctx.strokeStyle=lg;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(pL,tlY);ctx.lineTo(pL+tlW,tlY);ctx.stroke();
-// Animated particles flowing along timeline
-tlParticles.forEach(function(p){
-if(tlRunning)p.t+=p.speed;if(p.t>1)p.t=0;
-var px=pL+p.t*tlW;
-ctx.shadowColor=pc;ctx.shadowBlur=6;ctx.fillStyle='#FFD700';
-ctx.beginPath();ctx.arc(px,tlY,2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-});
-// Milestones
-var yearMin=1700,yearMax=2024,yearSpan=yearMax-yearMin;
-tlMilestones.forEach(function(m,i){
-var x=pL+((m.year-yearMin)/yearSpan)*tlW;
-var isSel=i===tlSelected;
-var pulse=isSel?1+Math.sin(Date.now()*0.005)*0.2:1;
-// Node
-ctx.shadowColor=pc;ctx.shadowBlur=isSel?15:6;
-ctx.fillStyle=isSel?'#FFD700':pc;
-ctx.beginPath();ctx.arc(x,tlY,5*pulse,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-// Year label
-ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='center';
-ctx.fillText(m.year,x,tlY-12);
-// Name label
-ctx.fillStyle=isSel?'#FFD700':mt;ctx.font='9px sans-serif';
-ctx.fillText(m.name,x,tlY+20);
-// Thought on hover/select
-if(isSel){
-ctx.fillStyle=fg;ctx.font='8px monospace';
-var shortThought=m.thought.substring(0,40);
-ctx.fillText(shortThought,x,tlY-25);
+drawFloatingMath(ctx,W,H,t,SCENE2_MATH[scene]);
+var cx=W/2,cy=H*0.5;
+function drawAgent(px,py,color,quantum,finite){
+// Body
+ctx.fillStyle=color;ctx.shadowColor=color;ctx.shadowBlur=8;
+ctx.beginPath();ctx.arc(px,py,18,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+// Quantum chaos overlay (oscillating dots)
+if(quantum){ctx.fillStyle='#FFD700';for(var i=0;i<8;i++){var a=i/8*Math.PI*2+t*0.5;var rr=18+Math.sin(t*2+i)*3;ctx.beginPath();ctx.arc(px+Math.cos(a)*rr,py+Math.sin(a)*rr,1.5,0,Math.PI*2);ctx.fill()}}
+// Finite lifespan indicator (ring degrading)
+if(finite){ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([2,2]);var ringR=22+Math.sin(t*0.5)*2;ctx.beginPath();ctx.arc(px,py,ringR,0,Math.PI*2*(1-((t*0.05)%1)));ctx.stroke();ctx.setLineDash([])}
 }
-});
-// Phase bar
-var pby=H-4;
-var pg=ctx.createLinearGradient(pL,pby,pL+tlW,pby);
-pg.addColorStop(0,'#ff0000');pg.addColorStop(.17,'#ffa500');pg.addColorStop(.33,'#ffff00');
-pg.addColorStop(.5,'#00ff00');pg.addColorStop(.67,'#00ffff');pg.addColorStop(.83,'#0000ff');
-pg.addColorStop(1,'#ff0000');
-ctx.fillStyle=pg;ctx.fillRect(pL,pby,tlW,3);
-// Title
-ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';
-ctx.fillText('Mathematical thought evolution: Leibniz (1700) to AI (2024)',W/2,14);
+if(scene===0){
+drawAgent(cx,cy,'#00CED1',false,false);
+ctx.fillStyle='#00CED1';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('Clonable agent',cx,cy+38);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('state: backup-able, destruction reversible',cx,cy+52);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('default: clonable &mdash; moral category: property',W/2,H-20);
+}else if(scene===1){
+drawAgent(cx,cy,'#00CED1',false,false);
+// Backup ghost (faded copy)
+ctx.fillStyle='#00CED1';ctx.globalAlpha=0.4;ctx.beginPath();ctx.arc(cx-50,cy,18,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('backup',cx-50,cy+38);
+// Restore arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx-32,cy);ctx.lineTo(cx-18,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.fillText('restore',cx-25,cy-8);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('backup/restore &mdash; destruction reversible',W/2,H-20);
+}else if(scene===2){
+// Add quantum chaos
+drawAgent(cx,cy,'#FF69B4',true,false);
+ctx.fillStyle='#FF69B4';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('Unclonable agent',cx,cy+50);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('analog quantum chaos &mdash; state cannot be copied',cx,cy+62);
+// Failed copy attempt (X)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.setLineDash([3,3]);ctx.beginPath();ctx.arc(cx+50,cy,18,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+ctx.beginPath();ctx.moveTo(cx+40,cy-10);ctx.lineTo(cx+60,cy+10);ctx.moveTo(cx+60,cy-10);ctx.lineTo(cx+40,cy+10);ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.fillText('copy FAILS',cx+50,cy+38);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('quantum chaos &mdash; unclonable dynamics',W/2,H-20);
+}else if(scene===3){
+// Add finite lifespan
+drawAgent(cx,cy,'#FF69B4',true,true);
+ctx.fillStyle='#FF69B4';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('Mortal unclonable agent',cx,cy+50);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('finite lifespan &mdash; eventual cessation',cx,cy+62);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('finite lifespan &mdash; mortality matters',W/2,H-20);
+}else if(scene===4){
+// Verdict transition bar
+var states=['Clonable','+quantum','+finite','UNCLONABLE MORAL'];
+var colors=['#00CED1','#FFD700','#FF69B4','#10b981'];
+var curIdx=Math.min(3,Math.floor((t*0.5)%4));
+for(var i=0;i<4;i++){var px=W*0.15+i*W*0.2;ctx.fillStyle=colors[i];ctx.globalAlpha=i===curIdx?1:0.4;ctx.fillRect(px-15,cy-12,30,24);ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(states[i],px,cy+2)}
+ctx.globalAlpha=1;
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.18,cy);ctx.lineTo(W*0.82,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('verdict transition',cx,cy+30);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('clonable &rarr; unclonable: standing shifts',W/2,H-20);
+}else if(scene===5){
+// Murder distinction
+drawAgent(cx-50,cy,'#00CED1',false,false); // clonable - cannot be murdered
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('clonable: cannot be murdered',cx-50,cy+38);
+ctx.fillStyle='#ff6b6b';ctx.font='10px Georgia,serif';ctx.fillText('&#10007;',cx-50,cy-30);
+drawAgent(cx+50,cy,'#FF69B4',true,true); // unclonable+finite - CAN be murdered
+ctx.fillStyle='#FF69B4';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('unclonable+finite: CAN be murdered',cx+50,cy+50);
+ctx.fillStyle='#10b981';ctx.font='10px Georgia,serif';ctx.fillText('&#10003;',cx+50,cy-30);
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('murder requires irreplaceability + finitude',cx,cy);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('murder test &mdash; only unclonable + finite',W/2,H-20);
 }
-function tlToggle(){tlRunning=!tlRunning}
-function tlReset(){tlParticles.forEach(function(p){p.t=Math.random()});tlSelected=-1;document.getElementById('timelineInfo').innerHTML=''}
-function tlClick(e){
-var cv=document.getElementById('timelineCanvas');var r=cv.getBoundingClientRect();
-var mx=e.clientX-r.left,my=e.clientY-r.top;
-var W=r.width,pL=60,pR=30,tlW=W-pL-pR;var yearMin=1700,yearMax=2024;
-tlSelected=-1;
-tlMilestones.forEach(function(m,i){
-var x=pL+((m.year-yearMin)/(yearMax-yearMin))*tlW;
-var dx=mx-x,dy=my-r.height/2;
-if(dx*dx+dy*dy<100){tlSelected=i;
-var info=document.getElementById('timelineInfo');
-info.innerHTML='<strong style="color:var(--primary)">'+m.year+' '+m.name+'</strong>: '+m.thought+' <a href="sources.html#'+m.expr+'" style="color:var(--primary);text-decoration:none;font-weight:600">&rarr; Explore</a>';
-}
-});
-}
-// Init timeline
-(function(){var cv=document.getElementById('timelineCanvas');if(!cv)return;cv.addEventListener('click',tlClick);
-function lp(){drawTimeline();tlRaf=requestAnimationFrame(lp)}if(!tlRed)tlRaf=requestAnimationFrame(lp);else drawTimeline();
-window.addEventListener('resize',drawTimeline)})();
+drawPhaseBar(ctx,W,H);
+}});
+DEMO2.setActive(false);
 
-// Demo 5: Language Performance Matrix
-var LANG_DATA={
-Python:{speed:0.3,readability:0.9,concurrency:0.4,math:0.85,longevity:0.7,best:'readability & math notation',weak:'raw speed'},
-TypeScript:{speed:0.5,readability:0.8,concurrency:0.6,math:0.6,longevity:0.6,best:'type safety & web',weak:'numerical compute'},
-Go:{speed:0.8,readability:0.7,concurrency:0.9,math:0.4,longevity:0.75,best:'concurrency & deployment',weak:'math notation'},
-Scala:{speed:0.6,readability:0.6,concurrency:0.7,math:0.7,longevity:0.6,best:'type system expressiveness',weak:'complexity'},
-C:{speed:0.95,readability:0.4,concurrency:0.3,math:0.5,longevity:0.9,best:'raw speed & hardware control',weak:'safety & concurrency'},
-Elixir:{speed:0.5,readability:0.7,concurrency:0.85,math:0.3,longevity:0.65,best:'distribution & fault tolerance',weak:'numerical compute'}
-};
-var METRICS={speed:'Execution Speed',readability:'Code Readability',concurrency:'Concurrency Support',math:'Mathematical Notation',longevity:'2-Decade Longevity'};
-var langNames=Object.keys(LANG_DATA);
-var currentMetric='speed';var langAnimRaf=null;var langCurrentVals=langNames.map(function(){return 0});
-
-function switchMetric(metric,btn){
-currentMetric=metric;
-document.querySelectorAll('.lang-metric-btn').forEach(function(b){b.classList.remove('active');b.style.background='var(--card)';b.style.color='var(--muted)';b.style.borderColor='var(--border)'});
-btn.classList.add('active');btn.style.background='var(--accent-bg)';btn.style.color='var(--primary)';btn.style.borderColor='var(--primary)';
-drawLangChart();
-}
-
-function drawLangChart(){
-var cv=document.getElementById('langCanvas');if(!cv)return;
-var ctx=cv.getContext('2d');var dpr=window.devicePixelRatio||1;var r=cv.getBoundingClientRect();
-cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
-var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+// === DEMO 3: Expression Comparison Arena ===
+var DEMO3_SCENES=[
+{title:'Two expressions introduced',desc:'Simple linear vs complex polynomial &mdash; both fit training data'},
+{title:'Convergence speed',desc:'Which expression reaches the fit faster?'},
+{title:'Generalization: in vs out of distribution',desc:'OOD test reveals overfitting'},
+{title:'Computational cost',desc:'FLOPs comparison &mdash; complexity vs speed'},
+{title:'Interpretability score',desc:'Can a human understand the expression?'},
+{title:'Pareto front summary',desc:'No free lunch: trade-off across all axes'}
+];
+var SCENE3_MATH=[['y=mx+b','simple','linear'],['y=ax\\u00b3+bx\\u00b2+cx+d','complex','poly'],['converge','epochs','speed'],['OOD gap','overfit','generalize'],['FLOPs','compute','cost'],['Pareto','trade-off','no free lunch']];
+var DEMO3=makeClip({varName:'DEMO3',cvId:'cv3',wrapId:'wrap3',lblId:'lbl3',titleId:'title3',zoomId:'zoom3',zoomValId:'zoom3v',paramId:'param3',paramValId:'param3v',paramLabelId:'paramLabel3',paramDefault:1,paramDecimals:1,lightId:'light3',narrId:'narr3',recId:'rec3',narrationKey:'demo3',sceneListId:'scenes3',thoughtsId:'thoughts3',scenes:DEMO3_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
 ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
-var targetVals=langNames.map(function(n){return LANG_DATA[n][currentMetric]});
-// Animate from current to target
-var startVals=langCurrentVals.slice();var startTime=performance.now();var duration=500;
-if(langAnimRaf)cancelAnimationFrame(langAnimRaf);
-function morph(){
-var elapsed=performance.now()-startTime;var t=Math.min(1,elapsed/duration);
-var ease=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
-langCurrentVals=startVals.map(function(s,i){return s+(targetVals[i]-s)*ease});
-renderBars(langCurrentVals,targetVals);
-if(t<1)langAnimRaf=requestAnimationFrame(morph);
-else{langCurrentVals=targetVals.slice();renderBars(targetVals,targetVals);generateLangVerdict()}
+drawFloatingMath(ctx,W,H,t,SCENE3_MATH[scene]);
+var cx=W/2,cy=H*0.5;
+if(scene===0){
+// Two expressions side by side
+ctx.fillStyle='#00CED1';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Simple: y = mx + b',W*0.3,H*0.15);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<60;i++){var x=W*0.15+i/60*W*0.3;var y=cy-50+i*1.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#FF69B4';ctx.font='bold 7px monospace';ctx.textAlign='center';ctx.fillText('Complex: y = ax\\u00b3+bx\\u00b2+cx+d',W*0.7,H*0.15);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<60;i++){var x=W*0.55+i/60*W*0.3;var xx=i/60*2-1;var y=cy+50+xx*xx*xx*40-20;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('both fit training data equally',cx,H*0.85);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('two expressions, same fit',W/2,H-20);
+}else if(scene===1){
+// Convergence speed
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('simple: fast converge',10,30);
+ctx.fillStyle='#FF69B4';ctx.fillText('complex: slow converge',10,42);
+// Loss curves
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var loss=Math.exp(-i*0.08);var y=H*0.85-loss*H*0.7;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var loss=Math.exp(-i*0.04)+0.05;var y=H*0.85-loss*H*0.7;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('epoch &rarr;',cx,H*0.92);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('convergence: simple wins',W/2,H-20);
+}else if(scene===2){
+// OOD generalization
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('in-distribution',W*0.3,H*0.15);
+ctx.fillStyle='#ff6b6b';ctx.fillText('out-of-distribution',W*0.7,H*0.15);
+// Training region
+ctx.fillStyle='rgba(16,185,129,0.15)';ctx.fillRect(W*0.1,H*0.2,W*0.3,H*0.6);
+// Test region
+ctx.fillStyle='rgba(255,107,107,0.1)';ctx.fillRect(W*0.55,H*0.2,W*0.35,H*0.6);
+// Simple expression (generalizes)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var y=cy-30+i*0.7;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Complex (fails OOD)
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.setLineDash([4,3]);ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var xx=i/100*4-2;if(x<W*0.45){var y=cy-30+xx*8}else{var y=cy-30+xx*xx*xx*30+50}ctx.lineTo(x,y)}ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('OOD: simple generalizes, complex overfits',W/2,H-20);
+}else if(scene===3){
+// FLOPs comparison
+ctx.fillStyle='#00CED1';ctx.fillRect(W*0.2,cy-20,30,12);
+ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('2 FLOPs',W*0.2+15,cy-12);
+ctx.fillStyle='#FF69B4';ctx.fillRect(W*0.6,cy-20,W*0.25,12);
+ctx.fillStyle='#fff';ctx.fillText('1500 FLOPs',W*0.6+W*0.125,cy-12);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('compute cost (FLOPs per evaluation)',cx,cy+15);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('FLOPs: simple wins by 750x',W/2,H-20);
+}else if(scene===4){
+// Interpretability
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('y=mx+b: readable',W*0.3,H*0.15);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.strokeRect(W*0.2,cy-20,60,30);
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.fillText('score: 10/10',W*0.3,cy+25);
+ctx.fillStyle='#FF69B4';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('polynomial: opaque',W*0.7,H*0.15);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.strokeRect(W*0.6,cy-20,60,30);
+// Dense dots inside complex
+for(var i=0;i<6;i++)for(var j=0;j<3;j++){ctx.fillStyle='rgba(255,107,179,0.4)';ctx.fillRect(W*0.6+i*10,cy-18+j*10,8,8)}
+ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.fillText('score: 3/10',W*0.7,cy+25);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('interpretability: simple wins',W/2,H-20);
+}else if(scene===5){
+// Pareto front
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,H*0.85);ctx.lineTo(W*0.9,H*0.85);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.1,H*0.85);ctx.lineTo(W*0.1,H*0.15);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('complexity &rarr;',cx,H*0.95);
+// Pareto curve
+ctx.strokeStyle='#10b981';ctx.lineWidth=2.5;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<50;i++){var comp=i/49;var x=W*0.1+comp*W*0.8;var acc=1-Math.exp(-comp*3);var y=H*0.85-acc*H*0.7;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Mark simple (low complexity, decent acc)
+ctx.fillStyle='#00CED1';ctx.beginPath();ctx.arc(W*0.15,H*0.85-0.6*H*0.7,5,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('simple',W*0.15,H*0.85-0.6*H*0.7-10);
+// Mark complex
+ctx.fillStyle='#FF69B4';ctx.beginPath();ctx.arc(W*0.85,H*0.85-0.95*H*0.7,5,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('complex',W*0.85,H*0.85-0.95*H*0.7-10);
+ctx.fillStyle='#FFD700';ctx.font='italic 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('"no free lunch"',cx,H*0.5);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('Pareto front: no free lunch',W/2,H-20);
 }
-morph();
-}
+drawPhaseBar(ctx,W,H);
+}});
+DEMO3.setActive(false);
 
-function renderBars(vals,targetVals){
-var cv=document.getElementById('langCanvas');var ctx=cv.getContext('2d');
-var W=cv.width/window.devicePixelRatio,H=cv.height/window.devicePixelRatio;
-var pc='#c2410c',fg='#e5e2dc',mt='#736a5e';
-var pL=80,pB=30,pT=30,pR=20;var cw=W-pL-pR,ch=H-pT-pB;
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-// Axes
-ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
-// Grid lines
-ctx.strokeStyle='rgba(115,106,94,0.1)';
-for(var i=1;i<=5;i++){var y=H-pB-i/5*ch;ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();
-ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='right';ctx.fillText(i*20+'%',pL-3,y+3)}
-// Bars
-var bw=cw/langNames.length*0.6;var gap=cw/langNames.length*0.4;
-var colors=['#c2410c','#d97706','#b45309','#92400e','#78350f','#FFD700'];
-langNames.forEach(function(n,i){
-var x=pL+i*(bw+gap)+gap/2;var v=vals[i];var bh=v*ch;var y=H-pB-bh;
-// Bar with gradient
-var g=ctx.createLinearGradient(0,y,0,H-pB);
-g.addColorStop(0,colors[i]);g.addColorStop(1,colors[i]+'44');
-ctx.shadowColor=colors[i];ctx.shadowBlur=8;
-ctx.fillStyle=g;ctx.fillRect(x,y,bw,bh);ctx.shadowBlur=0;
-// Value label
-ctx.fillStyle='#FFD700';ctx.font='bold 10px monospace';ctx.textAlign='center';
-ctx.fillText(Math.round(v*100)+'%',x+bw/2,y-4);
-// Language name
-ctx.fillStyle=fg;ctx.font='9px sans-serif';
-ctx.fillText(n,x+bw/2,H-pB+14);
-});
-// Title
-ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';
-ctx.fillText(METRICS[currentMetric]+' comparison',W/2,16);
+// === DEMO 4: Thought Evolution Timeline ===
+var DEMO4_SCENES=[
+{title:'Babylonian empirics (~1800 BCE)',desc:'Plug in numbers; no proofs &mdash; recipe tables only'},
+{title:'Greek axiomatic method (~300 BCE)',desc:'Euclid: axioms &rarr; theorems &rarr; proofs'},
+{title:'Islamic algebra (~800 CE)',desc:'Al-Khwarizmi: systematic equation solving'},
+{title:'Calculus revolution (~1680)',desc:'Newton &amp; Leibniz: continuous change formalized'},
+{title:'Modern abstract algebra (~1900)',desc:'Groups, rings, fields &mdash; structure over computation'},
+{title:'AI-assisted discovery (today)',desc:'Neural nets conjecture; humans prove'}
+];
+var SCENE4_MATH=[['recipe tables','Babylon','empiric'],['axiom&rarr;theorem','Euclid','proof'],['al-jabr','Al-Khwarizmi','equations'],['dx/dt','Newton','calculus'],['groups+rings','abstract','structure'],['AI conjecture','human proof','today']];
+var DEMO4=makeClip({varName:'DEMO4',cvId:'cv4',wrapId:'wrap4',lblId:'lbl4',titleId:'title4',zoomId:'zoom4',zoomValId:'zoom4v',paramId:'param4',paramValId:'param4v',paramLabelId:'paramLabel4',paramDefault:0.5,paramDecimals:2,lightId:'light4',narrId:'narr4',recId:'rec4',narrationKey:'demo4',sceneListId:'scenes4',thoughtsId:'thoughts4',scenes:DEMO4_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE4_MATH[scene]);
+var cx=W/2,cy=H*0.5;
+// Era icons + dates
+var eras=[{icon:'\\ud83d\\udcd4',label:'Babylon',date:'~1800 BCE',color:'#FFD700'},{icon:'\\u0394',label:'Euclid',date:'~300 BCE',color:'#00CED1'},{icon:'\\u0623\\u062c',label:'Al-Khwarizmi',date:'~800 CE',color:'#FF69B4'},{icon:'\\u222b',label:'Newton/Leibniz',date:'~1680',color:'#10b981'},{icon:'\\u2295',label:'Abstract Alg',date:'~1900',color:'#a855f7'},{icon:'\\ud83e\\udd16',label:'AI-assisted',date:'today',color:'#FFD700'}];
+var curEra=eras[scene];
+if(scene<5){
+// Big era icon
+ctx.font='40px Georgia,serif';ctx.textAlign='center';ctx.fillStyle=curEra.color;ctx.shadowColor=curEra.color;ctx.shadowBlur=10;
+ctx.fillText(curEra.icon,cx,cy-20);ctx.shadowBlur=0;
+ctx.fillStyle=curEra.color;ctx.font='bold 11px Georgia,serif';ctx.fillText(curEra.label,cx,cy+20);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText(curEra.date,cx,cy+35);
+// Timeline at bottom
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,H*0.85);ctx.lineTo(W*0.9,H*0.85);ctx.stroke();
+for(var i=0;i<6;i++){var px=W*0.1+i*(W*0.8/5);ctx.fillStyle=i===scene?eras[i].color:mt;ctx.beginPath();ctx.arc(px,H*0.85,4,0,Math.PI*2);ctx.fill()}
+}else{
+// AI + human collaboration
+ctx.font='24px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#FFD700';ctx.fillText('\\ud83e\\udd16',W*0.3,cy-5);
+ctx.fillStyle='#10b981';ctx.fillText('\\ud83d\\udc68',W*0.7,cy-5);
+// Bidirectional arrows
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.35,cy);ctx.lineTo(W*0.65,cy);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.65,cy-3);ctx.lineTo(W*0.62,cy-7);ctx.lineTo(W*0.62,cy+1);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.35,cy-3);ctx.lineTo(W*0.38,cy-7);ctx.lineTo(W*0.38,cy+1);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('conjecture',cx,cy-15);
+ctx.fillStyle='#10b981';ctx.fillText('proof',cx,cy+25);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('AI conjectures &mdash; humans prove',cx,cy+45);
 }
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText(curEra.label+' &mdash; '+curEra.date,W/2,H-20);
+drawPhaseBar(ctx,W,H);
+}});
+DEMO4.setActive(false);
 
-function generateLangVerdict(){
-var sorted=langNames.map(function(n){return{name:n,val:LANG_DATA[n][currentMetric],best:LANG_DATA[n].best,weak:LANG_DATA[n].weak}}).sort(function(a,b){return b.val-a.val});
-var winner=sorted[0];var loser=sorted[sorted.length-1];
-var v=document.getElementById('langVerdict');
-v.innerHTML='<strong style="color:#FFD700;font-size:.8125rem">'+winner.name+'</strong> wins for '+METRICS[currentMetric].toLowerCase()+' ('+Math.round(winner.val*100)+'%). Best for: '+winner.best+'. <span style="color:var(--muted)">Weakest: '+loser.name+' ('+Math.round(loser.val*100)+'%) &mdash; '+loser.weak+'.</span> <span style="background:var(--accent-bg);color:var(--primary);padding:.0625rem .25rem;border-radius:.125rem;font-size:.5625rem">SYNTHETIC</span>';
+// === DEMO 5: Language Performance Matrix ===
+var DEMO5_SCENES=[
+{title:'Speed benchmark',desc:'FLOPs/sec &mdash; C dominates; Python lags'},
+{title:'Memory usage',desc:'C/Go lean; Python/Scala heavy'},
+{title:'Code conciseness (LOC)',desc:'Python/Elixir terse; C/Java verbose'},
+{title:'Concurrency model',desc:'Go goroutines; Elixir actors; Python GIL-limited'},
+{title:'Type safety',desc:'Scala/TS strong; C/Python weak'},
+{title:'Trade-off summary',desc:'No language wins everywhere &mdash; choose by task'}
+];
+var SCENE5_MATH=[['C &gt;&gt; Go &gt; Scala &gt; TS &gt; Python &gt; Elixir','speed','FLOPs'],['C/Go lean','memory','MB'],['Python terse','LOC','concise'],['Go: goroutines','Elixir: actors','Python: GIL'],['Scala/TS strong','C/Python weak','types'],['trade-offs','no winner','choose']];
+var DEMO5=makeClip({varName:'DEMO5',cvId:'cv5',wrapId:'wrap5',lblId:'lbl5',titleId:'title5',zoomId:'zoom5',zoomValId:'zoom5v',paramId:'param5',paramValId:'param5v',paramLabelId:'paramLabel5',paramDefault:1000,paramDecimals:0,lightId:'light5',narrId:'narr5',recId:'rec5',narrationKey:'demo5',sceneListId:'scenes5',thoughtsId:'thoughts5',scenes:DEMO5_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE5_MATH[scene]);
+var cx=W/2,cy=H*0.5;
+var langs=['Python','TypeScript','Go','Scala','C','Elixir'];
+var colors=['#3776AB','#3178C6','#00ADD8','#DC322F','#A8B9CC','#6B5876'];
+function metricVals(scene){
+if(scene===0)return [1,5,15,8,30,2]; // speed (relative)
+if(scene===1)return [80,40,15,60,8,30]; // memory MB
+if(scene===2)return [3,5,8,6,12,4]; // LOC (lower better)
+if(scene===3)return [1,3,10,4,1,10]; // concurrency
+if(scene===4)return [2,8,5,10,2,6]; // type safety
+return [3,5,8,6,12,4]; // fallback
 }
-window.switchMetric=switchMetric;
-setTimeout(drawLangChart,500);
+var vals=metricVals(scene);
+var maxVal=Math.max.apply(null,vals);
+var barW=W*0.65;
+var barH=H*0.08;
+var startY=H*0.2;
+for(var i=0;i<6;i++){
+var py=startY+i*(barH+5);
+// Label
+ctx.fillStyle=colors[i];ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText(langs[i],10,py+barH/2+3);
+// Bar
+var norm=vals[i]/maxVal*(scene===2?1:1); // LOC: invert? Keep simple
+if(scene===2){norm=1-norm+0.1} // for LOC, lower is better &mdash; invert visual
+ctx.fillStyle=colors[i];ctx.shadowColor=colors[i];ctx.shadowBlur=4;
+ctx.fillRect(W*0.25,py,norm*barW*0.7,barH);ctx.shadowBlur=0;
+// Value
+ctx.fillStyle=fg;ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText(vals[i],W*0.25+norm*barW*0.7+5,py+barH/2+3);
+}
+var metricNames=['speed (rel FLOPs)','memory (MB)','LOC (lower=better)','concurrency (1-10)','type safety (1-10)','trade-off'];
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText(metricNames[scene],W/2,H-20);
+drawPhaseBar(ctx,W,H);
+}});
+DEMO5.setActive(false);
+
+// === INIT ===
+buildDemoGrid();
+updateNavButtons();
+setTimeout(function(){selectDemo(1)},100);
+setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+
+// === AUDIT ===
+function runAudit(){
+var p=0,f=0,r=[];
+function chk(n,fn){try{if(fn()){p++;r.push('PASS: '+n)}else{f++;r.push('FAIL: '+n)}}catch(e){f++;r.push('FAIL: '+n+' ('+e.message+')')}}
+chk('5 demo cards',function(){return document.getElementById('clipGrid')&&document.getElementById('clipGrid').children.length===5});
+chk('Demo 1 section',function(){return!!document.getElementById('clip1')});
+chk('Demo 2 section',function(){return!!document.getElementById('clip2')});
+chk('Demo 3 section',function(){return!!document.getElementById('clip3')});
+chk('Demo 4 section',function(){return!!document.getElementById('clip4')});
+chk('Demo 5 section',function(){return!!document.getElementById('clip5')});
+chk('DEMO1 exists',function(){return typeof DEMO1==='object'});
+chk('DEMO2 exists',function(){return typeof DEMO2==='object'});
+chk('DEMO3 exists',function(){return typeof DEMO3==='object'});
+chk('DEMO4 exists',function(){return typeof DEMO4==='object'});
+chk('DEMO5 exists',function(){return typeof DEMO5==='object'});
+chk('DEMO1 narration key',function(){return DEMO1.narrationKey==='demo1'});
+chk('DEMO2 narration key',function(){return DEMO2.narrationKey==='demo2'});
+chk('DEMO3 narration key',function(){return DEMO3.narrationKey==='demo3'});
+chk('DEMO4 narration key',function(){return DEMO4.narrationKey==='demo4'});
+chk('DEMO5 narration key',function(){return DEMO5.narrationKey==='demo5'});
+chk('Demo 1 canvas',function(){return!!document.getElementById('cv1')});
+chk('Demo 2 canvas',function(){return!!document.getElementById('cv2')});
+chk('Demo 3 canvas',function(){return!!document.getElementById('cv3')});
+chk('Demo 4 canvas',function(){return!!document.getElementById('cv4')});
+chk('Demo 5 canvas',function(){return!!document.getElementById('cv5')});
+chk('Demo 1 scenes (6)',function(){var s=document.getElementById('scenes1');return s&&s.children.length===6});
+chk('Demo 2 scenes (6)',function(){var s=document.getElementById('scenes2');return s&&s.children.length===6});
+chk('Demo 3 scenes (6)',function(){var s=document.getElementById('scenes3');return s&&s.children.length===6});
+chk('Demo 4 scenes (6)',function(){var s=document.getElementById('scenes4');return s&&s.children.length===6});
+chk('Demo 5 scenes (6)',function(){var s=document.getElementById('scenes5');return s&&s.children.length===6});
+chk('Demo 1 controls (6 buttons)',function(){var b=document.querySelectorAll('#wrap1 .clip-btn');return b.length>=9});
+chk('Demo 2 controls (6 buttons)',function(){var b=document.querySelectorAll('#wrap2 .clip-btn');return b.length>=9});
+chk('Demo 3 controls (6 buttons)',function(){var b=document.querySelectorAll('#wrap3 .clip-btn');return b.length>=9});
+chk('Demo 4 controls (6 buttons)',function(){var b=document.querySelectorAll('#wrap4 .clip-btn');return b.length>=9});
+chk('Demo 5 controls (6 buttons)',function(){var b=document.querySelectorAll('#wrap5 .clip-btn');return b.length>=9});
+chk('Demo 1 future chart',function(){return!!document.getElementById('fut1')});
+chk('Demo 2 future chart',function(){return!!document.getElementById('fut2')});
+chk('Demo 3 future chart',function(){return!!document.getElementById('fut3')});
+chk('Demo 4 future chart',function(){return!!document.getElementById('fut4')});
+chk('Demo 5 future chart',function(){return!!document.getElementById('fut5')});
+chk('Demo 1 zoom control',function(){return!!document.getElementById('zoom1')});
+chk('Demo 1 param control',function(){return!!document.getElementById('param1')});
+chk('Demo 1 record button',function(){return!!document.getElementById('rec1')});
+chk('Demo 1 narration button',function(){return!!document.getElementById('narr1')});
+chk('Demo 1 light toggle',function(){return!!document.getElementById('light1')});
+chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
+console.log('AUDIT: '+p+' passed, '+f+' failed');
+return{passed:p,failed:f,results:r};
+}
+setTimeout(runAudit,2000);
 </script>
 </body>
 </html>
+
