@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v11-clip7-autoencoders">
+<meta name="version" content="2026-11-04-v12-clip8-sindy-pde">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -526,10 +526,62 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap7"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas7"></canvas></div>
 </div>
 </section>
+
+<!-- CLIP 8: SINDy & PDE Discovery -->
+<section class="clip-section" id="clip8" style="display:none">
+<h2>SINDy & PDE Discovery</h2>
+<div class="subtitle">Video 8 \u00b7 SINDy algorithm, Lorenz rediscovery, PDE-SINDy, nonlinear Green\'s functions, core pitfalls, constrained optimization</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap8">
+<canvas class="clip-canvas" id="cv8"></canvas>
+<div class="clip-scene-label" id="lbl8">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP8.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP8.pause()">||</button>
+<button class="clip-btn" onclick="CLIP8.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP8.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP8.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title8">SINDy algorithm</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom8" min="0.5" max="3" step="0.1" value="1"><span id="zoom8v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel8">\u03bb</span><input type="range" id="param8" min="0.01" max="1" step="0.01" value="0.1"><span id="param8v">0.10</span></div>
+<button class="clip-btn" onclick="CLIP8.toggleRecord()" id="rec8" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP8.toggleNarration()" id="narr8" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP8.toggleLight()" id="light8">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes8"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts8"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 SINDy/PDE evolution</h4>
+<canvas class="future-canvas" id="fut8"></canvas>
+<div class="future-milestones" id="fut8m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code8">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr8">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map8"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs8"></div>
+<div id="codecontent8"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip8Code('sindy')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus8" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput8"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap8"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas8"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 7/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 8/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -556,7 +608,7 @@ var CLIP_CURRICULUM=[
 {n:5,title:'Physics-Informed Optimization',desc:'KKT constraints, PiDMD manifolds, SR3, PySR, Pareto',status:'ready'},
 {n:6,title:'PIML Recap & Synthesis',desc:'Small-data, OOD generalization, stage coupling, benchmarks',status:'ready'},
 {n:7,title:'Autoencoders & Coordinates',desc:'Latent discovery, SVD/PCA, SINDy-AE, Koopman, Green\'s functions',status:'ready'},
-{n:8,title:'Fourier Neural Operators',desc:'Learning in frequency space',status:'upcoming'},
+{n:8,title:'SINDy & PDE Discovery',desc:'Sparse ID, Lorenz rediscovery, PDE-SINDy, pitfalls, constrained optimization',status:'ready'},
 {n:9,title:'Dynamic Mode Decomposition',desc:'DMD for spatiotemporal data',status:'upcoming'},
 {n:10,title:'Architecture Design',desc:'Inductive biases in NN structure',status:'upcoming'},
 {n:11,title:'Lagrangian NNs',desc:'Lagrangian mechanics in ML',status:'upcoming'},
@@ -2238,6 +2290,213 @@ ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillTe
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
 
+// ============ CLIP 8: SINDy & PDE Discovery ============
+var CLIP8_SCENES=[
+{title:'SINDy algorithm',desc:'Library, sparse regression, rediscover Lorenz'},
+{title:'Parsimony',desc:'Occam\'s razor: fewest terms, generalizable'},
+{title:'PDE-SINDy',desc:'Spatial derivatives, Navier-Stokes from data'},
+{title:'Green\'s functions',desc:'Nonlinear boundary value problem solvers'},
+{title:'Core pitfalls',desc:'Zeroth challenge: data quality, library design'},
+{title:'Constrained SINDy',desc:'Physics-constrained sparse optimization'}
+];
+var CLIP8_THOUGHTS=[
+'<strong style="color:var(--primary)">Rediscover physics from data.</strong> SINDy constructs a candidate library $\\Theta(X)$ of nonlinear terms (polynomials, trig) and applies sparse optimization: $\\dot{X} \\approx \\Theta(X)\\Xi$, $\\Xi_k = \\arg\\min_\\xi \\|\\dot{X}_k - \\Theta\\xi\\|^2 + \\lambda\\|\\xi\\|_1$. It rediscovered the 1963 Lorenz equations purely from data \\u2014 the fewest terms that explain the dynamics.',
+'<strong style="color:var(--primary)">Simplest possible, no simpler.</strong> Black-box ML fails to generalize outside training. Parsimonious models \\u2014 with the fewest active terms \\u2014 are interpretable, generalizable, and physically meaningful. Occam\'s razor, enforced by $L_1$ sparsity, turns opaque neural nets into transparent differential equations. Simplicity IS generalization.',
+'<strong style="color:var(--primary)">From ODEs to PDEs.</strong> PDE-SINDy extends sparse identification to spatial-temporal fields: $u_t = N(u, \\nabla u, \\nabla^2 u, u\\nabla u, ...) \\approx \\Theta(U, U_x, U_{xx}, ...)\\Xi$. It discovers Navier-Stokes or heat diffusion from subsampled spatial measurements. Spatial derivatives enter the library alongside temporal ones.',
+'<strong style="color:var(--primary)">Deep Green\'s functions.</strong> Autoencoders learn nonlinear generalizations of Green\'s functions: $u(x) = \\int \\mathcal{G}_{deep}(x, \\xi) f(\\xi) d\\xi$. This unlocks rapid solutions for nonlinear boundary value problems in structural mechanics \\u2014 deforming wings, flexible structures. The classical Green\'s function, generalized by deep learning.',
+'<strong style="color:var(--primary)">The zeroth challenge.</strong> Before algorithms, you need clean, rapidly sampled data. Four fundamental challenges: (0) data quality and sampling rate, (1) measuring correct state variables, (2) constructing appropriate candidate library $\\Theta$, (3) choosing optimization that enforces conservation. Without good data, no algorithm can save you.',
+'<strong style="color:var(--primary)">Constrain the discovery.</strong> Physics-constrained sparse optimization: $\\min_\\Xi \\|\\dot{X} - \\Theta\\Xi\\|_F^2 + \\lambda\\|\\Xi\\|_1$ subject to $C\\Xi = d$. The constraint enforces conservation laws and symmetries directly in the coefficient discovery. Physics isn\'t a suggestion \\u2014 it\'s a hard constraint on what equations are discoverable.'
+];
+var CLIP8_PARAMS=[
+{label:'\\u03bb',min:0.01,max:1,step:0.01,default:0.1,decimals:2,desc:'sparsity threshold'},
+{label:'k',min:1,max:20,step:1,default:5,decimals:0,desc:'library size'},
+{label:'\\u0394x',min:0.1,max:2,step:0.1,default:0.5,decimals:1,desc:'spatial resolution'},
+{label:'\\u03b1',min:0,max:1,step:0.05,default:0.3,decimals:2,desc:'nonlinearity strength'},
+{label:'\\u03c3',min:0,max:0.3,step:0.01,default:0.05,decimals:2,desc:'noise level'},
+{label:'\\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'constraint weight'}
+];
+var SCENE8_MATH=[
+['\\u1e8a\\u2248\\u0398(X)\\u039e','\\u03bb||\\u039e||\\u2081','Lorenz rediscovered'],
+['min terms','Occam\'s razor','generalizable'],
+['u_t=\\u0398(U,U_x,U_xx)\\u039e','PDE-SINDy','Navier-Stokes'],
+['u=\\u222bG_deep(x,\\u03be)f(\\u03be)d\\u03be','nonlinear BVP','Green\'s function'],
+['data quality','library design','zeroth challenge'],
+['min||\\u1e8a-\\u0398\\u039e||\\u00b2+\\u03bb||\\u039e||\\u2081 s.t. C\\u039e=d','constrained','physics enforced']
+];
+var CLIP8=makeClip({varName:'CLIP8',cvId:'cv8',wrapId:'wrap8',lblId:'lbl8',titleId:'title8',zoomId:'zoom8',zoomValId:'zoom8v',paramId:'param8',paramValId:'param8v',paramLabelId:'paramLabel8',paramDefault:0.1,paramDecimals:2,lightId:'light8',narrId:'narr8',recId:'rec8',narrationKey:'piml8',sceneListId:'scenes8',thoughtsId:'thoughts8',scenes:CLIP8_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE8_MATH[scene]);
+if(scene===0){
+// SINDy: library + sparse selection + Lorenz rediscovery
+var threshold=param;
+// Lorenz attractor
+var cx=W*0.35,cy=H*0.45,scale=H*0.08;
+ctx.strokeStyle='rgba(234,88,12,0.15)';ctx.lineWidth=1;
+var x=0.1,y=0,z=0;var sigma=10,rho=28,beta=8/3;var dt=0.005;
+ctx.beginPath();
+for(var i=0;i<3000;i++){var dx=sigma*(y-x);var dy=x*(rho-z)-y;var dz=x*y-beta*z;x+=dx*dt;y+=dy*dt;z+=dz*dt;
+var px=cx+x*scale;var py=cy+(z-25)*scale;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();
+// Library terms being selected
+var terms=['\\u03c3(y-x)','x(rho-z)','xy','-\\u03b2z','x\\u00b2','sin(x)','cos(z)','e\\u02e3'];
+var barX=W*0.65;var barW=25;
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('\\u039e (sparse coefs)',barX+terms.length*barW/2,H*0.15);
+terms.forEach(function(term,i){
+var coef=Math.abs(Math.sin(i*0.7+t*0.3));
+var visible=coef>threshold;
+if(visible){ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.fillRect(barX+i*barW,H*0.7-coef*40,barW-3,coef*40);ctx.shadowBlur=0;
+ctx.fillStyle='#0a0908';ctx.font='5px monospace';ctx.fillText(term,barX+i*barW+(barW-3)/2,H*0.7-coef*40-3)}
+else{ctx.fillStyle='rgba(115,106,94,0.1)';ctx.fillRect(barX+i*barW,H*0.7-5,barW-3,5)}});
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('\\u1e8a\\u2248\\u0398(X)\\u039e  (rediscovered Lorenz)',W/2,H-20);
+}else if(scene===1){
+// Parsimony: black-box (many terms) vs parsimonious (few terms)
+var cx=W/2,cy=H*0.5;
+// Left: black-box (dense, many terms)
+ctx.fillStyle='rgba(255,107,107,0.1)';ctx.fillRect(0,0,W*0.5,H);
+ctx.fillStyle='#ff6b6b';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Black-box (81 terms)',W*0.25,20);
+// Dense equation (many terms visible)
+ctx.fillStyle='rgba(255,107,107,0.4)';ctx.font='6px monospace';
+for(var i=0;i<15;i++){ctx.fillText('+0.0'+i+'x'+i+'y'+((i+3)%5),W*0.25,H*0.3+i*12)}
+// Right: parsimonious (3 terms)
+ctx.fillStyle='rgba(0,255,136,0.1)';ctx.fillRect(W*0.5,0,W*0.5,H);
+ctx.fillStyle='#00ff88';ctx.font='bold 9px Georgia,serif';ctx.fillText('Parsimonious (3 terms)',W*0.75,20);
+ctx.fillStyle='#00ff88';ctx.font='10px monospace';ctx.textAlign='center';ctx.fillText('dx = \\u03c3(y - x)',W*0.75,H*0.35);
+ctx.fillText('dy = x(\\u03c1 - z) - y',W*0.75,H*0.45);
+ctx.fillText('dz = xy - \\u03b2z',W*0.75,H*0.55);
+// Arrow
+ctx.fillStyle='#FFD700';ctx.font='20px Georgia,serif';ctx.fillText('\\u2192',W*0.5,H*0.5);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('Occam\'s razor: as simple as possible, no simpler',W/2,H-20);
+}else if(scene===2){
+// PDE-SINDy: spatial derivatives in library
+var dx_param=param;var gridN=8;var cellW=W*0.5/gridN;var startX=W*0.1;
+// Spatial field u(x,y,t)
+for(var i=0;i<gridN;i++)for(var j=0;j<gridN;j++){
+var u=Math.sin(i*0.5*dx_param+j*0.3+t)*0.5+0.5;
+ctx.fillStyle='rgba(234,88,12,'+u*0.7+')';ctx.fillRect(startX+i*cellW,H*0.2+j*cellW,cellW-1,cellW-1)}
+// Discovered PDE
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='left';
+ctx.fillText('u_t = -u\\u00b7u_x + \\u03bd\\u00b7u_xx',W*0.65,H*0.3);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('(Navier-Stokes)',W*0.65,H*0.38);
+ctx.fillText('Library: [u, u_x, u_xx, u\\u00b7u_x, ...]',W*0.65,H*0.5);
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.fillText('\\u039e = [0, -1, \\u03bd, 0, ...]',W*0.65,H*0.58);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('PDE-SINDy: u_t = \\u0398(U,U_x,U_xx)\\u039e',W/2,H-20);
+}else if(scene===3){
+// Green's function: nonlinear BVP solver
+var cx=W/2,cy=H*0.45;
+// Classical Green's function (linear, simple)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<=60;i++){var u=i/60;var x=W*0.1+u*W*0.3;var y=cy-Math.exp(-Math.pow(u-0.5,2)*10)*30;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('Classical G(x,\\u03be)',W*0.25,cy+50);
+// Deep nonlinear Green's function (complex)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<=60;i++){var u=i/60;var x=W*0.6+u*W*0.3;var y=cy-(Math.exp(-Math.pow(u-0.5,2)*10)*30+Math.sin(u*Math.PI*3+t)*10*param);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.fillText('Deep G_deep(x,\\u03be)',W*0.75,cy+50);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('u(x) = \\u222b G_deep(x,\\u03be) f(\\u03be) d\\u03be',W/2,H-20);
+}else if(scene===4){
+// Pitfalls: zeroth challenge
+var noise=param;var cx=W/2,cy=H*0.5;
+// Clean data (left)
+ctx.strokeStyle='#00ff88';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i*W*0.003;var y=cy+Math.sin(i*0.1)*20;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Noisy data (right)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.55+i*W*0.003;var y=cy+Math.sin(i*0.1)*20+(Math.random()-0.5)*noise*100;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#00ff88';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Clean data \\u2713',W*0.25,cy+50);
+ctx.fillStyle='#ff6b6b';ctx.fillText('Noisy data \\u2717',W*0.7,cy+50);
+// Four challenges
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='left';
+ctx.fillText('0: Data quality & sampling rate',10,H*0.15);
+ctx.fillText('1: Correct state variables',10,H*0.2);
+ctx.fillText('2: Candidate library \\u0398 design',10,H*0.25);
+ctx.fillText('3: Physics-constrained optimization',10,H*0.3);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Zeroth challenge: data quality before algorithms',W/2,H-20);
+}else if(scene===5){
+// Constrained SINDy: CΞ=d
+var gamma=param;var cx=W/2,cy=H*0.5;
+// Unconstrained (many terms, red)
+ctx.fillStyle='rgba(255,107,107,0.6)';
+for(var i=0;i<10;i++){var v=Math.sin(i*1.3)*0.3+Math.cos(i*0.7)*0.2;ctx.fillRect(cx-W*0.3+i*W*0.06,cy-v*H*0.12-5,W*0.05-2,Math.abs(v*H*0.12)+5)}
+// Constrained (sparse, green, exact)
+ctx.fillStyle='#00ff88';ctx.shadowColor='#00ff88';ctx.shadowBlur=6;
+var constrained=[0,0.5,0,0,0,0,-0.3,0,0,0];
+for(var i=0;i<10;i++){if(constrained[i]!==0){ctx.fillRect(cx-W*0.3+i*W*0.06,cy-constrained[i]*H*0.12-5,W*0.05-2,Math.abs(constrained[i]*H*0.12)+5)}}
+ctx.shadowBlur=0;
+// Constraint line
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.beginPath();ctx.moveTo(cx-W*0.3,cy-H*0.15);ctx.lineTo(cx+W*0.3,cy-H*0.15);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('C\\u039e = d (constraint)',cx+W*0.25,cy-H*0.15-3);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('min||\\u1e8a-\\u0398\\u039e||\\u00b2+\\u03bb||\\u039e||\\u2081 s.t. C\\u039e=d',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP8.setActive(false);
+
+// CLIP8 code section — SINDy algorithm
+var CLIP8_CODE={
+'sindy':{
+name:'SINDy: Sparse Identification of Nonlinear Dynamics',
+latex:'\\dot{\\mathbf{X}} \\approx \\Theta(\\mathbf{X})\\Xi, \\quad \\Xi_k = \\arg\\min_\\xi \\|\\dot{X}_k - \\Theta\\xi\\|^2 + \\lambda\\|\\xi\\|_1',
+intent:'Discover sparse governing equations from data via L1-regularized regression',
+mapping:[
+{symbol:'\\u0398(X)',code:'library(X, degree)',note:'Candidate terms (1, x, x\\u00b2, sin(x), ...)'},
+{symbol:'\\u1e8a',code:'np.gradient(X, t)',note:'Time derivatives of measurements'},
+{symbol:'\\u039e',code:'sparse_coefs',note:'Sparse coefficient matrix'},
+{symbol:'\\u03bb||\\u039e||\\u2081',code:'lambda * l1_norm(xi)',note:'L1 sparsity penalty'},
+{symbol:'STLSQ',code:'sequential_threshold(X, dx, lambda)',note:'Sequential thresholded least squares'}
+],
+langs:{
+'Python':'import numpy as np\nfrom sklearn.linear_model import Lasso\n\ndef sindy(X, dx, lambda_=0.1, degree=3):\n    """Sparse Identification of Nonlinear Dynamics"""\n    # Build candidate library Theta(X)\n    Theta = build_library(X, degree)\n    \n    # Sparse regression: minimize ||dx - Theta*Xi||^2 + lambda*||Xi||_1\n    model = Lasso(alpha=lambda_, fit_intercept=False)\n    Xi = np.zeros((Theta.shape[1], X.shape[1]))\n    for k in range(X.shape[1]):\n        model.fit(Theta, dx[:, k])\n        Xi[:, k] = model.coef_\n    \n    # STLSQ: sequential thresholding\n    for _ in range(10):\n        small = np.abs(Xi) < lambda_\n        Xi[small] = 0\n        for k in range(X.shape[1]):\n            big = ~small[:, k]\n            if big.any():\n                Xi[big, k] = np.linalg.lstsq(Theta[:, big], dx[:, k], rcond=None)[0]\n    return Xi\n\ndef build_library(X, degree):\n    terms = [np.ones(X.shape[0])]\n    for i in range(X.shape[1]):\n        terms.append(X[:, i])\n    if degree >= 2:\n        for i in range(X.shape[1]):\n            for j in range(X.shape[1]):\n                terms.append(X[:, i] * X[:, j])\n    return np.column_stack(terms)',
+'TypeScript':'// SINDy algorithm\nfunction sindy(X: number[][], dx: number[][], lambda: number): number[][] {\n  const Theta = buildLibrary(X);\n  let Xi = lassoRegression(Theta, dx, lambda);\n  // STLSQ: sequential thresholding\n  for (let iter = 0; iter < 10; iter++) {\n    Xi = Xi.map(row => row.map(v => Math.abs(v) < lambda ? 0 : v));\n    Xi = refit(Theta, dx, Xi);\n  }\n  return Xi;\n}',
+'Go':'// SINDy (conceptual)\nfunc SINDy(X, dX [][]float64, lambda float64) [][]float64 {\n    theta := buildLibrary(X)\n    xi := lassoRegression(theta, dX, lambda)\n    // STLSQ: sequential threshold\n    for iter := 0; iter < 10; iter++ {\n        for i := range xi { for j := range xi[i] {\n            if math.Abs(xi[i][j]) < lambda { xi[i][j] = 0 }\n        }}\n        xi = refit(theta, dX, xi)\n    }\n    return xi\n}',
+'Scala':'// SINDy\ndef sindy(X: Matrix, dX: Matrix, lambda: Double): Matrix = {\n  val theta = buildLibrary(X)\n  var xi = lasso(theta, dX, lambda)\n  // STLSQ\n  for (_ <- 0 until 10) {\n    xi = xi.map(_.map(v => if (math.abs(v) < lambda) 0.0 else v))\n    xi = refit(theta, dX, xi)\n  }\n  xi\n}',
+'C':'/* SINDy (conceptual) */\nvoid sindy(double** X, double** dX, int n, int m, double lambda, double** Xi) {\n    double** theta = build_library(X, n, m);\n    lasso_regression(theta, dX, n, nterms, m, lambda, Xi);\n    /* STLSQ: sequential thresholding */\n    for (int iter = 0; iter < 10; iter++) {\n        for (int i = 0; i < nterms; i++)\n            for (int j = 0; j < m; j++)\n                if (fabs(Xi[i][j]) < lambda) Xi[i][j] = 0;\n        refit(theta, dX, n, nterms, m, Xi);\n    }\n}',
+'Elixir':'# SINDy\ndef sindy(x_data, dx_data, lambda) do\n  theta = build_library(x_data)\n  xi = lasso_regression(theta, dx_data, lambda)\n  # STLSQ: sequential thresholding\n  Enum.reduce(0..9, xi, fn _, xi_acc ->\n    xi_acc\n    |> Enum.map(fn row -> Enum.map(row, fn v -> if abs(v) < lambda, do: 0.0, else: v end) end)\n    |> refit(theta, dx_data)\n  end)\nend'
+}
+}
+};
+var CLIP8_CURRENT_LANG='Python';
+function populateCode8(){
+var e=CLIP8_CODE['sindy'];if(!e)return;
+var exprEl=document.getElementById('expr8');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map8');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs8');var ccEl=document.getElementById('codecontent8');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip8Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc8-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip8Code(lang){CLIP8_CURRENT_LANG=lang;document.querySelectorAll('#tabs8 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc8-'+lang)})}
+var CLIP8_OUTPUTS={'sindy':['Initializing SINDy...','Data: 1000 samples of Lorenz system (x,y,z)','','Building candidate library Theta(X):','  [1, x, y, z, x\\u00b2, xy, xz, y\\u00b2, yz, z\\u00b2, sin(x), ...]','  15 candidate terms','','STLSQ iteration 1: threshold = 0.1','  8 terms survive thresholding','STLSQ iteration 5:','  5 terms survive','STLSQ iteration 10 (converged):','  3 nonzero terms per equation','','Discovered: dx/dt = 10(y - x)','           dy/dt = x(28 - z) - y','           dz/dt = xy - (8/3)z','','Lorenz equations rediscovered from data!']};
+function runClip8Code(key){
+var e=CLIP8_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput8');var st=document.getElementById('runStatus8');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap8');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP8_CURRENT_LANG+' '+e.name,''];var out2=CLIP8_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip8CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip8CodeViz(key){
+var wrap=document.getElementById('codeVizWrap8');if(!wrap)return;var cv=document.getElementById('codeVizCanvas8');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('SINDy: Lorenz equations rediscovered',W/2,16);
+var cx=W/2,cy=H*0.55,scale=H*0.08;
+// Lorenz attractor
+ctx.strokeStyle='rgba(234,88,12,0.15)';ctx.lineWidth=1;
+var x=0.1,y=0,z=0;var sigma=10,rho=28,beta=8/3;var dt=0.005;
+ctx.beginPath();
+for(var i=0;i<3000;i++){var dx=sigma*(y-x);var dy=x*(rho-z)-y;var dz=x*y-beta*z;x+=dx*dt;y+=dy*dt;z+=dz*dt;
+var px=cx+x*scale;var py=cy+(z-25)*scale;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();
+// Discovered equations
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='left';
+ctx.fillText('dx = \\u03c3(y-x) = 10(y-x)',10,25);
+ctx.fillText('dy = x(\\u03c1-z)-y = x(28-z)-y',10,37);
+ctx.fillText('dz = xy-\\u03b2z = xy-(8/3)z',10,49);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
+
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -2246,7 +2505,8 @@ var FUTURES_DATA={
 'piml4':[{n:'Multi-loss automation',y:2028,p:0.40,t:'Auto-balanced multi-physics losses'},{n:'Hard constraint solvers',y:2030,p:0.30,t:'Constrained optimization in DL'},{n:'Symmetry-augmented training',y:2027,p:0.45,t:'Virtual data augmentation standard'},{n:'Parsimonious AI',y:2029,p:0.35,t:'L1 sparsity default for interpretable models'},{n:'Goldilocks auto-tuning',y:2032,p:0.25,t:'Auto Pareto-front optimization'}],
 'piml5':[{n:'KKT solvers in DL',y:2028,p:0.35,t:'Constrained optimization standard in training'},{n:'PiDMD widespread',y:2029,p:0.30,t:'Physics-informed DMD for engineering'},{n:'SR3 acceleration',y:2027,p:0.40,t:'Fast sparse regression default'},{n:'PySR discoveries',y:2028,p:0.35,t:'Symbolic regression finds new laws'},{n:'Manifold optimization',y:2031,p:0.25,t:'Matrix manifold training standard'}],
 'piml6':[{n:'PIML benchmarks standard',y:2028,p:0.40,t:'Physical benchmark datasets widespread'},{n:'Small-data AI',y:2027,p:0.45,t:'Physics-constrained models from 100 samples'},{n:'OOD generalization',y:2029,p:0.35,t:'Physics enables reliable extrapolation'},{n:'Lagrangian NNs mature',y:2028,p:0.30,t:'Structure-preserving networks default'},{n:'Disease dynamics discovery',y:2030,p:0.25,t:'PySR finds epidemiological laws'}],
-'piml7':[{n:'GoPro physics',y:2027,p:0.40,t:'Equations from video streams'},{n:'Koopman control',y:2028,p:0.35,t:'Linearized real-time control'},{n:'Deep Green\'s functions',y:2030,p:0.25,t:'Nonlinear PDE solvers'},{n:'Autoencoder discovery',y:2026,p:0.50,t:'Coordinate discovery standard'},{n:'EEG/ECG latent',y:2029,p:0.30,t:'Medical latent dynamics'}]
+'piml7':[{n:'GoPro physics',y:2027,p:0.40,t:'Equations from video streams'},{n:'Koopman control',y:2028,p:0.35,t:'Linearized real-time control'},{n:'Deep Green\'s functions',y:2030,p:0.25,t:'Nonlinear PDE solvers'},{n:'Autoencoder discovery',y:2026,p:0.50,t:'Coordinate discovery standard'},{n:'EEG/ECG latent',y:2029,p:0.30,t:'Medical latent dynamics'}],
+'piml8':[{n:'PDE-SINDy standard',y:2027,p:0.40,t:'Automatic PDE discovery from fields'},{n:'PySINDy ecosystem',y:2026,p:0.50,t:'Open-source SINDy ubiquitous'},{n:'Navier-Stokes discovered',y:2029,p:0.30,t:'ML rediscovers NS from data'},{n:'Constrained SINDy',y:2028,p:0.35,t:'Physics-constrained sparse ID'},{n:'Disease dynamics',y:2030,p:0.25,t:'SINDy for epidemiology'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -2275,7 +2535,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -2353,6 +2613,7 @@ setTimeout(populateCode4,300);
 setTimeout(populateCode5,300);
 setTimeout(populateCode6,300);
 setTimeout(populateCode7,300);
+setTimeout(populateCode8,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -2405,7 +2666,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('7 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===7});
+chk('8 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===8});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -2413,6 +2674,7 @@ chk('Clip 4 ready',function(){return CLIP_CURRICULUM[3].status==='ready'});
 chk('Clip 5 ready',function(){return CLIP_CURRICULUM[4].status==='ready'});
 chk('Clip 6 ready',function(){return CLIP_CURRICULUM[5].status==='ready'});
 chk('Clip 7 ready',function(){return CLIP_CURRICULUM[6].status==='ready'});
+chk('Clip 8 ready',function(){return CLIP_CURRICULUM[7].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -2453,6 +2715,16 @@ chk('Clip 7 code tabs (6)',function(){return document.getElementById('tabs7')&&d
 chk('Clip 7 map table',function(){var m=document.getElementById('map7');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 7 future chart',function(){return!!document.getElementById('fut7')});
 chk('CLIP7 narration key',function(){return CLIP7.narrationKey==='piml7'});
+// Clip 8
+chk('CLIP8 exists',function(){return typeof CLIP8==='object'});
+chk('Clip 8 section exists',function(){return!!document.getElementById('clip8')});
+chk('Clip 8 canvas',function(){return!!document.getElementById('cv8')});
+chk('Clip 8 scenes (6)',function(){var s=document.getElementById('scenes8');return s&&s.children.length===6});
+chk('Clip 8 expr populated',function(){var e=document.getElementById('expr8');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 8 code tabs (6)',function(){return document.getElementById('tabs8')&&document.getElementById('tabs8').children.length===6});
+chk('Clip 8 map table',function(){var m=document.getElementById('map8');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 8 future chart',function(){return!!document.getElementById('fut8')});
+chk('CLIP8 narration key',function(){return CLIP8.narrationKey==='piml8'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
