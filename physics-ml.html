@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-05-v23-clip19-fno">
+<meta name="version" content="2026-11-05-v24-clip20-pinns">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -1144,10 +1144,61 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap19"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas19"></canvas></div>
 </div>
 </section>
+<!-- CLIP 20: Physics-Informed Neural Networks (PINNs) -->
+<section class="clip-section" id="clip20" style="display:none">
+<h2>Physics-Informed Neural Networks (PINNs)</h2>
+<div class="subtitle">Video 20 \u00b7 Raissi-Perdikaris-Karniadakis framework: PDE residual in loss, autograd partials, virtual collocation, soft constraints, fPINN/Delta-PINN extensions, Pareto &amp; failure modes</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap20">
+<canvas class="clip-canvas" id="cv20"></canvas>
+<div class="clip-scene-label" id="lbl20">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP20.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP20.pause()">||</button>
+<button class="clip-btn" onclick="CLIP20.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP20.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP20.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title20">Custom physics loss &amp; autograd</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom20" min="0.5" max="3" step="0.1" value="1"><span id="zoom20v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel20">\u03b1</span><input type="range" id="param20" min="0" max="0.1" step="0.005" value="0.01"><span id="param20v">0.010</span></div>
+<button class="clip-btn" onclick="CLIP20.toggleRecord()" id="rec20" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP20.toggleNarration()" id="narr20" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP20.toggleLight()" id="light20">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes20"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts20"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 PINN evolution</h4>
+<canvas class="future-canvas" id="fut20"></canvas>
+<div class="future-milestones" id="fut20m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code20">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr20">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map20"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs20"></div>
+<div id="codecontent20"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip20Code('pinn')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus20" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput20"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap20"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas20"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 19/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 20/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -1186,7 +1237,7 @@ var CLIP_CURRICULUM=[
 {n:17,title:'Python Symbolic Regression (PySR)',desc:'Function trees, genetic programming (mutate/crossover/simplify), Pareto parsimony, Schmidt-Lipson law discovery, Noack symbolic control, interpretable AI',status:'ready'},
 {n:18,title:'Residual Networks (ResNets)',desc:'Skip connections y=x+F(x), forward Euler equivalence x_{k+1}=x_k+F(x_k), stride/dim control, Neural ODE limit, U-Net roots, ultra-deep training',status:'ready'},
 {n:19,title:'Fourier Neural Operator (FNO)',desc:'Operator learning G_\u03b8:A\u2192U, Fourier spectral layers v_{l+1}=\u03c3(Wv+F\u207b\u00b9(R\u00b7F(v))), zero-shot super-resolution, GNO/LNO kernel generalization, periodic BCs',status:'ready'},
-{n:20,title:'Reduced-Order Models',desc:'ROM with physics constraints',status:'upcoming'},
+{n:20,title:'Physics-Informed Neural Networks (PINNs)',desc:'Raissi-Perdikaris-Karniadakis: PDE residual in loss via autograd, virtual collocation N_d\u226aN_v, soft constraints, fPINN/Delta-PINN extensions, Pareto failure modes, curriculum \u03bb(t)',status:'ready'},
 {n:21,title:'Uncertainty Quantification',desc:'Bayesian PIML',status:'upcoming'},
 {n:22,title:'Multi-Fidelity Models',desc:'Combining data sources',status:'upcoming'},
 {n:23,title:'The Future of PIML',desc:'Where the field is heading',status:'upcoming'}
@@ -5566,6 +5617,260 @@ ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillTe
 ctx.fillStyle='#ff6b6b';ctx.fillText('finite-element: 187s',10,42);
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)} frame();
 }
+// ============ CLIP 20: Physics-Informed Neural Networks (PINNs) ============
+var CLIP20_SCENES=[
+{title:'Custom physics loss &amp; autograd',desc:'L_total = L_data + \u03bb\u00b7L_physics; N_PDE residual evaluated via PyTorch/JAX autograd'},
+{title:'Virtual collocation &amp; small-data assimilation',desc:'N_d \u226a N_v: sparse sensors + many virtual points; offload data onto physics'},
+{title:'Soft vs hard constraints &amp; optimization stiffness',desc:'Soft penalty \u2192 residual > 0; dueling loss terms cause stiff landscape'},
+{title:'Extensions: fPINNs &amp; Delta-PINNs',desc:'Fractional PDEs (fPINN); Laplace-Beltrami eigenfunctions for manifolds (Delta-PINN)'},
+{title:'Pareto front, failure modes, curriculum',desc:'\u03bb sweep reveals trade-off; convection-dominated failures; curriculum \u03bb(t)'},
+{title:'Global impact',desc:'Non-invasive cardiovascular diagnostics, fusion reactor plasma monitoring'}
+];
+var CLIP20_THOUGHTS=[
+'<strong style="color:var(--primary)">Embed the PDE in the loss.</strong> A standard NN maps inputs to outputs purely from data. A PINN, introduced by Raissi, Perdikaris, and Karniadakis, embeds the governing PDE directly into the loss: $\\mathcal{L}_{\\text{total}}(\\theta) = \\mathcal{L}_{\\text{data}}(\\theta) + \\lambda\\, \\mathcal{L}_{\\text{physics}}(\\theta)$ where $\\mathcal{L}_{\\text{physics}} = \\frac{1}{N_v}\\sum_i \\|\\mathcal{N}_{\\text{PDE}}(\\hat{\\mathbf{u}}(\\mathbf{x}_i, t_i; \\theta))\\|_2^2$. PyTorch/JAX autograd computes exact partial derivatives $\\partial \\hat{u}/\\partial x$, $\\partial \\hat{u}/\\partial t$, $\\partial^2 \\hat{u}/\\partial x^2$ of the network output \u2014 no finite differences, no mesh.',
+'<strong style="color:var(--primary)">Physics as free data.</strong> Data is scarce; physics is abundant. PINNs exploit this by offloading the data requirement onto $N_v \\gg N_d$ virtual collocation points where no measurement exists. At each, the loss simply asks whether the PDE residual equals zero. The data term fits the few real measurements ($N_d$ small), while the physics term regularises the field everywhere else. A PINN reconstructs high-fidelity dynamic fields from sparse, noisy, even incomplete experimental data \u2014 a free-lunch win for science.',
+'<strong style="color:var(--primary)">Soft means approximate.</strong> Physics enters as a <em>soft</em> penalty, not a hard constraint. So $\\min_\\theta (\\mathcal{L}_{\\text{data}} + \\lambda \\mathcal{L}_{\\text{physics}})$ yields a solution with $\\mathcal{L}_{\\text{physics}}(\\theta^*) > 0$ \u2014 physics is approximated, not exactly satisfied. Worse, $\\mathcal{L}_{\\text{data}}$ and $\\mathcal{L}_{\\text{physics}}$ frequently compete during gradient descent, producing a stiff optimization landscape. Conservation laws (mass, momentum, energy) are violated at the level of the residual, not by construction. This contrasts sharply with Hamiltonian / Lagrangian NNs where conservation is architectural.',
+'<strong style="color:var(--primary)">Beyond integer derivatives.</strong> Fractional PINNs (fPINNs) extend to non-integer-order PDEs using hybrid numerical discretization \u2014 useful for anomalous diffusion in porous media. Delta-PINNs handle complex manifolds (blood vessels, heart surfaces) by expanding the solution in eigenfunctions of the Laplace-Beltrami operator $\\Delta_{\\mathcal{M}} \\psi_k = \\lambda_k \\psi_k$, giving $\\hat{\\mathbf{u}}(\\mathbf{x}, t) = \\sum_k c_k(t) \\psi_k(\\mathbf{x})$. The eigenfunctions form an optimal coordinate basis adapted to the geometry itself.',
+'<strong style="color:var(--primary)">PINNs can fail.</strong> Standard PINNs struggle on stiff convection-dominated or chaotic systems \u2014 the optimization refuses to converge. Sweeping $\\lambda$ reveals a Pareto front of physical fidelity vs data accuracy; there is no free lunch. Fixes include <em>curriculum regularization</em> ($\\lambda(t)$ ramped from $\\lambda_{\\text{init}}$ to $\\lambda_{\\text{final}}$ over training), sequence-to-sequence learning (causal time chunks), and architecture-specific solvers. Krishnapriyan et al. (2021) formally characterised these failure modes, motivating the next generation of structured physics-informed training strategies.',
+'<strong style="color:var(--primary)">Where it matters.</strong> Non-invasive cardiovascular diagnostics: placing flow probes in arteries is risky; a PINN ingests sparse contrast-dye imaging and solves Navier-Stokes to infer internal blood velocity and pressure, enabling early thrombosis detection without surgery. Fusion reactor monitoring: temperatures melt physical sensors; PINNs combine sparse outer-wall measurements with magnetohydrodynamics physics loss to infer internal plasma profiles, supporting stable plasma control and accelerating carbon-free fusion energy. PINNs make physics-respecting inference possible where direct measurement is impossible.'
+];
+var CLIP20_PARAMS=[
+{label:'\u03bb',min:0,max:5,step:0.05,default:1,decimals:2,desc:'physics weight'},
+{label:'N_d',min:5,max:200,step:5,default:20,decimals:0,desc:'data points'},
+{label:'N_v',min:100,max:10000,step:100,default:1000,decimals:0,desc:'collocation pts'},
+{label:'\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'fractional order'},
+{label:'\u03bb_init',min:0,max:5,step:0.05,default:0.1,decimals:2,desc:'init curriculum'},
+{label:'\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'safety weight'}
+];
+var SCENE20_MATH=[
+['L=L_data+\u03bbL_phys','composite loss','autograd'],
+['N_d\u226aN_v','collocation','small data'],
+['L_phys(\u03b8*)>0','soft penalty','approximate'],
+['\u0394_M\u03c8_k=\u03bb_k\u03c8_k','Delta-PINN','manifold'],
+['\u03bb(t): init\u2192final','curriculum','Pareto'],
+['blood+plasma','non-invasive','inference']
+];
+var CLIP20=makeClip({varName:'CLIP20',cvId:'cv20',wrapId:'wrap20',lblId:'lbl20',titleId:'title20',zoomId:'zoom20',zoomValId:'zoom20v',paramId:'param20',paramValId:'param20v',paramLabelId:'paramLabel20',paramDefault:0.01,paramDecimals:3,lightId:'light20',narrId:'narr20',recId:'rec20',narrationKey:'piml20',sceneListId:'scenes20',thoughtsId:'thoughts20',scenes:CLIP20_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE20_MATH[scene]);
+if(scene===0){
+// PINN: input (x,t) -> NN -> u_hat -> autograd -> PDE residual -> composite loss
+var cx=W/2,cy=H*0.5;
+// Input (x, t)
+ctx.fillStyle='#00CED1';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('inputs (x, t)',W*0.1,H*0.12);
+ctx.fillStyle='#00CED1';ctx.shadowColor='#00CED1';ctx.shadowBlur=4;ctx.fillRect(W*0.05,cy-15,30,30);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('x, t',W*0.05+15,cy+3);
+// NN box
+ctx.fillStyle='#FF69B4';ctx.shadowColor='#FF69B4';ctx.shadowBlur=6;ctx.fillRect(W*0.2,cy-25,60,50);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('NN_\u03b8',W*0.2+30,cy+3);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.08,cy);ctx.lineTo(W*0.2,cy);ctx.stroke();
+// Output u_hat
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.fillRect(W*0.4,cy-15,30,30);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('\u00fb',W*0.4+15,cy+3);
+ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.fillText('u_hat(x,t)',W*0.4+15,cy+30);
+ctx.strokeStyle='#FFD700';ctx.beginPath();ctx.moveTo(W*0.27,cy);ctx.lineTo(W*0.4,cy);ctx.stroke();
+// Autograd derivatives
+ctx.fillStyle='#a855f7';ctx.font='6px monospace';ctx.textAlign='center';
+ctx.fillText('\u2202u/\u2202x, \u2202u/\u2202t, \u2202\u00b2u/\u2202x\u00b2',W*0.4+15,cy+45);
+ctx.fillText('(via autograd)',W*0.4+15,cy+53);
+// PDE residual box
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.fillRect(W*0.58,cy-25,70,50);ctx.shadowBlur=0;
+ctx.fillStyle='#000';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('N_PDE[\u00fb]',W*0.58+35,cy-3);
+ctx.fillStyle='#000';ctx.font='6px monospace';ctx.fillText('residual',W*0.58+35,cy+10);
+// Loss
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(W*0.85,cy,12,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('L',W*0.85,cy+3);
+// Arrows
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.43,cy);ctx.lineTo(W*0.58,cy);ctx.stroke();
+ctx.strokeStyle='#FFD700';ctx.beginPath();ctx.moveTo(W*0.65,cy);ctx.lineTo(W*0.73,cy);ctx.stroke();
+// Equation
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('L = L_data + \u03bb\u00b7L_physics',cx,cy+58);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('L_phys = (1/N_v)\u2211\u2016N_PDE\u2016\u00b2',cx,cy+70);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('PINN: PDE residual in composite loss',W/2,H-20);
+}else if(scene===1){
+// Virtual collocation: few data points (red) on dense virtual grid (cyan)
+var cx=W/2,cy=H*0.5;
+// Domain box
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.strokeRect(W*0.1,H*0.18,W*0.8,H*0.55);
+// Many virtual collocation points (cyan dots)
+ctx.fillStyle='#00CED1';ctx.globalAlpha=0.6;
+for(var i=0;i<150;i++){var px=W*0.1+Math.random()*W*0.8;var py=H*0.18+Math.random()*H*0.55;ctx.beginPath();ctx.arc(px,py,1,0,Math.PI*2);ctx.fill()}
+ctx.globalAlpha=1;
+// Sparse real data points (gold)
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=4;
+var dataPts=[{x:0.18,y:0.3},{x:0.32,y:0.45},{x:0.48,y:0.55},{x:0.62,y:0.4},{x:0.78,y:0.6}];
+dataPts.forEach(function(p){ctx.beginPath();ctx.arc(W*p.x,H*p.y,4,0,Math.PI*2);ctx.fill()});
+ctx.shadowBlur=0;
+// Labels
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('\u25cf N_d = 5 (real sensors)',10,H*0.85);
+ctx.fillStyle='#00CED1';ctx.fillText('\u00b7 N_v = 1000 (virtual collocation)',W*0.4,H*0.85);
+// Equation
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('L_data = (1/N_d)\u2211\u2016\u00fb - u_meas\u2016\u00b2  where N_d \u226a N_v',cx,cy+78);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('physics regularises the entire domain',cx,cy+90);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('small data + physics = full field reconstruction',W/2,H-20);
+}else if(scene===2){
+// Soft constraint: residual > 0; dueling loss terms
+var lambda=param;var cx=W/2,cy=H*0.5;
+// Two competing loss arrows pushing different directions
+ctx.fillStyle='#00CED1';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('L_data (fit measurements)',W*0.25,H*0.12);
+ctx.fillStyle='#FF69B4';ctx.fillText('L_physics (PDE residual)',W*0.75,H*0.12);
+// Loss arrows pointing toward theta
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.25,cy-30);ctx.lineTo(W*0.45,cy);ctx.stroke();
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.75,cy-30);ctx.lineTo(W*0.55,cy);ctx.stroke();
+// Theta (network params) at center
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(cx,cy,12,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#000';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('\u03b8',cx,cy+3);
+// Loss value: physics residual > 0
+ctx.fillStyle='#ff6b6b';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('L_phys(\u03b8*) > 0  (NOT zero!)',cx,cy+45);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('soft penalty \u2248 physics, not exact',cx,cy+57);
+// Stiff landscape visualization
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.beginPath();
+for(var i=0;i<80;i++){var x=W*0.1+i/80*W*0.8;var y=cy+75+Math.sin(i*0.3)*3+Math.cos(i*0.7)*2+Math.sin(i*0.1)*4;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('stiff optimization landscape',cx,cy+95);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('soft constraints: physics approximated, not enforced',W/2,H-20);
+}else if(scene===3){
+// Extensions: fPINN (fractional) and Delta-PINN (Laplace-Beltrami)
+var cx=W/2,cy=H*0.5;
+// fPINN (left)
+ctx.fillStyle='#FF69B4';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('fPINN',W*0.25,H*0.12);
+ctx.fillStyle='#FF69B4';ctx.shadowColor='#FF69B4';ctx.shadowBlur=6;ctx.fillRect(W*0.13,cy-25,60,50);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('D^\u03b1 u',W*0.13+30,cy-3);
+ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.fillText('fractional deriv.',W*0.13+30,cy+10);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('anomalous diffusion',W*0.25,cy+38);
+ctx.fillText('porous media',W*0.25,cy+46);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.4,cy);ctx.lineTo(W*0.6,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('extensions',W*0.5,cy-8);
+// Delta-PINN (right)
+ctx.fillStyle='#a855f7';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Delta-PINN',W*0.75,H*0.12);
+ctx.fillStyle='#a855f7';ctx.shadowColor='#a855f7';ctx.shadowBlur=6;ctx.fillRect(W*0.62,cy-25,75,50);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('\u0394_M \u03c8_k',W*0.62+37,cy-3);
+ctx.fillStyle='#fff';ctx.font='5px monospace';ctx.fillText('= \u03bb_k \u03c8_k',W*0.62+37,cy+10);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('Laplace-Beltrami',W*0.75,cy+38);
+ctx.fillText('manifold geometry',W*0.75,cy+46);
+// Manifold shape (curved surface)
+ctx.strokeStyle='#a855f7';ctx.lineWidth=1.5;ctx.beginPath();
+for(var i=0;i<60;i++){var x=W*0.62+i/60*75;var y=cy+60+Math.sin(i*0.2)*5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Eigenfunction decomposition
+ctx.fillStyle='#a855f7';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('\u00fb(x,t) = \u2211_k c_k(t)\u03c8_k(x)',cx,cy+78);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('optimal basis for geometry',cx,cy+90);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('fPINN (fractional) + Delta-PINN (manifold)',W/2,H-20);
+}else if(scene===4){
+// Pareto front: physics fidelity vs data accuracy; curriculum lambda(t)
+var lambda=param;var cx=W/2,cy=H*0.5;
+// Axes
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,H*0.85);ctx.lineTo(W*0.9,H*0.85);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.1,H*0.85);ctx.lineTo(W*0.1,H*0.15);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('\u03bb (physics weight) \u2192',cx,H*0.95);
+ctx.save();ctx.translate(W*0.05,cy);ctx.rotate(-Math.PI/2);ctx.fillText('accuracy',0,0);ctx.restore();
+// Pareto front curve
+ctx.strokeStyle='#10b981';ctx.lineWidth=2.5;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<50;i++){var l=i/49;var x=W*0.1+l*W*0.8;var totalAcc=1-Math.exp(-l*4)*0.5-Math.exp(-(1-l)*3)*0.6;var y=H*0.85-totalAcc*H*0.7;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Failure mode zone (convection-dominated)
+ctx.fillStyle='rgba(255,107,107,0.2)';ctx.fillRect(W*0.1,H*0.18,W*0.4,H*0.2);
+ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('failure: convection-dominated',W*0.3,H*0.28);
+ctx.fillStyle='#ff6b6b';ctx.fillText('(stiff, chaotic)',W*0.3,H*0.36);
+// Pareto elbow
+var elbowL=0.55;var ex=W*0.1+elbowL*W*0.8;var ey=H*0.85-(1-Math.exp(-elbowL*4)*0.5-Math.exp(-(1-elbowL)*3)*0.6)*H*0.7;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.setLineDash([3,3]);ctx.beginPath();ctx.arc(ex,ey,12,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#FFD700';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('Pareto elbow',ex,ey-18);
+// Curriculum lambda(t) bar
+ctx.fillStyle='#a855f7';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('curriculum: \u03bb(t)',10,H*0.85+30);
+ctx.strokeStyle='#a855f7';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<60;i++){var x=W*0.25+i/60*W*0.5;var y=H*0.85+35-Math.min(1,i/60*4)*10;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#a855f7';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('\u03bb_init \u2192 \u03bb_final',W*0.5,H*0.85+45);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Pareto front + curriculum regularization',W/2,H-20);
+}else if(scene===5){
+// Global applications: cardiovascular + fusion
+var cx=W/2,cy=H*0.45;
+var apps=[{x:0.25,icon:'\ud83e\udec0',l:'Cardiovascular',c:'#ff6b6b',note:'non-invasive flow'},{x:0.75,icon:'\u26a1',l:'Fusion plasma',c:'#FFD700',note:'internal monitoring'}];
+apps.forEach(function(ap){var px=W*ap.x;
+ctx.font='20px Georgia,serif';ctx.textAlign='center';ctx.fillText(ap.icon,px,cy-5);
+ctx.fillStyle=ap.c;ctx.font='8px Georgia,serif';ctx.fillText(ap.l,px,cy+12);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText(ap.note,px,cy+22);
+// Sparse measurement -> inference
+ctx.strokeStyle=ap.c;ctx.lineWidth=1;ctx.beginPath();
+for(var i=0;i<5;i++){var dx=px-25+i*12;ctx.beginPath();ctx.arc(dx,cy+38,2,0,Math.PI*2);ctx.fillStyle=ap.c;ctx.fill()}
+ctx.strokeStyle=ap.c;ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(px-22,cy+38);ctx.lineTo(px+22,cy+38);ctx.stroke();
+ctx.fillStyle=ap.c;ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('sparse surface sensors',px,cy+50);
+ctx.strokeStyle=ap.c;ctx.lineWidth=2;ctx.shadowColor=ap.c;ctx.shadowBlur=3;ctx.beginPath();ctx.moveTo(px,cy+45);ctx.lineTo(px,cy+65);ctx.stroke();ctx.shadowBlur=0;
+// Inferred internal field
+ctx.fillStyle=ap.c;ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('inferred internal field',px,cy+72)});
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('physics-respecting inference where direct measurement is impossible',W/2,H*0.85);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('PINNs: non-invasive physics inference',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP20.setActive(false);
+
+// CLIP20 code section \u2014 PINN with autograd PDE residual + curriculum
+var CLIP20_CODE={
+'pinn':{
+name:'Physics-Informed Neural Network (Burgers + curriculum)',
+latex:'\\mathcal{L}_{\\text{total}}(\\theta) = \\mathcal{L}_{\\text{data}}(\\theta) + \\lambda(t)\\, \\mathcal{L}_{\\text{physics}}(\\theta), \\quad \\mathcal{L}_{\\text{physics}} = \\frac{1}{N_v}\\sum_i \\|\\mathcal{N}_{\\text{PDE}}(\\hat{\\mathbf{u}}(\\mathbf{x}_i, t_i; \\theta))\\|_2^2',
+intent:'Embed Burgers PDE residual in loss via autograd; data points + virtual collocation; curriculum on lambda',
+mapping:[
+{symbol:'\\u00fb(x, t; \\u03b8)',code:'model(x, t)',note:'NN output: predicted field'},
+{symbol:'\\u2202\\u00fb/\\u2202t',code:'autograd.grad(u_hat, t)',note:'Time partial (exact via autograd)'},
+{symbol:'\\u2202\\u00fb/\\u2202x',code:'autograd.grad(u_hat, x)',note:'Space partial'},
+{symbol:'\\u2202\\u00b2\\u00fb/\\u2202x\\u00b2',code:'autograd.grad(u_x, x)',note:'Second space partial (diffusion)'},
+{symbol:'N_PDE[\\u00fb]',code:'u_t + u*u_x - nu*u_xx',note:'Burgers residual (mass/momentum)'},
+{symbol:'\\u03bb(t)',code:'lambda_curr = curriculum(step)',note:'Curriculum weight ramped over training'}],
+langs:{
+'Python':'import torch\nimport torch.nn as nn\n\nclass PINN(nn.Module):\n    """Raissi-Perdikaris-Karniadakis: embed PDE in loss via autograd"""\n    def __init__(self, layers=[2, 64, 64, 64, 1]):\n        super().__init__()\n        net = []\n        for i in range(len(layers)-1):\n            net.append(nn.Linear(layers[i], layers[i+1]))\n            net.append(nn.Tanh())\n        self.net = nn.Sequential(*net[:-1])  # drop last Tanh\n    \n    def forward(self, x, t):\n        return self.net(torch.cat([x, t], dim=-1))  # u_hat(x, t)\n    \n    def pde_residual(self, x, t, nu=0.01):\n        """Burgers: u_t + u*u_x - nu*u_xx = 0  (autograd computes all partials)"""\n        x = x.requires_grad_(True)\n        t = t.requires_grad_(True)\n        u = self.forward(x, t)                                # u_hat\n        # First partials via autograd\n        u_t = torch.autograd.grad(u.sum(), t, create_graph=True)[0]\n        u_x = torch.autograd.grad(u.sum(), x, create_graph=True)[0]\n        # Second partial (diffusion)\n        u_xx = torch.autograd.grad(u_x.sum(), x, create_graph=True)[0]\n        # Burgers residual N_PDE[u_hat]\n        return u_t + u * u_x - nu * u_xx\n    \n    def loss(self, x_data, t_data, u_data, x_coll, t_coll, lam):\n        \"\"\"L_total = L_data + lambda * L_physics  (composite, soft constraint)\"\"\"\n        # Data loss: fit sparse measurements (N_d small)\n        u_pred = self.forward(x_data, t_data)\n        L_data = torch.mean((u_pred - u_data)**2)\n        # Physics loss: PDE residual at N_v virtual collocation points (N_v >> N_d)\n        r = self.pde_residual(x_coll, t_coll)\n        L_phys = torch.mean(r**2)\n        return L_data + lam * L_phys, L_data, L_phys\n\ndef curriculum(step, total, lam_init=0.1, lam_final=1.0):\n    \"\"\"Ramp physics weight over training: lambda(t): init -> final\"\"\"\n    progress = min(1.0, step / total)\n    return lam_init + (lam_final - lam_init) * progress\n\n# Training loop: sparse data + virtual collocation + curriculum\npinn = PINN()\noptim = torch.optim.Adam(pinn.parameters(), lr=1e-3)\nN_steps = 5000\nfor step in range(N_steps):\n    lam = curriculum(step, N_steps)              # curriculum on lambda\n    L_total, L_d, L_p = pinn.loss(x_data, t_data, u_data,\n                                  x_coll, t_coll, lam)\n    optim.zero_grad(); L_total.backward(); optim.step()\n    if step % 500 == 0:\n        print(f"step {step}: L_data={L_d:.4f}, L_phys={L_p:.4f}, lambda={lam:.3f}")\n# Note: L_phys(theta*) > 0  (physics is SOFT, not exact)',
+'TypeScript':'// Physics-Informed Neural Network (conceptual)\nclass PINN {\n  private net: NeuralNet;  // (x, t) -> u_hat\n  \n  forward(x: number, t: number): number {\n    return this.net.forward([x, t])[0];  // u_hat(x, t)\n  }\n  \n  pdeResidual(x: number, t: number, nu: number = 0.01): number {\n    // Burgers: u_t + u*u_x - nu*u_xx = 0\n    // All partials via autograd (exact, no finite differences)\n    const u_t  = autoGrad(t => this.forward(x, t), t);\n    const u_x  = autoGrad(x => this.forward(x, t), x);\n    const u_xx = autoGradSecond(x => this.forward(x, t), x);\n    const u = this.forward(x, t);\n    return u_t + u * u_x - nu * u_xx;  // N_PDE[u_hat]\n  }\n  \n  loss(xData: number[], tData: number[], uData: number[],\n       xColl: number[], tColl: number[], lam: number): [number, number, number] {\n    // L_data: fit sparse measurements (N_d small)\n    const Ldata = mse(xData.map((x, i) => this.forward(x, tData[i])), uData);\n    // L_phys: PDE residual at N_v virtual collocation points (N_v >> N_d)\n    const Lphys = mse(xColl.map((x, i) => this.pdeResidual(x, tColl[i])),\n                      xColl.map(() => 0));\n    const Ltotal = Ldata + lam * Lphys;  // composite loss (soft constraint)\n    return [Ltotal, Ldata, Lphys];\n  }\n}\n\n// Curriculum: ramp lambda(t): init -> final over training\nfunction curriculum(step: number, total: number,\n                    lamInit: number = 0.1, lamFinal: number = 1.0): number {\n  const progress = Math.min(1, step / total);\n  return lamInit + (lamFinal - lamInit) * progress;\n}',
+'Go':'// Physics-Informed Neural Network (conceptual)\ntype PINN struct {\n    Net *NeuralNet  // (x, t) -> u_hat\n}\n\nfunc (m *PINN) Forward(x, t float64) float64 {\n    return m.Net.Forward([]float64{x, t})[0]  // u_hat(x, t)\n}\n\nfunc (m *PINN) PDEResidual(x, t, nu float64) float64 {\n    // Burgers: u_t + u*u_x - nu*u_xx = 0\n    // All partials via autograd (exact)\n    u_t  := autoGrad(func(t float64) float64 { return m.Forward(x, t) }, t)\n    u_x  := autoGrad(func(x float64) float64 { return m.Forward(x, t) }, x)\n    u_xx := autoGradSecond(func(x float64) float64 { return m.Forward(x, t) }, x)\n    u := m.Forward(x, t)\n    return u_t + u*u_x - nu*u_xx  // N_PDE[u_hat]\n}\n\nfunc (m *PINN) Loss(xData, tData, uData, xColl, tColl []float64, lam float64) (total, data, phys float64) {\n    // L_data: fit sparse measurements\n    var sumData float64\n    for i := range xData {\n        d := m.Forward(xData[i], tData[i]) - uData[i]\n        sumData += d * d\n    }\n    data = sumData / float64(len(xData))\n    // L_phys: PDE residual at N_v virtual collocation points\n    var sumPhys float64\n    for i := range xColl {\n        r := m.PDEResidual(xColl[i], tColl[i], 0.01)\n        sumPhys += r * r\n    }\n    phys = sumPhys / float64(len(xColl))\n    total = data + lam * phys  // composite loss (soft constraint)\n    return\n}\n\n// Curriculum: ramp lambda(t) over training\nfunc Curriculum(step, total int, lamInit, lamFinal float64) float64 {\n    progress := math.Min(1.0, float64(step)/float64(total))\n    return lamInit + (lamFinal-lamInit)*progress\n}',
+'Scala':'// Physics-Informed Neural Network (uses JAX-style autodiff)\nclass PINN(layers: List[Int] = List(2, 64, 64, 64, 1)) {\n  private val net = new NeuralNet(layers)\n  def forward(x: Double, t: Double): Double =\n    net.forward(Vector(x, t)).head  // u_hat(x, t)\n  \n  def pdeResidual(x: Double, t: Double, nu: Double = 0.01): Double = {\n    // Burgers: u_t + u*u_x - nu*u_xx = 0\n    // All partials via autograd\n    val u_t  = autoGrad(t => forward(x, t), t)\n    val u_x  = autoGrad(x => forward(x, t), x)\n    val u_xx = autoGradSecond(x => forward(x, t), x)\n    val u = forward(x, t)\n    u_t + u * u_x - nu * u_xx  // N_PDE[u_hat]\n  }\n  \n  def loss(xData: Vector[Double], tData: Vector[Double], uData: Vector[Double],\n           xColl: Vector[Double], tColl: Vector[Double],\n           lam: Double): (Double, Double, Double) = {\n    // L_data: fit sparse measurements\n    val Ldata = (xData zip tData zip uData).map { case ((x, t), u) =>\n      math.pow(forward(x, t) - u, 2)\n    }.sum / xData.length\n    // L_phys: PDE residual at virtual collocation points\n    val Lphys = (xColl zip tColl).map { case (x, t) =>\n      math.pow(pdeResidual(x, t), 2)\n    }.sum / xColl.length\n    val Ltotal = Ldata + lam * Lphys  // composite loss (soft)\n    (Ltotal, Ldata, Lphys)\n  }\n}\n\n// Curriculum: ramp lambda over training\nobject Curriculum {\n  def apply(step: Int, total: Int, lamInit: Double = 0.1, lamFinal: Double = 1.0): Double = {\n    val progress = math.min(1.0, step.toDouble / total)\n    lamInit + (lamFinal - lamInit) * progress\n  }\n}',
+'C':'/* Physics-Informed Neural Network (conceptual) */\n#include <math.h>\n\ntypedef struct {\n    NN* net;  /* (x, t) -> u_hat */\n} PINN;\n\ndouble pinn_forward(PINN* m, double x, double t) {\n    double in[2] = {x, t};\n    return nn_forward(m->net, in, 2)[0];  /* u_hat(x, t) */\n}\n\n/* Burgers residual: u_t + u*u_x - nu*u_xx = 0\n   All partials via autograd (exact, no finite differences) */\ndouble pinn_residual(PINN* m, double x, double t, double nu) {\n    double u_t  = auto_grad_1(m, x, t, /*var=*/1);  /* d/dt */\n    double u_x  = auto_grad_1(m, x, t, /*var=*/0);  /* d/dx */\n    double u_xx = auto_grad_2(m, x, t, /*var=*/0, /*var=*/0);  /* d^2/dx^2 */\n    double u = pinn_forward(m, x, t);\n    return u_t + u * u_x - nu * u_xx;  /* N_PDE[u_hat] */\n}\n\n/* L_total = L_data + lambda * L_physics  (composite, soft) */\ntypedef struct { double total, data, phys; } LossTuple;\nLossTuple pinn_loss(PINN* m,\n                    double* x_data, double* t_data, double* u_data, int n_data,\n                    double* x_coll, double* t_coll, int n_coll,\n                    double lam) {\n    /* L_data: fit sparse measurements */\n    double sum_data = 0;\n    for (int i = 0; i < n_data; i++) {\n        double d = pinn_forward(m, x_data[i], t_data[i]) - u_data[i];\n        sum_data += d * d;\n    }\n    double L_data = sum_data / n_data;\n    /* L_phys: PDE residual at N_v virtual collocation points */\n    double sum_phys = 0;\n    for (int i = 0; i < n_coll; i++) {\n        double r = pinn_residual(m, x_coll[i], t_coll[i], 0.01);\n        sum_phys += r * r;\n    }\n    double L_phys = sum_phys / n_coll;\n    LossTuple out;\n    out.total = L_data + lam * L_phys;\n    out.data = L_data; out.phys = L_phys;\n    return out;\n}\n\n/* Curriculum: ramp lambda(t) over training */\ndouble curriculum(int step, int total, double lam_init, double lam_final) {\n    double progress = fmin(1.0, (double)step / total);\n    return lam_init + (lam_final - lam_init) * progress;\n}',
+'Elixir':'defmodule PINN do\n  @moduledoc """\n  Physics-Informed Neural Network (Raissi-Perdikaris-Karniadakis)\n  Embed PDE residual in loss via autograd; soft physics constraint\n  \"\"\"\n  defstruct [:net]\n  def forward(model, x, t) do\n    NN.forward(model.net, [x, t]) |> hd()  # u_hat(x, t)\n  end\n  \n  def pde_residual(model, x, t, nu \\\\ 0.01) do\n    # Burgers: u_t + u*u_x - nu*u_xx = 0\n    # All partials via autograd (exact)\n    u_t  = auto_grad(fn t -> forward(model, x, t) end, t)\n    u_x  = auto_grad(fn x -> forward(model, x, t) end, x)\n    u_xx = auto_grad_second(fn x -> forward(model, x, t) end, x)\n    u = forward(model, x, t)\n    u_t + u * u_x - nu * u_xx  # N_PDE[u_hat]\n  end\n  \n  def loss(model, x_data, t_data, u_data, x_coll, t_coll, lam) do\n    # L_data: fit sparse measurements (N_d small)\n    l_data = Enum.zip([x_data, t_data, u_data])\n      |> Enum.map(fn {x, t, u} -> :math.pow(forward(model, x, t) - u, 2) end)\n      |> Enum.sum() / length(x_data)\n    # L_phys: PDE residual at N_v virtual collocation points (N_v >> N_d)\n    l_phys = Enum.zip(x_coll, t_coll)\n      |> Enum.map(fn {x, t} -> :math.pow(pde_residual(model, x, t), 2) end)\n      |> Enum.sum() / length(x_coll)\n    l_total = l_data + lam * l_phys  # composite loss (soft constraint)\n    {l_total, l_data, l_phys}\n  end\nend\n\ndefmodule Curriculum do\n  # Ramp lambda(t): init -> final over training\n  def apply(step, total, lam_init \\\\ 0.1, lam_final \\\\ 1.0) do\n    progress = min(1.0, step / total)\n    lam_init + (lam_final - lam_init) * progress\n  end\nend'
+}
+}
+};
+var CLIP20_CURRENT_LANG='Python';
+function populateCode20(){
+var e=CLIP20_CODE['pinn'];if(!e)return;
+var exprEl=document.getElementById('expr20');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map20');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs20');var ccEl=document.getElementById('codecontent20');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip20Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc20-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip20Code(lang){CLIP20_CURRENT_LANG=lang;document.querySelectorAll('#tabs20 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc20-'+lang)})}
+var CLIP20_OUTPUTS={'pinn':['Initializing PINN (Burgers equation)...','Network: [2, 64, 64, 64, 1]  (input (x,t) -> u_hat)','PDE: u_t + u*u_x - nu*u_xx = 0  (Burgers, nu=0.01)','Autograd: PyTorch computes all partials exactly','','Data: N_d = 20 sparse sensors (noisy)','Collocation: N_v = 1000 virtual points (random)','Curriculum: lambda(t) ramped 0.1 -> 1.0 over 5000 steps','','Training loop (Adam, lr=1e-3):','  step    0: L_data=0.4521, L_phys=0.8234, lambda=0.100','  step  500: L_data=0.0832, L_phys=0.2156, lambda=0.190','  step 1000: L_data=0.0214, L_phys=0.0643, lambda=0.280','  step 2000: L_data=0.0051, L_phys=0.0142, lambda=0.460','  step 3000: L_data=0.0018, L_phys=0.0051, lambda=0.640','  step 4000: L_data=0.0009, L_phys=0.0023, lambda=0.820','  step 5000: L_data=0.0005, L_phys=0.0012, lambda=1.000','','Converged. L_phys(theta*) = 0.0012 > 0  (physics SOFT, not exact)','','Failure mode check (convection-dominated, nu=1e-5):','  standard PINN: L_phys stuck at 0.43  (FAILS to converge)','  fix: curriculum + causal sequence-to-sequence training','','Speed: 0.4 ms per evaluation (sub-millisecond forward inference)','  vs 4D-VAR variational assimilation: ~12 sec per evaluation (30000x faster)','','Application: reconstructing blood flow from sparse MRI','  N_d = 50 contrast-dye images -> infer 3D velocity+pressure field','  PINN solves Navier-Stokes where probes cannot reach']};
+function runClip20Code(key){
+var e=CLIP20_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput20');var st=document.getElementById('runStatus20');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap20');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP20_CURRENT_LANG+' '+e.name,''];var out2=CLIP20_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip20CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip20CodeViz(key){
+var wrap=document.getElementById('codeVizWrap20');if(!wrap)return;var cv=document.getElementById('codeVizCanvas20');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('PINN: Burgers \u2014 data loss + physics loss convergence',W/2,16);
+var cx=W/2,cy=H*0.55;
+// Two loss curves: L_data (cyan) and L_phys (pink) over training
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var loss=Math.exp(-i*0.05)*0.5;var y=H-30-loss*H*0.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var loss=Math.exp(-i*0.04)*0.7*(0.5+0.5*Math.sin(i*0.05+i*0.01));var y=H-30-loss*H*0.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Curriculum lambda ramp
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.setLineDash([3,3]);ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var lam=0.1+i/100*0.9;var y=H-30-lam*H*0.3;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.setLineDash([]);
+// Axis
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,H-30);ctx.lineTo(W*0.9,H-30);ctx.stroke();
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('L_data',10,30);
+ctx.fillStyle='#FF69B4';ctx.fillText('L_phys',10,42);
+ctx.fillStyle='#FFD700';ctx.fillText('lambda(t) curriculum',10,54);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)} frame();
+}
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -5586,7 +5891,8 @@ var FUTURES_DATA={
 'piml16':[{n:'Neural ODEs in PyTorch/JAX',y:2026,p:0.50,t:'torchdiffeq / Diffrax standard in DL toolkits'},{n:'Adjoint method default',y:2027,p:0.45,t:'Memory-efficient adjoint backprop ubiquitous'},{n:'ICU early warning NODEs',y:2028,p:0.30,t:'Continuous-time sepsis prediction deployed'},{n:'NODE+SINDy discovery',y:2028,p:0.35,t:'NODE denoising feeds SINDy for equation recovery'},{n:'Continuous-depth models',y:2030,p:0.25,t:'Continuous-time networks replace discrete ResNets'}],
 'piml17':[{n:'PySR default for discovery',y:2026,p:0.45,t:'PySR standard tool for symbolic regression in science'},{n:'Rediscovered laws published',y:2027,p:0.35,t:'Symbolic regression publishes new physical laws'},{n:'Edge µC symbolic control',y:2028,p:0.30,t:'Compact symbolic controllers on off-grid microcontrollers'},{n:'Climate symbolic models',y:2029,p:0.25,t:'Compact climate sub-models replace empirical fits'},{n:'Pharmacokinetic equations',y:2030,p:0.20,t:'Personalized drug dynamics from symbolic regression'}],
 'piml18':[{n:'ResNet medical super-res',y:2026,p:0.45,t:'Rural clinics upscale MRI/ultrasound on laptops'},{n:'Climate downscaling default',y:2027,p:0.40,t:'ResNet spatiotemporal downscaling for smallholder farmers'},{n:'U-Net diffusion standard',y:2025,p:0.50,t:'U-Net backbone ubiquitous in generative AI'},{n:'Ultra-deep 1000+ layers',y:2030,p:0.20,t:'Improved skip variants enable 1000-layer networks'},{n:'Neural ODE replaces ResNet',y:2031,p:0.25,t:'Continuous-depth networks displace discrete ResNets'}],
-'piml19':[{n:'FNO PDE surrogate default',y:2026,p:0.45,t:'FNO replaces finite-element for fluid PDE inference'},{n:'Laplace Neural Operator',y:2027,p:0.35,t:'LNO handles growth/decay in stiff PDEs'},{n:'Cardiovascular FNO real-time',y:2028,p:0.30,t:'Patient-specific blood flow simulated in clinic'},{n:'Aero FNO design loops',y:2027,p:0.40,t:'Wind turbine / EV aero optimization via FNO surrogate'},{n:'Mesh-independent AI ubiquitous',y:2030,p:0.25,t:'Operator learning standard across heterogeneous sensor grids'}]
+'piml19':[{n:'FNO PDE surrogate default',y:2026,p:0.45,t:'FNO replaces finite-element for fluid PDE inference'},{n:'Laplace Neural Operator',y:2027,p:0.35,t:'LNO handles growth/decay in stiff PDEs'},{n:'Cardiovascular FNO real-time',y:2028,p:0.30,t:'Patient-specific blood flow simulated in clinic'},{n:'Aero FNO design loops',y:2027,p:0.40,t:'Wind turbine / EV aero optimization via FNO surrogate'},{n:'Mesh-independent AI ubiquitous',y:2030,p:0.25,t:'Operator learning standard across heterogeneous sensor grids'}],
+'piml20':[{n:'PINN real-time inference',y:2026,p:0.50,t:'PINNs deployed in real-time clinical diagnostics'},{n:'Cardiovascular PINN',y:2027,p:0.40,t:'Non-invasive blood flow inference standard'},{n:'Fusion plasma PINN',y:2029,p:0.25,t:'MHD inference for tokamak control'},{n:'Delta-PINN for organs',y:2028,p:0.30,t:'Laplace-Beltrami PINNs model heart/brain manifolds'},{n:'Curriculum PINN default',y:2026,p:0.45,t:'Curriculum regularization standard training practice'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -5615,7 +5921,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);drawFutureChart('fut15','piml15',futAnimState);drawFutureChart('fut16','piml16',futAnimState);drawFutureChart('fut17','piml17',futAnimState);drawFutureChart('fut18','piml18',futAnimState);drawFutureChart('fut19','piml19',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);drawFutureChart('fut15','piml15',futAnimState);drawFutureChart('fut16','piml16',futAnimState);drawFutureChart('fut17','piml17',futAnimState);drawFutureChart('fut18','piml18',futAnimState);drawFutureChart('fut19','piml19',futAnimState);drawFutureChart('fut20','piml20',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -5705,6 +6011,7 @@ setTimeout(populateCode16,300);
 setTimeout(populateCode17,300);
 setTimeout(populateCode18,300);
 setTimeout(populateCode19,300);
+setTimeout(populateCode20,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -5757,7 +6064,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('19 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===19});
+chk('20 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===20});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -5777,6 +6084,7 @@ chk('Clip 16 ready',function(){return CLIP_CURRICULUM[15].status==='ready'});
 chk('Clip 17 ready',function(){return CLIP_CURRICULUM[16].status==='ready'});
 chk('Clip 18 ready',function(){return CLIP_CURRICULUM[17].status==='ready'});
 chk('Clip 19 ready',function(){return CLIP_CURRICULUM[18].status==='ready'});
+chk('Clip 20 ready',function(){return CLIP_CURRICULUM[19].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -5937,6 +6245,16 @@ chk('Clip 19 code tabs (6)',function(){return document.getElementById('tabs19')&
 chk('Clip 19 map table',function(){var m=document.getElementById('map19');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 19 future chart',function(){return!!document.getElementById('fut19')});
 chk('CLIP19 narration key',function(){return CLIP19.narrationKey==='piml19'});
+// Clip 20
+chk('CLIP20 exists',function(){return typeof CLIP20==='object'});
+chk('Clip 20 section exists',function(){return!!document.getElementById('clip20')});
+chk('Clip 20 canvas',function(){return!!document.getElementById('cv20')});
+chk('Clip 20 scenes (6)',function(){var s=document.getElementById('scenes20');return s&&s.children.length===6});
+chk('Clip 20 expr populated',function(){var e=document.getElementById('expr20');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 20 code tabs (6)',function(){return document.getElementById('tabs20')&&document.getElementById('tabs20').children.length===6});
+chk('Clip 20 map table',function(){var m=document.getElementById('map20');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 20 future chart',function(){return!!document.getElementById('fut20')});
+chk('CLIP20 narration key',function(){return CLIP20.narrationKey==='piml20'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
