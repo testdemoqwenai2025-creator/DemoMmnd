@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-05-v18-clip14-lagrangian-nn">
+<meta name="version" content="2026-11-05-v19-clip15-lnn-architecture-loss">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -889,10 +889,61 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap14"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas14"></canvas></div>
 </div>
 </section>
+<!-- CLIP 15: Lagrangian NNs II — Architecture & Loss -->
+<section class="clip-section" id="clip15" style="display:none">
+<h2>Lagrangian NNs II: Architecture &amp; Loss</h2>
+<div class="subtitle">Video 15 \u00b7 T-V decomposition, naive NN energy blow-up, custom loss ||q\u00a8_obs \u2212 q\u00a8_LNN||\u00b2, Neural ODE extension, data efficiency, long-horizon stability</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap15">
+<canvas class="clip-canvas" id="cv15"></canvas>
+<div class="clip-scene-label" id="lbl15">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP15.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP15.pause()">||</button>
+<button class="clip-btn" onclick="CLIP15.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP15.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP15.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title15">L = T(q, q\u0307) \u2212 V(q)</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom15" min="0.5" max="3" step="0.1" value="1"><span id="zoom15v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel15">\u03b1</span><input type="range" id="param15" min="0" max="0.1" step="0.005" value="0.01"><span id="param15v">0.010</span></div>
+<button class="clip-btn" onclick="CLIP15.toggleRecord()" id="rec15" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP15.toggleNarration()" id="narr15" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP15.toggleLight()" id="light15">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes15"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts15"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 LNN II evolution</h4>
+<canvas class="future-canvas" id="fut15"></canvas>
+<div class="future-milestones" id="fut15m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code15">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr15">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map15"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs15"></div>
+<div id="codecontent15"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip15Code('lnn2')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus15" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput15"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap15"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas15"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 14/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 15/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -926,7 +977,7 @@ var CLIP_CURRICULUM=[
 {n:12,title:'Discrepancy Modeling',desc:'Hybrid physics+ML, Pareto trade-off, Ptolemy vs Galileo, group sparsity, digital twins',status:'ready'},
 {n:13,title:'Hamiltonian Neural Networks',desc:'HNN architecture, dual loss, Noether, symplectic, LNN extension',status:'ready'},
 {n:14,title:'Lagrangian Neural Networks',desc:'Scalar L(q,q\u0307), Euler-Lagrange, Hessian inversion, variational integrators, (q,q\u0307) flexibility',status:'ready'},
-{n:15,title:'Discovery of Equations',desc:'Finding governing laws from data',status:'upcoming'},
+{n:15,title:'Lagrangian NNs II: Architecture & Loss',desc:'T-V decomposition, naive NN blow-up, custom loss ||q\u00a8_obs \u2212 q\u00a8_LNN||\u00b2, Neural ODE extension, data efficiency, long-horizon stability',status:'ready'},
 {n:16,title:'Digital Twins',desc:'Real-time asset modeling',status:'upcoming'},
 {n:17,title:'Sparse Sensing',desc:'Compressed sensing & SHRED',status:'upcoming'},
 {n:18,title:'Control with PIML',desc:'Physics-informed control systems',status:'upcoming'},
@@ -4054,6 +4105,245 @@ ctx.fillStyle='#10b981';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillTe
 ctx.fillStyle='#ff6b6b';ctx.fillText('ode45: drifts \u2717',10,37);
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
+// ============ CLIP 15: Lagrangian NNs II — Architecture & Loss ============
+var CLIP15_SCENES=[
+{title:'L = T(q, q\u0307) \u2212 V(q)',desc:'Architectural choice: NN parameterises scalar Lagrangian with T-V decomposition'},
+{title:'Naive NN energy blow-up',desc:'Direct q\u00a8 regression breaks symmetries; ode45/RK4 drift unphysically'},
+{title:'Custom loss ||q\u00a8_obs \u2212 q\u00a8_LNN||\u00b2',desc:'Autodiff evaluates Euler-Lagrange; loss penalises deviation from observed dynamics'},
+{title:'Neural ODE extension',desc:'LNN = physics-constrained Neural ODE; dx/dt = f_LNN via Euler-Lagrange structure'},
+{title:'Data efficiency & noise robustness',desc:'Physical structure baked in \u2192 fewer samples, robust to noisy trajectories'},
+{title:'Long-horizon stability & impact',desc:'Decades-long orbital tracking, prosthetic joints, wind turbines, gait analysis'}
+];
+var CLIP15_THOUGHTS=[
+'<strong style="color:var(--primary)">Architectural choice.</strong> A standard feed-forward NN that directly regresses accelerations $\\ddot{q}$ has no built-in physical structure \u2014 symmetries break, energy drifts. The LNN architectural choice is to parameterise an intermediate scalar Lagrangian $L_\\theta(q,\\dot{q}) = T_\\theta(q,\\dot{q}) - V_\\theta(q)$, from which the equations of motion are derived via autodiff. Architecture becomes inductive bias: physics is built in, not learned by accident.',
+'<strong style="color:var(--primary)">Naive regression fails.</strong> A naive NN predicting $\\ddot{q}$ directly has no reason to respect energy conservation. On chaotic systems like the double pendulum, its trajectories drift unphysically \u2014 energy bleeds out or blows up over long horizons. Standard numerical integrators (RK4, ode45) suffer the same flaw. The fix: stop predicting $\\ddot{q}$ directly. Predict the scalar $L$, derive $\\ddot{q}$ via the Euler-Lagrange equation.',
+'<strong style="color:var(--primary)">Custom loss with autodiff.</strong> The loss is $\\mathcal{L}_{\\text{LNN}} = \\|\\ddot{q}_{\\text{obs}} - \\ddot{q}_{\\text{LNN}}(L,q,\\dot{q})\\|_2^2$. The network outputs $L_\\theta(q,\\dot{q})$; JAX or PyTorch compute the partial derivatives $\\nabla_q L$, $\\nabla_{\\dot{q}} L$, and the Hessian $\\nabla_{\\dot{q}}\\nabla_{\\dot{q}}^T L$ in a few lines of code. The Hessian inversion yields $\\ddot{q}_{\\text{LNN}}$, which is compared to observed accelerations. The custom loss is structured: physics lives inside the prediction, not the penalty.',
+'<strong style="color:var(--primary)">Neural ODE extension.</strong> A Neural ODE learns $\\dot{x} = f_\\theta(x)$ by differentiating through an ODE solver. An LNN is a physics-constrained Neural ODE: $f_\\theta$ is replaced by the Euler-Lagrange operator applied to a learned scalar $L_\\theta$. The result is a continuous-time model that respects variational structure when extrapolating beyond training data. Energy conservation is guaranteed by construction, not by hope.',
+'<strong style="color:var(--primary)">Less data, more robust.</strong> Because physical laws are baked into the architecture and loss, LNNs require substantially less training data than unconstrained NNs. They also learn accurate dynamics from noisy or imperfect trajectories \u2014 the physical structure regularises against observation noise. This matters for real-world deployment: every sensor is noisy, every dataset is small, every model must extrapolate. Physics is the ultimate regulariser.',
+'<strong style="color:var(--primary)">Decades-long stability.</strong> Long-horizon energy conservation unlocks applications impossible for naive models: tracking orbital debris for decades without false collision warnings, controlling prosthetic limbs with smooth energy-efficient joint trajectories, simulating floating wind turbines under chaotic wave loading, and reconstructing patient gait dynamics from video alone. The LNN trade-off \u2014 a more complex training procedure \u2014 buys decades of physically correct extrapolation.'
+];
+var CLIP15_PARAMS=[
+{label:'\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'T-V balance'},
+{label:'\u03b5',min:0,max:0.2,step:0.01,default:0.05,decimals:2,desc:'noise level'},
+{label:'\u03bb',min:0,max:2,step:0.1,default:1,decimals:1,desc:'loss weight'},
+{label:'T',min:10,max:500,step:10,default:100,decimals:0,desc:'horizon steps'},
+{label:'\u03c3',min:0,max:0.3,step:0.01,default:0.05,decimals:2,desc:'noise std'},
+{label:'\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'safety weight'}
+];
+var SCENE15_MATH=[
+['L=T(q,q\u0307)\u2212V(q)','architectural','inductive bias'],
+['E_NN(t)\u2192\u221e','naive drift','unphysical'],
+['L_LNN=||q\u00a8_obs\u2212q\u00a8_LNN||\u00b2','custom loss','autodiff'],
+['dx/dt=f_LNN(x)','Neural ODE','physics-bound'],
+['N\u2193, \u03c3\u2182 ok','data efficient','robust'],
+['decades stable','long horizon','prosthetics+orbit']
+];
+var CLIP15=makeClip({varName:'CLIP15',cvId:'cv15',wrapId:'wrap15',lblId:'lbl15',titleId:'title15',zoomId:'zoom15',zoomValId:'zoom15v',paramId:'param15',paramValId:'param15v',paramLabelId:'paramLabel15',paramDefault:0.01,paramDecimals:3,lightId:'light15',narrId:'narr15',recId:'rec15',narrationKey:'piml15',sceneListId:'scenes15',thoughtsId:'thoughts15',scenes:CLIP15_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE15_MATH[scene]);
+if(scene===0){
+// T-V decomposition: NN parameterises L = T - V
+var cx=W/2,cy=H*0.45;
+// Two sub-networks: T (kinetic) and V (potential)
+ctx.fillStyle='#00CED1';ctx.shadowColor='#00CED1';ctx.shadowBlur=6;
+ctx.fillRect(cx-65,cy-25,40,30);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('T\u03b8',cx-45,cy-8);
+ctx.fillStyle='#FF69B4';ctx.shadowColor='#FF69B4';ctx.shadowBlur=6;
+ctx.fillRect(cx+25,cy-25,40,30);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 9px Georgia,serif';ctx.fillText('V\u03b8',cx+45,cy-8);
+// Minus sign
+ctx.fillStyle='#FFD700';ctx.font='bold 14px Georgia,serif';ctx.fillText('\u2212',cx,cy-8);
+// Inputs: q and q_dot feeding both
+ctx.fillStyle='#10b981';ctx.font='7px Georgia,serif';ctx.textAlign='right';
+ctx.fillText('q',cx-70,cy-15);ctx.fillText('q\u0307',cx-70,cy-3);
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx-68,cy-13);ctx.lineTo(cx-65,cy-13);ctx.stroke();
+ctx.beginPath();ctx.moveTo(cx-68,cy-3);ctx.lineTo(cx-65,cy-3);ctx.stroke();
+// Output: L = T - V (scalar)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.setLineDash([3,3]);
+ctx.beginPath();ctx.moveTo(cx-45,cy+5);ctx.lineTo(cx,cy+30);ctx.stroke();
+ctx.beginPath();ctx.moveTo(cx+45,cy+5);ctx.lineTo(cx,cy+30);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=10;
+ctx.beginPath();ctx.arc(cx,cy+38,8,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('L\u03b8',cx,cy+34);
+// Equation
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('L = T(q, q\u0307) \u2212 V(q)',cx,cy+55);
+ctx.fillStyle='#a855f7';ctx.font='7px monospace';ctx.fillText('scalar \u2192 autodiff \u2192 q\u00a8',cx,cy+67);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('L = T(q, q\u0307) \u2212 V(q) (architectural)',W/2,H-20);
+}else if(scene===1){
+// Naive NN blow-up vs LNN conservation
+var epsilon=param;var cx=W/2,cy=H*0.5;
+// Naive NN energy (drifts to infinity)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<150;i++){var x=i/150*W*0.7+W*0.15;var drift=i*0.005+Math.sin(i*0.1)*5;var y=cy-30-drift*4;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('naive NN: E \u2192 \u221e',W*0.15,cy-50);
+// ode45 (drifts similarly)
+ctx.strokeStyle='#ffa500';ctx.lineWidth=1.5;ctx.setLineDash([4,2]);ctx.beginPath();
+for(var i=0;i<150;i++){var x=i/150*W*0.7+W*0.15;var drift=i*0.003+Math.cos(i*0.08)*4;var y=cy-30-drift*3;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ffa500';ctx.fillText('ode45: E drifts',W*0.15,cy-62);
+// LNN (conserves)
+ctx.strokeStyle='#10b981';ctx.lineWidth=2.5;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<150;i++){var x=i/150*W*0.7+W*0.15;var y=cy-30;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.fillText('LNN: E \u2248 E\u2080 (bounded)',W*0.15,cy-38);
+// Energy baseline
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.15,cy-30);ctx.lineTo(W*0.85,cy-30);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('time \u2192 (chaotic double pendulum)',cx,cy+15);
+// Warning sign for naive
+ctx.fillStyle='#ff6b6b';ctx.font='bold 8px Georgia,serif';ctx.textAlign='right';
+ctx.fillText('\u26a0 unphysical divergence',W*0.85,cy-50);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('naive NN blows up; LNN conserves',W/2,H-20);
+}else if(scene===2){
+// Custom loss: ||q_ddot_obs - q_ddot_LNN||^2
+var lambda=param;var cx=W/2,cy=H*0.45;
+// Observed q_ddot (data points)
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('observed q\u00a8',10,cy-40);
+for(var i=0;i<8;i++){var px=W*0.15+i*W*0.08;var py=cy-20+Math.sin(i*0.7+t*0.4)*8;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill()}
+// LNN prediction curve
+ctx.fillStyle='#FF69B4';ctx.fillText('LNN q\u00a8(L, q, q\u0307)',10,cy-28);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.shadowColor='#FF69B4';ctx.shadowBlur=3;ctx.beginPath();
+for(var i=0;i<80;i++){var px=W*0.15+i/80*W*0.65;var py=cy-20+Math.sin(i*0.07+t*0.4)*8;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();ctx.shadowBlur=0;
+// Residual lines (loss)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1;ctx.setLineDash([2,2]);
+for(var i=0;i<8;i++){var px=W*0.15+i*W*0.08;var py1=cy-20+Math.sin(i*0.7+t*0.4)*8;var py2=cy-20+Math.sin(i*0.56+t*0.4)*8;ctx.beginPath();ctx.moveTo(px,py1);ctx.lineTo(px,py2);ctx.stroke()}ctx.setLineDash([]);
+// Loss equation
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('L_LNN = ||q\u00a8_obs \u2212 q\u00a8_LNN||\u00b2',cx,cy+25);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('q\u00a8_LNN = EulerLagrange(L\u03b8, q, q\u0307)',cx,cy+38);
+ctx.fillStyle='#a855f7';ctx.font='7px monospace';ctx.fillText('autodiff computes \u2207L, \u2207\u00b2L',cx,cy+50);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('custom loss: ||q\u00a8_obs \u2212 q\u00a8_LNN||\u00b2',W/2,H-20);
+}else if(scene===3){
+// Neural ODE extension
+var cx=W/2,cy=H*0.5;
+// Standard Neural ODE (left): dx/dt = f_theta(x)
+ctx.fillStyle='#00CED1';ctx.font='8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Neural ODE',W*0.25,H*0.15);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.strokeRect(W*0.13,cy-25,80,50);
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.fillText('dx/dt = f\u03b8(x)',W*0.25,cy);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('unconstrained',W*0.25,cy+12);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.42,cy);ctx.lineTo(W*0.58,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.fillText('+ physics',W*0.5,cy-8);
+// LNN (right): dx/dt = f_LNN(x) via Euler-Lagrange
+ctx.fillStyle='#FF69B4';ctx.font='8px Georgia,serif';ctx.fillText('LNN (physics-bound)',W*0.75,H*0.15);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=1.5;ctx.shadowColor='#FF69B4';ctx.shadowBlur=4;ctx.strokeRect(W*0.63,cy-25,80,50);ctx.shadowBlur=0;
+ctx.fillStyle='#FF69B4';ctx.font='7px monospace';ctx.fillText('dx/dt = f_LNN(x)',W*0.75,cy);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('Euler-Lagrange',W*0.75,cy+10);
+ctx.fillText('of L\u03b8',W*0.75,cy+18);
+// Trajectory comparison (LNN stays bounded, NeuralODE drifts)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.setLineDash([3,2]);ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.15+i/100*W*0.7;var y=H*0.78+Math.sin(i*0.1)*3+i*0.005;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.setLineDash([]);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.15+i/100*W*0.7;var y=H*0.78+Math.sin(i*0.1)*3;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('extrapolation horizon \u2192',W*0.15,H*0.92);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('LNN = physics-constrained Neural ODE',W/2,H-20);
+}else if(scene===4){
+// Data efficiency & noise robustness
+var sigma=param;var cx=W/2,cy=H*0.5;
+// Sample count comparison
+ctx.fillStyle='#ff6b6b';ctx.font='8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('naive NN',W*0.25,H*0.15);
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();ctx.arc(W*0.25,cy,30,0,Math.PI*2);ctx.stroke();
+// Many noisy data points
+for(var i=0;i<60;i++){var a=Math.random()*Math.PI*2;var r=15+Math.random()*15;var px=W*0.25+Math.cos(a)*r;var py=cy+Math.sin(a)*r;ctx.fillStyle='#ff6b6b44';ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);ctx.fill()}
+ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.fillText('N=1000, \u03c3=0.2',W*0.25,cy+50);
+// LNN (right)
+ctx.fillStyle='#10b981';ctx.font='8px Georgia,serif';ctx.fillText('LNN',W*0.75,H*0.15);
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(W*0.75,cy,30,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;
+// Few data points + clean trajectory
+ctx.strokeStyle='#10b981';ctx.lineWidth=1.5;ctx.beginPath();
+for(var i=0;i<60;i++){var a=i/60*Math.PI*2;var px=W*0.75+Math.cos(a)*22;var py=cy+Math.sin(a)*22;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();
+for(var i=0;i<10;i++){var a=i/10*Math.PI*2+sigma*5;var px=W*0.75+Math.cos(a)*22;var py=cy+Math.sin(a)*22;ctx.fillStyle='#10b98188';ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill()}
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.fillText('N=100, \u03c3=0.05',W*0.75,cy+50);
+// Tradeoff bar
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('physics regularises against noise',cx,cy+70);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('LNN: less data, robust to noise',W/2,H-20);
+}else if(scene===5){
+// Long-horizon stability & applications
+var gamma=param;var cx=W/2,cy=H*0.45;
+// Long horizon axis
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,H*0.78);ctx.lineTo(W*0.9,H*0.78);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('0',W*0.12,H*0.78+10);ctx.fillText('10yr',W*0.45,H*0.78+10);ctx.fillText('decades',W*0.85,H*0.78+10);
+// LNN trajectory stable across decades
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<150;i++){var x=W*0.1+i/150*W*0.8;var y=H*0.78-Math.sin(i*0.05)*4;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('LNN: stable for decades',W*0.1,H*0.7);
+// Naive diverges
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([3,2]);ctx.beginPath();
+for(var i=0;i<150;i++){var x=W*0.1+i/150*W*0.8;var drift=i*0.003;var y=H*0.78-Math.sin(i*0.05)*4+drift*15;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff6b6b';ctx.fillText('naive: false alerts after 1yr',W*0.1,H*0.62);
+// Application icons row
+var apps=[{x:0.2,icon:'\ud83e\uddbe',l:'Prosthetics',c:'#a855f7'},{x:0.4,icon:'\ud83d\ude80',l:'Satellites',c:'#FFD700'},{x:0.6,icon:'\ud83c\udf01',l:'Wind',c:'#00CED1'},{x:0.8,icon:'\ud83d\udeb6',l:'Gait',c:'#10b981'}];
+apps.forEach(function(ap){var px=W*ap.x;
+ctx.font='14px Georgia,serif';ctx.textAlign='center';ctx.fillText(ap.icon,px,cy-5);
+ctx.fillStyle=ap.c;ctx.font='7px Georgia,serif';ctx.fillText(ap.l,px,cy+8)});
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('decades-long stability unlocks applications',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP15.setActive(false);
+
+// CLIP15 code section \u2014 Lagrangian NN with T-V decomposition + custom loss
+var CLIP15_CODE={
+'lnn2':{
+name:'Lagrangian NN II (T-V decomposition + custom loss)',
+latex:'L_\\theta(q,\\dot{q}) = T_\\theta(q,\\dot{q}) - V_\\theta(q), \\quad \\mathcal{L}_{\\text{LNN}} = \\| \\ddot{q}_{\\text{obs}} - \\ddot{q}_{\\text{LNN}}(L, q, \\dot{q}) \\|_2^2',
+intent:'Separate T and V heads; autodiff evaluates Euler-Lagrange; custom loss penalises acceleration mismatch',
+mapping:[
+{symbol:'T_\\u03b8(q,\\u1e0b)',code:'kinetic_net(q, qdot)',note:'Kinetic energy head'},
+{symbol:'V_\\u03b8(q)',code:'potential_net(q)',note:'Potential energy head'},
+{symbol:'L = T \\u2212 V',code:'L = T - V',note:'Scalar Lagrangian (architectural)'},
+{symbol:'\\u1e8b_LNN',code:'euler_lagrange_accel(L, q, qdot)',note:'Acceleration via autodiff + Hessian inv'},
+{symbol:'\\u1e8a_obs',code:'q_ddot_obs',note:'Observed accelerations (data)'},
+{symbol:'\\u2112_LNN',code:'mse(q_ddot_obs, q_ddot_LNN)',note:'Custom loss: ||obs - LNN||^2'}],
+langs:{
+'Python':'import torch\nimport torch.nn as nn\n\nclass LagrangianNN_TF(nn.Module):\n    """L = T(q, qdot) - V(q) with separate heads; custom EL-enforced loss"""\n    def __init__(self):\n        super().__init__()\n        # Kinetic head: (q, qdot) -> scalar T\n        self.T_net = nn.Sequential(\n            nn.Linear(4, 128), nn.Softplus(),\n            nn.Linear(128, 128), nn.Softplus(),\n            nn.Linear(128, 1)\n        )\n        # Potential head: q -> scalar V\n        self.V_net = nn.Sequential(\n            nn.Linear(2, 64), nn.Softplus(),\n            nn.Linear(64, 1)\n        )\n    \n    def forward(self, q, qdot):\n        T = self.T_net(torch.cat([q, qdot], dim=-1))\n        V = self.V_net(q)\n        return T - V  # scalar Lagrangian\n    \n    def euler_lagrange_accel(self, q, qdot):\n        """Compute q_ddot via EL: d/dt(dL/dqdot) - dL/dq = 0"""\n        q = q.requires_grad_(True)\n        qdot = qdot.requires_grad_(True)\n        L = self.forward(q, qdot)\n        p = torch.autograd.grad(L.sum(), qdot, create_graph=True)[0]   # momentum\n        dL_dq = torch.autograd.grad(L.sum(), q, create_graph=True)[0]  # force\n        M = torch.autograd.grad(p.sum(), qdot, create_graph=True)[0]   # mass matrix\n        C = torch.autograd.grad(p.sum(), q, create_graph=True)[0]      # coupling\n        rhs = dL_dq - (C * qdot).sum(dim=-1, keepdim=True)\n        q_ddot = torch.linalg.solve(M.unsqueeze(0), rhs.unsqueeze(0)).squeeze(0)\n        return q_ddot\n    \n    def loss(self, q, qdot, q_ddot_obs):\n        \"\"\"Custom LNN loss: ||q_ddot_obs - q_ddot_LNN||^2\"\"\"\n        q_ddot_pred = self.euler_lagrange_accel(q, qdot)\n        return torch.mean((q_ddot_obs - q_ddot_pred)**2)',
+'TypeScript':'// Lagrangian NN II (T-V decomposition + custom loss)\nclass LagrangianNN_TF {\n  private T_net: NeuralNet;  // (q, qdot) -> T (scalar)\n  private V_net: NeuralNet;  // q -> V (scalar)\n  \n  forward(q: number[], qdot: number[]): number {\n    const T = this.T_net.forward([...q, ...qdot])[0];\n    const V = this.V_net.forward(q)[0];\n    return T - V;  // scalar Lagrangian\n  }\n  \n  eulerLagrangeAccel(q: number[], qdot: number[]): number[] {\n    const L = this.forward(q, qdot);\n    const p = autoGrad(() => this.forward(q, qdot), qdot);     // momentum\n    const dL_dq = autoGrad(() => this.forward(q, qdot), q);    // force\n    const M = autoGradSecond(() => this.forward(q, qdot), qdot, qdot);  // mass\n    const C = autoGradSecond(() => this.forward(q, qdot), q, qdot);     // coupling\n    const rhs = dL_dq.map((v, i) => v - C[i] * qdot[i]);\n    return solveLinear(M, rhs);\n  }\n  \n  loss(q: number[], qdot: number[], q_ddot_obs: number[]): number {\n    const q_ddot_pred = this.eulerLagrangeAccel(q, qdot);\n    return mse(q_ddot_obs, q_ddot_pred);\n  }\n}',
+'Go':'// Lagrangian NN II (T-V decomposition + custom loss)\ntype LagrangianNN_TF struct {\n    T_net *NeuralNet  // (q, qdot) -> T\n    V_net *NeuralNet  // q -> V\n}\nfunc (m *LagrangianNN_TF) Forward(q, qdot []float64) float64 {\n    T := m.T_net.Forward(append(q, qdot...))[0]\n    V := m.V_net.Forward(q)[0]\n    return T - V  // scalar Lagrangian\n}\nfunc (m *LagrangianNN_TF) EulerLagrangeAccel(q, qdot []float64) []float64 {\n    dL_dq := autoGrad(m, q, qdot, "q")\n    p := autoGrad(m, q, qdot, "qdot")\n    M := hessian(m, q, qdot, "qdot", "qdot")\n    C := hessian(m, q, qdot, "q", "qdot")\n    rhs := make([]float64, len(q))\n    for i := range q { rhs[i] = dL_dq[i] - C[i]*qdot[i] }\n    return solveLinear(M, rhs)\n}\nfunc (m *LagrangianNN_TF) Loss(q, qdot, q_ddot_obs []float64) float64 {\n    pred := m.EulerLagrangeAccel(q, qdot)\n    var s float64\n    for i := range q_ddot_obs { d := q_ddot_obs[i] - pred[i]; s += d*d }\n    return s / float64(len(q_ddot_obs))\n}',
+'Scala':'// Lagrangian NN II (T-V decomposition + custom loss)\nclass LagrangianNN_TF {\n  private val T_net = new NeuralNet(List(4, 128, 128, 1))\n  private val V_net = new NeuralNet(List(2, 64, 1))\n  def forward(q: Vector[Double], qdot: Vector[Double]): Double = {\n    val T = T_net.forward(q ++ qdot).head\n    val V = V_net.forward(q).head\n    T - V  // scalar Lagrangian\n  }\n  def eulerLagrangeAccel(q: Vector[Double], qdot: Vector[Double]): Vector[Double] = {\n    val dL_dq = autoGrad(q => forward(q, qdot), q)\n    val p = autoGrad(qd => forward(q, qd), qdot)\n    val M = hessian(forward(q, _), qdot, qdot)\n    val C = hessian(forward(_, qdot), q, qdot)\n    val rhs = dL_dq.zip(C.zip(qdot)).map { case (f, (c, qd)) => f - c * qd }\n    solveLinear(M, rhs)\n  }\n  def loss(q: Vector[Double], qdot: Vector[Double], q_ddot_obs: Vector[Double]): Double = {\n    val pred = eulerLagrangeAccel(q, qdot)\n    (q_ddot_obs, pred).zipped.map((o, p) => (o - p) * (o - p)).sum / q_ddot_obs.length\n  }\n}',
+'C':'/* Lagrangian NN II (T-V decomposition + custom loss) */\ntypedef struct {\n    NN* T_net;  /* (q, qdot) -> T */\n    NN* V_net;  /* q -> V */\n} LagrangianNN_TF;\ndouble lnn2_forward(LagrangianNN_TF* m, double* q, double* qdot, int n) {\n    double in_T[2*n];\n    for (int i = 0; i < n; i++) { in_T[i] = q[i]; in_T[i+n] = qdot[i]; }\n    double T = nn_forward(m->T_net, in_T, 2*n)[0];\n    double V = nn_forward(m->V_net, q, n)[0];\n    return T - V;  /* scalar Lagrangian */\n}\n/* q_ddot via Euler-Lagrange + Hessian inversion (autodiff required) */\nvoid lnn2_accel(LagrangianNN_TF* m, double* q, double* qdot, double* q_ddot, int n) {\n    double* dL_dq = auto_grad(m, q, qdot, n, "q");\n    double* p = auto_grad(m, q, qdot, n, "qdot");\n    double** M = hessian(m, q, qdot, n, "qdot", "qdot");\n    double** C = hessian(m, q, qdot, n, "q", "qdot");\n    double* rhs = malloc(n * sizeof(double));\n    for (int i = 0; i < n; i++) {\n        rhs[i] = dL_dq[i];\n        for (int j = 0; j < n; j++) rhs[i] -= C[i][j] * qdot[j];\n    }\n    solve_linear(M, rhs, q_ddot, n);\n    free(rhs);\n}\ndouble lnn2_loss(LagrangianNN_TF* m, double* q, double* qdot, double* q_ddot_obs, int n) {\n    double* q_ddot_pred = malloc(n * sizeof(double));\n    lnn2_accel(m, q, qdot, q_ddot_pred, n);\n    double s = 0;\n    for (int i = 0; i < n; i++) { double d = q_ddot_obs[i] - q_ddot_pred[i]; s += d*d; }\n    free(q_ddot_pred);\n    return s / n;\n}',
+'Elixir':'defmodule LagrangianNN_TF do\n  defstruct [:T_net, :V_net]\n  def forward(model, q, qdot) do\n    T = NN.forward(model.T_net, q ++ qdot) |> hd()\n    V = NN.forward(model.V_net, q) |> hd()\n    T - V  # scalar Lagrangian\n  end\n  def euler_lagrange_accel(model, q, qdot) do\n    dL_dq = auto_grad(fn -> forward(model, q, qdot) end, q)\n    p = auto_grad(fn -> forward(model, q, qdot) end, qdot)\n    M = hessian(fn -> forward(model, q, qdot) end, qdot, qdot)\n    C = hessian(fn -> forward(model, q, qdot) end, q, qdot)\n    rhs = Enum.zip(dL_dq, Enum.zip(C, qdot))\n           |> Enum.map(fn {f, {c, qd}} -> f - c * qd end)\n    Solve.linear(M, rhs)\n  end\n  def loss(model, q, qdot, q_ddot_obs) do\n    pred = euler_lagrange_accel(model, q, qdot)\n    Enum.zip(q_ddot_obs, pred)\n      |> Enum.map(fn {o, p} -> :math.pow(o - p, 2) end)\n      |> Enum.sum() / length(q_ddot_obs)\n  end\nend'
+}
+}
+};
+var CLIP15_CURRENT_LANG='Python';
+function populateCode15(){
+var e=CLIP15_CODE['lnn2'];if(!e)return;
+var exprEl=document.getElementById('expr15');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map15');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs15');var ccEl=document.getElementById('codecontent15');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip15Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc15-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip15Code(lang){CLIP15_CURRENT_LANG=lang;document.querySelectorAll('#tabs15 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc15-'+lang)})}
+var CLIP15_OUTPUTS={'lnn2':['Initializing Lagrangian NN II (T-V decomposition)...','T_net: [4, 128, 128, 1] -> kinetic T(q, qdot)','V_net: [2, 64, 1] -> potential V(q)','L = T - V (scalar Lagrangian)','','Training on double pendulum (chaotic):','  N_samples = 200 (vs 2000 for naive NN)','  noise_std = 0.05 (sensor-grade)','','Epoch 100:  L_LNN = 0.018','Epoch 500:  L_LNN = 0.004','Epoch 1000: L_LNN = 0.001','','Euler-Lagrange acceleration check:','  ||q_ddot_obs - q_ddot_LNN||^2 = 0.001 (converged)','  Mass matrix M = d2L/dqdot2 well-conditioned (cond=12)','','Long-horizon energy conservation:','  E(t=0)    = 1.0000','  E(t=100)  = 1.0001','  E(t=1000) = 1.0002','  E(t=10000)= 1.0003 (drift: 0.0003 over 10k steps)','','Naive NN baseline (same data):','  E(t=1000) = 1.87 (87% energy gain! unphysical)','  E(t=10000)= blow-up (NaN)','','LNN: 10x less data, robust to noise, decades-stable']};
+function runClip15Code(key){
+var e=CLIP15_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput15');var st=document.getElementById('runStatus15');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap15');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP15_CURRENT_LANG+' '+e.name,''];var out2=CLIP15_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip15CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip15CodeViz(key){
+var wrap=document.getElementById('codeVizWrap15');if(!wrap)return;var cv=document.getElementById('codeVizCanvas15');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('LNN II: T-V decomposition \\u2014 energy conservation',W/2,16);
+var cx=W/2,cy=H*0.55,scale=H*0.08;
+// LNN trajectory (conserves)
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<300;i++){var phase=i*0.04+tt*0.3;var q1=Math.cos(phase)*scale*1.5;var q2=Math.cos(phase*1.4)*scale*1.1;ctx.lineTo(cx+q1,cy+q2)}ctx.stroke();ctx.shadowBlur=0;
+// Naive NN (drifts)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);ctx.beginPath();
+for(var i=0;i<300;i++){var phase=i*0.04+tt*0.3;var drift=i*0.0008;var q1=Math.cos(phase)*(scale*1.5+drift*40);var q2=Math.cos(phase*1.4)*(scale*1.1+drift*40);ctx.lineTo(cx+q1,cy+q2)}ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#10b981';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('LNN II: E=const \\u2713 (T-V)',10,25);
+ctx.fillStyle='#ff6b6b';ctx.fillText('naive NN: blow-up \\u2717',10,37);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)} frame();
+}
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -4069,7 +4359,8 @@ var FUTURES_DATA={
 'piml11':[{n:'STLSQ everywhere',y:2025,p:0.50,t:'STLSQ default sparse optimization'},{n:'Stability-constrained SINDy',y:2027,p:0.35,t:'Globally stable models by construction'},{n:'Adaptive SINDy control',y:2028,p:0.30,t:'Real-time model updates for damage'},{n:'SR3 maturity',y:2026,p:0.45,t:'SR3 replaces L1 as default'},{n:'Energy-conserving SINDy',y:2027,p:0.40,t:'KKT constraints standard for fluids'}],
 'piml12':[{n:'Discrepancy twins standard',y:2027,p:0.45,t:'Every digital twin uses discrepancy ML'},{n:'Group sparsity default',y:2026,p:0.40,t:'Multi-trajectory group sparsity standard'},{n:'Pareto-optimal hybrid',y:2025,p:0.50,t:'Physics+ML Pareto trade-off ubiquitous'},{n:'Aging adaptive control',y:2028,p:0.35,t:'Real-time aging adaptation for robotics'},{n:'Universal law discovery',y:2030,p:0.25,t:'ML discovers universal vs trajectory-specific'}],
 'piml13':[{n:'HNN for orbital mechanics',y:2027,p:0.35,t:'Energy-conserving satellite tracking'},{n:'Symplectic NN default',y:2028,p:0.30,t:'Symplectic structure standard in ML'},{n:'Fusion plasma HNN',y:2030,p:0.20,t:'Tokamak control via HNN'},{n:'Molecular dynamics HNN',y:2026,p:0.40,t:'Drug discovery acceleration'},{n:'Lagrangian NN mature',y:2027,p:0.35,t:'LNN standard for robotics'}],
-'piml14':[{n:'LNN for prosthetics',y:2027,p:0.40,t:'Smooth joint control from (q,q\u0307) sensors'},{n:'LNN satellite tracking',y:2028,p:0.35,t:'No false collision warnings over decades'},{n:'Wind turbine digital twins',y:2029,p:0.30,t:'Chaotic fluid-structure LNN twins'},{n:'Biomechanics LNN',y:2026,p:0.45,t:'Gait analysis from cameras+IMU'},{n:'(q,q\u0307) models default',y:2030,p:0.25,t:'Sensor-friendly coordinate models standard'}]
+'piml14':[{n:'LNN for prosthetics',y:2027,p:0.40,t:'Smooth joint control from (q,q\u0307) sensors'},{n:'LNN satellite tracking',y:2028,p:0.35,t:'No false collision warnings over decades'},{n:'Wind turbine digital twins',y:2029,p:0.30,t:'Chaotic fluid-structure LNN twins'},{n:'Biomechanics LNN',y:2026,p:0.45,t:'Gait analysis from cameras+IMU'},{n:'(q,q\u0307) models default',y:2030,p:0.25,t:'Sensor-friendly coordinate models standard'}],
+'piml15':[{n:'T-V decomposition LNNs',y:2026,p:0.45,t:'Separate T/V heads standard for interpretability'},{n:'Custom EL loss default',y:2027,p:0.40,t:'Euler-Lagrange residual loss standard in PIML'},{n:'Physics-bound Neural ODEs',y:2028,p:0.35,t:'Neural ODEs ship with physics constraints'},{n:'Small-data robotics',y:2027,p:0.40,t:'100-sample dynamics learning for prosthetics'},{n:'Decades-long orbit twins',y:2030,p:0.25,t:'LNN twins track debris for decades'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -4098,7 +4389,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);drawFutureChart('fut15','piml15',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -4183,6 +4474,7 @@ setTimeout(populateCode11,300);
 setTimeout(populateCode12,300);
 setTimeout(populateCode13,300);
 setTimeout(populateCode14,300);
+setTimeout(populateCode15,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -4235,7 +4527,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('14 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===14});
+chk('15 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===15});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -4250,6 +4542,7 @@ chk('Clip 11 ready',function(){return CLIP_CURRICULUM[10].status==='ready'});
 chk('Clip 12 ready',function(){return CLIP_CURRICULUM[11].status==='ready'});
 chk('Clip 13 ready',function(){return CLIP_CURRICULUM[12].status==='ready'});
 chk('Clip 14 ready',function(){return CLIP_CURRICULUM[13].status==='ready'});
+chk('Clip 15 ready',function(){return CLIP_CURRICULUM[14].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -4360,6 +4653,16 @@ chk('Clip 14 code tabs (6)',function(){return document.getElementById('tabs14')&
 chk('Clip 14 map table',function(){var m=document.getElementById('map14');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 14 future chart',function(){return!!document.getElementById('fut14')});
 chk('CLIP14 narration key',function(){return CLIP14.narrationKey==='piml14'});
+// Clip 15
+chk('CLIP15 exists',function(){return typeof CLIP15==='object'});
+chk('Clip 15 section exists',function(){return!!document.getElementById('clip15')});
+chk('Clip 15 canvas',function(){return!!document.getElementById('cv15')});
+chk('Clip 15 scenes (6)',function(){var s=document.getElementById('scenes15');return s&&s.children.length===6});
+chk('Clip 15 expr populated',function(){var e=document.getElementById('expr15');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 15 code tabs (6)',function(){return document.getElementById('tabs15')&&document.getElementById('tabs15').children.length===6});
+chk('Clip 15 map table',function(){var m=document.getElementById('map15');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 15 future chart',function(){return!!document.getElementById('fut15')});
+chk('CLIP15 narration key',function(){return CLIP15.narrationKey==='piml15'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
