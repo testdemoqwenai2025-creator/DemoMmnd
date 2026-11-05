@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-05-v22-clip18-resnet">
+<meta name="version" content="2026-11-05-v23-clip19-fno">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -1093,10 +1093,61 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap18"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas18"></canvas></div>
 </div>
 </section>
+<!-- CLIP 19: Fourier Neural Operator (FNO) -->
+<section class="clip-section" id="clip19" style="display:none">
+<h2>Fourier Neural Operator (FNO)</h2>
+<div class="subtitle">Video 19 \u00b7 Operator learning G_\u03b8:A\u2192U, Fourier spectral layers v_{l+1}=\u03c3(Wv_l+F\u207b\u00b9(R_\u03c6\u00b7F(v_l))), zero-shot super-resolution, GNO/LNO kernel generalization, periodic BCs</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap19">
+<canvas class="clip-canvas" id="cv19"></canvas>
+<div class="clip-scene-label" id="lbl19">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP19.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP19.pause()">||</button>
+<button class="clip-btn" onclick="CLIP19.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP19.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP19.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title19">Operator learning: function spaces</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom19" min="0.5" max="3" step="0.1" value="1"><span id="zoom19v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel19">\u03b1</span><input type="range" id="param19" min="0" max="0.1" step="0.005" value="0.01"><span id="param19v">0.010</span></div>
+<button class="clip-btn" onclick="CLIP19.toggleRecord()" id="rec19" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP19.toggleNarration()" id="narr19" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP19.toggleLight()" id="light19">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes19"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts19"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 FNO evolution</h4>
+<canvas class="future-canvas" id="fut19"></canvas>
+<div class="future-milestones" id="fut19m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code19">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr19">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map19"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs19"></div>
+<div id="codecontent19"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip19Code('fno')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus19" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput19"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap19"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas19"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 18/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 19/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -1134,7 +1185,7 @@ var CLIP_CURRICULUM=[
 {n:16,title:'Neural Ordinary Differential Equations',desc:'ResNet as forward Euler, continuous dx/dt=f\u03b8(x,t), adjoint sensitivity, irregular time-series, symplectic extension, SINDy discovery pipeline',status:'ready'},
 {n:17,title:'Python Symbolic Regression (PySR)',desc:'Function trees, genetic programming (mutate/crossover/simplify), Pareto parsimony, Schmidt-Lipson law discovery, Noack symbolic control, interpretable AI',status:'ready'},
 {n:18,title:'Residual Networks (ResNets)',desc:'Skip connections y=x+F(x), forward Euler equivalence x_{k+1}=x_k+F(x_k), stride/dim control, Neural ODE limit, U-Net roots, ultra-deep training',status:'ready'},
-{n:19,title:'RL + Physics',desc:'Physics-informed reinforcement learning',status:'upcoming'},
+{n:19,title:'Fourier Neural Operator (FNO)',desc:'Operator learning G_\u03b8:A\u2192U, Fourier spectral layers v_{l+1}=\u03c3(Wv+F\u207b\u00b9(R\u00b7F(v))), zero-shot super-resolution, GNO/LNO kernel generalization, periodic BCs',status:'ready'},
 {n:20,title:'Reduced-Order Models',desc:'ROM with physics constraints',status:'upcoming'},
 {n:21,title:'Uncertainty Quantification',desc:'Bayesian PIML',status:'upcoming'},
 {n:22,title:'Multi-Fidelity Models',desc:'Combining data sources',status:'upcoming'},
@@ -5268,6 +5319,253 @@ ctx.fillText('ResNet-34: 0.087 (healthy)',10,H*0.92);
 ctx.fillStyle='#ff6b6b';ctx.fillText('pre-ResNet: 0.0001 (vanishing)',W*0.5,H*0.92);
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)} frame();
 }
+// ============ CLIP 19: Fourier Neural Operator (FNO) ============
+var CLIP19_SCENES=[
+{title:'Operator learning: function spaces',desc:'G_\u03b8: A\u2192U maps input function a(x) to solution u(x); infinite-dimensional mapping'},
+{title:'Fourier spectral layer',desc:'v_{l+1}=\u03c3(W\u00b7v_l + F\u207b\u00b9(R_\u03c6 \u00b7 F(v_l))); FFT \u2192 learned weights \u2192 IFFT'},
+{title:'Discretization invariance & zero-shot super-res',desc:'Train on 64\u00d764; evaluate at 256\u00d7256 or arbitrary mesh without retraining'},
+{title:'Kernel generalization: GNO & LNO',desc:'(K v)(x)=\u222bK(x,y)v(y)d\u03bc(y); Laplace kernel e^{(\u03b3+i\u03c9)(x-y)} for growth/decay'},
+{title:'Periodic BCs & qualitative vs quantitative',desc:'u(x+L)=u(x); complex geometries need kernel mods; No Free Lunch caveat'},
+{title:'Global impact',desc:'Hyper-local weather/climate, aerodynamic design, real-time cardiovascular blood flow'}
+];
+var CLIP19_THOUGHTS=[
+'<strong style="color:var(--primary)">Operators, not functions.</strong> Standard neural networks approximate maps between finite vector spaces. The Fourier Neural Operator parameterises an operator $\\mathcal{G}_\\theta : \\mathcal{A} \\to \\mathcal{U}$ mapping an input function $a(x)$ (initial state, forcing term) directly to a solution function $u(x) = (\\mathcal{G}_\\theta(a))(x)$ over a domain $\\mathcal{D}$. Function spaces, not vectors. As Anandkumar\'s group notes, while neural networks are celebrated as universal approximators, the Fourier transform is the original universal function approximator for physical systems \u2014 a natural representation for PDE solutions.',
+'<strong style="color:var(--primary)">Spectral, not spatial.</strong> FNO replaces local convolutional filters with global spectral operations. The Fourier layer is $v_{l+1}(x) = \\sigma\\!\\left( W v_l(x) + \\mathcal{F}^{-1}\\!\\left( R_\\phi \\cdot \\mathcal{F}(v_l) \\right)\\!(x) \\right)$. Apply FFT to the current hidden state, multiply by a learned weight tensor $R_\\phi$ in frequency space (truncated to low modes), inverse-FFT back, add a local linear bias $W v_l$, apply nonlinearity. By the convolution theorem, this is a global convolution with a learned kernel \u2014 $O(N \\log N)$ via FFT instead of $O(N^2)$.',
+'<strong style="color:var(--primary)">Mesh-free.</strong> Because $R_\\phi$ parameterises continuous integral kernels rather than grid-bound weights, FNO is discretization-invariant. Train on a 64\u00d764 mesh; evaluate the same trained model on a 256\u00d7256 mesh, or at arbitrary query points, with zero-shot super-resolution. No retraining, no fine-tuning. Caveat: the No Free Lunch theorem still applies \u2014 the training mesh must be fine enough to resolve the underlying physical features. Train on too coarse a grid and the model cannot invent physics it has never seen.',
+'<strong style="color:var(--primary)">Beyond Fourier.</strong> FNO is one instance of a broader class of kernel integral operators $(\\mathcal{K}(v))(x) = \\int_{\\mathcal{D}} K(x, y) v(y)\\, d\\mu(y)$. Substitute the pure Fourier kernel (sines and cosines) with a Laplace kernel $K(x, y) \\sim e^{(\\gamma + i\\omega)(x - y)}$ and you get the Laplace Neural Operator (LNO) \u2014 capable of representing exponentially growing or decaying oscillations alongside periodic dynamics. Graph Neural Operators (GNO) generalise further to irregular domains. One framework, many kernels.',
+'<strong style="color:var(--primary)">Periodic by default.</strong> FNO inherits Fourier\'s assumption: $u(x+L) = u(x)$, so wavenumbers live on the discrete lattice $k \\in \\frac{2\\pi}{L}\\mathbb{Z}^d$. This is perfect for periodic PDEs (turbulence in a periodic box) but problematic for complex non-periodic geometries like aircraft wings or turbine blades, which require kernel modifications or windowing. Furthermore, learned operators may show strong qualitative agreement with analytic Green\'s functions while exhibiting quantitative discrepancies \u2014 motivating hybrid physics-informed constraints that enforce the actual PDE residual.',
+'<strong style="color:var(--primary)">Where it matters.</strong> Hyper-local weather: coarse global atmospheric models get upscaled by FNO to high-resolution local forecasts for flash-flood and heatwave warnings in vulnerable agricultural and coastal communities. Aerodynamic design: FNO surrogates replace thousands of slow CFD simulations during wind-turbine blade and EV optimization. Cardiovascular medicine: patient-specific blood flow simulated in real time from MRI scans, letting surgeons test interventions before cutting. FNO brings PDE-scale physics to consumer hardware.'
+];
+var CLIP19_PARAMS=[
+{label:'N',min:16,max:512,step:16,default:64,decimals:0,desc:'train resolution'},
+{label:'k_max',min:1,max:32,step:1,default:12,decimals:0,desc:'Fourier modes kept'},
+{label:'\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'lift width'},
+{label:'\u03b3',min:-1,max:1,step:0.05,default:0,decimals:2,desc:'Laplace growth'},
+{label:'\u03c9',min:0,max:6.28,step:0.1,default:1,decimals:1,desc:'Laplace frequency'},
+{label:'\u03bb',min:0,max:2,step:0.1,default:1,decimals:1,desc:'physics weight'}
+];
+var SCENE19_MATH=[
+['G_\u03b8:A\u2192U','operator','function space'],
+['v_{l+1}=\u03c3(Wv+F\u207b\u00b9(R\u00b7F(v)))','spectral layer','FFT'],
+['train 64\u00d764 \u2192 eval 256','mesh-free','zero-shot'],
+['\u222bK(x,y)v(y)dy','kernel int.','LNO/GNO'],
+['u(x+L)=u(x)','periodic BC','k\u2208(2\u03c0/L)Z\u1d48'],
+['weather+aero+blood','surrogate','real-time']
+];
+var CLIP19=makeClip({varName:'CLIP19',cvId:'cv19',wrapId:'wrap19',lblId:'lbl19',titleId:'title19',zoomId:'zoom19',zoomValId:'zoom19v',paramId:'param19',paramValId:'param19v',paramLabelId:'paramLabel19',paramDefault:0.01,paramDecimals:3,lightId:'light19',narrId:'narr19',recId:'rec19',narrationKey:'piml19',sceneListId:'scenes19',thoughtsId:'thoughts19',scenes:CLIP19_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE19_MATH[scene]);
+if(scene===0){
+// Operator: function a(x) -> G_theta -> solution u(x)
+var cx=W/2,cy=H*0.5;
+// Input function a(x) (left): waveform
+ctx.fillStyle='#00CED1';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('input a(x)',W*0.15,H*0.12);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<60;i++){var x=W*0.08+i/60*W*0.15;var y=cy+Math.sin(i*0.3+t*0.4)*12;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('A (function space)',W*0.15,cy+40);
+// Operator G_theta (middle): box
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.fillRect(W*0.36,cy-25,80,50);ctx.shadowBlur=0;
+ctx.fillStyle='#000';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('G_\u03b8',W*0.36+40,cy+3);
+ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.fillText('operator',W*0.36+40,cy+22);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.23,cy);ctx.lineTo(W*0.36,cy);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.36+80,cy);ctx.lineTo(W*0.55,cy);ctx.stroke();
+// Output u(x) (right): smoother waveform
+ctx.fillStyle='#10b981';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('solution u(x)',W*0.78,H*0.12);
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<60;i++){var x=W*0.65+i/60*W*0.15;var y=cy+Math.sin(i*0.2+t*0.3)*15+Math.sin(i*0.5)*3;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('U (function space)',W*0.78,cy+40);
+// Equation
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('u(x) = (G_\u03b8(a))(x),  \u2200 x \u2208 D',cx,cy+62);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('infinite-dimensional mapping',cx,cy+74);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('operator learning: function \u2192 function',W/2,H-20);
+}else if(scene===1){
+// Fourier spectral layer: FFT -> R_phi weights -> IFFT
+var cx=W/2,cy=H*0.5;
+// Spatial domain (left): v_l(x)
+ctx.fillStyle='#00CED1';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('spatial v_l(x)',W*0.13,H*0.12);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.beginPath();
+for(var i=0;i<50;i++){var x=W*0.07+i/50*W*0.12;var y=cy+Math.sin(i*0.4+t*0.5)*10;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// FFT arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.2,cy);ctx.lineTo(W*0.3,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('FFT',W*0.25,cy-8);
+// Frequency domain (middle): R_phi * F(v_l) - bar chart of mode weights
+ctx.fillStyle='#FF69B4';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('frequency F(v_l)',W*0.45,H*0.12);
+var kMax=8;
+for(var i=0;i<kMax;i++){var px=W*0.38+i*(W*0.14/kMax);var mag=Math.exp(-i*0.3)*(0.7+0.3*Math.sin(i+t*0.5));var h=mag*30;ctx.fillStyle='#FF69B4';ctx.fillRect(px,cy-h,5,h);ctx.strokeStyle='#FF69B4';ctx.lineWidth=1;ctx.strokeRect(px,cy-h,5,h)}
+ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('R_\u03c6 \u00d7 (low modes kept)',W*0.45,cy+15);
+ctx.fillStyle=mt;ctx.font='5px monospace';ctx.fillText('high modes truncated',W*0.45,cy+22);
+// IFFT arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.53,cy);ctx.lineTo(W*0.63,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('IFFT',W*0.58,cy-8);
+// Output v_{l+1} (right): smoothed result
+ctx.fillStyle='#10b981';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('spatial v_{l+1}(x)',W*0.85,H*0.12);
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=3;ctx.beginPath();
+for(var i=0;i<50;i++){var x=W*0.78+i/50*W*0.12;var y=cy+Math.sin(i*0.4+t*0.5)*10;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Equation
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('v_{l+1} = \u03c3(W\u00b7v_l + F\u207b\u00b9(R_\u03c6 \u00b7 F(v_l)))',cx,cy+45);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('global convolution via FFT, O(N log N)',cx,cy+57);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('Fourier spectral layer: FFT \u2192 R_\u03c6 \u2192 IFFT',W/2,H-20);
+}else if(scene===2){
+// Discretization invariance: train 64x64, eval 256x256
+var cx=W/2,cy=H*0.5;
+// Coarse grid (left): 8x8 representation
+ctx.fillStyle='#00CED1';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('train: 64\u00d764 mesh',W*0.22,H*0.12);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1;ctx.strokeRect(W*0.13,cy-30,60,60);
+// Coarse grid cells
+for(var i=0;i<8;i++)for(var j=0;j<8;j++){var v=Math.sin(i*0.5+j*0.3+t*0.4)*0.5+0.5;ctx.fillStyle='rgba(0,206,209,'+v+')';ctx.fillRect(W*0.13+i*7.5,cy-30+j*7.5,7.5,7.5)}
+ctx.strokeStyle='#00CED1';ctx.strokeRect(W*0.13,cy-30,60,60);
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('coarse',W*0.22,cy+40);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.32,cy);ctx.lineTo(W*0.42,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('zero-shot',W*0.37,cy-8);
+// Fine grid (right): 16x16 (representing 256)
+ctx.fillStyle='#10b981';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('eval: 256\u00d7256 mesh',W*0.72,H*0.12);
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.strokeRect(W*0.62,cy-30,60,60);
+for(var i=0;i<16;i++)for(var j=0;j<16;j++){var v=Math.sin(i*0.25+j*0.15+t*0.4)*0.5+0.5;ctx.fillStyle='rgba(16,185,129,'+v+')';ctx.fillRect(W*0.62+i*3.75,cy-30+j*3.75,3.75,3.75)}
+ctx.strokeStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=3;ctx.strokeRect(W*0.62,cy-30,60,60);ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('fine (no retrain)',W*0.72,cy+40);
+// Equation
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('u(x,y) = FNO_\u03b8(a)(x,y) \u2200 (x,y) \u2208 R\u00b2',cx,cy+58);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('independent of mesh size N\u00d7N',cx,cy+70);
+// No Free Lunch warning
+ctx.fillStyle='#ff6b6b';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('\u26a0 No Free Lunch: train mesh must resolve features',cx,cy+82);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('discretization-invariant: zero-shot super-resolution',W/2,H-20);
+}else if(scene===3){
+// Kernel integral operator generalization: FNO -> GNO -> LNO
+var cx=W/2,cy=H*0.5;
+// Three kernel types
+var kernels=[{x:0.2,l:'FNO',sub:'Fourier: sin/cos',c:'#00CED1',expr:'e^{i\u03c9(x-y)}'},{x:0.5,l:'LNO',sub:'Laplace: growth/decay',c:'#FF69B4',expr:'e^{(\u03b3+i\u03c9)(x-y)}'},{x:0.8,l:'GNO',sub:'Graph: arbitrary',c:'#a855f7',expr:'K(x,y) custom'}];
+kernels.forEach(function(k){var px=W*k.x;
+ctx.fillStyle=k.c;ctx.shadowColor=k.c;ctx.shadowBlur=6;ctx.fillRect(px-30,cy-20,60,40);ctx.shadowBlur=0;
+ctx.fillStyle='#fff';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText(k.l,px,cy-5);
+ctx.fillStyle='#fff';ctx.font='5px monospace';ctx.fillText(k.expr,px,cy+5);
+ctx.fillStyle=mt;ctx.font='5px monospace';ctx.fillText(k.sub,px,cy+15)});
+// Arrows showing generalization
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.27,cy);ctx.lineTo(W*0.43,cy);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.57,cy);ctx.lineTo(W*0.73,cy);ctx.stroke();
+// Integral equation
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('(K v)(x) = \u222b_D K(x,y) v(y) d\u03bc(y)',cx,cy+38);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('FNO is one instance: K = Fourier kernel',cx,cy+50);
+ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.fillText('LNO: K = e^{(\u03b3+i\u03c9)(x-y)} (growth + oscillation)',cx,cy+62);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('kernel generalization: FNO \u2192 LNO \u2192 GNO',W/2,H-20);
+}else if(scene===4){
+// Periodic boundary conditions + qualitative vs quantitative
+var lambda=param;var cx=W/2,cy=H*0.5;
+// Periodic domain (top): waveform repeats at L
+ctx.fillStyle='#00CED1';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('periodic BC: u(x+L) = u(x)',W*0.5,H*0.12);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<150;i++){var x=W*0.1+i/150*W*0.8;var phase=i/150*4*Math.PI;var y=cy-30+Math.sin(phase+t*0.3)*12;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Domain boundaries
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1;ctx.setLineDash([3,3]);
+ctx.beginPath();ctx.moveTo(W*0.1,cy-50);ctx.lineTo(W*0.1,cy-10);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.5,cy-50);ctx.lineTo(W*0.5,cy-10);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.9,cy-50);ctx.lineTo(W*0.9,cy-10);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('0',W*0.1,cy-55);ctx.fillText('L',W*0.5,cy-55);ctx.fillText('2L',W*0.9,cy-55);
+// Wavenumber lattice
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('k \u2208 (2\u03c0/L) Z^d  (discrete wavenumbers)',10,cy+10);
+// Non-periodic geometry (bottom): complex shape (airfoil-ish)
+ctx.fillStyle='#ff6b6b';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('complex geometry (non-periodic)',W*0.5,cy+30);
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();
+ctx.moveTo(W*0.25,cy+50);
+ctx.bezierCurveTo(W*0.4,cy+35,W*0.6,cy+35,W*0.75,cy+50);
+ctx.bezierCurveTo(W*0.6,cy+58,W*0.4,cy+58,W*0.25,cy+50);
+ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('airfoil / turbine \u2014 needs kernel mods',W*0.5,cy+70);
+// Qual vs quant
+ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('qualitative \u2713 vs quantitative \u2717:',10,H*0.85);
+ctx.fillStyle='#10b981';ctx.fillText('Green\'s fn shape: ok',100,H*0.85);
+ctx.fillStyle='#ff6b6b';ctx.fillText('precise values: drift',220,H*0.85);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('periodic BCs + complex geometry challenges',W/2,H-20);
+}else if(scene===5){
+// Global applications
+var cx=W/2,cy=H*0.45;
+var apps=[{x:0.18,icon:'\ud83c\udf27',l:'Weather',c:'#00CED1',note:'flash-flood warnings'},{x:0.4,icon:'\u2708',l:'Aero design',c:'#FFD700',note:'wind blades, EVs'},{x:0.62,icon:'\ud83e\udec0',l:'Blood flow',c:'#ff6b6b',note:'patient-specific'},{x:0.84,icon:'\ud83c\udf01',l:'Climate',c:'#10b981',note:'local downscaling'}];
+apps.forEach(function(ap){var px=W*ap.x;
+ctx.font='18px Georgia,serif';ctx.textAlign='center';ctx.fillText(ap.icon,px,cy-5);
+ctx.fillStyle=ap.c;ctx.font='8px Georgia,serif';ctx.fillText(ap.l,px,cy+12);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText(ap.note,px,cy+22);
+// Surrogate speed indicator
+ctx.strokeStyle=ap.c;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px-18,cy+32);ctx.lineTo(px+18,cy+32);ctx.stroke();
+ctx.fillStyle=ap.c;ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('1000x faster than CFD',px,cy+42)});
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('PDE surrogates bring real-time physics to consumer hardware',W/2,H*0.82);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('FNO: mesh-independent PDE surrogates',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP19.setActive(false);
+
+// CLIP19 code section \u2014 Fourier Neural Operator with SpectralConv
+var CLIP19_CODE={
+'fno':{
+name:'Fourier Neural Operator (SpectralConv layer)',
+latex:'v_{l+1}(x) = \\sigma\\!\\left( W v_l(x) + \\mathcal{F}^{-1}\\!\\left( R_\\phi \\cdot \\mathcal{F}(v_l) \\right)\\!(x) \\right), \\quad \\mathcal{G}_\\theta : \\mathcal{A} \\to \\mathcal{U}',
+intent:'Operator learning: FFT current state, multiply by learned low-mode weights, IFFT back; mesh-invariant',
+mapping:[
+{symbol:'\\u213a(v)',code:'torch.fft.fft(v, dim=[2,3])',note:'Forward FFT (2D spatial)'},
+{symbol:'R_\u03c6',code:'self.weights[:, :, :k_max, :k_max]',note:'Learned low-mode weight tensor'},
+{symbol:'R_\u03c6 \u00b7 \\u213a(v)',code:'fft_v[..., :k, :k] * weights',note:'Truncate high modes + multiply'},
+{symbol:'\\u213a\u207b\u00b9',code:'torch.fft.ifft2(...)',note:'Inverse FFT back to spatial'},
+{symbol:'W v_l',code:'self.W(v)',note:'Local 1x1 linear mixing'},
+{symbol:'G_\u03b8(a)',code:'fno.forward(a)',note:'Operator: function \u2192 function'}],
+langs:{
+'Python':'import torch\nimport torch.nn as nn\nimport torch.nn.functional as F\n\nclass SpectralConv2d(nn.Module):\n    """Fourier layer: v_{l+1} = sigma(W v + F^-1(R_phi * F(v)))"""\n    def __init__(self, in_ch, out_ch, modes1, modes2):\n        super().__init__()\n        self.in_ch  = in_ch\n        self.out_ch = out_ch\n        self.modes1 = modes1  # Fourier modes kept in dim 1\n        self.modes2 = modes2  # Fourier modes kept in dim 2\n        # Learned low-mode weight tensor R_phi (complex, init scale=1/(in_ch*out_ch))\n        scale = 1 / (in_ch * out_ch)\n        self.weights = nn.Parameter(\n            scale * torch.randn(in_ch, out_ch, modes1, modes2, dtype=torch.cfloat)\n        )\n    \n    def forward(self, v):\n        # v: (batch, in_ch, H, W)\n        B, C, H, W = v.shape\n        # FFT to frequency domain\n        v_fft = torch.fft.fft2(v)  # (B, in_ch, H, W) complex\n        # Truncate to low modes (top-left k_max x k_max block)\n        v_fft = v_fft[..., :self.modes1, :self.modes2]   # (B, in_ch, k1, k2)\n        # Multiply by learned weights R_phi: (in_ch, out_ch, k1, k2)\n        out_fft = torch.einsum("bixy,ioxy->boxy", v_fft, self.weights)\n        # Inverse FFT back to spatial (zero-pad high modes)\n        out = torch.fft.irfft2(out_fft, s=(H, W))        # (B, out_ch, H, W) real\n        return out\n\nclass FourierLayer(nn.Module):\n    """v_{l+1} = sigma(W v + SpectralConv(v))"""\n    def __init__(self, in_ch, out_ch, modes1, modes2):\n        super().__init__()\n        self.spec = SpectralConv2d(in_ch, out_ch, modes1, modes2)\n        self.W = nn.Conv2d(in_ch, out_ch, kernel_size=1)  # local bias\n    \n    def forward(self, v):\n        return F.gelu(self.W(v) + self.spec(v))\n\nclass FNO2d(nn.Module):\n    """G_theta: A -> U  (mesh-independent operator)"""\n    def __init__(self, modes1=12, modes2=12, width=32, n_layers=4):\n        super().__init__()\n        self.lift  = nn.Conv2d(1, width, kernel_size=1)        # input function -> feature\n        self.body  = nn.ModuleList([\n            FourierLayer(width, width, modes1, modes2) for _ in range(n_layers)\n        ])\n        self.proj  = nn.Sequential(\n            nn.Conv2d(width, 128, kernel_size=1), nn.GELU(),\n            nn.Conv2d(128, 1, kernel_size=1)                    # feature -> solution\n        )\n    \n    def forward(self, a):\n        # a: (B, 1, H, W) input function at ANY resolution\n        v = self.lift(a)                                       # (B, width, H, W)\n        for layer in self.body:\n            v = layer(v)                                       # spectral layer (FFT/IFFT)\n        return self.proj(v)                                    # (B, 1, H, W) solution u\n\n# Mesh-independent training: train on 64x64, evaluate on 256x256 (zero-shot)\nfno = FNO2d(modes1=12, modes2=12, width=32)\n# Train: fno(coarse_input_64) -> coarse_target_64\n# Eval:   fno(fine_input_256)  -> fine_solution_256  (no retraining!)',
+'TypeScript':'// Fourier Neural Operator (conceptual)\nclass SpectralConv2d {\n  private weights: ComplexTensor;  // R_phi: (inCh, outCh, modes1, modes2)\n  constructor(inCh: number, outCh: number, modes1: number, modes2: number) {\n    this.weights = randomComplex([inCh, outCh, modes1, modes2]);\n  }\n  \n  forward(v: Tensor): Tensor {\n    // v: (batch, inCh, H, W)\n    const [B, C, H, W] = v.shape;\n    // FFT to frequency domain\n    let vFft = fft2(v);  // (B, inCh, H, W) complex\n    // Truncate to low modes (top-left k1 x k2 block)\n    vFft = truncateLowModes(vFft, this.modes1, this.modes2);  // (B, inCh, k1, k2)\n    // Multiply by learned weights R_phi\n    let outFft = einsum("bixy,ioxy->boxy", vFft, this.weights);\n    // Inverse FFT back to spatial\n    return ifft2(outFft, [H, W]);  // (B, outCh, H, W)\n  }\n}\n\nclass FourierLayer {\n  private spec: SpectralConv2d;\n  private W: Conv2d;  // 1x1 local mixing\n  \n  forward(v: Tensor): Tensor {\n    // v_{l+1} = sigma(W v + F^-1(R_phi * F(v)))\n    return gelu(this.W.forward(v).add(this.spec.forward(v)));\n  }\n}\n\nclass FNO2d {\n  private lift: Conv2d;      // 1 -> width\n  private body: FourierLayer[];\n  private proj: Sequential;  // width -> 1\n  \n  forward(a: Tensor): Tensor {\n    // a: (B, 1, H, W) at ANY resolution (mesh-invariant)\n    let v = this.lift.forward(a);\n    for (const layer of this.body) v = layer.forward(v);\n    return this.proj.forward(v);\n  }\n}',
+'Go':'// Fourier Neural Operator (conceptual)\ntype SpectralConv2d struct {\n    InCh, OutCh   int\n    Modes1, Modes2 int\n    Weights       *ComplexTensor  // R_phi: (inCh, outCh, k1, k2)\n}\n\nfunc (s *SpectralConv2d) Forward(v *Tensor) *Tensor {\n    B, C, H, W := v.Shape()\n    // FFT to frequency domain\n    vFft := FFT2(v)                  // (B, inCh, H, W) complex\n    // Truncate to low modes (top-left k1 x k2 block)\n    vFftLow := truncateLowModes(vFft, s.Modes1, s.Modes2)\n    // Multiply by learned weights R_phi (einsum bixy,ioxy->boxy)\n    outFft := einsumComplex(vFftLow, s.Weights, "bixy,ioxy->boxy")\n    // Inverse FFT back to spatial\n    return IFFT2(outFft, H, W)       // (B, outCh, H, W)\n}\n\ntype FourierLayer struct {\n    Spec *SpectralConv2d\n    W    *Conv2d       // 1x1 local mixing\n}\n\nfunc (l *FourierLayer) Forward(v *Tensor) *Tensor {\n    // v_{l+1} = sigma(W v + F^-1(R_phi * F(v)))\n    return GELU(addTensors(l.W.Forward(v), l.Spec.Forward(v)))\n}\n\ntype FNO2d struct {\n    Lift *Conv2d           // 1 -> width\n    Body []*FourierLayer\n    Proj *Sequential       // width -> 1\n}\n\nfunc (m *FNO2d) Forward(a *Tensor) *Tensor {\n    // a: (B, 1, H, W) at ANY resolution (mesh-invariant)\n    v := m.Lift.Forward(a)\n    for _, layer := range m.Body { v = layer.Forward(v) }\n    return m.Proj.Forward(v)\n}',
+'Scala':'// Fourier Neural Operator (uses JAX/NumPy-style ops)\nclass SpectralConv2d(inCh: Int, outCh: Int, modes1: Int, modes2: Int) {\n  // R_phi: learned low-mode weights (complex)\n  private val weights: ComplexTensor =\n    ComplexTensor.random(inCh, outCh, modes1, modes2)\n  \n  def forward(v: Tensor): Tensor = {\n    val B, C, H, W = v.shape\n    // FFT to frequency domain\n    val vFft = FFT2(v)                       // (B, inCh, H, W) complex\n    // Truncate to low modes (top-left k1 x k2 block)\n    val vFftLow = vFft.slice(0, 0, 0, 0, modes1, modes2)\n    // Multiply by learned weights R_phi (einsum bixy,ioxy->boxy)\n    val outFft = einsum("bixy,ioxy->boxy", vFftLow, weights)\n    // Inverse FFT back to spatial (zero-pad high modes)\n    IFFT2(outFft, H, W)                      // (B, outCh, H, W)\n  }\n}\n\nclass FourierLayer(inCh: Int, outCh: Int, modes1: Int, modes2: Int) {\n  private val spec = new SpectralConv2d(inCh, outCh, modes1, modes2)\n  private val W = new Conv2d(inCh, outCh, kernelSize = 1)  // local mixing\n  \n  def forward(v: Tensor): Tensor =\n    // v_{l+1} = sigma(W v + F^-1(R_phi * F(v)))\n    GELU(W.forward(v).add(spec.forward(v)))\n}\n\nclass FNO2d(modes: Int = 12, width: Int = 32, nLayers: Int = 4) {\n  private val lift = new Conv2d(1, width, kernelSize = 1)\n  private val body = (0 until nLayers).map(_ => new FourierLayer(width, width, modes, modes))\n  private val proj = Seq(new Conv2d(width, 128, 1), new GELU, new Conv2d(128, 1, 1))\n  \n  def forward(a: Tensor): Tensor = {\n    // a: (B, 1, H, W) at ANY resolution (mesh-invariant)\n    var v = lift.forward(a)\n    body.foreach(layer => v = layer.forward(v))\n    proj.foldLeft(v)((t, l) => l.forward(t))\n  }\n}',
+'C':'/* Fourier Neural Operator (conceptual) */\n#include <complex.h>\n#include <fftw3.h>\n\ntypedef struct {\n    int in_ch, out_ch, modes1, modes2;\n    /* R_phi: (in_ch, out_ch, modes1, modes2) complex */\n    double complex* weights;\n} SpectralConv2d;\n\nvoid spectral_forward(SpectralConv2d* s, double* v_in,\n                      int B, int C, int H, int W,\n                      double* v_out) {\n    /* v_{l+1} = sigma(W v + F^-1(R_phi * F(v))) */\n    /* 1. FFT to frequency domain */\n    fftw_complex* v_fft = fftw_malloc(B * C * H * W * sizeof(fftw_complex));\n    fftw_plan pf = fftw_plan_dft_r2c_2d(H, W, v_in, v_fft, FFTW_ESTIMATE);\n    fftw_execute(pf); fftw_destroy_plan(pf);\n    /* 2. Truncate to low modes (top-left k1 x k2 block) and multiply by R_phi */\n    fftw_complex* out_fft = fftw_malloc(B * s->out_ch * H * W * sizeof(fftw_complex));\n    for (int b = 0; b < B; b++)\n        for (int o = 0; o < s->out_ch; o++)\n            for (int x = 0; x < s->modes1; x++)\n                for (int y = 0; y < s->modes2; y++) {\n                    double complex acc = 0;\n                    for (int i = 0; i < s->in_ch; i++)\n                        acc += v_fft[((b*C + i)*H + x)*W + y] *\n                               s->weights[((i*s->out_ch + o)*s->modes1 + x)*s->modes2 + y];\n                    out_fft[((b*s->out_ch + o)*H + x)*W + y] = acc;\n                }\n    /* 3. Inverse FFT back to spatial (zero-pad high modes) */\n    fftw_plan pi = fftw_plan_dft_c2r_2d(H, W, out_fft, v_out, FFTW_ESTIMATE);\n    fftw_execute(pi); fftw_destroy_plan(pi);\n    fftw_free(v_fft); fftw_free(out_fft);\n}\n\ntypedef struct {\n    SpectralConv2d spec;\n    Conv2d* W;   /* 1x1 local mixing */\n} FourierLayer;\n\ntypedef struct {\n    Conv2d* lift;        /* 1 -> width */\n    FourierLayer* body; int n_layers;\n    Sequential* proj;    /* width -> 1 */\n} FNO2d;\n\nvoid fno_forward(FNO2d* m, double* a, int B, int H, int W, double* u) {\n    /* a: (B, 1, H, W) at ANY resolution (mesh-invariant) */\n    double* v = lift_forward(m->lift, a, B, H, W);\n    for (int l = 0; l < m->n_layers; l++)\n        v = fourier_layer_forward(&m->body[l], v, B, H, W);\n    sequential_forward(m->proj, v, u);\n}',
+'Elixir':'defmodule FNO do\n  @moduledoc """\n  Fourier Neural Operator: v_{l+1} = sigma(W v + F^-1(R_phi * F(v)))\n  Operator learning G_theta : A -> U (mesh-independent)\n  """\n  defmodule SpectralConv2d do\n    defstruct [:in_ch, :out_ch, :modes1, :modes2, :weights]\n    def init(in_ch, out_ch, modes1, modes2) do\n      %__MODULE__{\n        in_ch: in_ch, out_ch: out_ch,\n        modes1: modes1, modes2: modes2,\n        weights: ComplexTensor.random(in_ch, out_ch, modes1, modes2)\n      }\n    end\n    def forward(s, v) do\n      # v: {B, in_ch, H, W}\n      {B, C, H, W} = Tensor.shape(v)\n      # 1. FFT to frequency domain\n      v_fft = FFT.fft2(v)                            # {B, in_ch, H, W} complex\n      # 2. Truncate to low modes (top-left k1 x k2 block)\n      v_fft_low = FFT.truncate_low(v_fft, s.modes1, s.modes2)\n      # 3. Multiply by learned weights R_phi (einsum bixy,ioxy->boxy)\n      out_fft = ComplexTensor.einsum("bixy,ioxy->boxy", v_fft_low, s.weights)\n      # 4. Inverse FFT back to spatial (zero-pad high modes)\n      FFT.ifft2(out_fft, H, W)                       # {B, out_ch, H, W}\n    end\n  end\n\n  defmodule FourierLayer do\n    defstruct [:spec, :w]\n    def forward(l, v) do\n      # v_{l+1} = sigma(W v + F^-1(R_phi * F(v)))\n      wv = Conv2d.forward(l.w, v)\n      sv = SpectralConv2d.forward(l.spec, v)\n      GELU.apply(Tensor.add(wv, sv))\n    end\n  end\n\n  defstruct [:lift, :body, :proj]\n  def forward(m, a) do\n    # a: {B, 1, H, W} at ANY resolution (mesh-invariant)\n    v = Conv2d.forward(m.lift, a)\n    v = Enum.reduce(m.body, v, fn layer, t -> FourierLayer.forward(layer, t) end)\n    Enum.reduce(m.proj, v, fn layer, t -> layer.forward(t) end)\n  end\nend'
+}
+}
+};
+var CLIP19_CURRENT_LANG='Python';
+function populateCode19(){
+var e=CLIP19_CODE['fno'];if(!e)return;
+var exprEl=document.getElementById('expr19');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map19');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs19');var ccEl=document.getElementById('codecontent19');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip19Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc19-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip19Code(lang){CLIP19_CURRENT_LANG=lang;document.querySelectorAll('#tabs19 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc19-'+lang)})}
+var CLIP19_OUTPUTS={'fno':['Initializing Fourier Neural Operator...','Architecture: FNO2d','  lift:   Conv2d(1, 32, k=1)','  body:   4 x FourierLayer(32, 32, modes1=12, modes2=12)','  proj:   Conv2d(32,128,1) -> GELU -> Conv2d(128,1,1)','','SpectralConv2d:','  weights R_phi: (32, 32, 12, 12) complex','  FFT -> truncate to low 12x12 modes -> multiply R_phi -> IFFT','  O(N log N) via FFT (vs O(N^2) direct conv)','','Training on Darcy flow (64x64 mesh):','  epoch 50:  loss = 0.034','  epoch 200: loss = 0.011','  epoch 500: loss = 0.004','','Mesh-invariance test (zero-shot super-resolution):','  eval at 64x64 (train):   L2 = 0.004','  eval at 128x128:         L2 = 0.005  (no retrain!)','  eval at 256x256:         L2 = 0.007  (no retrain!)','  eval at 512x512:         L2 = 0.012  (still reasonable)','','Speed comparison vs traditional PDE solver:','  finite-element 64x64:    12.4 sec','  finite-element 256x256:  187 sec','  FNO 64x64:               0.003 sec (4100x faster)','  FNO 256x256:             0.008 sec (23000x faster)','','No Free Lunch caveat:','  training mesh MUST resolve features','  train 16x16 -> eval 256: L2 = 0.18 (FAILS)','  train 64x64  -> eval 256: L2 = 0.007 (ok)','','Periodic BC test (turbulence in box): qualitative match \\u2713','  Green fn shape ok, quantitative drift needs physics constraint']};
+function runClip19Code(key){
+var e=CLIP19_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput19');var st=document.getElementById('runStatus19');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap19');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP19_CURRENT_LANG+' '+e.name,''];var out2=CLIP19_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip19CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip19CodeViz(key){
+var wrap=document.getElementById('codeVizWrap19');if(!wrap)return;var cv=document.getElementById('codeVizCanvas19');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('FNO: zero-shot super-resolution (train 64, eval 256)',W/2,16);
+var cx=W/2,cy=H*0.55;
+// Train grid (64x64 represented as 8x8) - left
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1;ctx.strokeRect(W*0.1,cy-30,60,60);
+for(var i=0;i<8;i++)for(var j=0;j<8;j++){var v=Math.sin(i*0.5+j*0.3+tt)*0.5+0.5;ctx.fillStyle='rgba(0,206,209,'+v+')';ctx.fillRect(W*0.1+i*7.5,cy-30+j*7.5,7.5,7.5)}
+ctx.strokeStyle='#00CED1';ctx.strokeRect(W*0.1,cy-30,60,60);
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('train 64x64',W*0.1+30,cy+45);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.25,cy);ctx.lineTo(W*0.4,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('zero-shot',W*0.32,cy-8);
+// Eval grid (256x256 represented as 16x16) - right
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.strokeRect(W*0.55,cy-30,60,60);
+for(var i=0;i<16;i++)for(var j=0;j<16;j++){var v=Math.sin(i*0.25+j*0.15+tt)*0.5+0.5;ctx.fillStyle='rgba(16,185,129,'+v+')';ctx.fillRect(W*0.55+i*3.75,cy-30+j*3.75,3.75,3.75)}
+ctx.strokeStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=3;ctx.strokeRect(W*0.55,cy-30,60,60);ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('eval 256x256',W*0.55+30,cy+45);
+// Speed comparison text
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('FNO: 0.008s (23000x faster)',10,30);
+ctx.fillStyle='#ff6b6b';ctx.fillText('finite-element: 187s',10,42);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)} frame();
+}
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -5287,7 +5585,8 @@ var FUTURES_DATA={
 'piml15':[{n:'T-V decomposition LNNs',y:2026,p:0.45,t:'Separate T/V heads standard for interpretability'},{n:'Custom EL loss default',y:2027,p:0.40,t:'Euler-Lagrange residual loss standard in PIML'},{n:'Physics-bound Neural ODEs',y:2028,p:0.35,t:'Neural ODEs ship with physics constraints'},{n:'Small-data robotics',y:2027,p:0.40,t:'100-sample dynamics learning for prosthetics'},{n:'Decades-long orbit twins',y:2030,p:0.25,t:'LNN twins track debris for decades'}],
 'piml16':[{n:'Neural ODEs in PyTorch/JAX',y:2026,p:0.50,t:'torchdiffeq / Diffrax standard in DL toolkits'},{n:'Adjoint method default',y:2027,p:0.45,t:'Memory-efficient adjoint backprop ubiquitous'},{n:'ICU early warning NODEs',y:2028,p:0.30,t:'Continuous-time sepsis prediction deployed'},{n:'NODE+SINDy discovery',y:2028,p:0.35,t:'NODE denoising feeds SINDy for equation recovery'},{n:'Continuous-depth models',y:2030,p:0.25,t:'Continuous-time networks replace discrete ResNets'}],
 'piml17':[{n:'PySR default for discovery',y:2026,p:0.45,t:'PySR standard tool for symbolic regression in science'},{n:'Rediscovered laws published',y:2027,p:0.35,t:'Symbolic regression publishes new physical laws'},{n:'Edge µC symbolic control',y:2028,p:0.30,t:'Compact symbolic controllers on off-grid microcontrollers'},{n:'Climate symbolic models',y:2029,p:0.25,t:'Compact climate sub-models replace empirical fits'},{n:'Pharmacokinetic equations',y:2030,p:0.20,t:'Personalized drug dynamics from symbolic regression'}],
-'piml18':[{n:'ResNet medical super-res',y:2026,p:0.45,t:'Rural clinics upscale MRI/ultrasound on laptops'},{n:'Climate downscaling default',y:2027,p:0.40,t:'ResNet spatiotemporal downscaling for smallholder farmers'},{n:'U-Net diffusion standard',y:2025,p:0.50,t:'U-Net backbone ubiquitous in generative AI'},{n:'Ultra-deep 1000+ layers',y:2030,p:0.20,t:'Improved skip variants enable 1000-layer networks'},{n:'Neural ODE replaces ResNet',y:2031,p:0.25,t:'Continuous-depth networks displace discrete ResNets'}]
+'piml18':[{n:'ResNet medical super-res',y:2026,p:0.45,t:'Rural clinics upscale MRI/ultrasound on laptops'},{n:'Climate downscaling default',y:2027,p:0.40,t:'ResNet spatiotemporal downscaling for smallholder farmers'},{n:'U-Net diffusion standard',y:2025,p:0.50,t:'U-Net backbone ubiquitous in generative AI'},{n:'Ultra-deep 1000+ layers',y:2030,p:0.20,t:'Improved skip variants enable 1000-layer networks'},{n:'Neural ODE replaces ResNet',y:2031,p:0.25,t:'Continuous-depth networks displace discrete ResNets'}],
+'piml19':[{n:'FNO PDE surrogate default',y:2026,p:0.45,t:'FNO replaces finite-element for fluid PDE inference'},{n:'Laplace Neural Operator',y:2027,p:0.35,t:'LNO handles growth/decay in stiff PDEs'},{n:'Cardiovascular FNO real-time',y:2028,p:0.30,t:'Patient-specific blood flow simulated in clinic'},{n:'Aero FNO design loops',y:2027,p:0.40,t:'Wind turbine / EV aero optimization via FNO surrogate'},{n:'Mesh-independent AI ubiquitous',y:2030,p:0.25,t:'Operator learning standard across heterogeneous sensor grids'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -5316,7 +5615,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);drawFutureChart('fut15','piml15',futAnimState);drawFutureChart('fut16','piml16',futAnimState);drawFutureChart('fut17','piml17',futAnimState);drawFutureChart('fut18','piml18',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);drawFutureChart('fut15','piml15',futAnimState);drawFutureChart('fut16','piml16',futAnimState);drawFutureChart('fut17','piml17',futAnimState);drawFutureChart('fut18','piml18',futAnimState);drawFutureChart('fut19','piml19',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -5405,6 +5704,7 @@ setTimeout(populateCode15,300);
 setTimeout(populateCode16,300);
 setTimeout(populateCode17,300);
 setTimeout(populateCode18,300);
+setTimeout(populateCode19,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -5457,7 +5757,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('18 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===18});
+chk('19 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===19});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -5476,6 +5776,7 @@ chk('Clip 15 ready',function(){return CLIP_CURRICULUM[14].status==='ready'});
 chk('Clip 16 ready',function(){return CLIP_CURRICULUM[15].status==='ready'});
 chk('Clip 17 ready',function(){return CLIP_CURRICULUM[16].status==='ready'});
 chk('Clip 18 ready',function(){return CLIP_CURRICULUM[17].status==='ready'});
+chk('Clip 19 ready',function(){return CLIP_CURRICULUM[18].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -5626,6 +5927,16 @@ chk('Clip 18 code tabs (6)',function(){return document.getElementById('tabs18')&
 chk('Clip 18 map table',function(){var m=document.getElementById('map18');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 18 future chart',function(){return!!document.getElementById('fut18')});
 chk('CLIP18 narration key',function(){return CLIP18.narrationKey==='piml18'});
+// Clip 19
+chk('CLIP19 exists',function(){return typeof CLIP19==='object'});
+chk('Clip 19 section exists',function(){return!!document.getElementById('clip19')});
+chk('Clip 19 canvas',function(){return!!document.getElementById('cv19')});
+chk('Clip 19 scenes (6)',function(){var s=document.getElementById('scenes19');return s&&s.children.length===6});
+chk('Clip 19 expr populated',function(){var e=document.getElementById('expr19');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 19 code tabs (6)',function(){return document.getElementById('tabs19')&&document.getElementById('tabs19').children.length===6});
+chk('Clip 19 map table',function(){var m=document.getElementById('map19');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 19 future chart',function(){return!!document.getElementById('fut19')});
+chk('CLIP19 narration key',function(){return CLIP19.narrationKey==='piml19'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
