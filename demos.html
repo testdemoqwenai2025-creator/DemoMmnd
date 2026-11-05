@@ -796,7 +796,7 @@ ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
 drawFloatingMath(ctx,W,H,t,SCENE4_MATH[scene]);
 var cx=W/2,cy=H*0.5;
 // Era icons + dates
-var eras=[{icon:'\\ud83d\\udcd4',label:'Babylon',date:'~1800 BCE',color:'#FFD700'},{icon:'\\u0394',label:'Euclid',date:'~300 BCE',color:'#00CED1'},{icon:'\\u0623\\u062c',label:'Al-Khwarizmi',date:'~800 CE',color:'#FF69B4'},{icon:'\\u222b',label:'Newton/Leibniz',date:'~1680',color:'#10b981'},{icon:'\\u2295',label:'Abstract Alg',date:'~1900',color:'#a855f7'},{icon:'\\ud83e\\udd16',label:'AI-assisted',date:'today',color:'#FFD700'}];
+var eras=[{icon:'\ud83d\udcd4',label:'Babylon',date:'~1800 BCE',color:'#FFD700'},{icon:'\u0394',label:'Euclid',date:'~300 BCE',color:'#00CED1'},{icon:'\u0623\u062c',label:'Al-Khwarizmi',date:'~800 CE',color:'#FF69B4'},{icon:'\u222b',label:'Newton/Leibniz',date:'~1680',color:'#10b981'},{icon:'\u2295',label:'Abstract Alg',date:'~1900',color:'#a855f7'},{icon:'\ud83e\udd16',label:'AI-assisted',date:'today',color:'#FFD700'}];
 var curEra=eras[scene];
 if(scene<5){
 // Big era icon
@@ -809,8 +809,8 @@ ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,H*0.85);ctx.
 for(var i=0;i<6;i++){var px=W*0.1+i*(W*0.8/5);ctx.fillStyle=i===scene?eras[i].color:mt;ctx.beginPath();ctx.arc(px,H*0.85,4,0,Math.PI*2);ctx.fill()}
 }else{
 // AI + human collaboration
-ctx.font='24px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#FFD700';ctx.fillText('\\ud83e\\udd16',W*0.3,cy-5);
-ctx.fillStyle='#10b981';ctx.fillText('\\ud83d\\udc68',W*0.7,cy-5);
+ctx.font='24px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#FFD700';ctx.fillText('\ud83e\udd16',W*0.3,cy-5);
+ctx.fillStyle='#10b981';ctx.fillText('\ud83d\udc68',W*0.7,cy-5);
 // Bidirectional arrows
 ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.35,cy);ctx.lineTo(W*0.65,cy);ctx.stroke();
 ctx.beginPath();ctx.moveTo(W*0.65,cy-3);ctx.lineTo(W*0.62,cy-7);ctx.lineTo(W*0.62,cy+1);ctx.stroke();
