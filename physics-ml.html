@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v10-button-glyph-fix">
+<meta name="version" content="2026-11-04-v11-clip7-autoencoders">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -474,10 +474,62 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap6"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas6"></canvas></div>
 </div>
 </section>
+
+<!-- CLIP 7: Autoencoders & Coordinate Discovery -->
+<section class="clip-section" id="clip7" style="display:none">
+<h2>Autoencoders & Coordinate Discovery</h2>
+<div class="subtitle">Video 7 \u00b7 Latent coordinates, SVD/PCA as shallow AE, SINDy-AE, Koopman linearization, constrictive vs expansive, Green\'s functions</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap7">
+<canvas class="clip-canvas" id="cv7"></canvas>
+<div class="clip-scene-label" id="lbl7">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP7.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP7.pause()">||</button>
+<button class="clip-btn" onclick="CLIP7.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP7.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP7.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title7">Latent coordinates</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom7" min="0.5" max="3" step="0.1" value="1"><span id="zoom7v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel7">|z|</span><input type="range" id="param7" min="1" max="10" step="1" value="2"><span id="param7v">2</span></div>
+<button class="clip-btn" onclick="CLIP7.toggleRecord()" id="rec7" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP7.toggleNarration()" id="narr7" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP7.toggleLight()" id="light7">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes7"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts7"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 autoencoder evolution</h4>
+<canvas class="future-canvas" id="fut7"></canvas>
+<div class="future-milestones" id="fut7m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code7">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr7">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map7"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs7"></div>
+<div id="codecontent7"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip7Code('sindy_ae')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus7" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput7"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap7"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas7"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 6/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 7/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -503,7 +555,7 @@ var CLIP_CURRICULUM=[
 {n:4,title:'Loss Function Engineering',desc:'PINNs, divergence, Lagrangian, parsimony, symmetry, soft vs hard',status:'ready'},
 {n:5,title:'Physics-Informed Optimization',desc:'KKT constraints, PiDMD manifolds, SR3, PySR, Pareto',status:'ready'},
 {n:6,title:'PIML Recap & Synthesis',desc:'Small-data, OOD generalization, stage coupling, benchmarks',status:'ready'},
-{n:7,title:'Hamiltonian NNs',desc:'Energy-conserving networks',status:'upcoming'},
+{n:7,title:'Autoencoders & Coordinates',desc:'Latent discovery, SVD/PCA, SINDy-AE, Koopman, Green\'s functions',status:'ready'},
 {n:8,title:'Fourier Neural Operators',desc:'Learning in frequency space',status:'upcoming'},
 {n:9,title:'Dynamic Mode Decomposition',desc:'DMD for spatiotemporal data',status:'upcoming'},
 {n:10,title:'Architecture Design',desc:'Inductive biases in NN structure',status:'upcoming'},
@@ -1961,6 +2013,231 @@ ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillTe
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
 
+// ============ CLIP 7: Autoencoders & Coordinate Discovery ============
+var CLIP7_SCENES=[
+{title:'Latent coordinates',desc:'GoPro physics: video \\u2192 equations'},
+{title:'SVD as shallow AE',desc:'Linear U,V vs deep nonlinear manifold'},
+{title:'SINDy autoencoder',desc:'Sparse dynamics + L1 + joint loss'},
+{title:'Koopman autoencoder',desc:'Nonlinear \\u2192 linear, Burgers \\u2192 Heat'},
+{title:'Constrictive vs expansive',desc:'Compress vs lift dimensionality'},
+{title:'Green\'s functions',desc:'Space-time rescaling, nonlinear solvers'}
+];
+var CLIP7_THOUGHTS=[
+'<strong style="color:var(--primary)">Coordinates are everything.</strong> High-dimensional observations (megapixel video) compress via autoencoders into latent coordinates $\\mathbf{z} = \\phi(\\mathbf{x})$ with minimal dynamics $\\dot{\\mathbf{z}} = f(\\mathbf{z})$. Finding the right coordinates is like shifting from geocentric to heliocentric \\u2014 it unlocked Kepler\'s laws and $F=ma$. The coordinate system IS the physics.',
+'<strong style="color:var(--primary)">SVD is a shallow autoencoder.</strong> $\\mathbf{z} = V^T\\mathbf{x}, \\hat{\\mathbf{x}} = U\\mathbf{z}$ \\u2014 SVD/PCA/POD are linear encoder-decoder pairs, data-driven Fourier transforms. Replacing linear projections with deep neural networks generalizes linear subspaces into non-linear manifolds, achieving massive reductions in degrees of freedom for turbulence, fluid flows, and beyond.',
+'<strong style="color:var(--primary)">Sparse + interpretable.</strong> SINDy autoencoders couple coordinate discovery with sparse regression: $\\dot{\\mathbf{z}} = \\Theta(\\mathbf{z})\\Xi$. The joint loss $\\mathcal{L} = \\|x-\\psi(\\phi(x))\\|^2 + \\|\\dot{z}-\\Theta\\Xi\\|^2 + \\lambda\\|\\Xi\\|_1 + \\mathcal{L}_{chain}$ enforces reconstruction, dynamics fit, sparsity, and chain-rule consistency simultaneously. Output: human-readable differential equations.',
+'<strong style="color:var(--primary)">Linearize the nonlinear.</strong> Koopman theory: nonlinear systems can be mapped to coordinates where dynamics are linear: $\\dot{\\mathbf{z}} = L\\mathbf{z}$. Deep Koopman networks discover these transformations automatically \\u2014 like the Cole-Hopf transform mapping Burgers\' equation to the heat equation. Linear dynamics enable optimal control (LQR, MPC) on embedded hardware.',
+'<strong style="color:var(--primary)">Compress or lift?</strong> Constrictive autoencoders squeeze $\\mathbb{R}^N \\to \\mathbb{R}^r$ ($r \\ll N$), extracting dominant coherent structures \\u2014 physically intuitive. Expansive lifting projects $\\mathbb{R}^N \\to \\mathbb{R}^M$ ($M \\gg N$), aligning with kernel methods. Physics favors constrictive: few dominant modes evolve predictably.',
+'<strong style="color:var(--primary)">Rescale reality.</strong> Deep networks rescale space-time so nonlinear oscillators become linear: $\\tau = g(t), \\frac{d^2z}{d\\tau^2} + \\omega^2 z = 0$. Autoencoders discover nonlinear Green\'s functions $u(x) = \\int \\mathcal{G}_{deep}(x,\\xi) f(\\xi) d\\xi$, enabling rapid solutions for nonlinear boundary value problems \\u2014 deforming wings, flexible structures, extreme mechanics.'
+];
+var CLIP7_PARAMS=[
+{label:'|z|',min:1,max:10,step:1,default:2,decimals:0,desc:'latent dimension'},
+{label:'k',min:1,max:20,step:1,default:5,decimals:0,desc:'SVD modes'},
+{label:'\\u03bb',min:0.01,max:1,step:0.01,default:0.1,decimals:2,desc:'sparsity weight'},
+{label:'\\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'linearization strength'},
+{label:'r',min:1,max:20,step:1,default:3,decimals:0,desc:'compression ratio'},
+{label:'\\u03c9',min:0.5,max:3,step:0.1,default:1,decimals:1,desc:'rescaled frequency'}
+];
+var SCENE7_MATH=[
+['z=\\u03c6(x)','\\u1e8b=\\u03c8(z)','\\u017c=f(z)','GoPro'],
+['z=V\\u1d40x','x\\u0302=Uz','SVD=shallow AE'],
+['\\u017c=\\u0398(z)\\u039e','\\u03bb||\\u039e||\\u2081','joint loss'],
+['\\u017c=Lz','Burgers\\u2192Heat','Koopman'],
+['R\\u207f\\u2192R\\u02b3','R\\u207f\\u2192R\\u1d50','constrictive vs expansive'],
+['\\u03c4=g(t)','d\\u00b2z/d\\u03c4\\u00b2+\\u03c9\\u00b2z=0','Green\'s function']
+];
+var CLIP7=makeClip({varName:'CLIP7',cvId:'cv7',wrapId:'wrap7',lblId:'lbl7',titleId:'title7',zoomId:'zoom7',zoomValId:'zoom7v',paramId:'param7',paramValId:'param7v',paramLabelId:'paramLabel7',paramDefault:2,paramDecimals:0,lightId:'light7',narrId:'narr7',recId:'rec7',narrationKey:'piml7',sceneListId:'scenes7',thoughtsId:'thoughts7',scenes:CLIP7_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE7_MATH[scene]);
+if(scene===0){
+// GoPro physics: video → encoder → z → dynamics → decoder → reconstruction
+var dim=Math.floor(param);
+// Left: high-dim video frames
+var gridN=6;var cellW=W*0.15/gridN;var startX=W*0.05;
+for(var i=0;i<gridN;i++)for(var j=0;j<gridN;j++){var v=Math.sin(i*0.5+j*0.3+t)*0.5+0.5;ctx.fillStyle='rgba(234,88,12,'+v*0.6+')';ctx.fillRect(startX+i*cellW,H*0.2+j*cellW,cellW-1,cellW-1)}
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('x (video)',startX+gridN*cellW/2,H*0.2+gridN*cellW+12);
+// Encoder arrow
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(startX+gridN*cellW+5,H*0.5);ctx.lineTo(startX+gridN*cellW+35,H*0.5);ctx.stroke();
+ctx.fillStyle=pc;ctx.font='8px Georgia,serif';ctx.fillText('\\u03c6',startX+gridN*cellW+20,H*0.5-8);
+// Center: low-dim z (dots orbiting)
+var zcx=startX+gridN*cellW+50;var zcy=H*0.5;
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
+for(var i=0;i<dim;i++){var a=i/dim*Math.PI*2+t*0.5;var r2=15;ctx.beginPath();ctx.arc(zcx+Math.cos(a)*r2,zcy+Math.sin(a)*r2,4,0,Math.PI*2);ctx.fill()}
+ctx.shadowBlur=0;ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('z ('+dim+'D)',zcx,zcy+30);
+// Decoder arrow
+var decX=zcx+25;
+ctx.strokeStyle=pc;ctx.beginPath();ctx.moveTo(decX,H*0.5);ctx.lineTo(decX+35,H*0.5);ctx.stroke();
+ctx.fillStyle=pc;ctx.font='8px Georgia,serif';ctx.fillText('\\u03c8',decX+17,H*0.5-8);
+// Right: reconstruction
+var reconStart=decX+40;
+for(var i=0;i<gridN;i++)for(var j=0;j<gridN;j++){var v=Math.sin(i*0.5+j*0.3+t*0.5)*0.5+0.5;ctx.fillStyle='rgba(0,206,209,'+v*0.6+')';ctx.fillRect(reconStart+i*cellW,H*0.2+j*cellW,cellW-1,cellW-1)}
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('x\\u0302 (recon)',reconStart+gridN*cellW/2,H*0.2+gridN*cellW+12);
+// Dynamics equation
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('z=\\u03c6(x), \\u017c=f(z), x\\u0302=\\u03c8(z)',W/2,H-20);
+}else if(scene===1){
+// SVD (linear) vs deep (nonlinear manifold)
+var cx=W*0.5,cy=H*0.45;
+// Left: linear SVD (U, V matrices)
+var sx=W*0.25;
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('SVD (linear)',sx,H*0.15);
+// V matrix (encoder)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.strokeRect(sx-20,H*0.25,20,40);
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.fillText('V\\u1d40',sx-10,H*0.25-3);
+// z (compressed)
+ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(sx+5,H*0.45,3,0,Math.PI*2);ctx.fill();
+// U matrix (decoder)
+ctx.strokeStyle='#00CED1';ctx.strokeRect(sx+15,H*0.25,20,40);
+ctx.fillStyle='#00CED1';ctx.fillText('U',sx+25,H*0.25-3);
+// Arrow
+ctx.strokeStyle=pc;ctx.beginPath();ctx.moveTo(sx+40,H*0.45);ctx.lineTo(sx+70,H*0.45);ctx.stroke();
+// Right: deep nonlinear manifold (curved surface)
+var dx=W*0.65;
+ctx.fillStyle=pc;ctx.font='8px monospace';ctx.fillText('Deep (nonlinear)',dx,H*0.15);
+// Draw manifold (curved grid)
+ctx.strokeStyle='rgba(234,88,12,0.3)';ctx.lineWidth=1;
+for(var i=-2;i<=2;i++){ctx.beginPath();for(var u=0;u<=1;u+=0.05){var x=dx+u*W*0.2;var y=H*0.4+i*20+Math.sin(u*Math.PI*2+t*0.3)*15;if(u===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(dx+W*0.1,H*0.4+Math.sin(0.5+t*0.3)*15,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('z=V\\u1d40x (linear) vs z=\\u03c6_deep(x) (nonlinear)',W/2,H-20);
+}else if(scene===2){
+// SINDy autoencoder: library + sparse + joint loss
+var lambda=param;var cx=W/2,cy=H*0.5;
+// Candidate library terms
+var terms=['1','z','z\\u00b2','sin(z)','cos(z)','z\\u00b3'];
+var barW=W*0.5/terms.length;var startX=(W-barW*terms.length)/2;
+terms.forEach(function(term,i){
+var px=startX+i*barW;var coef=Math.random();
+var visible=coef>lambda;
+ctx.fillStyle=visible?'#FFD700':'rgba(115,106,94,0.15)';
+if(visible){ctx.shadowColor='#FFD700';ctx.shadowBlur=6}
+ctx.fillRect(px,cy-15,barW-4,visible?20:10);
+ctx.shadowBlur=0;
+ctx.fillStyle=visible?'#0a0908':'rgba(115,106,94,0.4)';
+ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(term,px+(barW-4)/2,cy-2)});
+// Joint loss components
+ctx.fillStyle=pc;ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('L = L_recon + L_dyn + \\u03bb||\\u039e||\\u2081 + L_chain',W/2,H-20);
+}else if(scene===3){
+// Koopman: nonlinear → linear
+var strength=param;var cx=W/2,cy=H*0.5;
+// Left: nonlinear trajectory (curved, chaotic)
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();
+var x1=0.5,y1=0;
+for(var i=0;i<100;i++){var dx1=y1;var dy1=-0.5*x1-x1*x1*x1;x1+=dx1*0.05;y1+=dy1*0.05;
+var px=W*0.2+x1*30;var py=cy+y1*30;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('Nonlinear',W*0.2,cy+60);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.35,cy);ctx.lineTo(W*0.5,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.fillText('\\u03c6 (Koopman)',W*0.42,cy-8);
+// Right: linear trajectory (straight/sinusoidal)
+ctx.strokeStyle='#00ff88';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var px=W*0.55+i*W*0.004;var py=cy+Math.sin(i*0.1*strength)*20;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('Linear (\\u017c=Lz)',W*0.7,cy+60);
+// Burgers → Heat
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Burgers \\u2192 Heat (Cole-Hopf)',W/2,H*0.2);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('\\u017c = Lz  (Koopman linearization)',W/2,H-20);
+}else if(scene===4){
+// Constrictive vs expansive
+var ratio=param;var cx=W/2,cy=H*0.5;
+// Constrictive (left): wide → narrow
+ctx.fillStyle='rgba(234,88,12,0.1)';ctx.strokeStyle=pc;ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(W*0.1,H*0.2);ctx.lineTo(W*0.35,H*0.35);ctx.lineTo(W*0.35,H*0.65);ctx.lineTo(W*0.1,H*0.8);ctx.closePath();ctx.fill();ctx.stroke();
+ctx.fillStyle=pc;ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Constrictive',W*0.22,H*0.15);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('R\\u207f \\u2192 R\\u02b3 (r\\u226bn)',W*0.22,H*0.85);
+// Expansive (right): narrow → wide
+ctx.fillStyle='rgba(168,85,247,0.1)';ctx.strokeStyle='#a855f7';ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(W*0.55,H*0.35);ctx.lineTo(W*0.9,H*0.2);ctx.lineTo(W*0.9,H*0.8);ctx.lineTo(W*0.55,H*0.65);ctx.closePath();ctx.fill();ctx.stroke();
+ctx.fillStyle='#a855f7';ctx.font='8px Georgia,serif';ctx.fillText('Expansive',W*0.72,H*0.15);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('R\\u207f \\u2192 R\\u1d50 (M\\u226bn)',W*0.72,H*0.85);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('Compress vs Lift',W/2,H-20);
+}else if(scene===5){
+// Space-time rescaling + Green's function
+var omega=param;var cx=W/2,cy=H*0.45;
+// Left: nonlinear oscillator (varying amplitude)
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<200;i++){var x=i*W*0.002;var amp=1+0.3*Math.sin(i*0.05);var y=cy+Math.sin(i*0.05*t)*30*amp;if(i===0)ctx.moveTo(W*0.05,y);else ctx.lineTo(W*0.05+x,y)}
+ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('Nonlinear osc.',W*0.15,cy+50);
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.35,cy);ctx.lineTo(W*0.5,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.fillText('\\u03c4=g(t)',W*0.42,cy-8);
+// Right: linear oscillator (constant amplitude)
+ctx.strokeStyle='#00ff88';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<200;i++){var x=i*W*0.002;var y=cy+Math.sin(i*0.05*omega)*30;if(i===0)ctx.moveTo(W*0.55,y);else ctx.lineTo(W*0.55+x,y)}
+ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('Linear (rescaled)',W*0.65,cy+50);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('\\u03c4=g(t), d\\u00b2z/d\\u03c4\\u00b2+\\u03c9\\u00b2z=0',W/2,H-20);
+// Green's function label
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.fillText('G_deep(x,\\u03be): nonlinear Green\'s function',W/2,H*0.8);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP7.setActive(false);
+
+// CLIP7 code section — SINDy Autoencoder joint loss
+var CLIP7_CODE={
+'sindy_ae':{
+name:'SINDy Autoencoder: Joint Loss (Recon + Dynamics + Sparsity + Chain)',
+latex:'\\mathcal{L} = \\|x-\\psi(\\phi(x))\\|^2 + \\|\\dot{z}-\\Theta(z)\\Xi\\|^2 + \\lambda\\|\\Xi\\|_1 + \\mathcal{L}_{chain}',
+intent:'Simultaneously discover coordinates AND sparse governing equations from high-dim data',
+mapping:[
+{symbol:'\\u03c6(x)',code:'encoder(x)',note:'Nonlinear coordinate embedding'},
+{symbol:'\\u03c8(z)',code:'decoder(z)',note:'Reconstruction from latent'},
+{symbol:'\\u0398(z)',code:'library(z)',note:'Candidate terms (1, z, z\\u00b2, sin(z), ...)'},
+{symbol:'\\u039e',code:'sparse_coefs',note:'L1-penalized sparse coefficients'},
+{symbol:'L_chain',code:'chain_rule_loss(x, dx, z)',note:'Derivative consistency \\u1e8b = \\u2202\\u03c6/\\u2202x \\u00b7 \\u1e8b'}
+],
+langs:{
+'Python':'import torch\nimport torch.nn as nn\n\nclass SINDyAutoencoder(nn.Module):\n    """Joint discovery of coordinates + sparse dynamics"""\n    def __init__(self, input_dim, latent_dim=2, degree=3):\n        super().__init__()\n        self.encoder = nn.Sequential(\n            nn.Linear(input_dim, 64), nn.Tanh(),\n            nn.Linear(64, latent_dim))\n        self.decoder = nn.Sequential(\n            nn.Linear(latent_dim, 64), nn.Tanh(),\n            nn.Linear(64, input_dim))\n        self.degree = degree\n        self.xi = nn.Parameter(torch.zeros(self._library_size(latent_dim), latent_dim))\n    \n    def _library_size(self, dim):\n        return 1 + dim + dim * (dim + 1) // 2  # const + linear + quadratic\n    \n    def build_library(self, z):\n        terms = [torch.ones(z.shape[0], 1)]\n        terms.append(z)  # linear\n        for i in range(z.shape[1]):\n            for j in range(z.shape[1]):\n                terms.append(z[:, i:i+1] * z[:, j:j+1])  # quadratic\n        return torch.cat(terms, dim=1)\n    \n    def loss(self, x, dx):\n        z = self.encoder(x)\n        x_hat = self.decoder(z)\n        Theta = self.build_library(z)\n        dz_pred = Theta @ self.xi\n        # Chain rule: dz/dt = dφ/dx · dx/dt\n        dz_chain = torch.autograd.grad(z.sum(), x, create_graph=True)[0] @ dx.T\n        L_recon = torch.mean((x - x_hat)**2)\n        L_dynamics = torch.mean((dz_chain - dz_pred)**2)\n        L_sparse = 0.01 * torch.norm(self.xi, p=1)\n        L_chain = torch.mean((dz_chain - dz_pred)**2)\n        return L_recon + L_dynamics + L_sparse + L_chain',
+'TypeScript':'// SINDy Autoencoder joint loss\nclass SINDyAutoencoder {\n  loss(x: number[][], dx: number[][]): number {\n    const z = this.encoder.forward(x);\n    const xHat = this.decoder.forward(z);\n    const Theta = this.buildLibrary(z);\n    const dzPred = matMul(Theta, this.xi);\n    const dzChain = this.chainRule(x, dx, z);\n    const L_recon = mse(x, xHat);\n    const L_dynamics = mse(dzChain, dzPred);\n    const L_sparse = 0.01 * l1Norm(this.xi);\n    return L_recon + L_dynamics + L_sparse;\n  }\n}',
+'Go':'// SINDy Autoencoder (conceptual)\nfunc (m *SINDyAE) Loss(x, dx [][]float64) float64 {\n    z := m.Encoder.Forward(x)\n    xHat := m.Decoder.Forward(z)\n    theta := m.BuildLibrary(z)\n    dzPred := MatMul(theta, m.Xi)\n    dzChain := ChainRule(x, dx, z)\n    lRecon := MSE(x, xHat)\n    lDyn := MSE(dzChain, dzPred)\n    lSparse := 0.01 * L1Norm(m.Xi)\n    return lRecon + lDyn + lSparse\n}',
+'Scala':'// SINDy Autoencoder\ndef loss(x: Matrix, dx: Matrix): Double = {\n  val z = encoder.forward(x)\n  val xHat = decoder.forward(z)\n  val theta = buildLibrary(z)\n  val dzPred = theta * xi\n  val dzChain = chainRule(x, dx, z)\n  mse(x, xHat) + mse(dzChain, dzPred) + 0.01 * l1Norm(xi)\n}',
+'C':'/* SINDy Autoencoder loss (conceptual) */\ndouble sindy_ae_loss(NN* enc, NN* dec, double** x, double** dx,\n                     double* xi, int n, int dim, double lambda) {\n    double* z = nn_forward(enc, x, n);\n    double* xhat = nn_forward(dec, z, dim);\n    double* theta = build_library(z, dim);\n    double* dz_pred = mat_vec(theta, xi);\n    double* dz_chain = chain_rule(x, dx, enc);\n    double l = mse(x, xhat, n) + mse(dz_chain, dz_pred, dim)\n             + lambda * l1_norm(xi, nterms);\n    return l;\n}',
+'Elixir':'# SINDy Autoencoder loss\ndef loss(model, x, dx) do\n  z = NN.forward(model.encoder, x)\n  x_hat = NN.forward(model.decoder, z)\n  theta = build_library(z)\n  dz_pred = mat_vec(theta, model.xi)\n  dz_chain = chain_rule(x, dx, model.encoder)\n  mse(x, x_hat) + mse(dz_chain, dz_pred) + 0.01 * l1_norm(model.xi)\nend'
+}
+}
+};
+var CLIP7_CURRENT_LANG='Python';
+function populateCode7(){
+var e=CLIP7_CODE['sindy_ae'];if(!e)return;
+var exprEl=document.getElementById('expr7');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map7');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs7');var ccEl=document.getElementById('codecontent7');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip7Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc7-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip7Code(lang){CLIP7_CURRENT_LANG=lang;document.querySelectorAll('#tabs7 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc7-'+lang)})}
+var CLIP7_OUTPUTS={'sindy_ae':['Initializing SINDy Autoencoder...','Encoder: [784, 64, 2] (compress to 2D)','Decoder: [2, 64, 784] (reconstruct)','','Library Θ(z): [1, z1, z2, z1², z1z2, z2²]','','Joint loss components:','  L_recon = 0.034 (reconstruction error)','  L_dynamics = 0.012 (SINDy fit)','  L_sparse = 0.008 (λ||Ξ||₁)','  L_chain = 0.005 (chain rule consistency)','','Training... Epoch 500: total loss = 0.015','','Discovered: dz/dt = [-0.5z1 + 0.3z1z2, -0.2z2 - 0.1z1²]','','2 nonzero terms per equation (parsimonious)']};
+function runClip7Code(key){
+var e=CLIP7_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput7');var st=document.getElementById('runStatus7');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap7');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP7_CURRENT_LANG+' '+e.name,''];var out2=CLIP7_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip7CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip7CodeViz(key){
+var wrap=document.getElementById('codeVizWrap7');if(!wrap)return;var cv=document.getElementById('codeVizCanvas7');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('SINDy AE: discovered latent dynamics',W/2,16);
+var cx=W/2,cy=H*0.55,scale=H*0.12;
+// Phase portrait of discovered system
+ctx.strokeStyle='rgba(234,88,12,0.2)';ctx.lineWidth=1;
+for(var e=0.2;e<=1.0;e+=0.2){ctx.beginPath();for(var th=0;th<Math.PI*2;th+=0.05){var z1=e*Math.cos(th);var z2=e*Math.sin(th);var dz1=-0.5*z1+0.3*z1*z2;var dz2=-0.2*z2-0.1*z1*z1;var px=cx+z1*scale*2;var py=cy+z2*scale*2;if(th===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath();ctx.stroke()}
+// Trajectory
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();
+var z1=1.5,z2=0;var dt2=0.05;
+for(var s=0;s<200;s++){var dz1=-0.5*z1+0.3*z1*z2;var dz2=-0.2*z2-0.1*z1*z1;z1+=dz1*dt2;z2+=dz2*dt2;var px=cx+z1*scale*2;var py=cy+z2*scale*2;if(s===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}
+ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('dz/dt = [-0.5z + 0.3zz, -0.2z - 0.1z\\u00b2]',10,25);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
+
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -1968,7 +2245,8 @@ var FUTURES_DATA={
 'piml3':[{n:'Equivariant NNs standard',y:2028,p:0.40,t:'Symmetry-enforcing architectures default'},{n:'FNO at scale',y:2029,p:0.35,t:'Fourier operators for billion-grid PDEs'},{n:'SINDy+AE discovery',y:2027,p:0.45,t:'Auto equation discovery from video'},{n:'GNN for physics',y:2030,p:0.35,t:'Graph networks for particle systems'},{n:'Neural ODE maturity',y:2031,p:0.30,t:'Continuous-depth models standard'}],
 'piml4':[{n:'Multi-loss automation',y:2028,p:0.40,t:'Auto-balanced multi-physics losses'},{n:'Hard constraint solvers',y:2030,p:0.30,t:'Constrained optimization in DL'},{n:'Symmetry-augmented training',y:2027,p:0.45,t:'Virtual data augmentation standard'},{n:'Parsimonious AI',y:2029,p:0.35,t:'L1 sparsity default for interpretable models'},{n:'Goldilocks auto-tuning',y:2032,p:0.25,t:'Auto Pareto-front optimization'}],
 'piml5':[{n:'KKT solvers in DL',y:2028,p:0.35,t:'Constrained optimization standard in training'},{n:'PiDMD widespread',y:2029,p:0.30,t:'Physics-informed DMD for engineering'},{n:'SR3 acceleration',y:2027,p:0.40,t:'Fast sparse regression default'},{n:'PySR discoveries',y:2028,p:0.35,t:'Symbolic regression finds new laws'},{n:'Manifold optimization',y:2031,p:0.25,t:'Matrix manifold training standard'}],
-'piml6':[{n:'PIML benchmarks standard',y:2028,p:0.40,t:'Physical benchmark datasets widespread'},{n:'Small-data AI',y:2027,p:0.45,t:'Physics-constrained models from 100 samples'},{n:'OOD generalization',y:2029,p:0.35,t:'Physics enables reliable extrapolation'},{n:'Lagrangian NNs mature',y:2028,p:0.30,t:'Structure-preserving networks default'},{n:'Disease dynamics discovery',y:2030,p:0.25,t:'PySR finds epidemiological laws'}]
+'piml6':[{n:'PIML benchmarks standard',y:2028,p:0.40,t:'Physical benchmark datasets widespread'},{n:'Small-data AI',y:2027,p:0.45,t:'Physics-constrained models from 100 samples'},{n:'OOD generalization',y:2029,p:0.35,t:'Physics enables reliable extrapolation'},{n:'Lagrangian NNs mature',y:2028,p:0.30,t:'Structure-preserving networks default'},{n:'Disease dynamics discovery',y:2030,p:0.25,t:'PySR finds epidemiological laws'}],
+'piml7':[{n:'GoPro physics',y:2027,p:0.40,t:'Equations from video streams'},{n:'Koopman control',y:2028,p:0.35,t:'Linearized real-time control'},{n:'Deep Green\'s functions',y:2030,p:0.25,t:'Nonlinear PDE solvers'},{n:'Autoencoder discovery',y:2026,p:0.50,t:'Coordinate discovery standard'},{n:'EEG/ECG latent',y:2029,p:0.30,t:'Medical latent dynamics'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -1997,7 +2275,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -2074,6 +2352,7 @@ setTimeout(populateCode3,300);
 setTimeout(populateCode4,300);
 setTimeout(populateCode5,300);
 setTimeout(populateCode6,300);
+setTimeout(populateCode7,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -2126,13 +2405,14 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('6 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===6});
+chk('7 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===7});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
 chk('Clip 4 ready',function(){return CLIP_CURRICULUM[3].status==='ready'});
 chk('Clip 5 ready',function(){return CLIP_CURRICULUM[4].status==='ready'});
 chk('Clip 6 ready',function(){return CLIP_CURRICULUM[5].status==='ready'});
+chk('Clip 7 ready',function(){return CLIP_CURRICULUM[6].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -2163,6 +2443,16 @@ chk('Clip 6 code tabs (6)',function(){return document.getElementById('tabs6')&&d
 chk('Clip 6 map table',function(){var m=document.getElementById('map6');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 6 future chart',function(){return!!document.getElementById('fut6')});
 chk('CLIP6 narration key',function(){return CLIP6.narrationKey==='piml6'});
+// Clip 7
+chk('CLIP7 exists',function(){return typeof CLIP7==='object'});
+chk('Clip 7 section exists',function(){return!!document.getElementById('clip7')});
+chk('Clip 7 canvas',function(){return!!document.getElementById('cv7')});
+chk('Clip 7 scenes (6)',function(){var s=document.getElementById('scenes7');return s&&s.children.length===6});
+chk('Clip 7 expr populated',function(){var e=document.getElementById('expr7');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 7 code tabs (6)',function(){return document.getElementById('tabs7')&&document.getElementById('tabs7').children.length===6});
+chk('Clip 7 map table',function(){var m=document.getElementById('map7');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 7 future chart',function(){return!!document.getElementById('fut7')});
+chk('CLIP7 narration key',function(){return CLIP7.narrationKey==='piml7'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
