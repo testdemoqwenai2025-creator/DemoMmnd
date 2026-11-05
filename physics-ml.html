@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v15-clip11-sindy-optimization">
+<meta name="version" content="2026-11-04-v16-clip12-discrepancy-modeling">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -734,10 +734,62 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap11"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas11"></canvas></div>
 </div>
 </section>
+
+<!-- CLIP 12: Discrepancy Modeling -->
+<section class="clip-section" id="clip12" style="display:none">
+<h2>Discrepancy Modeling</h2>
+<div class="subtitle">Video 12 \u00b7 Hybrid physics+ML residual, Pareto trade-off, Ptolemy vs Galileo, group sparsity, aging digital twins</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap12">
+<canvas class="clip-canvas" id="cv12"></canvas>
+<div class="clip-scene-label" id="lbl12">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP12.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP12.pause()">||</button>
+<button class="clip-btn" onclick="CLIP12.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP12.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP12.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title12">Hybrid discrepancy</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom12" min="0.5" max="3" step="0.1" value="1"><span id="zoom12v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel12">\u03b4</span><input type="range" id="param12" min="0" max="1" step="0.05" value="0.3"><span id="param12v">0.30</span></div>
+<button class="clip-btn" onclick="CLIP12.toggleRecord()" id="rec12" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP12.toggleNarration()" id="narr12" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP12.toggleLight()" id="light12">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes12"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts12"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 discrepancy modeling evolution</h4>
+<canvas class="future-canvas" id="fut12"></canvas>
+<div class="future-milestones" id="fut12m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code12">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr12">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map12"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs12"></div>
+<div id="codecontent12"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip12Code('discrepancy')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus12" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput12"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap12"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas12"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 11/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 12/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -768,7 +820,7 @@ var CLIP_CURRICULUM=[
 {n:9,title:'Coordinate Discovery & SINDy-AE',desc:'Coordinate selection, SVD/PCA, deep SINDy-AE, intrinsic variables, Takens embeddings',status:'ready'},
 {n:10,title:'Library Construction & SINDy Extensions',desc:'Hierarchical library, SINDYc, implicit SINDy, tensor trains, symmetry pruning',status:'ready'},
 {n:11,title:'SINDy Optimization & Constraints',desc:'STLSQ, Pareto front, SR3, energy conservation, stability, adaptive recovery',status:'ready'},
-{n:12,title:'Galilean-Invariant NNs',desc:'Symmetry-enforcing tensor networks',status:'upcoming'},
+{n:12,title:'Discrepancy Modeling',desc:'Hybrid physics+ML, Pareto trade-off, Ptolemy vs Galileo, group sparsity, digital twins',status:'ready'},
 {n:13,title:'Data Curation & Equivariance',desc:'Optimal coordinates, symmetries',status:'upcoming'},
 {n:14,title:'Hard Constraints',desc:'Lagrange multipliers in optimization',status:'upcoming'},
 {n:15,title:'Discovery of Equations',desc:'Finding governing laws from data',status:'upcoming'},
@@ -3289,6 +3341,212 @@ ctx.fillRect(startX+i*barW,cy-current*30-5,barW-3,Math.abs(current*30)+5);ctx.sh
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
 
+// ============ CLIP 12: Discrepancy Modeling ============
+var CLIP12_SCENES=[
+{title:'Hybrid discrepancy',desc:'Physics + ML residual = true dynamics'},
+{title:'Pareto trade-off',desc:'Physics constraints vs data flexibility'},
+{title:'Ptolemy vs Galileo',desc:'Overfitting cautionary tale'},
+{title:'Group sparsity',desc:'Eliminate spurious trajectory-specific terms'},
+{title:'Aging digital twins',desc:'Update only discrepancy for system changes'},
+{title:'Global impact',desc:'Prosthetics, grids, UAVs, infrastructure'}
+];
+var CLIP12_THOUGHTS=[
+'<strong style="color:var(--primary)">Bridge physics and data.</strong> Start with imperfect baseline physics $f_{physics}(x)$ and learn only the residual: $\\dot{x} = f_{physics}(x) + g_{ML}(x)$. The ML captures what physics misses \\u2014 joint chatter, aerodynamic drag, structural aging. Orders of magnitude less data than end-to-end learning.',
+'<strong style="color:var(--primary)">The Pareto elbow.</strong> Physics easily enforces exact constraints ($h(x)=0$, $\\mathcal{E}(x)=C$) that ML struggles with. ML easily fits hairy disturbances that physics can\'t model. Combining both finds the Pareto-optimal elbow: $\\min_\\theta \\sum\\|\\dot{x} - (f_{phys} + g_\\theta)\\|^2$ s.t. $h(x)=0, \\mathcal{E}(x)=C$. Maximize physics, minimize complexity.',
+'<strong style="color:var(--primary)">Beware epicycles.</strong> Unconstrained ML on noisy data recovers Ptolemaic models \\u2014 fits observations perfectly by absorbing drag into spurious terms. Aristotelian $\\ddot{x}=-\\frac{b}{m}\\dot{x}$ fits falling objects but misses the universal law $\\ddot{x}=-g$. Choose: brute-force empirical fit or simplified, interpretable physical law.',
+'<strong style="color:var(--primary)">Universal across trajectories.</strong> Dropping wiffle balls vs basketballs yields different drag terms. Group sparsity forces a single active term set across ALL trajectories: $\\min_\\Xi \\sum_k \\|\\dot{X}_k - \\Theta(X_k)\\Xi_k\\|^2 + \\lambda\\sum_j \\|\\Xi^{(j)}\\|_{2,1}$. Isolates universal physics ($-g$) from environment-specific discrepancy ($drag$).',
+'<strong style="color:var(--primary)">Twins that age gracefully.</strong> Digital twins: $\\dot{x} = f_{ideal}(x) + g_{aging}(x,t)$. As components wear, only the discrepancy term updates \\u2014 baseline kinematics stay fixed. Lightweight, real-time adaptation for robotic arms, drone propellers, and industrial machinery without re-learning from scratch.',
+'<strong style="color:var(--primary)">Impact: adaptive, safe, efficient.</strong> Prosthetics adapt to muscle fatigue. Smart grids handle micro-weather fluctuations. UAVs survive wing damage mid-flight. Bridge monitoring isolates normal wear from sudden damage. Discrepancy models run on embedded microcontrollers \\u2014 real-time, edge-deployable, physically safe.'
+];
+var CLIP12_PARAMS=[
+{label:'\\u03b4',min:0,max:1,step:0.05,default:0.3,decimals:2,desc:'discrepancy magnitude'},
+{label:'\\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'Pareto tradeoff'},
+{label:'b/m',min:0,max:1,step:0.05,default:0.3,decimals:2,desc:'drag coefficient'},
+{label:'\\u03bb',min:0.01,max:1,step:0.01,default:0.1,decimals:2,desc:'group sparsity'},
+{label:'\\u03b4t',min:0,max:1,step:0.05,default:0.2,decimals:2,desc:'aging rate'},
+{label:'\\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'safety weight'}
+];
+var SCENE12_MATH=[
+['\\u1e8b=f_phys+g_ML','hybrid','discrepancy'],
+['min||\\u1e8b-(f+g)||\\u00b2 s.t. h=0','Pareto elbow','constraints'],
+['\\u00e8=-b/m\\u1e8b vs \\u00e8=-g','Ptolemy vs Galileo','universal law'],
+['\\u03bb\\u03a3||\\u039e^(j)||_{2,1}','group sparsity','universal physics'],
+['\\u1e8b=f_ideal+g_aging(x,t)','digital twin','adaptive'],
+['prosthetics+grids+UAVs','edge deployable','safety']
+];
+var CLIP12=makeClip({varName:'CLIP12',cvId:'cv12',wrapId:'wrap12',lblId:'lbl12',titleId:'title12',zoomId:'zoom12',zoomValId:'zoom12v',paramId:'param12',paramValId:'param12v',paramLabelId:'paramLabel12',paramDefault:0.3,paramDecimals:2,lightId:'light12',narrId:'narr12',recId:'rec12',narrationKey:'piml12',sceneListId:'scenes12',thoughtsId:'thoughts12',scenes:CLIP12_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE12_MATH[scene]);
+if(scene===0){
+// Hybrid: physics + discrepancy = true
+var disc=param;var cx=W/2,cy=H*0.5;var scale=H*0.12;
+// Physics model (idealized, dashed cyan)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.setLineDash([5,5]);ctx.beginPath();
+for(var i=-3;i<=3;i+=0.05){var y=Math.sin(i*1.5)*0.5;ctx.lineTo(cx+i*scale,cy-y*scale)}ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('f_physics (ideal)',cx,cy-scale-10);
+// Discrepancy (golden, residual)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=-3;i<=3;i+=0.05){var y=disc*Math.sin(i*3+t)*0.3;ctx.lineTo(cx+i*scale,cy-y*scale)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.fillText('g_ML (discrepancy)',cx,cy+scale+15);
+// True dynamics (orange, sum)
+ctx.strokeStyle=pc;ctx.lineWidth=3;ctx.shadowColor=pc;ctx.shadowBlur=6;ctx.beginPath();
+for(var i=-3;i<=3;i+=0.05){var y=Math.sin(i*1.5)*0.5+disc*Math.sin(i*3+t)*0.3;ctx.lineTo(cx+i*scale,cy-y*scale)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('x\\u0307 = f_phys + g_ML (true)',W/2,H-20);
+}else if(scene===1){
+// Pareto trade-off: physics constraints vs data flexibility
+var tradeoff=param;var cx=W/2,cy=H*0.5;var scaleX=W*0.35,scaleY=H*0.2;
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx-scaleX,cy);ctx.lineTo(cx+scaleX,cy);ctx.moveTo(cx,cy-scaleY);ctx.lineTo(cx,cy+scaleY);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('physics constraints \\u2192',cx+scaleX-80,cy-5);ctx.fillText('data flexibility \\u2191',cx+5,cy-scaleY+10);
+// Pareto curve
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.shadowColor=pc;ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<=50;i++){var u=i/50;var x=cx-scaleX+u*scaleX*2;var y=cy+scaleY-Math.pow(1-u,1.5)*scaleY*1.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Elbow
+var eu=tradeoff;var ex=cx-scaleX+eu*scaleX*2;var ey=cy+scaleY-Math.pow(1-eu,1.5)*scaleY*1.5;
+ctx.fillStyle='rgba(255,215,0,0.3)';ctx.beginPath();ctx.arc(ex,ey,12,0,Math.PI*2);ctx.fill();
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(ex,ey,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Pareto elbow',ex,ey-18);
+// Labels
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('pure physics (high error)',cx-scaleX+5,cy+scaleY-5);
+ctx.fillStyle='#FF69B4';ctx.fillText('pure ML (no constraints)',cx+scaleX-80,cy-scaleY+22);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Pareto: physics + ML elbow',W/2,H-20);
+}else if(scene===2){
+// Ptolemy vs Galileo: falling objects
+var drag=param;var cx=W*0.5,cy=H*0.45;
+// Falling ball trajectory
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var time=i*0.05;var x=time;var y=0.5*9.8*time*time*(1-drag*Math.sin(time*2)*0.1);var px=W*0.15+x*W*0.08;var py=cy-y*1.5;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();
+// Aristotelian fit (fits data but wrong physics)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);ctx.beginPath();
+for(var i=0;i<100;i++){var time=i*0.05;var v=9.8*time*(1+drag*0.3);var y=v*time;var px=W*0.15+time*W*0.08;var py=cy-y*1.5;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();ctx.setLineDash([]);
+// Labels
+ctx.fillStyle='#ff6b6b';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('Aristotelian: \\u00e8=-b/m\\u1e8b (fits data \\u2713, wrong physics \\u2717)',10,H*0.15);
+ctx.fillStyle='#00ff88';ctx.fillText('Galilean: \\u00e8=-g (universal law \\u2713)',10,H*0.22);
+ctx.fillStyle='#FFD700';ctx.fillText('Discrepancy: g=drag(x) (ML residual)',10,H*0.29);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Ptolemy (overfit) vs Galileo (universal)',W/2,H-20);
+}else if(scene===3){
+// Group sparsity: multiple trajectories
+var lambda=param;var cx=W/2,cy=H*0.5;
+var trajectories=['wiffle','basketball','bowling'];
+var terms=['-g','drag\\u00b7v','v\\u00b2','spin','spin\\u00b7v','v\\u00b3'];
+var barW=W*0.5/terms.length;var startX=(W-barW*terms.length)/2;
+trajectories.forEach(function(traj,ti){
+var yOffset=H*0.15+ti*H*0.18;
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText(traj,startX-35,yOffset+10);
+terms.forEach(function(term,i){
+var coef=Math.sin(i*0.7+ti*1.3)*0.5;
+var universal=i===0; // -g is universal
+var active=Math.abs(coef)>lambda;
+var color=universal?'#00ff88':(active?'#FFD700':'rgba(115,106,94,0.15)');
+ctx.fillStyle=color;
+if(active||universal){ctx.shadowColor=color;ctx.shadowBlur=3}
+ctx.fillRect(startX+i*barW,yOffset,barW-3,Math.abs(coef*25)+3);ctx.shadowBlur=0;
+ctx.fillStyle=universal?'#00ff88':'rgba(115,106,94,0.5)';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText(term,startX+i*barW+(barW-3)/2,yOffset-3)})});
+ctx.fillStyle='#00ff88';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('Green = universal (-g)',10,H*0.8);
+ctx.fillStyle='#FFD700';ctx.fillText('Gold = trajectory-specific (drag)',10,H*0.87);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Group sparsity: \\u03bb\\u03a3||\\u039e^(j)||_{2,1}',W/2,H-20);
+}else if(scene===4){
+// Aging digital twins
+var agingRate=param;var cx=W/2,cy=H*0.45;
+// Nominal trajectory (ideal, cyan)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<200;i++){var x=i*W*0.004;var y=cy+Math.sin(i*0.05)*15;if(i===0)ctx.moveTo(W*0.05,y);else ctx.lineTo(W*0.05+x,y)}ctx.stroke();
+// Aging progression (discrepancy grows over time)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<200;i++){var x=i*W*0.004;var aging=i*agingRate*0.01;var y=cy+Math.sin(i*0.05)*15+aging*Math.sin(i*0.1)*8;if(i===0)ctx.moveTo(W*0.05,y);else ctx.lineTo(W*0.05+x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Aging indicator
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='left';
+ctx.fillText('g_aging(x,t) grows with time',10,H*0.2);
+ctx.fillText('Only discrepancy updates \\u2192 lightweight',10,H*0.28);
+ctx.fillStyle='#00CED1';ctx.fillText('f_ideal stays fixed',10,H*0.12);
+// Timeline
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.05,H*0.75);ctx.lineTo(W*0.85,H*0.75);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';
+ctx.fillText('t=0 (new)',W*0.1,H*0.82);ctx.fillText('t=T (aged)',W*0.8,H*0.82);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('x\\u0307 = f_ideal + g_aging(x,t)',W/2,H-20);
+}else if(scene===5){
+// Global impact: prosthetics, grids, UAVs, infrastructure
+var gamma=param;var cx=W/2,cy=H*0.45;
+var impacts=[{x:0.2,icon:'\\ud83e\\uddbe',l:'Prosthetics',c:'#00CED1'},{x:0.4,icon:'\\u26a1',l:'Smart Grids',c:'#FFD700'},{x:0.6,icon:'\\u2708',l:'UAVs',c:'#a855f7'},{x:0.8,icon:'\\ud83c\\udf09',l:'Bridges',c:'#10b981'}];
+impacts.forEach(function(im){var px=W*im.x;
+ctx.font='20px Georgia,serif';ctx.textAlign='center';ctx.fillText(im.icon,px,cy-10);
+ctx.fillStyle=im.c;ctx.font='8px Georgia,serif';ctx.fillText(im.l,px,cy+10);
+// Discrepancy bar
+ctx.strokeStyle=im.c;ctx.lineWidth=2;ctx.strokeRect(px-20,cy+20,40,H*0.1);
+ctx.fillStyle=im.c+'33';ctx.fillRect(px-20,cy+20,40,H*0.1*(0.3+Math.sin(t+im.x)*0.3+0.4))});
+// Edge computing label
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('Edge-deployable \\u00b7 Real-time \\u00b7 Physically safe',W/2,H*0.8);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('Discrepancy ML: adaptive, safe, efficient',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP12.setActive(false);
+
+// CLIP12 code section — Discrepancy model
+var CLIP12_CODE={
+'discrepancy':{
+name:'Discrepancy Model: Physics + ML Residual',
+latex:'\\dot{\\mathbf{x}} = f_{physics}(\\mathbf{x}) + g_{ML}(\\mathbf{x})',
+intent:'Learn only the residual between idealized physics and reality',
+mapping:[
+{symbol:'f_physics(x)',code:'physics_model(x)',note:'Idealized baseline (Lagrangian, conservation)'},
+{symbol:'g_ML(x)',code:'ml_residual(x)',note:'Learned discrepancy (drag, chatter, aging)'},
+{symbol:'x\\u0307',code:'physics(x) + ml(x)',note:'Hybrid prediction'},
+{symbol:'h(x)=0',code:'constraint(x)',note:'Geometric constraint (torus, circle)'},
+{symbol:'\\u039e^(j)_{2,1}',code:'group_l1(coefs, trajectories)',note:'Group sparsity across experiments'}],
+langs:{
+'Python':'import numpy as np\nfrom sklearn.neural_network import MLPRegressor\n\nclass DiscrepancyModel:\n    """x_dot = f_physics(x) + g_ml(x)"""\n    def __init__(self, physics_fn):\n        self.physics = physics_fn\n        self.ml = MLPRegressor(hidden_layer_sizes=(32, 32),\n                               activation=\'tanh\', max_iter=500)\n    \n    def predict(self, x):\n        return self.physics(x) + self.ml.predict(x)\n    \n    def fit(self, X, dx_true):\n        # Train g_ml on residual: dx - f_physics\n        residual = dx_true - self.physics(X)\n        self.ml.fit(X, residual)\n    \n    def update_aging(self, X_new, dx_new, lr=0.1):\n        """Lightweight update for digital twin aging"""\n        new_residual = dx_new - self.physics(X_new)\n        self.ml.partial_fit(X_new, new_residual)\n\n# Group sparsity for universal law discovery\nfrom sklearn.linear_model import Lasso\n\ndef group_sparse_sindy(trajectories, lambda_=0.1):\n    """Discover universal terms across multiple experiments"""\n    all_coefs = []\n    for X, dX in trajectories:\n        Theta = build_library(X)\n        model = Lasso(alpha=lambda_)\n        model.fit(Theta, dX)\n        all_coefs.append(model.coef_)\n    # Group sparsity: term active in ALL trajectories = universal\n    universal = np.mean(np.abs(all_coefs), axis=0) > lambda_\n    return universal, all_coefs',
+'TypeScript':'// Discrepancy model\nclass DiscrepancyModel {\n  predict(x: number[]): number[] {\n    return this.physics(x).map((p, i) => p + this.ml(x)[i]);\n  }\n  fit(X: number[][], dxTrue: number[][]): void {\n    const residual = X.map((x, i) =>\n      dxTrue[i].map((d, j) => d - this.physics(x)[j]));\n    this.ml.train(X, residual);\n  }\n  updateAging(X: number[][], dx: number[][]): void {\n    const r = X.map((x, i) =>\n      dx[i].map((d, j) => d - this.physics(x)[j]));\n    this.ml.partialFit(X, r);\n  }\n}',
+'Go':'type DiscrepancyModel struct {\n    Physics func([]float64) []float64\n    ML      *NeuralNet\n}\nfunc (m *DiscrepancyModel) Predict(x []float64) []float64 {\n    p := m.Physics(x)\n    g := m.ML.Forward(x)\n    result := make([]float64, len(p))\n    for i := range p { result[i] = p[i] + g[i] }\n    return result\n}\nfunc (m *DiscrepancyModel) UpdateAging(X [][]float64, dx [][]float64) {\n    for i, x := range X {\n        p := m.Physics(x)\n        for j := range dx[i] { dx[i][j] -= p[j] }\n    }\n    m.ML.PartialFit(X, dx)\n}',
+'Scala':'class DiscrepancyModel(physics: Vector[Double] => Vector[Double]) {\n  def predict(x: Vector[Double]): Vector[Double] =\n    physics(x).zip(ml.forward(x)).map { case (p, g) => p + g }\n  def fit(X: Seq[Vector[Double]], dxTrue: Seq[Vector[Double]]): Unit = {\n    val residual = X.zip(dxTrue).map { case (x, dx) =>\n      dx.zip(physics(x)).map { case (d, p) => d - p }\n    }\n    ml.train(X, residual)\n  }\n}',
+'C':'void discrepancy_predict(DiscrepancyModel* m, double* x, int n, double* out) {\n    double* phys = malloc(n*sizeof(double));\n    double* corr = malloc(n*sizeof(double));\n    m->physics(x, n, phys);\n    nn_forward(m->ml, x, n, corr);\n    for (int i = 0; i < n; i++) out[i] = phys[i] + corr[i];\n    free(phys); free(corr);\n}\nvoid discrepancy_update(DiscrepancyModel* m, double** X, double** dx, int n) {\n    double* phys = malloc(n*sizeof(double));\n    for (int i = 0; i < n; i++) {\n        m->physics(X[i], n, phys);\n        for (int j = 0; j < n; j++) dx[i][j] -= phys[j];\n    }\n    nn_partial_fit(m->ml, X, dx, n);\n    free(phys);\n}',
+'Elixir':'defmodule DiscrepancyModel do\n  def predict(model, x) do\n    physics = model.physics.(x)\n    correction = NN.forward(model.ml, x)\n    Enum.zip(physics, correction) |> Enum.map(fn {p, g} -> p + g end)\n  end\n  def fit(model, x_data, dx_true) do\n    residuals = Enum.zip(x_data, dx_true)\n      |> Enum.map(fn {x, dx} ->\n        Enum.zip(dx, model.physics.(x)) |> Enum.map(fn {d, p} -> d - p end)\n      end)\n    ml = NN.train(model.ml, x_data, residuals)\n    %{model | ml: ml}\n  end\nend'
+}
+}
+};
+var CLIP12_CURRENT_LANG='Python';
+function populateCode12(){
+var e=CLIP12_CODE['discrepancy'];if(!e)return;
+var exprEl=document.getElementById('expr12');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map12');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs12');var ccEl=document.getElementById('codecontent12');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip12Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc12-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip12Code(lang){CLIP12_CURRENT_LANG=lang;document.querySelectorAll('#tabs12 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc12-'+lang)})}
+var CLIP12_OUTPUTS={'discrepancy':['Initializing discrepancy model...','Physics: f(x) = idealized Lagrangian','ML: MLPRegressor(32, 32) for residual','','Training on residual: dx - f_physics(x)...','Epoch 100: residual MSE = 0.034','Epoch 500: residual MSE = 0.008','','Group sparsity across 3 trajectories:','  wiffle ball: [-g, 0.3\\u00b7v, 0, 0, ...]','  basketball: [-g, 0.1\\u00b7v, 0, 0, ...]','  bowling:    [-g, 0.02\\u00b7v, 0, 0, ...]','','Universal terms: [-g] (\\u2713 true physics)','Discrepancy terms: [drag\\u00b7v] (environment-specific)','','Digital twin ready','Aging update: only g_ML changes, f_physics fixed']};
+function runClip12Code(key){
+var e=CLIP12_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput12');var st=document.getElementById('runStatus12');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap12');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP12_CURRENT_LANG+' '+e.name,''];var out2=CLIP12_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip12CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip12CodeViz(key){
+var wrap=document.getElementById('codeVizWrap12');if(!wrap)return;var cv=document.getElementById('codeVizCanvas12');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('Discrepancy: physics + ML residual',W/2,16);
+var cx=W/2,cy=H*0.55,scale=H*0.1;
+// Physics (dashed cyan)
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.setLineDash([5,5]);ctx.beginPath();
+for(var i=-3;i<=3;i+=0.05){ctx.lineTo(cx+i*scale,cy-Math.sin(i*1.5)*0.5*scale)}ctx.stroke();ctx.setLineDash([]);
+// ML discrepancy (golden)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=-3;i<=3;i+=0.05){ctx.lineTo(cx+i*scale,cy-0.3*Math.sin(i*3+tt)*scale)}ctx.stroke();ctx.shadowBlur=0;
+// True (orange, sum)
+ctx.strokeStyle=pc;ctx.lineWidth=3;ctx.beginPath();
+for(var i=-3;i<=3;i+=0.05){ctx.lineTo(cx+i*scale,cy-(Math.sin(i*1.5)*0.5+0.3*Math.sin(i*3+tt))*scale)}ctx.stroke();
+ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('f_physics (idealized)',10,25);
+ctx.fillStyle='#FFD700';ctx.fillText('g_ML (discrepancy)',10,37);
+ctx.fillStyle=pc;ctx.fillText('x_dot = f + g (true)',10,49);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
+
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -3301,7 +3559,8 @@ var FUTURES_DATA={
 'piml8':[{n:'PDE-SINDy standard',y:2027,p:0.40,t:'Automatic PDE discovery from fields'},{n:'PySINDy ecosystem',y:2026,p:0.50,t:'Open-source SINDy ubiquitous'},{n:'Navier-Stokes discovered',y:2029,p:0.30,t:'ML rediscovers NS from data'},{n:'Constrained SINDy',y:2028,p:0.35,t:'Physics-constrained sparse ID'},{n:'Disease dynamics',y:2030,p:0.25,t:'SINDy for epidemiology'}],
 'piml9':[{n:'Auto coordinate discovery',y:2026,p:0.50,t:'Automatic latent coordinate finding'},{n:'Takens embedding standard',y:2027,p:0.40,t:'Delay embeddings for latent states'},{n:'Intrinsic variable models',y:2028,p:0.35,t:'Macro-force SINDy for engineering'},{n:'Brain dynamics SINDy',y:2029,p:0.30,t:'EEG seizure prediction from delays'},{n:'Normal form learning',y:2030,p:0.25,t:'Deep AE discovers normal forms'}],
 'piml10':[{n:'SINDYc for MPC',y:2027,p:0.40,t:'Control-aware SINDy for real-time MPC'},{n:'Implicit SINDy standard',y:2028,p:0.35,t:'Rational dynamics discovery default'},{n:'Tensor train SINDy',y:2029,p:0.25,t:'Scalable high-dim library compression'},{n:'Symmetry pruning default',y:2026,p:0.45,t:'Automatic symmetry-based pruning'},{n:'PySINDy ecosystem',y:2025,p:0.50,t:'Comprehensive SINDy toolkit mature'}],
-'piml11':[{n:'STLSQ everywhere',y:2025,p:0.50,t:'STLSQ default sparse optimization'},{n:'Stability-constrained SINDy',y:2027,p:0.35,t:'Globally stable models by construction'},{n:'Adaptive SINDy control',y:2028,p:0.30,t:'Real-time model updates for damage'},{n:'SR3 maturity',y:2026,p:0.45,t:'SR3 replaces L1 as default'},{n:'Energy-conserving SINDy',y:2027,p:0.40,t:'KKT constraints standard for fluids'}]
+'piml11':[{n:'STLSQ everywhere',y:2025,p:0.50,t:'STLSQ default sparse optimization'},{n:'Stability-constrained SINDy',y:2027,p:0.35,t:'Globally stable models by construction'},{n:'Adaptive SINDy control',y:2028,p:0.30,t:'Real-time model updates for damage'},{n:'SR3 maturity',y:2026,p:0.45,t:'SR3 replaces L1 as default'},{n:'Energy-conserving SINDy',y:2027,p:0.40,t:'KKT constraints standard for fluids'}],
+'piml12':[{n:'Discrepancy twins standard',y:2027,p:0.45,t:'Every digital twin uses discrepancy ML'},{n:'Group sparsity default',y:2026,p:0.40,t:'Multi-trajectory group sparsity standard'},{n:'Pareto-optimal hybrid',y:2025,p:0.50,t:'Physics+ML Pareto trade-off ubiquitous'},{n:'Aging adaptive control',y:2028,p:0.35,t:'Real-time aging adaptation for robotics'},{n:'Universal law discovery',y:2030,p:0.25,t:'ML discovers universal vs trajectory-specific'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -3330,7 +3589,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -3412,6 +3671,7 @@ setTimeout(populateCode8,300);
 setTimeout(populateCode9,300);
 setTimeout(populateCode10,300);
 setTimeout(populateCode11,300);
+setTimeout(populateCode12,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -3464,7 +3724,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('11 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===11});
+chk('12 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===12});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -3476,6 +3736,7 @@ chk('Clip 8 ready',function(){return CLIP_CURRICULUM[7].status==='ready'});
 chk('Clip 9 ready',function(){return CLIP_CURRICULUM[8].status==='ready'});
 chk('Clip 10 ready',function(){return CLIP_CURRICULUM[9].status==='ready'});
 chk('Clip 11 ready',function(){return CLIP_CURRICULUM[10].status==='ready'});
+chk('Clip 12 ready',function(){return CLIP_CURRICULUM[11].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -3556,6 +3817,16 @@ chk('Clip 11 code tabs (6)',function(){return document.getElementById('tabs11')&
 chk('Clip 11 map table',function(){var m=document.getElementById('map11');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 11 future chart',function(){return!!document.getElementById('fut11')});
 chk('CLIP11 narration key',function(){return CLIP11.narrationKey==='piml11'});
+// Clip 12
+chk('CLIP12 exists',function(){return typeof CLIP12==='object'});
+chk('Clip 12 section exists',function(){return!!document.getElementById('clip12')});
+chk('Clip 12 canvas',function(){return!!document.getElementById('cv12')});
+chk('Clip 12 scenes (6)',function(){var s=document.getElementById('scenes12');return s&&s.children.length===6});
+chk('Clip 12 expr populated',function(){var e=document.getElementById('expr12');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 12 code tabs (6)',function(){return document.getElementById('tabs12')&&document.getElementById('tabs12').children.length===6});
+chk('Clip 12 map table',function(){var m=document.getElementById('map12');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 12 future chart',function(){return!!document.getElementById('fut12')});
+chk('CLIP12 narration key',function(){return CLIP12.narrationKey==='piml12'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
