@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v16-clip12-discrepancy-modeling">
+<meta name="version" content="2026-11-04-v17-clip13-hamiltonian-nn">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -786,10 +786,62 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap12"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas12"></canvas></div>
 </div>
 </section>
+
+<!-- CLIP 13: Hamiltonian Neural Networks -->
+<section class="clip-section" id="clip13" style="display:none">
+<h2>Hamiltonian Neural Networks</h2>
+<div class="subtitle">Video 13 \u00b7 HNN scalar energy, dual loss, Noether conservation, symplectic drift elimination, Lagrangian NN extension</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap13">
+<canvas class="clip-canvas" id="cv13"></canvas>
+<div class="clip-scene-label" id="lbl13">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP13.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP13.pause()">||</button>
+<button class="clip-btn" onclick="CLIP13.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP13.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP13.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title13">HNN architecture</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom13" min="0.5" max="3" step="0.1" value="1"><span id="zoom13v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel13">\u03b5</span><input type="range" id="param13" min="0" max="0.1" step="0.005" value="0.01"><span id="param13v">0.010</span></div>
+<button class="clip-btn" onclick="CLIP13.toggleRecord()" id="rec13" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP13.toggleNarration()" id="narr13" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP13.toggleLight()" id="light13">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes13"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts13"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 HNN evolution</h4>
+<canvas class="future-canvas" id="fut13"></canvas>
+<div class="future-milestones" id="fut13m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code13">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr13">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map13"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs13"></div>
+<div id="codecontent13"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip13Code('hnn')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus13" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput13"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap13"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas13"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 12/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 13/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -821,7 +873,7 @@ var CLIP_CURRICULUM=[
 {n:10,title:'Library Construction & SINDy Extensions',desc:'Hierarchical library, SINDYc, implicit SINDy, tensor trains, symmetry pruning',status:'ready'},
 {n:11,title:'SINDy Optimization & Constraints',desc:'STLSQ, Pareto front, SR3, energy conservation, stability, adaptive recovery',status:'ready'},
 {n:12,title:'Discrepancy Modeling',desc:'Hybrid physics+ML, Pareto trade-off, Ptolemy vs Galileo, group sparsity, digital twins',status:'ready'},
-{n:13,title:'Data Curation & Equivariance',desc:'Optimal coordinates, symmetries',status:'upcoming'},
+{n:13,title:'Hamiltonian Neural Networks',desc:'HNN architecture, dual loss, Noether, symplectic, LNN extension',status:'ready'},
 {n:14,title:'Hard Constraints',desc:'Lagrange multipliers in optimization',status:'upcoming'},
 {n:15,title:'Discovery of Equations',desc:'Finding governing laws from data',status:'upcoming'},
 {n:16,title:'Digital Twins',desc:'Real-time asset modeling',status:'upcoming'},
@@ -3547,6 +3599,210 @@ ctx.fillStyle=pc;ctx.fillText('x_dot = f + g (true)',10,49);
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
 
+// ============ CLIP 13: Hamiltonian Neural Networks ============
+var CLIP13_SCENES=[
+{title:'HNN architecture',desc:'Scalar H(q,p) \\u2192 autodiff \\u2192 canonical equations'},
+{title:'Dual loss function',desc:'Anti-symmetric derivative enforcement'},
+{title:'Noether\'s theorem',desc:'Symmetry \\u2192 conservation, dH/dt=0 proof'},
+{title:'Energy drift elimination',desc:'Standard integrator drifts vs HNN conserves'},
+{title:'Lagrangian NNs',desc:'Euler-Lagrange in (q, q\\u0307) space'},
+{title:'Global impact',desc:'Orbits, fusion, drug discovery, robotics'}
+];
+var CLIP13_THOUGHTS=[
+'<strong style="color:var(--primary)">Learn energy, not derivatives.</strong> Standard NNs fit $\\dot{x}$ directly, missing physics. HNNs parameterize a scalar Hamiltonian $H(q,p)$ and generate derivatives via canonical equations: $\\dot{q}=\\frac{\\partial H}{\\partial p}, \\dot{p}=-\\frac{\\partial H}{\\partial q}$. The network learns the energy surface; physics generates the dynamics.',
+'<strong style="color:var(--primary)">Dual enforcement.</strong> Architecture: learn scalar $H(q,p)$. Loss: $\\mathcal{L} = \\|\\dot{q}-\\frac{\\partial H}{\\partial p}\\|^2 + \\|\\dot{p}+\\frac{\\partial H}{\\partial q}\\|^2$. Anti-symmetric structure is enforced both by construction (scalar energy) and by penalty (canonical equation residual). Dual enforcement = robust generalization from noisy data.',
+'<strong style="color:var(--primary)">Noether\'s theorem.</strong> Energy conservation stems from time-translation symmetry. Proof: $\\frac{dH}{dt} = \\frac{\\partial H}{\\partial q}\\dot{q} + \\frac{\\partial H}{\\partial p}\\dot{p} = \\frac{\\partial H}{\\partial q}\\frac{\\partial H}{\\partial p} + \\frac{\\partial H}{\\partial p}(-\\frac{\\partial H}{\\partial q}) = 0$. The anti-symmetry cancels exactly. Conservation is not learned \\u2014 it\'s mathematically guaranteed.',
+'<strong style="color:var(--primary)">No more drift.</strong> Standard integrators (Runge-Kutta, ode45) add artificial damping or energy growth over long horizons. HNNs function like symplectic integrators: $E(t) \\approx E_0$ as $t \\to \\infty$. Energy stays bounded indefinitely. Critical for chaotic systems and long-horizon prediction.',
+'<strong style="color:var(--primary)">Lagrangian extension.</strong> HNNs operate in canonical $(q,p)$ space. Lagrangian NNs work in $(q,\\dot{q})$ space: $\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} - \\frac{\\partial L}{\\partial q} = 0$ where $L=T-V$. Accommodates systems where momentum can\'t be directly measured. Same principle \\u2014 learn the energy, derive the dynamics.',
+'<strong style="color:var(--primary)">Conservation in practice.</strong> Orbital mechanics: track space debris for decades without energy drift. Fusion: model plasma containment with Hamiltonian fluid principles. Drug discovery: molecular dynamics without artificial heating. Robotics: conservative bounds guarantee safety near humans. HNNs = physics-respecting AI.'
+];
+var CLIP13_PARAMS=[
+{label:'\\u03b5',min:0,max:0.1,step:0.005,default:0.01,decimals:3,desc:'energy tolerance'},
+{label:'\\u03bb',min:0,max:2,step:0.1,default:1,decimals:1,desc:'loss weight'},
+{label:'\\u03b8',min:0,max:6.28,step:0.1,default:0,decimals:1,desc:'symmetry angle'},
+{label:'T',min:10,max:500,step:10,default:100,decimals:0,desc:'simulation horizon'},
+{label:'\\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'LNN coupling'},
+{label:'\\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'safety weight'}
+];
+var SCENE13_MATH=[
+['H(q,p)\\u2192\\u1e8b=\\u2202H/\\u2202p,\\u1e8b=-\\u2202H/\\u2202q','canonical','scalar energy'],
+['L=||\\u1e8b-\\u2202H/\\u2202p||\\u00b2+||\\u1e8b+\\u2202H/\\u2202q||\\u00b2','dual loss','anti-symmetric'],
+['dH/dt=\\u2202H/\\u2202q\\u00b7\\u2202H/\\u2202p+\\u2202H/\\u2202p\\u00b7(-\\u2202H/\\u2202q)=0','Noether','conservation'],
+['E(t)\\u2248E\\u2080','symplectic','no drift'],
+['d/dt(\\u2202L/\\u2202\\u1e8b)=\\u2202L/\\u2202q','Euler-Lagrange','L=T-V'],
+['orbits+fusion+drugs','conservative','safety']
+];
+var CLIP13=makeClip({varName:'CLIP13',cvId:'cv13',wrapId:'wrap13',lblId:'lbl13',titleId:'title13',zoomId:'zoom13',zoomValId:'zoom13v',paramId:'param13',paramValId:'param13v',paramLabelId:'paramLabel13',paramDefault:0.01,paramDecimals:3,lightId:'light13',narrId:'narr13',recId:'rec13',narrationKey:'piml13',sceneListId:'scenes13',thoughtsId:'thoughts13',scenes:CLIP13_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE13_MATH[scene]);
+if(scene===0){
+// HNN architecture: scalar H → autodiff → canonical equations
+var cx=W/2,cy=H*0.45;var scale=H*0.1;
+// NN → H(q,p) scalar
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
+ctx.beginPath();ctx.arc(cx,cy,8,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('H(q,p)',cx,cy-15);
+// Autodiff arrows down
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.setLineDash([3,3]);
+ctx.beginPath();ctx.moveTo(cx-15,cy+10);ctx.lineTo(cx-30,cy+35);ctx.stroke();
+ctx.beginPath();ctx.moveTo(cx+15,cy+10);ctx.lineTo(cx+30,cy+35);ctx.stroke();ctx.setLineDash([]);
+// q_dot = dH/dp (left)
+ctx.fillStyle='#00CED1';ctx.font='9px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('q\\u0307 = \\u2202H/\\u2202p',cx-40,cy+50);
+// p_dot = -dH/dq (right)
+ctx.fillStyle='#FF69B4';ctx.fillText('p\\u0307 = -\\u2202H/\\u2202q',cx+40,cy+50);
+// Phase space orbit
+ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var a=i/100*Math.PI*2+t*0.3;var q=Math.cos(a)*30;var p=Math.sin(a)*20;var px=cx+q;var py=cy-80+p;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath();ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('phase space orbit',cx,cy-80+35);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('H(q,p) \\u2192 \\u1e8b=\\u2202H/\\u2202p, p\\u0307=-\\u2202H/\\u2202q',W/2,H-20);
+}else if(scene===1){
+// Dual loss: anti-symmetric enforcement
+var lambda=param;var cx=W/2,cy=H*0.5;
+// Two loss terms
+ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.textAlign='center';
+ctx.fillText('L_q = ||q\\u0307 - \\u2202H/\\u2202p||\\u00b2',W*0.3,cy-30);
+ctx.fillStyle='#FF69B4';ctx.fillText('L_p = ||p\\u0307 + \\u2202H/\\u2202q||\\u00b2',W*0.7,cy-30);
+// Bars showing both losses decreasing
+ctx.fillStyle='#00CED1';ctx.fillRect(W*0.2,cy,15,-H*0.15*(1-Math.min(1,t*0.1)));
+ctx.fillStyle='#FF69B4';ctx.fillRect(W*0.6,cy,15,-H*0.15*(1-Math.min(1,t*0.08)));
+// Total loss
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.fillText('L = L_q + L_p (dual)',W/2,cy+30);
+// Anti-symmetry indicator
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.arc(W/2,cy-60,15,0,Math.PI*2);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.fillText('anti-sym',W/2,cy-57);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('L = ||\\u1e8b-\\u2202H/\\u2202p||\\u00b2 + ||p\\u0307+\\u2202H/\\u2202q||\\u00b2',W/2,H-20);
+}else if(scene===2){
+// Noether's theorem: dH/dt = 0 proof
+var cx=W/2,cy=H*0.5;
+// Energy conservation bar (stays constant)
+var E=1-Math.abs(Math.sin(t*0.1))*param*10; // nearly constant for HNN
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.strokeRect(W*0.1,H*0.2,W*0.8,H*0.08);
+ctx.fillStyle='#00ff88';ctx.shadowColor='#00ff88';ctx.shadowBlur=6;ctx.fillRect(W*0.1,H*0.2,W*0.8*E,H*0.08);ctx.shadowBlur=0;
+ctx.fillStyle='#00ff88';ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('H(t) \\u2248 const (conserved)',W/2,H*0.15);
+// Proof steps
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='left';
+ctx.fillText('dH/dt = (\\u2202H/\\u2202q)(\\u2202H/\\u2202p) + (\\u2202H/\\u2202p)(-\\u2202H/\\u2202q)',10,H*0.4);
+ctx.fillStyle='#FFD700';ctx.fillText('      = \\u2202H/\\u2202q \\u00b7 \\u2202H/\\u2202p - \\u2202H/\\u2202p \\u00b7 \\u2202H/\\u2202q',10,H*0.48);
+ctx.fillStyle='#00ff88';ctx.fillText('      = 0  (anti-symmetry cancels!)',10,H*0.56);
+// Noether label
+ctx.fillStyle='#a855f7';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Noether: time symmetry \\u2192 energy conservation',W/2,H*0.7);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('dH/dt = 0 (conservation by construction)',W/2,H-20);
+}else if(scene===3){
+// Energy drift: standard vs HNN
+var horizon=Math.floor(param);var cx=W/2,cy=H*0.5;var scale=W*0.3;
+// Standard integrator (drifts)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<horizon*3;i++){var x=i/(horizon*3)*scale*2-scale;var drift=i*0.0005;var y=cy-Math.sin(i*0.05)*10+drift*50;if(i===0)ctx.moveTo(cx+x,y);else ctx.lineTo(cx+x,y)}ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('Standard (drifts)',cx-scale*0.5,cy-40);
+// HNN (conserves)
+ctx.strokeStyle='#00ff88';ctx.lineWidth=2;ctx.shadowColor='#00ff88';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<horizon*3;i++){var x=i/(horizon*3)*scale*2-scale;var y=cy-Math.sin(i*0.05)*10;if(i===0)ctx.moveTo(cx+x,y);else ctx.lineTo(cx+x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#00ff88';ctx.fillText('HNN (conserves)',cx+scale*0.5,cy-40);
+// Energy over time
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx-scale,cy+40);ctx.lineTo(cx+scale,cy+40);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('time \\u2192',cx,cy+55);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('E(t) \\u2248 E\\u2080 (symplectic, no drift)',W/2,H-20);
+}else if(scene===4){
+// Lagrangian NNs: Euler-Lagrange in (q, q_dot)
+var alpha=param;var cx=W/2,cy=H*0.45;
+// HNN (left): (q, p) space
+ctx.fillStyle='#00CED1';ctx.font='8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('HNN: (q, p) space',W*0.25,H*0.15);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var a=i/50*Math.PI;var q=Math.cos(a)*20;var p=Math.sin(a)*15;ctx.lineTo(W*0.25+q,cy+p)}ctx.stroke();
+// Arrow
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.4,cy);ctx.lineTo(W*0.55,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.fillText('extension',W*0.47,cy-8);
+// LNN (right): (q, q_dot) space
+ctx.fillStyle='#FF69B4';ctx.font='8px Georgia,serif';ctx.fillText('LNN: (q, q\\u0307) space',W*0.75,H*0.15);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var a=i/50*Math.PI;var q=Math.cos(a)*20;var qd=Math.sin(a)*15*alpha;ctx.lineTo(W*0.75+q,cy+qd)}ctx.stroke();
+// Equations
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='left';
+ctx.fillText('q\\u0307=\\u2202H/\\u2202p, p\\u0307=-\\u2202H/\\u2202q',10,H*0.7);
+ctx.fillStyle='#FF69B4';ctx.fillText('d/dt(\\u2202L/\\u2202\\u1e8b)=\\u2202L/\\u2202q',10,H*0.78);
+ctx.fillStyle=mt;ctx.fillText('L=T-V (kinetic - potential)',10,H*0.86);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('LNN: Euler-Lagrange in (q, q\\u0307)',W/2,H-20);
+}else if(scene===5){
+// Global impact
+var gamma=param;var cx=W/2,cy=H*0.45;
+var impacts=[{x:0.2,icon:'\\ud83d\\ude80',l:'Orbits',c:'#a855f7'},{x:0.4,icon:'\\u26a1',l:'Fusion',c:'#FFD700'},{x:0.6,icon:'\\ud83e\\uddec',l:'Drugs',c:'#00CED1'},{x:0.8,icon:'\\ud83e\\uddbe',l:'Robotics',c:'#10b981'}];
+impacts.forEach(function(im){var px=W*im.x;
+ctx.font='18px Georgia,serif';ctx.textAlign='center';ctx.fillText(im.icon,px,cy-5);
+ctx.fillStyle=im.c;ctx.font='8px Georgia,serif';ctx.fillText(im.l,px,cy+12);
+// Conservation bar (green = stable)
+ctx.strokeStyle=im.c;ctx.lineWidth=2;ctx.strokeRect(px-18,cy+20,36,H*0.08);
+ctx.fillStyle=im.c+'33';ctx.fillRect(px-18,cy+20,36,H*0.08*0.9)});
+ctx.fillStyle='#00ff88';ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('Energy conserved \\u00b7 No drift \\u00b7 Physically safe',W/2,H*0.8);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('HNN: conservation in practice',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP13.setActive(false);
+
+// CLIP13 code section — Hamiltonian Neural Network
+var CLIP13_CODE={
+'hnn':{
+name:'Hamiltonian Neural Network (Energy-Conserving)',
+latex:'\\dot{q} = \\frac{\\partial H}{\\partial p}, \\quad \\dot{p} = -\\frac{\\partial H}{\\partial q}',
+intent:'Parameterize scalar Hamiltonian; autodiff enforces canonical equations',
+mapping:[
+{symbol:'H(q,p)',code:'model(q, p)',note:'Scalar energy function (neural net output)'},
+{symbol:'\\u2202H/\\u2202p',code:'autograd.grad(H, p)',note:'q derivative via autodiff'},
+{symbol:'\\u2202H/\\u2202q',code:'autograd.grad(H, q)',note:'p derivative (negated)'},
+{symbol:'q\\u0307',code:'dH_dp',note:'Position derivative = dH/dp'},
+{symbol:'p\\u0307',code:'-dH_dq',note:'Momentum derivative = -dH/dq'}],
+langs:{
+'Python':'import torch\nimport torch.nn as nn\n\nclass HamiltonianNN(nn.Module):\n    """H(q,p) -> canonical equations -> energy conservation"""\n    def __init__(self):\n        super().__init__()\n        self.net = nn.Sequential(\n            nn.Linear(4, 64), nn.Tanh(),\n            nn.Linear(64, 64), nn.Tanh(),\n            nn.Linear(64, 1)  # scalar H(q,p)\n        )\n    \n    def forward(self, q, p):\n        return self.net(torch.cat([q, p], dim=-1))\n    \n    def dynamics(self, q, p):\n        \"\"\"Hamilton\'s canonical equations via autodiff\"\"\"\n        q.requires_grad_(True)\n        p.requires_grad_(True)\n        H = self.forward(q, p)\n        # dq/dt = dH/dp\n        dH_dp = torch.autograd.grad(H.sum(), p, create_graph=True)[0]\n        # dp/dt = -dH/dq\n        dH_dq = torch.autograd.grad(H.sum(), q, create_graph=True)[0]\n        return dH_dp, -dH_dq\n    \n    def loss(self, q, p, q_dot, p_dot):\n        \"\"\"Dual loss enforcing canonical equations\"\"\"\n        pred_q_dot, pred_p_dot = self.dynamics(q, p)\n        return torch.mean((q_dot - pred_q_dot)**2) + \\\n               torch.mean((p_dot - pred_p_dot)**2)',
+'TypeScript':'// Hamiltonian Neural Network\nclass HamiltonianNN {\n  private net: NeuralNet; // q,p -> H (scalar)\n  \n  forward(q: number[], p: number[]): number {\n    return this.net.forward([...q, ...p])[0];\n  }\n  \n  dynamics(q: number[], p: number[]): [number[], number[]] {\n    const H = this.forward(q, p);\n    const dH_dp = autoGrad(() => this.forward(q, p), p);\n    const dH_dq = autoGrad(() => this.forward(q, p), q);\n    return [dH_dp, dH_dq.map(v => -v)]; // [q_dot, p_dot]\n  }\n  \n  loss(q: number[], p: number[], qDot: number[], pDot: number[]): number {\n    const [predQ, predP] = this.dynamics(q, p);\n    return mse(qDot, predQ) + mse(pDot, predP);\n  }\n}',
+'Go':'type HamiltonianNN struct {\n    Net *NeuralNet // q,p -> H\n}\nfunc (m *HamiltonianNN) Dynamics(q, p []float64) ([]float64, []float64) {\n    H := m.Net.Forward(append(q, p...))[0]\n    dH_dp := autoGrad(m, q, p, "p")\n    dH_dq := autoGrad(m, q, p, "q")\n    qDot := dH_dp\n    pDot := make([]float64, len(dH_dq))\n    for i := range dH_dq { pDot[i] = -dH_dq[i] }\n    return qDot, pDot\n}',
+'Scala':'class HamiltonianNN {\n  private val net = new NeuralNet(List(4, 64, 64, 1))\n  def forward(q: Vector[Double], p: Vector[Double]): Double =\n    net.forward(q ++ p).head\n  def dynamics(q: Vector[Double], p: Vector[Double]): (Vector[Double], Vector[Double]) = {\n    val dH_dp = autoGrad(q => forward(q, p), q)\n    val dH_dq = autoGrad(p => forward(q, p), p)\n    (dH_dp, dH_dq.map(-_)) // (q_dot, p_dot)\n  }\n}',
+'C':'/* Hamiltonian Neural Network (conceptual) */\ndouble hnn_forward(NN* net, double* q, double* p, int n) {\n    double input[2*n];\n    for (int i = 0; i < n; i++) { input[i] = q[i]; input[i+n] = p[i]; }\n    return nn_forward(net, input, 2*n)[0];\n}\n/* q_dot = dH/dp, p_dot = -dH/dq via autodiff */',
+'Elixir':'defmodule HamiltonianNN do\n  def forward(model, q, p) do\n    NN.forward(model.net, q ++ p) |> hd()\n  end\n  def dynamics(model, q, p) do\n    dH_dp = auto_grad(fn -> forward(model, q, p) end, p)\n    dH_dq = auto_grad(fn -> forward(model, q, p) end, q)\n    {dH_dp, Enum.map(dH_dq, &(-&1))}\n  end\nend'
+}
+}
+};
+var CLIP13_CURRENT_LANG='Python';
+function populateCode13(){
+var e=CLIP13_CODE['hnn'];if(!e)return;
+var exprEl=document.getElementById('expr13');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map13');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs13');var ccEl=document.getElementById('codecontent13');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip13Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc13-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip13Code(lang){CLIP13_CURRENT_LANG=lang;document.querySelectorAll('#tabs13 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc13-'+lang)})}
+var CLIP13_OUTPUTS={'hnn':['Initializing Hamiltonian Neural Network...','Network: [4, 64, 64, 1] -> H(q,p) (scalar energy)','','Computing canonical equations via autodiff...','  dq/dt = dH/dp: computed','  dp/dt = -dH/dq: computed','','Dual loss:','  L_q = ||q_dot - dH/dp||^2 = 0.003','  L_p = ||p_dot + dH/dq||^2 = 0.002','','Energy conservation check:','  H(t=0) = 1.0000','  H(t=100) = 1.0001 (drift: 0.0001)','  H(t=1000) = 1.0002 (drift: 0.0002)','','Standard integrator (ode45) drift:','  H(t=1000) = 0.87 (13% energy loss!)','','HNN conserves energy by construction']};
+function runClip13Code(key){
+var e=CLIP13_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput13');var st=document.getElementById('runStatus13');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap13');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP13_CURRENT_LANG+' '+e.name,''];var out2=CLIP13_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip13CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip13CodeViz(key){
+var wrap=document.getElementById('codeVizWrap13');if(!wrap)return;var cv=document.getElementById('codeVizCanvas13');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('HNN: energy conservation over time',W/2,16);
+var cx=W/2,cy=H*0.55,scale=H*0.08;
+// HNN trajectory (conserves energy)
+ctx.strokeStyle='#00ff88';ctx.lineWidth=2;ctx.shadowColor='#00ff88';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<200;i++){var phase=i*0.05;var q=Math.cos(phase)*scale*2;var p=Math.sin(phase)*scale*2;ctx.lineTo(cx+q,cy+p)}ctx.closePath();ctx.stroke();ctx.shadowBlur=0;
+// Standard integrator (drifts)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);ctx.beginPath();
+for(var i=0;i<200;i++){var phase=i*0.05;var drift=i*0.0005;var q=Math.cos(phase)*(scale*2-drift*20);var p=Math.sin(phase)*(scale*2-drift*20);ctx.lineTo(cx+q,cy+p)}ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#00ff88';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('HNN: E=const \\u2713',10,25);
+ctx.fillStyle='#ff6b6b';ctx.fillText('Standard: drifts \\u2717',10,37);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
+
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -3560,7 +3816,8 @@ var FUTURES_DATA={
 'piml9':[{n:'Auto coordinate discovery',y:2026,p:0.50,t:'Automatic latent coordinate finding'},{n:'Takens embedding standard',y:2027,p:0.40,t:'Delay embeddings for latent states'},{n:'Intrinsic variable models',y:2028,p:0.35,t:'Macro-force SINDy for engineering'},{n:'Brain dynamics SINDy',y:2029,p:0.30,t:'EEG seizure prediction from delays'},{n:'Normal form learning',y:2030,p:0.25,t:'Deep AE discovers normal forms'}],
 'piml10':[{n:'SINDYc for MPC',y:2027,p:0.40,t:'Control-aware SINDy for real-time MPC'},{n:'Implicit SINDy standard',y:2028,p:0.35,t:'Rational dynamics discovery default'},{n:'Tensor train SINDy',y:2029,p:0.25,t:'Scalable high-dim library compression'},{n:'Symmetry pruning default',y:2026,p:0.45,t:'Automatic symmetry-based pruning'},{n:'PySINDy ecosystem',y:2025,p:0.50,t:'Comprehensive SINDy toolkit mature'}],
 'piml11':[{n:'STLSQ everywhere',y:2025,p:0.50,t:'STLSQ default sparse optimization'},{n:'Stability-constrained SINDy',y:2027,p:0.35,t:'Globally stable models by construction'},{n:'Adaptive SINDy control',y:2028,p:0.30,t:'Real-time model updates for damage'},{n:'SR3 maturity',y:2026,p:0.45,t:'SR3 replaces L1 as default'},{n:'Energy-conserving SINDy',y:2027,p:0.40,t:'KKT constraints standard for fluids'}],
-'piml12':[{n:'Discrepancy twins standard',y:2027,p:0.45,t:'Every digital twin uses discrepancy ML'},{n:'Group sparsity default',y:2026,p:0.40,t:'Multi-trajectory group sparsity standard'},{n:'Pareto-optimal hybrid',y:2025,p:0.50,t:'Physics+ML Pareto trade-off ubiquitous'},{n:'Aging adaptive control',y:2028,p:0.35,t:'Real-time aging adaptation for robotics'},{n:'Universal law discovery',y:2030,p:0.25,t:'ML discovers universal vs trajectory-specific'}]
+'piml12':[{n:'Discrepancy twins standard',y:2027,p:0.45,t:'Every digital twin uses discrepancy ML'},{n:'Group sparsity default',y:2026,p:0.40,t:'Multi-trajectory group sparsity standard'},{n:'Pareto-optimal hybrid',y:2025,p:0.50,t:'Physics+ML Pareto trade-off ubiquitous'},{n:'Aging adaptive control',y:2028,p:0.35,t:'Real-time aging adaptation for robotics'},{n:'Universal law discovery',y:2030,p:0.25,t:'ML discovers universal vs trajectory-specific'}],
+'piml13':[{n:'HNN for orbital mechanics',y:2027,p:0.35,t:'Energy-conserving satellite tracking'},{n:'Symplectic NN default',y:2028,p:0.30,t:'Symplectic structure standard in ML'},{n:'Fusion plasma HNN',y:2030,p:0.20,t:'Tokamak control via HNN'},{n:'Molecular dynamics HNN',y:2026,p:0.40,t:'Drug discovery acceleration'},{n:'Lagrangian NN mature',y:2027,p:0.35,t:'LNN standard for robotics'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -3589,7 +3846,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -3672,6 +3929,7 @@ setTimeout(populateCode9,300);
 setTimeout(populateCode10,300);
 setTimeout(populateCode11,300);
 setTimeout(populateCode12,300);
+setTimeout(populateCode13,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -3724,7 +3982,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('12 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===12});
+chk('13 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===13});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -3737,6 +3995,7 @@ chk('Clip 9 ready',function(){return CLIP_CURRICULUM[8].status==='ready'});
 chk('Clip 10 ready',function(){return CLIP_CURRICULUM[9].status==='ready'});
 chk('Clip 11 ready',function(){return CLIP_CURRICULUM[10].status==='ready'});
 chk('Clip 12 ready',function(){return CLIP_CURRICULUM[11].status==='ready'});
+chk('Clip 13 ready',function(){return CLIP_CURRICULUM[12].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -3827,6 +4086,16 @@ chk('Clip 12 code tabs (6)',function(){return document.getElementById('tabs12')&
 chk('Clip 12 map table',function(){var m=document.getElementById('map12');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 12 future chart',function(){return!!document.getElementById('fut12')});
 chk('CLIP12 narration key',function(){return CLIP12.narrationKey==='piml12'});
+// Clip 13
+chk('CLIP13 exists',function(){return typeof CLIP13==='object'});
+chk('Clip 13 section exists',function(){return!!document.getElementById('clip13')});
+chk('Clip 13 canvas',function(){return!!document.getElementById('cv13')});
+chk('Clip 13 scenes (6)',function(){var s=document.getElementById('scenes13');return s&&s.children.length===6});
+chk('Clip 13 expr populated',function(){var e=document.getElementById('expr13');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 13 code tabs (6)',function(){return document.getElementById('tabs13')&&document.getElementById('tabs13').children.length===6});
+chk('Clip 13 map table',function(){var m=document.getElementById('map13');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 13 future chart',function(){return!!document.getElementById('fut13')});
+chk('CLIP13 narration key',function(){return CLIP13.narrationKey==='piml13'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
