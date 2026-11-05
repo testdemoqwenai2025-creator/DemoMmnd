@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-04-v17-clip13-hamiltonian-nn">
+<meta name="version" content="2026-11-05-v18-clip14-lagrangian-nn">
 <title>Physics-Informed ML · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -838,10 +838,61 @@ footer a{color:var(--primary);text-decoration:none}
 <div class="code-viz-wrap-cl" id="codeVizWrap13"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas13"></canvas></div>
 </div>
 </section>
+<!-- CLIP 14: Lagrangian Neural Networks -->
+<section class="clip-section" id="clip14" style="display:none">
+<h2>Lagrangian Neural Networks</h2>
+<div class="subtitle">Video 14 \u00b7 Scalar L(q,q\u0307) intermediate, Euler-Lagrange enforcement, Hessian inversion via autodiff, (q,q\u0307) coordinate flexibility, variational integrator parallel</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap14">
+<canvas class="clip-canvas" id="cv14"></canvas>
+<div class="clip-scene-label" id="lbl14">Scene 1/6</div>
+<div class="clip-controls">
+<button class="clip-btn" onclick="CLIP14.play()">\u25b6</button>
+<button class="clip-btn" onclick="CLIP14.pause()">||</button>
+<button class="clip-btn" onclick="CLIP14.replay()">\u21bb</button>
+<button class="clip-btn" onclick="CLIP14.prev()">\u25c0</button>
+<button class="clip-btn" onclick="CLIP14.next()">\u25b6|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title14">Scalar Lagrangian L(q, q\u0307)</span>
+<div class="zoom-control">\ud83d\udd0d<input type="range" id="zoom14" min="0.5" max="3" step="0.1" value="1"><span id="zoom14v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel14">\u03b1</span><input type="range" id="param14" min="0" max="0.1" step="0.005" value="0.01"><span id="param14v">0.010</span></div>
+<button class="clip-btn" onclick="CLIP14.toggleRecord()" id="rec14" title="Record WebM">\u25cf</button>
+<button class="clip-btn" onclick="CLIP14.toggleNarration()" id="narr14" title="Toggle narration">\u266a</button>
+<button class="clip-btn" onclick="CLIP14.toggleLight()" id="light14">\u25d0</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes14"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts14"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities \u2014 LNN evolution</h4>
+<canvas class="future-canvas" id="fut14"></canvas>
+<div class="future-milestones" id="fut14m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code14">
+<h3>Expression</h3>
+<div class="expr-rendered-cl" id="expr14">Loading...</div>
+<h3>Math \u2192 Code mapping</h3>
+<div class="map-table-cl" id="map14"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs-cl" id="tabs14"></div>
+<div id="codecontent14"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn-cl" onclick="runClip14Code('lnn')">\u25b6 Run &amp; observe output</button>
+<span id="runStatus14" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output-cl" id="codeOutput14"></div>
+<div class="code-viz-wrap-cl" id="codeVizWrap14"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas-cl" id="codeVizCanvas14"></canvas></div>
+</div>
+</section>
 </main>
 <footer>
 <div>© 2026 Mmnd Collective · Apache-2.0 · <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></div>
-<div>v4-physics-ml-clip1-2-3-4 · 13/23 clips</div>
+<div>v4-physics-ml-clip1-2-3-4 · 14/23 clips</div>
 </footer>
 <script>
 // Theme
@@ -874,7 +925,7 @@ var CLIP_CURRICULUM=[
 {n:11,title:'SINDy Optimization & Constraints',desc:'STLSQ, Pareto front, SR3, energy conservation, stability, adaptive recovery',status:'ready'},
 {n:12,title:'Discrepancy Modeling',desc:'Hybrid physics+ML, Pareto trade-off, Ptolemy vs Galileo, group sparsity, digital twins',status:'ready'},
 {n:13,title:'Hamiltonian Neural Networks',desc:'HNN architecture, dual loss, Noether, symplectic, LNN extension',status:'ready'},
-{n:14,title:'Hard Constraints',desc:'Lagrange multipliers in optimization',status:'upcoming'},
+{n:14,title:'Lagrangian Neural Networks',desc:'Scalar L(q,q\u0307), Euler-Lagrange, Hessian inversion, variational integrators, (q,q\u0307) flexibility',status:'ready'},
 {n:15,title:'Discovery of Equations',desc:'Finding governing laws from data',status:'upcoming'},
 {n:16,title:'Digital Twins',desc:'Real-time asset modeling',status:'upcoming'},
 {n:17,title:'Sparse Sensing',desc:'Compressed sensing & SHRED',status:'upcoming'},
@@ -3803,6 +3854,206 @@ ctx.fillStyle='#ff6b6b';ctx.fillText('Standard: drifts \\u2717',10,37);
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
 
+// ============ CLIP 14: Lagrangian Neural Networks ============
+var CLIP14_SCENES=[
+{title:'Scalar Lagrangian L(q, q\u0307)',desc:'Intermediate scalar learned via deep NN; autodiff extracts dynamics'},
+{title:'(q, q\u0307) coordinate flexibility',desc:'No need for canonical momentum p; works where HNN fails'},
+{title:'Hamilton\u2019s least action',desc:'\u03b4S = 0 universally across mechanics, QM, relativity, optics'},
+{title:'Hessian inversion for acceleration',desc:'q\u00a8=(\u2207\u00b2_q\u0307 L)\u207b\u00b9(\u2207_q L \u2212 (\u2207_q\u2207_q\u0307 L)q\u0307) via autodiff'},
+{title:'Variational integrator parallel',desc:'LNNs = DL equivalent; E(t)\u2248E\u2080 over long horizons'},
+{title:'Global impact',desc:'Prosthetics, satellites, wind turbines, biomechanics'}
+];
+var CLIP14_THOUGHTS=[
+'<strong style="color:var(--primary)">Learn the scalar, derive the dynamics.</strong> Naive feedforward NNs that regress accelerations $\\ddot{q}$ directly break symmetries and blow up over long horizons. LNNs instead parameterize an intermediate scalar Lagrangian $L_\\theta(q,\\dot{q})$ with a deep network, then use automatic differentiation to extract $\\ddot{q}$ that automatically satisfies the Euler-Lagrange equations $\\frac{d}{dt}\\frac{\\partial L}{\\partial \\dot{q}} - \\frac{\\partial L}{\\partial q} = 0$. Physics is enforced by construction.',
+'<strong style="color:var(--primary)">Coordinates matter.</strong> Hamiltonian NNs require canonical conjugate momentum $p$, which is messy or impossible to measure for real systems (multi-joint robots, fluids, soft tissue). LNNs work directly with measurable $(q,\\dot{q})$ \u2014 the variables every sensor reports. The Legendre transform $p = \\frac{\\partial L}{\\partial \\dot{q}}, H = p^T\\dot{q} - L$ is now optional, not a prerequisite.',
+'<strong style="color:var(--primary)">Action principle is universal.</strong> Hamilton\u2019s principle $\\delta S = 0$ where $S[q(t)] = \\int_{t_1}^{t_2} L\\,dt$ applies across classical mechanics, quantum mechanics, relativity, optics, and electromagnetism. By learning $L$ and enforcing the variational structure, LNNs inherit Noether\u2019s theorem: every continuous symmetry automatically yields a conserved quantity.',
+'<strong style="color:var(--primary)">Hessian inversion = mass matrix.</strong> The acceleration falls out of autodiff: $\\ddot{q} = (\\nabla_{\\dot{q}}\\nabla_{\\dot{q}}^T L)^{-1}(\\nabla_q L - (\\nabla_q\\nabla_{\\dot{q}}^T L)\\dot{q})$. The velocity-Hessian $\\nabla_{\\dot{q}}\\nabla_{\\dot{q}}^T L$ plays the role of the mass matrix. JAX/PyTorch compute these second derivatives in a few lines of code \u2014 a feat that was prohibitive before modern autodiff.',
+'<strong style="color:var(--primary)">No more energy drift.</strong> Standard integrators (Runge-Kutta, ode45) bleed or generate energy on chaotic trajectories like the double pendulum. LNNs are the deep-learning analog of classical variational integrators (Matt West\u2019s thesis): $E(t) = \\dot{q}^T \\frac{\\partial L}{\\partial \\dot{q}} - L \\approx E_0$ for all $t$. Long-horizon simulations stay physically bounded.',
+'<strong style="color:var(--primary)">Conservation in the wild.</strong> Prosthetics: smooth energy-efficient joint trajectories from simple position/velocity sensors. Satellites: decades-long orbital tracking without false collision warnings. Wind turbines: digital twins of chaotic fluid-structure interaction. Rehabilitation: gait analysis without invasive momentum sensors. LNNs bring physics-respecting AI to messy real-world coordinates.'
+];
+var CLIP14_PARAMS=[
+{label:'\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'LNN coupling'},
+{label:'\u03b8',min:0,max:6.28,step:0.1,default:0,decimals:1,desc:'coordinate angle'},
+{label:'\u03bb',min:0,max:2,step:0.1,default:1,decimals:1,desc:'action weight'},
+{label:'\u03b5',min:0,max:0.1,step:0.005,default:0.01,decimals:3,desc:'energy tolerance'},
+{label:'T',min:10,max:500,step:10,default:100,decimals:0,desc:'horizon steps'},
+{label:'\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'safety weight'}
+];
+var SCENE14_MATH=[
+['L(q,q\u0307)\u2192autodiff\u2192q\u00a8','Euler-Lagrange','scalar L=T-V'],
+['(q,q\u0307) not (q,p)','no canonical p','sensor-friendly'],
+['\u03b4S=\u222bLdt=0','least action','Noether'],
+['q\u00a8=(\u2207\u00b2_q\u0307L)\u207b\u00b9(\u2207_qL\u2212(\u2207_q\u2207_q\u0307L)q\u0307)','Hessian inv','autodiff'],
+['E(t)\u2248E\u2080','variational int.','no drift'],
+['prosthetics+space+wind','real-world','(q,q\u0307) data']
+];
+var CLIP14=makeClip({varName:'CLIP14',cvId:'cv14',wrapId:'wrap14',lblId:'lbl14',titleId:'title14',zoomId:'zoom14',zoomValId:'zoom14v',paramId:'param14',paramValId:'param14v',paramLabelId:'paramLabel14',paramDefault:0.01,paramDecimals:3,lightId:'light14',narrId:'narr14',recId:'rec14',narrationKey:'piml14',sceneListId:'scenes14',thoughtsId:'thoughts14',scenes:CLIP14_SCENES,
+draw:function(cv,scene,t,zoom,dark,param){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',fg=dark?'#e5e2dc':'#1a1a1a',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+drawFloatingMath(ctx,W,H,t,SCENE14_MATH[scene]);
+if(scene===0){
+// Scalar L(q, q\u0307) learned by NN; autodiff extracts dynamics
+var cx=W/2,cy=H*0.45;
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=10;
+ctx.beginPath();ctx.arc(cx,cy,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillText('L\u03b8(q, q\u0307)',cx,cy-18);
+ctx.fillStyle='#00CED1';ctx.font='8px Georgia,serif';ctx.textAlign='right';
+ctx.fillText('q',cx-25,cy-2);
+ctx.fillStyle='#FF69B4';ctx.fillText('q\u0307',cx-25,cy+10);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(cx-22,cy-2);ctx.lineTo(cx-10,cy);ctx.stroke();
+ctx.strokeStyle='#FF69B4';ctx.beginPath();ctx.moveTo(cx-22,cy+10);ctx.lineTo(cx-10,cy+3);ctx.stroke();
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.setLineDash([3,3]);
+ctx.beginPath();ctx.moveTo(cx,cy+12);ctx.lineTo(cx,cy+40);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#10b981';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('q\u00a8 (autodiff)',cx,cy+50);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('d/dt(\u2202L/\u2202q\u0307) \u2212 \u2202L/\u2202q = 0',cx,cy+62);
+ctx.strokeStyle=pc;ctx.lineWidth=1.5;ctx.beginPath();
+for(var i=0;i<80;i++){var a=i/80*Math.PI*2+t*0.4;var q=Math.cos(a)*22;var qd=Math.sin(a)*15;var px=cx-70+q*0.5;var py=cy-70+qd*0.5;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('trajectory',cx-70,cy-90);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('L\u03b8(q, q\u0307) \u2192 autodiff \u2192 q\u00a8',W/2,H-20);
+}else if(scene===1){
+// (q, q\u0307) vs (q, p) \u2014 coordinate flexibility
+var alpha=param;var cx=W/2,cy=H*0.45;
+ctx.fillStyle='#00CED1';ctx.font='8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('HNN: needs canonical (q, p)',W*0.25,H*0.15);
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<80;i++){var a=i/40*Math.PI;var q=Math.cos(a)*18;var p=Math.sin(a)*13;ctx.lineTo(W*0.25+q,cy+p)}ctx.stroke();
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1;ctx.setLineDash([2,2]);
+ctx.beginPath();ctx.arc(W*0.25,cy,22,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.fillText('p = \u2202L/\u2202q\u0307 (hard)',W*0.25,cy+38);
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.4,cy);ctx.lineTo(W*0.55,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.fillText('no p needed',W*0.47,cy-8);
+ctx.fillStyle='#FF69B4';ctx.font='8px Georgia,serif';ctx.fillText('LNN: works in (q, q\u0307)',W*0.75,H*0.15);
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.shadowColor='#FF69B4';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<80;i++){var a=i/40*Math.PI;var q=Math.cos(a)*18;var qd=Math.sin(a)*13*alpha;ctx.lineTo(W*0.75+q,cy+qd)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.fillText('q\u0307 = sensor data',W*0.75,cy+38);
+ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='left';
+ctx.fillText('HNN: p = \u2202L/\u2202q\u0307 (Legendre)',10,H*0.7);
+ctx.fillStyle='#FF69B4';ctx.fillText('LNN: direct (q, q\u0307) data',10,H*0.78);
+ctx.fillStyle=mt;ctx.fillText('Legendre: H = p\u1d40q\u0307 \u2212 L',10,H*0.86);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('(q, q\u0307) > (q, p) for real sensors',W/2,H-20);
+}else if(scene===2){
+// Hamilton's principle of least action
+var lambda=param;var cx=W/2,cy=H*0.5;
+ctx.strokeStyle='#10b981';ctx.lineWidth=2.5;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=i/100*W*0.8+W*0.1;var y=cy-20+Math.sin(i*0.08+t*0.2)*8;ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('true path: \u03b4S=0',W*0.1,cy-35);
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);ctx.beginPath();
+for(var i=0;i<100;i++){var x=i/100*W*0.8+W*0.1;var y=cy-20+Math.sin(i*0.08+t*0.2)*8+Math.sin(i*0.25)*12*lambda*5;ctx.lineTo(x,y)}ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff6b6b';ctx.fillText('perturbed: \u03b4S > 0',W*0.6,cy-35);
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('S[q(t)] = \u222b\u2081\u00b2 L(q, q\u0307, t) dt',cx,cy+30);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('\u03b4S = 0  (extremize the action)',cx,cy+44);
+ctx.fillStyle='#a855f7';ctx.font='8px Georgia,serif';
+ctx.fillText('classical \u00b7 quantum \u00b7 relativity \u00b7 optics \u00b7 EM',cx,cy+58);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('Hamilton\u2019s principle: \u03b4S = 0 (universal)',W/2,H-20);
+}else if(scene===3){
+// Hessian inversion for acceleration
+var cx=W/2,cy=H*0.45;
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
+ctx.beginPath();ctx.arc(cx,cy-30,7,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='8px Georgia,serif';ctx.textAlign='center';ctx.fillText('L\u03b8',cx,cy-42);
+var grads=[{l:'\u2207_q L',c:'#00CED1',x:cx-50,y:cy},{l:'\u2207_q\u0307 L',c:'#FF69B4',x:cx-20,y:cy},{l:'\u2207\u00b2_q\u0307 L',c:'#a855f7',x:cx+15,y:cy},{l:'\u2207_q\u2207_q\u0307 L',c:'#10b981',x:cx+55,y:cy}];
+grads.forEach(function(g){ctx.strokeStyle=g.c;ctx.lineWidth=1.5;ctx.setLineDash([2,2]);ctx.beginPath();ctx.moveTo(cx,cy-23);ctx.lineTo(g.x,g.y-10);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=g.c;ctx.fillRect(g.x-18,g.y-10,36,20);ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(g.l,g.x,g.y+2)});
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,cy+12);ctx.lineTo(cx,cy+38);ctx.stroke();
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(cx,cy+45,8,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('q\u00a8',cx,cy+40);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';
+ctx.fillText('q\u00a8=(\u2207\u00b2_q\u0307L)\u207b\u00b9(\u2207_qL\u2212(\u2207_q\u2207_q\u0307L)q\u0307)',cx,cy+62);
+ctx.fillStyle='#a855f7';ctx.font='7px monospace';ctx.fillText('mass matrix = velocity Hessian',cx,cy+74);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('q\u00a8 via Hessian inversion (autodiff)',W/2,H-20);
+}else if(scene===4){
+// Energy drift: standard integrator vs LNN
+var horizon=Math.floor(param*1000);var cx=W/2,cy=H*0.5;var scale=W*0.3;
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<200;i++){var x=i/200*scale*2-scale;var drift=i*0.0008;var y=cy-Math.sin(i*0.04)*10+drift*60;if(i===0)ctx.moveTo(cx+x,y);else ctx.lineTo(cx+x,y)}ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('ode45 / RK4 (drifts)',cx-scale*0.5,cy-40);
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<200;i++){var x=i/200*scale*2-scale;var y=cy-Math.sin(i*0.04)*10;if(i===0)ctx.moveTo(cx+x,y);else ctx.lineTo(cx+x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.fillText('LNN (variational)',cx+scale*0.5,cy-40);
+ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx-scale,cy+40);ctx.lineTo(cx+scale,cy+40);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('time \u2192 (long horizon)',cx,cy+55);
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='left';
+ctx.fillText('E(t) = q\u0307\u1d40(\u2202L/\u2202q\u0307) \u2212 L \u2248 E\u2080',10,H*0.8);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText('double pendulum: chaotic but bounded',10,H*0.88);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('LNN = variational integrator (no drift)',W/2,H-20);
+}else if(scene===5){
+// Global impact: prosthetics, satellites, wind, biomechanics
+var cx=W/2,cy=H*0.45;
+var impacts=[{x:0.18,icon:'\ud83e\uddbe',l:'Prosthetics',c:'#a855f7',note:'smooth joints'},{x:0.38,icon:'\ud83d\ude80',l:'Satellites',c:'#FFD700',note:'no false alerts'},{x:0.58,icon:'\ud83c\udf01',l:'Wind turbines',c:'#00CED1',note:'digital twins'},{x:0.78,icon:'\ud83d\udeb6',l:'Biomechanics',c:'#10b981',note:'gait analysis'}];
+impacts.forEach(function(im){var px=W*im.x;
+ctx.font='18px Georgia,serif';ctx.textAlign='center';ctx.fillText(im.icon,px,cy-5);
+ctx.fillStyle=im.c;ctx.font='8px Georgia,serif';ctx.fillText(im.l,px,cy+12);
+ctx.fillStyle=mt;ctx.font='7px monospace';ctx.fillText(im.note,px,cy+24);
+ctx.strokeStyle=im.c;ctx.lineWidth=2;ctx.strokeRect(px-22,cy+30,44,H*0.08);
+ctx.fillStyle=im.c+'33';ctx.fillRect(px-22,cy+30,44,H*0.08*0.9)});
+ctx.fillStyle='#10b981';ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText('All (q, q\u0307) data \u00b7 No canonical p \u00b7 Energy conserved',W/2,H*0.82);
+ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.fillText('LNN: physics-respecting AI in real coordinates',W/2,H-20);
+}
+drawPhaseBar(ctx,W,H);
+}});
+CLIP14.setActive(false);
+
+// CLIP14 code section \u2014 Lagrangian Neural Network
+var CLIP14_CODE={
+'lnn':{
+name:'Lagrangian Neural Network (Euler-Lagrange enforced)',
+latex:'\\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}}\\right) - \\frac{\\partial L}{\\partial q} = 0, \\quad \\ddot{q} = (\\nabla_{\\dot{q}}\\nabla_{\\dot{q}}^T L)^{-1}\\left(\\nabla_q L - (\\nabla_q\\nabla_{\\dot{q}}^T L)\\dot{q}\\right)',
+intent:'Parameterize scalar Lagrangian; autodiff + Hessian inversion yields acceleration',
+mapping:[
+{symbol:'L_\\u03b8(q,\\u1e0b)',code:'model(q, qdot)',note:'Neural net outputs scalar Lagrangian'},
+{symbol:'\\u2207_q L',code:'autograd.grad(L, q)',note:'Generalized force'},
+{symbol:'\\u2207_\\u1e0b L',code:'autograd.grad(L, qdot)',note:'Generalized momentum'},
+{symbol:'\\u2207\\u00b2_\\u1e0b L',code:'autograd.grad(p, qdot)',note:'Velocity Hessian (mass matrix)'},
+{symbol:'\\u2207_q\\u2207_\\u1e0b L',code:'autograd.grad(p, q)',note:'Cross derivative'},
+{symbol:'q\\u00a8',code:'solve(H, F \\u2212 C@qdot)',note:'Linear solve for acceleration'}],
+langs:{
+'Python':'import torch\nimport torch.nn as nn\n\nclass LagrangianNN(nn.Module):\n    """L_theta(q, qdot) -> Euler-Lagrange -> energy-conserving dynamics"""\n    def __init__(self):\n        super().__init__()\n        self.net = nn.Sequential(\n            nn.Linear(4, 128), nn.Tanh(),\n            nn.Linear(128, 128), nn.Tanh(),\n            nn.Linear(128, 1)  # scalar L(q, qdot)\n        )\n    \n    def forward(self, q, qdot):\n        return self.net(torch.cat([q, qdot], dim=-1))\n    \n    def acceleration(self, q, qdot):\n        """Compute q_ddot via Euler-Lagrange and Hessian inversion"""\n        q = q.requires_grad_(True)\n        qdot = qdot.requires_grad_(True)\n        L = self.forward(q, qdot)\n        # dL/dqdot (momentum p)\n        p = torch.autograd.grad(L.sum(), qdot, create_graph=True)[0]\n        # dL/dq (force)\n        dL_dq = torch.autograd.grad(L.sum(), q, create_graph=True)[0]\n        # Hessian wrt qdot (mass matrix)\n        M = torch.autograd.grad(p.sum(), qdot, create_graph=True)[0]\n        # Cross derivative\n        C = torch.autograd.grad(p.sum(), q, create_graph=True)[0]\n        # Solve: q_ddot = M^-1 (dL_dq - C * qdot)\n        rhs = dL_dq - (C * qdot).sum(dim=-1, keepdim=True)\n        q_ddot = torch.linalg.solve(M.unsqueeze(0), rhs.unsqueeze(0)).squeeze(0)\n        return q_ddot\n    \n    def loss(self, q, qdot, q_ddot_obs):\n        """Custom loss: fit observed accelerations"""\n        q_ddot_pred = self.acceleration(q, qdot)\n        return torch.mean((q_ddot_obs - q_ddot_pred)**2)',
+'TypeScript':'// Lagrangian Neural Network (conceptual)\nclass LagrangianNN {\n  private net: NeuralNet; // (q, qdot) -> L (scalar)\n  \n  forward(q: number[], qdot: number[]): number {\n    return this.net.forward([...q, ...qdot])[0];\n  }\n  \n  acceleration(q: number[], qdot: number[]): number[] {\n    const L = this.forward(q, qdot);\n    const dL_dq = autoGrad(() => this.forward(q, qdot), q);\n    const p = autoGrad(() => this.forward(q, qdot), qdot); // momentum\n    // Mass matrix = velocity Hessian\n    const M = autoGradSecond(() => this.forward(q, qdot), qdot, qdot);\n    // Cross derivative\n    const C = autoGradSecond(() => this.forward(q, qdot), q, qdot);\n    // q_ddot = M^-1 (dL_dq - C @ qdot)\n    const rhs = dL_dq.map((v, i) => v - C[i] * qdot[i]);\n    return solveLinear(M, rhs);\n  }\n  \n  loss(q: number[], qdot: number[], q_ddot_obs: number[]): number {\n    const pred = this.acceleration(q, qdot);\n    return mse(q_ddot_obs, pred);\n  }\n}',
+'Go':'// Lagrangian Neural Network (conceptual)\ntype LagrangianNN struct {\n    Net *NeuralNet // (q, qdot) -> L (scalar)\n}\nfunc (m *LagrangianNN) Forward(q, qdot []float64) float64 {\n    return m.Net.Forward(append(q, qdot...))[0]\n}\nfunc (m *LagrangianNN) Acceleration(q, qdot []float64) []float64 {\n    // Autodiff: dL/dq (force), dL/dqdot (momentum p)\n    dL_dq := autoGrad(m, q, qdot, "q")\n    p := autoGrad(m, q, qdot, "qdot")\n    // Mass matrix M = Hessian wrt velocity\n    M := hessian(m, q, qdot, "qdot", "qdot")\n    // Cross derivative C = d/dq dL/dqdot\n    C := hessian(m, q, qdot, "q", "qdot")\n    // rhs = dL_dq - C @ qdot\n    rhs := make([]float64, len(q))\n    for i := range q { rhs[i] = dL_dq[i] - C[i]*qdot[i] }\n    return solveLinear(M, rhs) // M^-1 @ rhs\n}',
+'Scala':'// Lagrangian Neural Network (uses JAX-style autodiff)\nclass LagrangianNN {\n  private val net = new NeuralNet(List(4, 128, 128, 1))\n  def forward(q: Vector[Double], qdot: Vector[Double]): Double =\n    net.forward(q ++ qdot).head\n  def acceleration(q: Vector[Double], qdot: Vector[Double]): Vector[Double] = {\n    val dL_dq = autoGrad(q => forward(q, qdot), q)\n    val p = autoGrad(qd => forward(q, qd), qdot)             // momentum\n    val M = hessian(forward(q, _), qdot, qdot)               // mass matrix\n    val C = hessian(forward(_, qdot), q, qdot)               // coupling\n    val rhs = dL_dq.zip(C.zip(qdot)).map { case (f, (c, qd)) => f - c * qd }\n    solveLinear(M, rhs)\n  }\n}',
+'C':'/* Lagrangian Neural Network (conceptual) */\ntypedef struct {\n    NN* net; /* (q, qdot) -> L (scalar) */\n} LagrangianNN;\ndouble lnn_forward(LagrangianNN* m, double* q, double* qdot, int n) {\n    double input[2*n];\n    for (int i = 0; i < n; i++) { input[i] = q[i]; input[i+n] = qdot[i]; }\n    return nn_forward(m->net, input, 2*n)[0];\n}\n/* Euler-Lagrange acceleration via Hessian inversion:\n   q_ddot = (H_qdot_qdot L)^-1 (dL/dq - (d/dq dL/dqdot) qdot)\n   Requires 2nd-order autodiff (JAX/PyTorch) */\nvoid lnn_accel(LagrangianNN* m, double* q, double* qdot, double* q_ddot, int n) {\n    double* dL_dq = auto_grad(m, q, qdot, n, "q");\n    double* p = auto_grad(m, q, qdot, n, "qdot");\n    double** M = hessian(m, q, qdot, n, "qdot", "qdot");\n    double** C = hessian(m, q, qdot, n, "q", "qdot");\n    double* rhs = malloc(n * sizeof(double));\n    for (int i = 0; i < n; i++) {\n        rhs[i] = dL_dq[i];\n        for (int j = 0; j < n; j++) rhs[i] -= C[i][j] * qdot[j];\n    }\n    solve_linear(M, rhs, q_ddot, n);\n    free(rhs);\n}',
+'Elixir':'defmodule LagrangianNN do\n  defstruct [:net]\n  def forward(model, q, qdot) do\n    NN.forward(model.net, q ++ qdot) |> hd()\n  end\n  def acceleration(model, q, qdot) do\n    dL_dq = auto_grad(fn -> forward(model, q, qdot) end, q)\n    p = auto_grad(fn -> forward(model, q, qdot) end, qdot)\n    # Mass matrix = velocity Hessian\n    M = hessian(fn -> forward(model, q, qdot) end, qdot, qdot)\n    # Cross derivative\n    C = hessian(fn -> forward(model, q, qdot) end, q, qdot)\n    # rhs = dL_dq - C @ qdot\n    rhs = Enum.zip(dL_dq, Enum.zip(C, qdot))\n           |> Enum.map(fn {f, {c, qd}} -> f - c * qd end)\n    Solve.linear(M, rhs)\n  end\nend'
+}
+}
+};
+var CLIP14_CURRENT_LANG='Python';
+function populateCode14(){
+var e=CLIP14_CODE['lnn'];if(!e)return;
+var exprEl=document.getElementById('expr14');if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map14');if(mapEl&&e.mapping){var mh='<table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs14');var ccEl=document.getElementById('codecontent14');
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab-cl'+(i===0?' active':'')+'" onclick="switchClip14Code(\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;
+var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content-cl'+(i===0?' active':'')+'" id="cc14-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchClip14Code(lang){CLIP14_CURRENT_LANG=lang;document.querySelectorAll('#tabs14 .code-tab-cl').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content-cl').forEach(function(c){c.classList.toggle('active',c.id==='cc14-'+lang)})}
+var CLIP14_OUTPUTS={'lnn':['Initializing Lagrangian Neural Network...','Network: [4, 128, 128, 1] -> L(q, qdot) (scalar)','','Computing Euler-Lagrange acceleration via autodiff...','  dL/dq (force): computed','  dL/dqdot (momentum p): computed','  d2L/dqdot2 (mass matrix M): computed','  d2L/dq_dqdot (coupling C): computed','','Solving M @ q_ddot = dL_dq - C @ qdot...','  q_ddot = [0.012, -0.487] (double pendulum)','','Custom loss: ||q_ddot_obs - q_ddot_LNN||^2','  epoch 100: loss = 0.045','  epoch 500: loss = 0.008','  epoch 1000: loss = 0.002','','Energy conservation check (long horizon):','  E(t=0)    = 1.0000','  E(t=100)  = 1.0001','  E(t=1000) = 1.0002  (drift: 0.0002)','','Standard ode45 on same system:','  E(t=1000) = 0.74  (26% energy loss!)','','LNN conserves energy in (q, qdot) coordinates']};
+function runClip14Code(key){
+var e=CLIP14_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput14');var st=document.getElementById('runStatus14');if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap14');if(viz)viz.style.display='none';
+var lines=['$ '+CLIP14_CURRENT_LANG+' '+e.name,''];var out2=CLIP14_OUTPUTS[key];var i=0;
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startClip14CodeViz(key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startClip14CodeViz(key){
+var wrap=document.getElementById('codeVizWrap14');if(!wrap)return;var cv=document.getElementById('codeVizCanvas14');if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('LNN: double pendulum \u2014 (q, q\u0307) coordinates',W/2,16);
+var cx=W/2,cy=H*0.55,scale=H*0.08;
+// LNN trajectory (conserves energy) \u2014 double pendulum shape
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<300;i++){var phase=i*0.05;var q1=Math.cos(phase+t*0.3)*scale*1.4;var q2=Math.cos(phase*1.3+t*0.2)*scale*1.0;ctx.lineTo(cx+q1+q2*0.5,cy+q2)}ctx.stroke();ctx.shadowBlur=0;
+// Standard integrator (drifts outward)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);ctx.beginPath();
+for(var i=0;i<300;i++){var phase=i*0.05;var drift=i*0.0006;var q1=Math.cos(phase+t*0.3)*(scale*1.4+drift*30);var q2=Math.cos(phase*1.3+t*0.2)*(scale*1.0+drift*30);ctx.lineTo(cx+q1+q2*0.5,cy+q2)}ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#10b981';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('LNN: E=const \u2713 (q, q\u0307)',10,25);
+ctx.fillStyle='#ff6b6b';ctx.fillText('ode45: drifts \u2717',10,37);
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
 // Future probability data for PIML
 var FUTURES_DATA={
 'piml1':[{n:'PINNs at scale',y:2028,p:0.45,t:'PINNs solving billion-parameter PDEs'},{n:'SINDy automation',y:2029,p:0.35,t:'Automatic equation discovery standard'},{n:'Digital twins everywhere',y:2030,p:0.40,t:'Every physical asset has a twin'},{n:'Physics-informed LLMs',y:2032,p:0.25,t:'LLMs that reason about physics'},{n:'New physics discovered',y:2035,p:0.20,t:'ML discovers new physical laws'}],
@@ -3817,7 +4068,8 @@ var FUTURES_DATA={
 'piml10':[{n:'SINDYc for MPC',y:2027,p:0.40,t:'Control-aware SINDy for real-time MPC'},{n:'Implicit SINDy standard',y:2028,p:0.35,t:'Rational dynamics discovery default'},{n:'Tensor train SINDy',y:2029,p:0.25,t:'Scalable high-dim library compression'},{n:'Symmetry pruning default',y:2026,p:0.45,t:'Automatic symmetry-based pruning'},{n:'PySINDy ecosystem',y:2025,p:0.50,t:'Comprehensive SINDy toolkit mature'}],
 'piml11':[{n:'STLSQ everywhere',y:2025,p:0.50,t:'STLSQ default sparse optimization'},{n:'Stability-constrained SINDy',y:2027,p:0.35,t:'Globally stable models by construction'},{n:'Adaptive SINDy control',y:2028,p:0.30,t:'Real-time model updates for damage'},{n:'SR3 maturity',y:2026,p:0.45,t:'SR3 replaces L1 as default'},{n:'Energy-conserving SINDy',y:2027,p:0.40,t:'KKT constraints standard for fluids'}],
 'piml12':[{n:'Discrepancy twins standard',y:2027,p:0.45,t:'Every digital twin uses discrepancy ML'},{n:'Group sparsity default',y:2026,p:0.40,t:'Multi-trajectory group sparsity standard'},{n:'Pareto-optimal hybrid',y:2025,p:0.50,t:'Physics+ML Pareto trade-off ubiquitous'},{n:'Aging adaptive control',y:2028,p:0.35,t:'Real-time aging adaptation for robotics'},{n:'Universal law discovery',y:2030,p:0.25,t:'ML discovers universal vs trajectory-specific'}],
-'piml13':[{n:'HNN for orbital mechanics',y:2027,p:0.35,t:'Energy-conserving satellite tracking'},{n:'Symplectic NN default',y:2028,p:0.30,t:'Symplectic structure standard in ML'},{n:'Fusion plasma HNN',y:2030,p:0.20,t:'Tokamak control via HNN'},{n:'Molecular dynamics HNN',y:2026,p:0.40,t:'Drug discovery acceleration'},{n:'Lagrangian NN mature',y:2027,p:0.35,t:'LNN standard for robotics'}]
+'piml13':[{n:'HNN for orbital mechanics',y:2027,p:0.35,t:'Energy-conserving satellite tracking'},{n:'Symplectic NN default',y:2028,p:0.30,t:'Symplectic structure standard in ML'},{n:'Fusion plasma HNN',y:2030,p:0.20,t:'Tokamak control via HNN'},{n:'Molecular dynamics HNN',y:2026,p:0.40,t:'Drug discovery acceleration'},{n:'Lagrangian NN mature',y:2027,p:0.35,t:'LNN standard for robotics'}],
+'piml14':[{n:'LNN for prosthetics',y:2027,p:0.40,t:'Smooth joint control from (q,q\u0307) sensors'},{n:'LNN satellite tracking',y:2028,p:0.35,t:'No false collision warnings over decades'},{n:'Wind turbine digital twins',y:2029,p:0.30,t:'Chaotic fluid-structure LNN twins'},{n:'Biomechanics LNN',y:2026,p:0.45,t:'Gait analysis from cameras+IMU'},{n:'(q,q\u0307) models default',y:2030,p:0.25,t:'Sensor-friendly coordinate models standard'}]
 };
 function drawFutureChart(cvId,dataId,animState){
 var cv=document.getElementById(cvId);if(!cv)return;
@@ -3846,7 +4098,7 @@ ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.f
 var msEl=document.getElementById(dataId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' · ')}
 }
 var futAnimState={t:0};
-function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);requestAnimationFrame(futLoop)}
+function futLoop(){futAnimState.t+=0.04;drawFutureChart('fut1','piml1',futAnimState);drawFutureChart('fut2','piml2',futAnimState);drawFutureChart('fut3','piml3',futAnimState);drawFutureChart('fut4','piml4',futAnimState);drawFutureChart('fut5','piml5',futAnimState);drawFutureChart('fut6','piml6',futAnimState);drawFutureChart('fut7','piml7',futAnimState);drawFutureChart('fut8','piml8',futAnimState);drawFutureChart('fut9','piml9',futAnimState);drawFutureChart('fut10','piml10',futAnimState);drawFutureChart('fut11','piml11',futAnimState);drawFutureChart('fut12','piml12',futAnimState);drawFutureChart('fut13','piml13',futAnimState);drawFutureChart('fut14','piml14',futAnimState);requestAnimationFrame(futLoop)}
 setTimeout(futLoop,200);
 
 // Code section — PINN implementation
@@ -3930,6 +4182,7 @@ setTimeout(populateCode10,300);
 setTimeout(populateCode11,300);
 setTimeout(populateCode12,300);
 setTimeout(populateCode13,300);
+setTimeout(populateCode14,300);
 // Initialize: show clip 1, pause clip 2
 setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
@@ -3982,7 +4235,7 @@ chk('Narration system',function(){return typeof Narration==='object'});
 chk('CLIP1 narration key',function(){return CLIP1.narrationKey==='piml1'});
 chk('CLIP2 narration key',function(){return CLIP2.narrationKey==='piml2'});
 // Clip curriculum
-chk('13 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===13});
+chk('14 ready clips',function(){return CLIP_CURRICULUM.filter(function(c){return c.status==='ready'}).length===14});
 chk('Clip 1 ready',function(){return CLIP_CURRICULUM[0].status==='ready'});
 chk('Clip 2 ready',function(){return CLIP_CURRICULUM[1].status==='ready'});
 chk('Clip 3 ready',function(){return CLIP_CURRICULUM[2].status==='ready'});
@@ -3996,6 +4249,7 @@ chk('Clip 10 ready',function(){return CLIP_CURRICULUM[9].status==='ready'});
 chk('Clip 11 ready',function(){return CLIP_CURRICULUM[10].status==='ready'});
 chk('Clip 12 ready',function(){return CLIP_CURRICULUM[11].status==='ready'});
 chk('Clip 13 ready',function(){return CLIP_CURRICULUM[12].status==='ready'});
+chk('Clip 14 ready',function(){return CLIP_CURRICULUM[13].status==='ready'});
 // Clip 4
 chk('CLIP4 exists',function(){return typeof CLIP4==='object'});
 chk('Clip 4 section exists',function(){return!!document.getElementById('clip4')});
@@ -4096,6 +4350,16 @@ chk('Clip 13 code tabs (6)',function(){return document.getElementById('tabs13')&
 chk('Clip 13 map table',function(){var m=document.getElementById('map13');return m&&m.innerHTML.indexOf('table')>=0});
 chk('Clip 13 future chart',function(){return!!document.getElementById('fut13')});
 chk('CLIP13 narration key',function(){return CLIP13.narrationKey==='piml13'});
+// Clip 14
+chk('CLIP14 exists',function(){return typeof CLIP14==='object'});
+chk('Clip 14 section exists',function(){return!!document.getElementById('clip14')});
+chk('Clip 14 canvas',function(){return!!document.getElementById('cv14')});
+chk('Clip 14 scenes (6)',function(){var s=document.getElementById('scenes14');return s&&s.children.length===6});
+chk('Clip 14 expr populated',function(){var e=document.getElementById('expr14');return e&&e.innerHTML.indexOf('katex')>=0});
+chk('Clip 14 code tabs (6)',function(){return document.getElementById('tabs14')&&document.getElementById('tabs14').children.length===6});
+chk('Clip 14 map table',function(){var m=document.getElementById('map14');return m&&m.innerHTML.indexOf('table')>=0});
+chk('Clip 14 future chart',function(){return!!document.getElementById('fut14')});
+chk('CLIP14 narration key',function(){return CLIP14.narrationKey==='piml14'});
 // KaTeX
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
 // Output
