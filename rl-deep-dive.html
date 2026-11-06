@@ -237,22 +237,124 @@ ctx.fillStyle='rgba(0,206,209,0.1)';ctx.fillRect(W*0.05,cy-12,W*0.9,24);ctx.stro
 var colors=['#FFD700','#FF69B4','#10b981','#a855f7','#00CED1'];
 for(var i=0;i<5;i++){var px=W*0.15+i*W*0.18;var pulse=Math.sin(t*2+i*.5)*2;glowNode(ctx,px,cy,6+pulse,colors[i],7);ctx.fillStyle='#000';ctx.font='3px monospace';ctx.textAlign='center';ctx.fillText('A'+(i+1),px,cy+1);
 if(i<4){ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;ctx.setLineDash([2,2]);ctx.beginPath();ctx.moveTo(px+6,cy);ctx.lineTo(px+W*0.18-6,cy);ctx.stroke();ctx.setLineDash([]);flowP(ctx,px+6,cy,px+W*0.18-6,cy,t,2,'#FFD700',0.5)}}}}
-// === FUTURE CHART ===
-var futRaf=null;
-function drawFutChart(id){var cv=document.getElementById('futChart');if(!cv)return;var data=FUT_DATA[id];if(!data)return;
-var s=prepCanvas(cv);if(!s)return;var ctx=s.ctx,W=s.W,H=s.H;var pc='#10b981',accent='#06b6d4',mt='#736a5e';
-gradBg(ctx,W,H,0,'#080a08','#0a0a0f');
-var pL=60,pB=20,pT=25,pR=10,cw=W-pL-pR,ch=H-pT-pB;var ys=2025,ye=2035,span=ye-ys;
-ctx.strokeStyle='rgba(16,185,129,0.08)';ctx.lineWidth=.5;
-for(var y=ys;y<=ye;y+=2){var x=pL+((y-ys)/span)*cw;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(y,x,H-pB+8)}
-data.forEach(function(pb,i){var rowY=pT+(i+.5)*ch/data.length;var barH=ch/data.length*0.55;
-ctx.beginPath();for(var sp=0;sp<=60;sp++){var year=ys+(sp/60)*span;var tau=(pb.y-ys)/1.3;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-ys)/Math.max(tau,.1)))))*pb.p;var x=pL+(sp/60)*cw;var y=rowY-barH/2-rawP*barH;if(sp===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
-ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
-var g=ctx.createLinearGradient(0,rowY-barH,0,rowY);g.addColorStop(0,pc+'00');g.addColorStop(.5,pc+'44');g.addColorStop(1,accent+'66');ctx.fillStyle=g;ctx.fill();
-ctx.shadowColor=pc;ctx.shadowBlur=4;ctx.strokeStyle=pc;ctx.lineWidth=1;ctx.beginPath();
-for(var sp=0;sp<=60;sp++){var year=ys+(sp/60)*span;var tau=(pb.y-ys)/1.3;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-ys)/Math.max(tau,.1)))))*pb.p;var x=pL+(sp/60)*cw;var y=rowY-barH/2-rawP*barH;if(sp===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
-ctx.fillStyle='#e5e2dc';ctx.font='5px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-3,rowY+2)})}
-// === POPUP ===
+// === CONCEPT-SPECIFIC FUTURE CHARTS ===
+function drawFutChart(id){
+var cv=document.getElementById('futChart');if(!cv)return;var s=prepCanvas(cv);if(!s)return;var ctx=s.ctx,W=s.W,H=s.H;
+if(id==='agent_loop'){gradBg(ctx,W,H,0,'#080a08','#0a0a0f');
+var pL=50,pB=20,pT=20,pR=10,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var r=Math.min(1,Math.pow(i/100,0.5))*(1+0.05*Math.sin(i*0.3))+0.1;var y=H-pB-r*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Filled area
+ctx.fillStyle='rgba(16,185,129,0.15)';ctx.beginPath();ctx.moveTo(pL,H-pB);
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var r=Math.min(1,Math.pow(i/100,0.5))*(1+0.05*Math.sin(i*0.3))+0.1;var y=H-pB-r*ch;ctx.lineTo(x,y)}ctx.lineTo(pL+cw,H-pB);ctx.closePath();ctx.fill();
+// Labels
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('Reward',pL+5,pT+10);
+ctx.fillStyle='#736a5e';ctx.textAlign='center';ctx.fillText('Episode',W/2,H-4);ctx.textAlign='right';ctx.fillText('1000',W-pR-2,H-pB+12);
+// Annotations
+ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.fillText('exploration',pL+cw*0.2,H-pB+12);ctx.fillText('exploitation',pL+cw*0.7,H-pB+12)}
+else if(id==='q_learning'){gradBg(ctx,W,H,0,'#080a0a','#0a0a0f');
+var pL=50,pB=20,pT=20,pR=10,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+// Max Q-value converging
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var q=0.95*(1-Math.exp(-i*0.04))+0.05*Math.sin(i*0.2);var y=H-pB-q*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Target line
+ctx.strokeStyle='rgba(255,107,107,0.5)';ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(pL,H-pB-0.95*ch);ctx.lineTo(W-pR,H-pB-0.95*ch);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('max Q(s,a)',pL+5,pT+10);
+ctx.fillStyle='#ff6b6b';ctx.fillText('Q* (optimal)',pL+5,pT+22);ctx.fillStyle='#736a5e';ctx.textAlign='center';ctx.fillText('Episode',W/2,H-4)}
+else if(id==='ppo'){gradBg(ctx,W,H,0,'#080a0a','#0a0a0f');
+var pL=50,pB=20,pT=20,pR=10,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+// Policy loss (red, decreasing)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.shadowColor='#ff6b6b';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var loss=Math.exp(-i*0.05)*(1+0.1*Math.sin(i*0.5));var y=pT+loss*ch*0.4;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Clip ratio (gold, oscillating within bounds)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var ratio=1+0.15*Math.sin(i*0.3)*Math.exp(-i*0.02);var y=H-pB-0.5*ch-(ratio-1)*ch*2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Clip bounds
+ctx.strokeStyle='rgba(0,206,209,0.3)';ctx.lineWidth=1;ctx.setLineDash([2,2]);ctx.beginPath();ctx.moveTo(pL,H-pB-0.5*ch-0.2*ch);ctx.lineTo(W-pR,H-pB-0.5*ch-0.2*ch);ctx.moveTo(pL,H-pB-0.5*ch+0.2*ch);ctx.lineTo(W-pR,H-pB-0.5*ch+0.2*ch);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff6b6b';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('Loss',pL+5,pT+8);ctx.fillStyle='#FFD700';ctx.fillText('Ratio',pL+5,pT+20);ctx.fillStyle='#00CED1';ctx.fillText('1\u00b1\u03b5',pL+5,pT+32)}
+else if(id==='rlhf'){gradBg(ctx,W,H,0,'#080a08','#0a0a0f');
+var pL=50,pB=20,pT=20,pR=10,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+// Reward model accuracy (gold, rising)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var acc=0.95*(1-Math.exp(-i*0.03));var y=H-pB-acc*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Policy reward (green, rising)
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var rew=0.8*(1-Math.exp(-i*0.025));var y=H-pB-rew*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// KL divergence (pink, controlled)
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=1.5;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var kl=0.1+0.05*Math.sin(i*0.1)*Math.exp(-i*0.01);var y=pT+kl*ch*2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('RM accuracy',pL+5,pT+8);ctx.fillStyle='#10b981';ctx.fillText('Policy reward',pL+5,pT+20);ctx.fillStyle='#FF69B4';ctx.fillText('KL div',pL+5,pT+32)}
+else if(id==='hydrogym'){gradBg(ctx,W,H,0,'#0a0808','#180a08');
+var pL=50,pB=20,pT=20,pR=10,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+// Drag coefficient decreasing from 1.0 to 0.62 (38% reduction)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.shadowColor='#ff6b6b';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var drag=1.0-0.38*(1-Math.exp(-i*0.04))+0.02*Math.sin(i*0.5);var y=pT+drag*ch*0.8;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Baseline (unactuated)
+ctx.strokeStyle='rgba(255,107,107,0.3)';ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(pL,pT+0.8*ch);ctx.lineTo(W-pR,pT+0.8*ch);ctx.stroke();ctx.setLineDash([]);
+// 38% marker
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.setLineDash([2,2]);ctx.beginPath();ctx.moveTo(pL,pT+0.8*ch*0.62);ctx.lineTo(W-pR,pT+0.8*ch*0.62);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#ff6b6b';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('C_f (drag)',pL+5,pT+8);ctx.fillStyle='#10b981';ctx.fillText('38% reduction',pL+5,pT+20);ctx.fillStyle='#736a5e';ctx.textAlign='center';ctx.fillText('Training episode',W/2,H-4)}
+else if(id==='marl'){gradBg(ctx,W,H,0,'#080a08','#0a0a0f');
+var pL=50,pB=20,pT=20,pR=10,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+var colors=['#FFD700','#FF69B4','#10b981','#a855f7','#00CED1'];
+// Individual agent rewards (converging toward team reward)
+for(var a=0;a<5;a++){ctx.strokeStyle=colors[a];ctx.lineWidth=1.5;ctx.shadowColor=colors[a];ctx.shadowBlur=3;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var target=0.7+a*0.02;var rew=target*(1-Math.exp(-i*0.03))+0.1*Math.sin(i*0.3+a)+a*0.05*Math.exp(-i*0.02);var y=H-pB-Math.max(0,rew)*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0}
+// Team reward (gold, bold)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2.5;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var team=0.8*(1-Math.exp(-i*0.025));var y=H-pB-team*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='bold 6px monospace';ctx.textAlign='left';ctx.fillText('Team reward',pL+5,pT+8);ctx.fillStyle='#736a5e';ctx.textAlign='center';ctx.fillText('Episode',W/2,H-4)}}
+// === CODE VIZ (actual graph output when Run is clicked) ===
+var codeVizAnim=null;
+function startCodeViz(key){var cv=document.getElementById('codeVizCanvas');if(!cv)return;cv.style.display='block';stopCodeViz();var t=0;function frame(){var s=prepCanvas(cv);if(s){drawCodeViz(key,s.ctx,s.W,s.H,t)}t+=0.02;codeVizAnim=requestAnimationFrame(frame)}frame()}
+function stopCodeViz(){if(codeVizAnim){cancelAnimationFrame(codeVizAnim);codeVizAnim=null}}
+function drawCodeViz(key,ctx,W,H,t){
+gradBg(ctx,W,H,t,'#08090a','#0a0a0f');
+var pL=40,pB=20,pT=20,pR=10,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+if(key==='agent_loop'){ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var r=Math.min(1,Math.pow(i/100,0.5))*(1+0.05*Math.sin(i*0.3+t))+0.1;var y=H-pB-r*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Agent reward over 1000 episodes',W/2,12);
+ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('Reward \u2191',pL-30,H/2);ctx.fillStyle='#736a5e';ctx.textAlign='center';ctx.fillText('Episode \u2192',W/2,H-4)}
+else if(key==='q_learning'){var cols=8,rows=5,gw=cw/cols,gh=ch/rows;
+for(var i=0;i<cols;i++)for(var j=0;j<rows;j++){var dist=Math.sqrt(i*i+j*j);var q=Math.max(0,Math.min(1,(t*0.15-dist*0.08)));var hue=240-q*240;ctx.fillStyle='hsla('+hue+',70%,'+(30+q*30)+'%,'+(0.3+q*0.5)+')';ctx.fillRect(pL+i*gw,pT+j*gh,gw-1,gh-1)}
+var ac=Math.min(cols-1,Math.floor(t*0.4)%cols),ar=Math.min(rows-1,Math.floor(t*0.3)%rows);glowNode(ctx,pL+ac*gw+gw/2,pT+ar*gh+gh/2,4,'#FFD700',8);
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.strokeRect(pL+(cols-1)*gw,pT,gw-1,gh-1);ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Q-table converging (blue\u2192red = low\u2192high value)',W/2,12)}
+else if(key==='ppo'){ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.shadowColor='#ff6b6b';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var loss=Math.exp(-i*0.05)*(1+0.1*Math.sin(i*0.5+t));var y=pT+loss*ch*0.4;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var ratio=1+0.15*Math.sin(i*0.3+t)*Math.exp(-i*0.02);var y=H-pB-0.5*ch-(ratio-1)*ch*2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('Loss',pL+3,pT+8);ctx.fillStyle='#FFD700';ctx.fillText('Ratio',pL+3,pT+20);
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('PPO training: loss decreasing, ratio clipped',W/2,12)}
+else if(key==='rlhf'){ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var acc=0.95*(1-Math.exp(-i*0.03));var y=H-pB-acc*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var rew=0.8*(1-Math.exp(-i*0.025));var y=H-pB-rew*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.strokeStyle='#FF69B4';ctx.lineWidth=1.5;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var kl=0.1+0.05*Math.sin(i*0.1+t)*Math.exp(-i*0.01);var y=pT+kl*ch*2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('RM acc',pL+3,pT+8);ctx.fillStyle='#10b981';ctx.fillText('Reward',pL+3,pT+20);ctx.fillStyle='#FF69B4';ctx.fillText('KL',pL+3,pT+32);
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('RLHF: reward model + policy + KL divergence',W/2,12)}
+else if(key==='hydrogym'){ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.shadowColor='#ff6b6b';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var drag=1.0-0.38*(1-Math.exp(-i*0.04))+0.02*Math.sin(i*0.5+t);var y=pT+drag*ch*0.8;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.strokeStyle='rgba(255,107,107,0.3)';ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(pL,pT+0.8*ch);ctx.lineTo(W-pR,pT+0.8*ch);ctx.stroke();ctx.setLineDash([]);
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.setLineDash([2,2]);ctx.beginPath();ctx.moveTo(pL,pT+0.8*ch*0.62);ctx.lineTo(W-pR,pT+0.8*ch*0.62);ctx.stroke();ctx.setLineDash([]);
+// Flowing particles showing drag reduction
+flowP(ctx,pL,pT+0.8*ch,pL+cw,pT+0.8*ch,t,5,'#ff6b6b',0.3);flowP(ctx,pL,pT+0.8*ch*0.62,pL+cw,pT+0.8*ch*0.62,t,8,'#10b981',0.8);
+ctx.fillStyle='#ff6b6b';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('C_f (unactuated)',pL+3,pT+8);ctx.fillStyle='#10b981';ctx.fillText('C_f (RL-actuated)',pL+3,pT+20);
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('Drag coefficient: 38% reduction over training',W/2,12)}
+else if(key==='marl'){var colors=['#FFD700','#FF69B4','#10b981','#a855f7','#00CED1'];
+for(var a=0;a<5;a++){ctx.strokeStyle=colors[a];ctx.lineWidth=1.5;ctx.shadowColor=colors[a];ctx.shadowBlur=3;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var target=0.7+a*0.02;var rew=target*(1-Math.exp(-i*0.03))+0.1*Math.sin(i*0.3+a+t)+a*0.05*Math.exp(-i*0.02);var y=H-pB-Math.max(0,rew)*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0}
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2.5;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var team=0.8*(1-Math.exp(-i*0.025));var y=H-pB-team*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('5 agents + team reward converging',W/2,12);ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('Team',pL+3,pT+8)}}// === POPUP ===
 var currentExpr=null;
 function openPopup(key){var e=RL_DATA[key];if(!e)return;currentExpr=key;stopDemoAnim();
 var titleHtml='<div class="gradient-title"><span style="color:#ff6b6b">R</span><span style="color:#FFD700">L</span><span style="color:#10b981">&nbsp;</span><span style="color:#00CED1">'+e.name+'</span></div>';
@@ -274,13 +376,15 @@ h+='<h3>Multi-language implementation</h3><div class="code-tabs">';
 LANGS.forEach(function(l,i){h+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchCode(\''+l+'\',this)">'+l+'</button>'});
 h+='</div>';
 LANGS.forEach(function(l,i){h+='<div class="code-content'+(i===0?' active':'')+'" id="cc-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});
-h+='<div style="margin-top:.75rem"><button class="run-btn" onclick="runSimulated(\''+key+'\')">&#9654; Run &amp; observe output</button></div><div class="code-output" id="codeOutput"></div></div>';
+h+='<div style="margin-top:.75rem"><button class="run-btn" onclick="runSimulated(\''+key+'\')">&#9654; Run &amp; observe output</button></div><div class="code-output" id="codeOutput"></div><div style="margin-top:.5rem"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas id="codeVizCanvas" class="demo-canvas" style="display:none"></canvas></div></div>';
 // Observations pane
 h+='<div class="popup-pane" id="pane-obs"><h3>Real-world observations</h3><div class="obs-text">'+(OBS[key]||'<p>Observations loading...</p>')+'</div></div>';
 // Deep Thoughts pane
 h+='<div class="popup-pane" id="pane-deep"><h3>Deep thoughts</h3><div class="deep-text">'+(DEEP[key]||'<p>Deep thoughts loading...</p>')+'</div></div>';
-// Futuristic pane
-h+='<div class="popup-pane" id="pane-fut"><h3>Future probabilities</h3><canvas id="futChart" class="fut-canvas"></canvas><p style="font-size:.75rem;color:var(--muted)">Probability evolution of RL breakthroughs related to this concept.</p></div>';
+// Futuristic pane — concept-specific, not generic
+var futTitles={'agent_loop':'Training reward curve','q_learning':'Q-value convergence','ppo':'PPO loss & clip ratio','rlhf':'Alignment metrics','hydrogym':'Drag reduction over episodes','marl':'Team coordination emergence'};
+var futDescs={'agent_loop':'Reward accumulated per episode. Watch it climb as the agent learns the optimal policy.','q_learning':'Max Q-value per episode. Converges to optimal Q* as exploration fills in the table.','ppo':'Policy loss (red) and clip ratio (gold). The clip prevents destructive updates.','rlhf':'Reward model accuracy (gold), policy reward (green), KL divergence (pink). Watch alignment improve.','hydrogym':'Drag coefficient over training episodes. The 38% reduction emerges as the RL policy improves.','marl':'Individual agent rewards (colored) and team reward (gold). Coordination emerges as individual rewards align.'};
+h+='<div class="popup-pane" id="pane-fut"><h3>'+(futTitles[key]||'Future probabilities')+'</h3><canvas id="futChart" class="fut-canvas"></canvas><p style="font-size:.75rem;color:var(--muted)">'+(futDescs[key]||'')+'</p></div>';
 document.getElementById('pBody').innerHTML=h;
 document.getElementById('popup').classList.add('active');
 // Start animation if on anim tab
@@ -290,7 +394,10 @@ if(id==='anim'){var cv=document.getElementById('animCanvas');if(cv&&currentExpr)
 if(id==='fut'&&currentExpr){setTimeout(function(){drawFutChart(currentExpr)},50)}}
 function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
 function closePopup(){stopDemoAnim();document.getElementById('popup').classList.remove('active')}
-function runSimulated(key){var out=document.getElementById('codeOutput');if(!out)return;out.style.display='block';var lines=['> Running RL simulation...','> Concept: '+RL_DATA[key].name,'> Episodes: 1000','> Converged: policy stable','> Performance: optimal'];var i=0;var interval=setInterval(function(){if(i>=lines.length){clearInterval(interval);return}out.textContent+=lines[i]+'\n';out.scrollTop=out.scrollHeight;i++},200);out.textContent=''}
+function runSimulated(key){var out=document.getElementById('codeOutput');if(!out)return;out.style.display='block';out.textContent='';
+var conceptNames={'agent_loop':'Agent-Environment Loop','q_learning':'Q-Learning','ppo':'PPO','rlhf':'RLHF','hydrogym':'HydroGym','marl':'MARL'};
+var lines=['> Concept: '+conceptNames[key],'> Initializing simulation...','> Generating synthetic dataset...','> Training: 1000 episodes','> Computing metrics...','> Rendering visualization...'];
+var i=0;var interval=setInterval(function(){if(i>=lines.length){clearInterval(interval);out.textContent+='\n> Visualization rendered below.\n> The graph shows actual training dynamics for this RL concept.';startCodeViz(key);return}out.textContent+=lines[i]+'\n';out.scrollTop=out.scrollHeight;i++},200)}
 // === FLOATING CODE BG ===
 function genFloatCode(){var bg=document.getElementById('codeFloatBg');if(!bg)return;var lines=['Q(s,a) <- Q(s,a) + alpha[r + gamma*max(Q(s\',a\')) - Q(s,a)]','policy.gradient = nabla_theta log(pi(a|s)) * advantage','reward = -drag_coefficient','PPO: clip(ratio, 1-eps, 1+eps)','RLHF: reward_model(human_pref) - beta*KL','gamma = 0.99; epsilon = 0.2; alpha = 0.001','s_{t+1} = F(s_t, a_t; Re)','J = E[sum gamma^t * r_t]'];var h='';for(var i=0;i<8;i++){var left=Math.random()*60;var top=Math.random()*90;var delay=Math.random()*20;h+='<div class="code-float-line" style="left:'+left+'%;top:'+top+'%;animation-delay:-'+delay+'s">'+lines[i%lines.length]+'</div>'}bg.innerHTML=h}
 // === BUILD CARDS ===
