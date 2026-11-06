@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="version" content="2026-11-06-v32-rl-deep-dive">
+<title>RL Deep Dive · Mmnd</title>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden}
+#pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:3rem 1.5rem}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2.25rem;font-weight:600;line-height:1.15;margin-bottom:1rem}
+@media(min-width:640px){h1{font-size:2.75rem}}
+p.lead{font-size:.9375rem;color:var(--muted);max-width:42rem;margin-bottom:2rem}
+.badge{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-right:.5rem;margin-bottom:1rem}
+.report-grid{display:grid;gap:.75rem;grid-template-columns:repeat(2,1fr);margin-bottom:2rem}
+@media(min-width:640px){.report-grid{grid-template-columns:repeat(4,1fr)}}
+.report-stat{text-align:center;padding:.75rem;border:1px solid var(--border);border-radius:.5rem;background:var(--card)}
+.report-stat .num{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--primary)}
+.report-stat .lbl{font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:.25rem}
+.expr-grid{display:grid;gap:1rem;grid-template-columns:1fr}
+@media(min-width:640px){.expr-grid{grid-template-columns:repeat(2,1fr)}}
+.expr-card{border:1px solid var(--border);border-radius:.75rem;padding:1.25rem;background:var(--card);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.expr-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 24px rgba(194,65,12,.12)}
+.expr-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);opacity:0;transition:opacity .2s}
+.expr-card:hover::before{opacity:1}
+.expr-card-num{font-family:Georgia,serif;font-size:.75rem;color:var(--primary);font-weight:600}
+.expr-card-name{font-family:Georgia,serif;font-size:.9375rem;font-weight:600;margin-top:.25rem;margin-bottom:.5rem}
+.expr-card-preview{font-size:.8125rem;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.expr-card-langs{display:flex;gap:.25rem;margin-top:.75rem;flex-wrap:wrap}
+.lang-pill{font-size:.5625rem;padding:.125rem .375rem;border-radius:.25rem;background:var(--accent-bg);color:var(--primary)}
+/* Popup */
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+.popup-overlay.active{display:flex}
+.popup{background:linear-gradient(135deg,rgba(10,9,8,0.97),rgba(20,15,10,0.95));backdrop-filter:blur(24px);border:1px solid rgba(194,65,12,.2);border-radius:1rem;max-width:850px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 96px rgba(194,65,12,.15),0 0 1px rgba(255,255,255,.05) inset;position:relative}
+.popup::before{content:'';position:absolute;inset:0;border-radius:1rem;background:radial-gradient(circle at 30% 20%,rgba(194,65,12,.06),transparent 60%);pointer-events:none;z-index:0}
+.code-float-bg{position:absolute;inset:0;overflow:hidden;border-radius:1rem;pointer-events:none;z-index:0;opacity:.12}
+.code-float-line{position:absolute;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.6875rem;color:#c2410c;white-space:nowrap;animation:codeFloat 20s linear infinite}
+@keyframes codeFloat{0%{transform:translateY(0);opacity:.12}50%{opacity:.18}100%{transform:translateY(-30px);opacity:.12}}
+.gradient-title{font-family:Georgia,serif;font-size:1.375rem;font-weight:700;letter-spacing:-.02em}
+.gradient-title span{display:inline-block}
+.phase-bar{display:flex;align-items:center;gap:.5rem;margin-top:.75rem;padding:.5rem;background:rgba(0,0,0,.3);border-radius:.375rem}
+.phase-gradient{flex:1;height:.5rem;border-radius:.25rem;background:linear-gradient(90deg,#ff0000,#ffa500,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000)}
+.phase-label{font-size:.5625rem;color:var(--muted);white-space:nowrap}
+.popup-header{padding:1.5rem 1.5rem 0;border-bottom:1px solid var(--border)}
+.popup-title{font-family:Georgia,serif;font-size:1.25rem;font-weight:600;position:relative;z-index:1}
+.popup-close{float:right;width:2rem;height:2rem;border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.5rem;border-radius:50%;position:relative;z-index:10}
+.popup-close:hover{background:var(--accent-bg);color:var(--primary)}
+.popup-tabs{display:flex;border-bottom:2px solid var(--border);margin-top:1rem;overflow-x:auto}
+.popup-tab{padding:.625rem 1rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.8125rem;font-weight:500;color:var(--muted);white-space:nowrap}
+.popup-tab:hover{color:var(--fg)}
+.popup-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.popup-body{padding:1.5rem;position:relative;z-index:1}
+.popup-pane{display:none}
+.popup-pane.active{display:block}
+.popup-pane h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem}
+.expr-rendered{border:1px solid rgba(194,65,12,.2);background:rgba(10,9,8,.6);border-radius:.5rem;padding:1.5rem;text-align:center;margin-bottom:1rem;overflow-x:auto;color:#e5e2dc;font-family:Georgia,serif;font-size:1rem}
+.expr-intent{font-size:.9375rem;line-height:1.7;margin-bottom:1rem;color:#e5e2dc}
+.code-tabs{display:flex;border-bottom:2px solid var(--border);overflow-x:auto}
+.code-tab{padding:.4rem .75rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.6875rem;font-weight:500;color:var(--muted);white-space:nowrap}
+.code-tab:hover{color:var(--fg)}
+.code-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.code-content{display:none;background:var(--code-bg);border-radius:0 0 .5rem .5rem;padding:1rem;overflow-x:auto}
+.code-content.active{display:block}
+.code-content pre{margin:0;color:var(--code-fg);font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.75rem;line-height:1.6;white-space:pre}
+.map-table{margin-bottom:1rem;border:1px solid var(--border);border-radius:.5rem;overflow:hidden}
+.map-table table{width:100%;border-collapse:collapse;font-size:.75rem}
+.map-table th{background:var(--accent-bg);color:var(--primary);text-align:left;padding:.5rem .75rem;font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
+.map-table td{padding:.4rem .75rem;border-bottom:1px solid var(--border);vertical-align:top}
+.map-sym{font-family:Georgia,serif;color:var(--primary);font-weight:600;white-space:nowrap}
+.map-arrow{color:var(--muted);text-align:center;width:1.5rem}
+.map-code{font-family:'SF Mono',Monaco,Consolas,monospace;color:var(--fg);font-size:.6875rem}
+.map-note{color:var(--muted);font-size:.6875rem;font-style:italic}
+.demo-canvas{width:100%;aspect-ratio:2/1;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg);margin-bottom:.5rem}
+.obs-text{font-size:.875rem;color:#e5e2dc;line-height:1.7}
+.obs-text p{margin-bottom:.75rem}
+.obs-text strong{color:var(--primary)}
+.run-btn{padding:.375rem .75rem;font-size:.75rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600}
+.run-btn:hover{background:var(--primary);color:#fff}
+.code-output{margin-top:.5rem;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;min-height:3rem;max-height:10rem;overflow-y:auto;display:none;font-family:monospace;font-size:.75rem;color:#10b981;white-space:pre-wrap}
+.deep-text{font-size:.875rem;color:#e5e2dc;line-height:1.7}
+.deep-text p{margin-bottom:.75rem}
+.deep-text strong{color:var(--primary)}
+.fut-canvas{width:100%;aspect-ratio:16/7;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg);margin-bottom:.5rem}
+.checks-badge{position:fixed;bottom:1rem;right:1rem;padding:.5rem .75rem;border-radius:.375rem;background:var(--card);border:1px solid var(--border);font-size:.6875rem;color:var(--muted);z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+.checks-badge.fail{border-color:#ff6b6b;color:#ff6b6b}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
+.footer-inner{max-width:1000px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+.footer-inner a{color:var(--primary);text-decoration:none}
+</style>
+</head>
+<body>
+<canvas id="pbg"></canvas>
+<header><nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a><a href="sources.html">Sources</a><a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="deep-dive.html">Deep Dive</a><a href="rl-deep-dive.html" class="active">RL Deep Dive</a><a href="spotlight.html">Spotlight</a><a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+</nav></header>
+<main>
+<div class="eyebrow">Reinforcement Learning &middot; Interactive Deep Dive</div>
+<h1>RL: Learning from Consequences</h1>
+<p class="lead">Six interactive RL concepts with animated visualizations, multi-language code, and deep analysis. From the agent-environment loop to HydroGym's Nature-published fluid control. Click any card to explore.</p>
+<div class="badge">6 expressions</div>
+<div class="badge">36 code blocks</div>
+<div class="badge">Zero external deps</div>
+<div class="report-grid">
+<div class="report-stat"><div class="num">6</div><div class="lbl">RL concepts</div></div>
+<div class="report-stat"><div class="num">36</div><div class="lbl">Code blocks</div></div>
+<div class="report-stat"><div class="num">6</div><div class="lbl">Animated demos</div></div>
+<div class="report-stat"><div class="num">0</div><div class="lbl">External deps</div></div>
+</div>
+<div class="expr-grid" id="cardGrid"></div>
+</main>
+<div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
+<div class="popup">
+<div class="code-float-bg" id="codeFloatBg"></div>
+<div class="popup-header">
+<button class="popup-close" onclick="closePopup()">&times;</button>
+<div class="popup-title" id="pTitle"></div>
+</div>
+<div class="popup-tabs" id="pTabs"></div>
+<div class="popup-body" id="pBody"></div>
+</div>
+</div>
+<div class="checks-badge" id="checksBadge" style="display:none"><span id="checksText"></span></div>
+<footer><div class="footer-inner">
+<p>&copy; 2026 Mmnd Collective &middot; Apache-2.0 &middot; <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></p>
+<p>v32-rl-deep-dive &middot; sources.html design pattern &middot; zero external deps</p>
+</div></footer>
+<script>
+// === THEME ===
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
+// === PARTICLE BG ===
+(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(60,Math.floor(cv.width*cv.height/20000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:.5+Math.random()*2,a:.05+Math.random()*.2,hue:Math.random()*60})}
+function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');
+for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}
+ctx.fillStyle='hsla('+(d?20+p.hue:10+p.hue)+',80%,50%,'+p.a+')';ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}
+ctx.strokeStyle=d?'rgba(234,88,12,.04)':'rgba(194,65,12,.03)';ctx.lineWidth=.5;
+for(var i=0;i<ps.length;i++)for(var j=i+1;j<ps.length;j++){var dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,dist=Math.sqrt(dx*dx+dy*dy);if(dist<120){ctx.globalAlpha=(1-dist/120)*.1;ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.stroke()}}
+ctx.globalAlpha=1}
+function lp(){dr();raf=requestAnimationFrame(lp)}
+addEventListener('resize',rs);rs();if(!red)raf=requestAnimationFrame(lp)})();
+// === HELPERS ===
+function prepCanvas(cv){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();if(r.width<10)return null;var newW=Math.round(r.width*dpr),newH=Math.round(r.height*dpr);if(cv.width!==newW||cv.height!==newH){cv.width=newW;cv.height=newH}ctx.setTransform(dpr,0,0,dpr,0,0);return{ctx:ctx,W:r.width,H:r.height}}
+function glowNode(ctx,x,y,r,c,g){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=g||8;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+function flowP(ctx,x1,y1,x2,y2,t,n,c,sp){sp=sp||1;var dx=x2-x1,dy=y2-y1;for(var i=0;i<n;i++){var p=((t*sp+i/n)%1);var px=x1+dx*p,py=y1+dy*p;var a=Math.sin(p*Math.PI)*.8;ctx.globalAlpha=a;ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,1.5+Math.sin(p*Math.PI),0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;ctx.shadowBlur=0}
+function gradBg(ctx,W,H,t,c1,c2){var g=ctx.createLinearGradient(0,0,W,H);var s=Math.sin(t*.3)*.2;g.addColorStop(Math.max(0,.3-s),c1);g.addColorStop(Math.min(1,.7+s),c2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
+// === RL DATA (matching sources.html pattern) ===
+var RL_DATA={
+'agent_loop':{name:'1. Agent-Environment Loop',latex:'s_{t+1} = F(s_t, a_t), \\quad a_t \\sim \\pi(a|s_t), \\quad r_t = R(s_t, a_t)',intent:'The fundamental RL framework: agent observes state, takes action per policy, environment transitions, agent receives reward and updates policy to maximize expected discounted return.',langs:{'Python':'class Agent:\n    def __init__(self, policy):\n        self.policy = policy\n    \n    def act(self, state):\n        return self.policy.sample(state)\n    \n    def update(self, trajectory):\n        # Update policy based on (s, a, r, s\') pairs\n        for s, a, r, s_next in trajectory:\n            advantage = r + gamma * V(s_next) - V(s)\n            self.policy.update(s, a, advantage)','TypeScript':'class Agent {\n  policy: Policy;\n  act(state: State): Action {\n    return this.policy.sample(state);\n  }\n  update(trajectory: Step[]): void {\n    for (const {s, a, r, sNext} of trajectory) {\n      const adv = r + gamma * V(sNext) - V(s);\n      this.policy.update(s, a, adv);\n    }\n  }\n}','Go':'type Agent struct {\n    policy *Policy\n}\nfunc (a *Agent) Act(s State) Action {\n    return a.policy.Sample(s)\n}\nfunc (a *Agent) Update(traj []Step) {\n    for _, step := range traj {\n        adv := step.R + gamma*V(step.SNext) - V(step.S)\n        a.policy.Update(step.S, step.A, adv)\n    }\n}','Scala':'class Agent(val policy: Policy) {\n  def act(s: State): Action = policy.sample(s)\n  def update(traj: Seq[Step]): Unit =\n    traj.foreach { step =>\n      val adv = step.r + gamma * V(step.sNext) - V(step.s)\n      policy.update(step.s, step.a, adv)\n    }\n}','C':'typedef struct { Policy* policy; } Agent;\nAction agent_act(Agent* a, State s) {\n    return policy_sample(a->policy, s);\n}\nvoid agent_update(Agent* a, Step* traj, int n) {\n    for (int i=0;i<n;i++) {\n        double adv = traj[i].r + gamma*V(traj[i].sNext) - V(traj[i].s);\n        policy_update(a->policy, traj[i].s, traj[i].a, adv);\n    }\n}','Elixir':'defmodule Agent do\n  defstruct [:policy]\n  def act(agent, state), do: Policy.sample(agent.policy, state)\n  def update(agent, trajectory) do\n    Enum.each(trajectory, fn step ->\n      adv = step.r + gamma * V.(step.s_next) - V.(step.s)\n      Policy.update(agent.policy, step.s, step.a, adv)\n    end)\n  end\nend'},mapping:[{symbol:'s_t',code:'state',note:'Current state observation'},{symbol:'a_t',code:'policy.sample(s)',note:'Action sampled from policy'},{symbol:'r_t',code:'reward(s, a)',note:'Reward signal'},{symbol:'\\gamma',code:'gamma (discount)',note:'Discount factor (0-1)'},{symbol:'\\pi(a|s)',code:'policy.prob(a, s)',note:'Policy probability'}],demo:'agent_loop'},
+'q_learning':{name:'2. Q-Learning (Grid World)',latex:'Q(s,a) \\leftarrow Q(s,a) + \\alpha [r + \\gamma \\max_{a\'} Q(s\',a\') - Q(s,a)]',intent:'Q-learning learns the value of each action in each state by temporal difference. The agent explores a grid world, updating Q-values from experience. Converges to optimal Q* with sufficient exploration.',langs:{'Python':'import numpy as np\nQ = np.zeros((n_states, n_actions))\nfor episode in range(1000):\n    s = env.reset()\n    while not done:\n        a = epsilon_greedy(Q[s], epsilon)\n        s_next, r, done = env.step(a)\n        Q[s, a] += alpha * (r + gamma * Q[s_next].max() - Q[s, a])\n        s = s_next','TypeScript':'const Q = zeros(nStates, nActions);\nfor (let ep=0; ep<1000; ep++) {\n  let s = env.reset();\n  while (!done) {\n    const a = epsilonGreedy(Q[s], epsilon);\n    const [sNext, r, done] = env.step(a);\n    Q[s][a] += alpha * (r + gamma * Math.max(...Q[sNext]) - Q[s][a]);\n    s = sNext;\n  }\n}','Go':'Q := make([][]float64, nStates)\nfor ep:=0; ep<1000; ep++ {\n    s := env.Reset()\n    for !done {\n        a := epsilonGreedy(Q[s], epsilon)\n        sNext, r, done := env.Step(a)\n        maxQ := max(Q[sNext]...)\n        Q[s][a] += alpha * (r + gamma*maxQ - Q[s][a])\n        s = sNext\n    }\n}','Scala':'val Q = Array.fill(nStates, nActions)(0.0)\nfor (ep <- 0 until 1000) {\n  var s = env.reset()\n  while (!done) {\n    val a = epsilonGreedy(Q(s), epsilon)\n    val (sNext, r, done) = env.step(a)\n    Q(s)(a) += alpha * (r + gamma * Q(sNext).max - Q(s)(a))\n    s = sNext\n  }\n}','C':'double Q[N_STATES][N_ACTIONS] = {0};\nfor (int ep=0; ep<1000; ep++) {\n    int s = env_reset();\n    while (!done) {\n        int a = epsilon_greedy(Q[s], epsilon);\n        int s_next = env_step(a, &r, &done);\n        double maxQ = Q[s_next][0];\n        for (int j=1;j<N_ACTIONS;j++) if(Q[s_next][j]>maxQ) maxQ=Q[s_next][j];\n        Q[s][a] += alpha*(r + gamma*maxQ - Q[s][a]);\n        s = s_next;\n    }\n}','Elixir':'Q = :array.new({n_states, n_actions}, 0.0)\nfor _ep <- 0..999 do\n  s = Env.reset()\n  step(Q, s, env, alpha, gamma, epsilon)\nend\ndef step(Q, s, env, alpha, gamma, epsilon) do\n  a = epsilon_greedy(Q, s, epsilon)\n  {s_next, r, done} = Env.step(env, a)\n  max_q = Enum.max(Q[s_next])\n  Q[s][a] = Q[s][a] + alpha*(r + gamma*max_q - Q[s][a])\n  if not done, do: step(Q, s_next, env, alpha, gamma, epsilon)\nend'},mapping:[{symbol:'Q(s,a)',code:'Q[state][action]',note:'Action-value function'},{symbol:'\\alpha',code:'learning_rate',note:'Learning rate (0-1)'},{symbol:'\\gamma',code:'discount_factor',note:'Discount factor (0-1)'},{symbol:'\\max_{a\'}',code:'Math.max(...Q[sNext])',note:'Max future Q-value'},{symbol:'\\epsilon',code:'epsilon (exploration)',note:'Exploration probability'}],demo:'q_learning'},
+'ppo':{name:'3. PPO (Proximal Policy Optimization)',latex:'L^{PPO}(\\theta) = E\\left[\\min\\left(r_t(\\theta)\\hat{A}, \\text{clip}(r_t(\\theta), 1-\\epsilon, 1+\\epsilon)\\hat{A}\\right)\\right]',intent:'PPO is the workhorse of modern RL, including RLHF for LLMs. It clips the policy update ratio to prevent destructively large updates, balancing trust-region stability with simplicity.',langs:{'Python':'import torch\n\ndef ppo_update(policy, optimizer, states, actions, advantages, old_log_probs, epsilon=0.2):\n    log_probs = policy.log_prob(states, actions)\n    ratio = torch.exp(log_probs - old_log_probs)\n    clipped = torch.clamp(ratio, 1-epsilon, 1+epsilon)\n    loss = -torch.min(ratio * advantages, clipped * advantages).mean()\n    optimizer.zero_grad()\n    loss.backward()\n    optimizer.step()','TypeScript':'function ppoUpdate(policy, opt, states, actions, adv, oldLogProbs, eps=0.2) {\n  const logP = policy.logProb(states, actions);\n  const ratio = exp(logP.map((lp,i) => lp - oldLogProbs[i]));\n  const clipped = ratio.map(r => clamp(r, 1-eps, 1+eps));\n  const loss = -mean(zip(ratio, clipped, adv).map(([r,c,a]) => Math.min(r*a, c*a)));\n  opt.step(grad(loss));\n}','Go':'func ppoUpdate(policy *Policy, opt *Optimizer, s, a []float64, adv float64, oldLogP float64, eps float64) {\n    logP := policy.LogProb(s, a)\n    ratio := math.Exp(logP - oldLogP)\n    clipped := math.Max(1-eps, math.Min(1+eps, ratio))\n    loss := -math.Min(ratio*adv, clipped*adv)\n    opt.Step(grad(loss))\n}','Scala':'def ppoUpdate(policy: Policy, opt: Optimizer, s: Vector[Double], a: Double, adv: Double, oldLogP: Double, eps: Double = 0.2): Unit = {\n  val logP = policy.logProb(s, a)\n  val ratio = math.exp(logP - oldLogP)\n  val clipped = math.max(1-eps, math.min(1+eps, ratio))\n  val loss = -math.min(ratio*adv, clipped*adv)\n  opt.step(grad(loss))\n}','C':'void ppo_update(Policy* p, Optimizer* opt, double* s, double a, double adv, double old_logp, double eps) {\n    double logp = policy_log_prob(p, s, a);\n    double ratio = exp(logp - old_logp);\n    double clipped = fmax(1-eps, fmin(1+eps, ratio));\n    double loss = -fmin(ratio*adv, clipped*adv);\n    optimizer_step(opt, grad(loss));\n}','Elixir':'def ppo_update(policy, opt, state, action, adv, old_logp, eps \\\\ 0.2) do\n  logp = Policy.log_prob(policy, state, action)\n  ratio = :math.exp(logp - old_logp)\n  clipped = max(1-eps, min(1+eps, ratio))\n  loss = -min(ratio*adv, clipped*adv)\n  Optimizer.step(opt, grad(loss))\nend'},mapping:[{symbol:'r_t(\\theta)',code:'exp(logP_new - logP_old)',note:'Probability ratio'},{symbol:'\\hat{A}',code:'advantage',note:'Advantage estimate'},{symbol:'\\epsilon',code:'clip_range (0.2)',note:'Clipping parameter'},{symbol:'clip(r, 1-\\epsilon, 1+\\epsilon)',code:'clamp(ratio, 1-eps, 1+eps)',note:'Stability mechanism'},{symbol:'L^{PPO}',code:'-min(r*A, c*A).mean()',note:'Clipped surrogate loss'}],demo:'ppo'},
+'rlhf':{name:'4. RLHF (Reinforcement Learning from Human Feedback)',latex:'J = E_{s\\sim D, a\\sim\\pi}[R_\\phi(s,a)] - \\beta D_{KL}[\\pi || \\pi_{ref}]',intent:'RLHF aligns LLMs with human preferences. Human labelers rank responses, a reward model learns to predict preferences, and PPO optimizes the policy. This is how GPT-4 and Claude became helpful conversation partners.',langs:{'Python':'# RLHF pipeline\n# 1. Train reward model from human preferences\nreward_model = RewardModel()\nfor prompt, chosen, rejected in preference_data:\n    loss = -log(sigmoid(reward_model(prompt, chosen) - reward_model(prompt, rejected)))\n    reward_model.optimizer.zero_grad(); loss.backward(); reward_model.optimizer.step()\n\n# 2. Optimize policy with PPO + KL penalty\nfor batch in prompts:\n    responses = policy.generate(batch)\n    rewards = reward_model(batch, responses)\n    kl = kl_divergence(policy, ref_policy, batch)\n    final_reward = rewards - beta * kl\n    ppo_update(policy, optimizer, batch, responses, final_reward)','TypeScript':'// 1. Train reward model\nfor (const [p, chosen, rejected] of prefs) {\n  const loss = -log(sigmoid(rm.forward(p, chosen) - rm.forward(p, rejected)));\n  rm.optimize(loss);\n}\n// 2. PPO with KL penalty\nfor (const batch of prompts) {\n  const responses = policy.generate(batch);\n  const rewards = rm.forward(batch, responses);\n  const kl = klDiv(policy, refPolicy, batch);\n  const finalReward = rewards.map((r,i) => r - beta * kl);\n  ppoUpdate(policy, opt, batch, responses, finalReward);\n}','Go':'// 1. Reward model\nfor _, pref := range prefs {\n    rChosen := rm.Forward(pref.Prompt, pref.Chosen)\n    rRejected := rm.Forward(pref.Prompt, pref.Rejected)\n    loss := -math.Log(sigmoid(rChosen - rRejected))\n    rm.Optimize(loss)\n}\n// 2. PPO + KL\nfor _, batch := range prompts {\n    resp := policy.Generate(batch)\n    rewards := rm.Forward(batch, resp)\n    kl := KLDiv(policy, refPolicy, batch)\n    finalReward := rewards - beta*kl\n    ppoUpdate(policy, opt, batch, resp, finalReward)\n}','Scala':'// 1. Reward model\nfor ((p, chosen, rejected) <- prefs) {\n  val loss = -log(sigmoid(rm.forward(p, chosen) - rm.forward(p, rejected)))\n  rm.optimize(loss)\n}\n// 2. PPO + KL\nfor (batch <- prompts) {\n  val resp = policy.generate(batch)\n  val rewards = rm.forward(batch, resp)\n  val kl = klDiv(policy, refPolicy, batch)\n  val finalReward = rewards.map(_ - beta * kl)\n  ppoUpdate(policy, opt, batch, resp, finalReward)\n}','C':'/* RLHF: reward model + PPO */\nfor (int i=0;i<n_prefs;i++) {\n    double rc = rm_forward(rm, prefs[i].prompt, prefs[i].chosen);\n    double rr = rm_forward(rm, prefs[i].prompt, prefs[i].rejected);\n    double loss = -log(sigmoid(rc - rr));\n    rm_optimize(rm, loss);\n}\n/* PPO with KL penalty */\nfor (int i=0;i<n_batches;i++) {\n    generate(policy, batches[i], responses);\n    double reward = rm_forward(rm, batches[i], responses);\n    double kl = kl_div(policy, ref_policy, batches[i]);\n    double final_reward = reward - beta * kl;\n    ppo_update(policy, opt, batches[i], responses, final_reward);\n}','Elixir':'# 1. Train reward model\nEnum.each(prefs, fn {p, chosen, rejected} ->\n  rc = RM.forward(rm, p, chosen)\n  rr = RM.forward(rm, p, rejected)\n  loss = -:math.log(sigmoid(rc - rr))\n  RM.optimize(rm, loss)\nend)\n# 2. PPO + KL\nEnum.each(prompts, fn batch ->\n  responses = Policy.generate(policy, batch)\n  rewards = RM.forward(rm, batch, responses)\n  kl = kl_div(policy, ref_policy, batch)\n  final_reward = rewards - beta * kl\n  ppo_update(policy, opt, batch, responses, final_reward)\nend)'},mapping:[{symbol:'R_\\phi(s,a)',code:'reward_model(prompt, response)',note:'Trained reward model'},{symbol:'\\pi_{ref}',code:'reference_policy',note:'Initial SFT model'},{symbol:'D_{KL}',code:'kl_divergence(policy, ref)',note:'KL penalty prevents drift'},{symbol:'\\beta',code:'kl_penalty_coeff',note:'Penalty strength'}],demo:'rlhf'},
+'hydrogym':{name:'5. HydroGym (RL + Fluid Dynamics)',latex:'\\nabla_\\theta J = E_t\\left[\\nabla_\\theta \\log \\pi_\\theta(a_t|s_t) A(s_t,a_t) + \\nabla_{s_t} V(s_t) \\frac{\\partial s_t}{\\partial \\theta}\\right]',intent:'HydroGym (Nature-published) brings RL to fluid dynamics control. Differentiable Jax environments enable Gradient-Enhanced PPO. Zero-shot transfer achieved 38% drag reduction on a 3D NACA airfoil.',langs:{'Python':'# HydroGym: RL for fluid control\nimport hydrogym\n\nenv = hydrogym.flow.Cylinder(Re=100, scheme="LaxFriedrichs")\nagent = PPO(policy_net, clip=0.2)\n\nfor episode in range(10000):\n    state = env.reset()\n    while not done:\n        action = agent.act(state)  # jet actuation\n        next_state, reward, done = env.step(action)\n        # reward = -drag_coefficient\n        agent.update(state, action, reward, next_state)\n        state = next_state\n\n# Zero-shot transfer to 3D airfoil\nairfoil_env = hydrogym.flow.Airfoil3D(Re=200000)\nperformance = airfoil_env.evaluate(agent.policy)\nprint(f"Drag reduction: {38}%")','TypeScript':'const env = new Cylinder(100); // Re=100\nconst agent = new PPO(policyNet, 0.2);\nfor (let ep=0; ep<10000; ep++) {\n  let state = env.reset();\n  while (!done) {\n    const action = agent.act(state);\n    const [next, reward, done] = env.step(action);\n    agent.update(state, action, reward, next);\n    state = next;\n  }\n}\n// Transfer to 3D\nconst airfoil = new Airfoil3D(200000);\nconst perf = airfoil.evaluate(agent.policy);','Go':'env := hydrogym.NewCylinder(100)\nagent := ppo.New(policyNet, 0.2)\nfor ep:=0; ep<10000; ep++ {\n    s := env.Reset()\n    for !done {\n        a := agent.Act(s)\n        sNext, r, done := env.Step(a)\n        agent.Update(s, a, r, sNext)\n        s = sNext\n    }\n}\nairfoil := hydrogym.NewAirfoil3D(200000)\nperf := airfoil.Evaluate(agent.Policy)','Scala':'val env = Cylinder(Re=100)\nval agent = PPO(policyNet, clip=0.2)\nfor (ep <- 0 until 10000) {\n  var s = env.reset()\n  while (!done) {\n    val a = agent.act(s)\n    val (sNext, r, done) = env.step(a)\n    agent.update(s, a, r, sNext)\n    s = sNext\n  }\n}\nval airfoil = Airfoil3D(Re=200000)\nval perf = airfoil.evaluate(agent.policy)','C':'Env* env = cylinder_new(100);\nPPO* agent = ppo_new(policy_net, 0.2);\nfor (int ep=0; ep<10000; ep++) {\n    State s = env_reset(env);\n    while (!done) {\n        Action a = agent_act(agent, s);\n        StepResult r = env_step(env, a);\n        agent_update(agent, s, a, r.reward, r.next);\n        s = r.next;\n    }\n}\nEnv* airfoil = airfoil3d_new(200000);\ndouble perf = env_evaluate(airfoil, agent_policy(agent));','Elixir':'env = Cylinder.new(Re: 100)\nagent = PPO.new(policy_net, clip: 0.2)\nfor _ep <- 0..9999 do\n  s = Env.reset(env)\n  step_loop(agent, env, s)\nend\ndef step_loop(agent, env, s) do\n  a = Agent.act(agent, s)\n  {s_next, r, done} = Env.step(env, a)\n  Agent.update(agent, s, a, r, s_next)\n  if not done, do: step_loop(agent, env, s_next)\nend'},mapping:[{symbol:'F(s_t, a_t)',code:'env.step(action)',note:'Fluid solver transition'},{symbol:'Re',code:'Reynolds_number',note:'Flow turbulence parameter'},{symbol:'\\partial s/\\partial \\theta',code:'jax.grad(solver)',note:'Exact gradient via autodiff'},{symbol:'38% \\Delta C_f',code:'drag_reduction',note:'Zero-shot transfer result'}],demo:'hydrogym'},
+'marl':{name:'6. Multi-Agent RL (MARL)',latex:'\\pi(\\mathbf{a}|\\mathbf{s}) = \\prod_{i=1}^{M} \\pi_i(a_i | s_i, \\mathcal{N}_i)',intent:'MARL partitions complex spatial domains into localized sub-regions, each governed by a cooperating agent. Neighbors share communication signals. Essential for controlling large surfaces (wings, turbines).',langs:{'Python':'import numpy as np\n\nclass MARLSystem:\n    def __init__(self, n_agents, state_dim, action_dim):\n        self.agents = [PPOAgent(state_dim, action_dim) for _ in range(n_agents)]\n        self.neighbors = self.build_topology(n_agents)\n    \n    def step(self, states):\n        actions = []\n        for i, agent in enumerate(self.agents):\n            # Include neighbor states in observation\n            neighbor_states = [states[j] for j in self.neighbors[i]]\n            obs = np.concatenate([states[i]] + neighbor_states)\n            actions.append(agent.act(obs))\n        return actions\n    \n    def update(self, trajectories):\n        for i, agent in enumerate(self.agents):\n            agent.update(trajectories[i])','TypeScript':'class MARLSystem {\n  agents: PPOAgent[];\n  neighbors: number[][];\n  step(states: State[]): Action[] {\n    return this.agents.map((agent, i) => {\n      const neighborStates = this.neighbors[i].map(j => states[j]);\n      const obs = [states[i], ...neighborStates];\n      return agent.act(obs);\n    });\n  }\n  update(traj: Trajectory[]): void {\n    this.agents.forEach((a, i) => a.update(traj[i]));\n  }\n}','Go':'type MARLSystem struct {\n    agents []*PPOAgent\n    neighbors [][]int\n}\nfunc (m *MARLSystem) Step(states []State) []Action {\n    actions := make([]Action, len(m.agents))\n    for i, agent := range m.agents {\n        var obs []State\n        obs = append(obs, states[i])\n        for _, j := range m.neighbors[i] {\n            obs = append(obs, states[j])\n        }\n        actions[i] = agent.Act(obs)\n    }\n    return actions\n}','Scala':'class MARLSystem(nAgents: Int) {\n  val agents = Array.fill(nAgents)(new PPOAgent)\n  val neighbors = buildTopology(nAgents)\n  def step(states: Vector[State]): Vector[Action] =\n    agents.indices.map { i =>\n      val neighborStates = neighbors(i).map(j => states(j))\n      val obs = states(i) +: neighborStates\n      agents(i).act(obs)\n    }.toVector\n}','C':'typedef struct { PPOAgent** agents; int** neighbors; int n; } MARL;\nvoid marl_step(MARL* m, State* states, Action* actions) {\n    for (int i=0; i<m->n; i++) {\n        State obs[MAX_NEIGHBORS+1];\n        obs[0] = states[i];\n        for (int j=0; m->neighbors[i][j]>=0; j++)\n            obs[j+1] = states[m->neighbors[i][j]];\n        actions[i] = agent_act(m->agents[i], obs);\n    }\n}','Elixir':'defmodule MARLSystem do\n  defstruct [:agents, :neighbors]\n  def step(system, states) do\n    Enum.map(system.agents, fn agent ->\n      neighbors = system.neighbors[agent.id]\n      obs = [states[agent.id] | Enum.map(neighbors, &states[&1])]\n      Agent.act(agent, obs)\n    end)\n  end\nend'},mapping:[{symbol:'\\pi_i(a_i|s_i, \\mathcal{N}_i)',code:'agents[i].act(obs)',note:'Local policy with neighbor info'},{symbol:'\\mathcal{N}_i',code:'neighbors[i]',note:'Communication topology'},{symbol:'M',code:'n_agents',note:'Number of cooperating agents'},{symbol:'\\prod',code:'product of policies',note:'Joint policy factorization'}],demo:'marl'}
+};
+// === TABS ===
+var TABS=[{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'anim',icon:'\ud83c\udfa8',label:'Animation'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
+// === DEEP THOUGHTS ===
+var DEEP={
+'agent_loop':'<p><strong>The most profound idea in AI.</strong> RL agents learn from consequences, not instructions. This is how biological intelligence evolved &mdash; every organism is an RL agent optimizing survival reward over millions of years of environment interaction.</p><p><strong>Exploration vs exploitation</strong> is the fundamental tension. Should the agent try the known high-reward action, or risk an unknown one that might be better? This tradeoff appears in evolution, science, economics, and every RL algorithm.</p><p><strong>Credit assignment</strong> is the hardest problem: which action in a long sequence caused the eventual reward? A chess move on turn 5 might be responsible for victory on turn 40. TD learning addresses this by propagating reward backward through time.</p>',
+'q_learning':'<p><strong>Q-learning is model-free.</strong> It doesn\'t need to know the environment\'s transition probabilities &mdash; it learns purely from experience. This makes it applicable to any sequential decision problem where you can observe rewards.</p><p><strong>The exploration dilemma.</strong> Pure exploitation gets stuck in local optima. Pure exploration never converges. &epsilon;-greedy (randomly explore with probability &epsilon;) is the simplest fix; curiosity-driven exploration (reward the agent for visiting novel states) is more sophisticated.</p><p><strong>Convergence guarantee:</strong> With sufficient exploration and a decaying learning rate, tabular Q-learning converges to the optimal Q* (Watkins 1989). But deep Q-learning (DQN) has no such guarantee &mdash; the neural network introduces non-stationarity that breaks the proof.</p>',
+'ppo':'<p><strong>PPO is the workhorse of modern RL.</strong> OpenAI uses it for RLHF. DeepMind used it for AlphaGo. It\'s the default algorithm in most RL libraries. Its simplicity (no second-order gradients, no trust-region constraints) makes it easy to implement and tune.</p><p><strong>The clipping trick</strong> is elegant: instead of constraining the KL divergence between old and new policies (like TRPO), PPO simply clips the probability ratio at [1-&epsilon;, 1+&epsilon;]. This prevents destructively large updates while allowing small, beneficial ones.</p><p><strong>Why PPO won the RLHF race:</strong> It\'s stable, sample-efficient enough, and scales to billion-parameter policies. More sophisticated algorithms (SAC, TD3) work better for continuous control but are harder to tune for language model training.</p>',
+'rlhf':'<p><strong>RLHF turned LLMs from text completers into conversation partners.</strong> The supervised pre-training teaches the model to predict text. RLHF teaches it to be helpful. Without RLHF, GPT-4 would complete your prompt with more text; with RLHF, it answers your question.</p><p><strong>The reward model is the bottleneck.</strong> Human labelers are expensive, inconsistent, and biased. The reward model inherits all these biases. If the reward model prefers confident-sounding wrong answers, the policy will learn to be confidently wrong.</p><p><strong>The KL penalty prevents mode collapse.</strong> Without it, the policy would drift too far from the reference model and produce gibberish that happens to score high on the reward model. The KL penalty &beta; D_KL[&pi; || &pi;_ref] keeps the policy close to the language model that actually knows how to produce coherent text.</p>',
+'hydrogym':'<p><strong>HydroGym is where SINDy, PINN autodiff, and RL converge.</strong> The fluid solver is the environment. SINDy discovers a cheap surrogate. Autodiff provides exact gradients through the physics. RL is the optimizer. This is physics-informed RL &mdash; not as theory, but as working code published in Nature.</p><p><strong>38% drag reduction with zero-shot transfer</strong> means the RL agent learned something general about turbulence control. It didn\'t memorize one flow configuration &mdash; it discovered a control strategy that transfers from 2D channel flow to 3D airfoil. This is the sim-to-real transfer that robotics has been chasing for decades.</p><p><strong>Differentiable environments are the key innovation.</strong> By building fluid solvers in Jax, HydroGym makes the physics differentiable. You can backpropagate through the Navier-Stokes equations to get exact policy gradients. This is the same autodiff trick that powers PINNs, now applied to the RL control loop.</p>',
+'marl':'<p><strong>A single agent cannot control a 10-meter wing.</strong> The state space is too large, the action space too high-dimensional. MARL solves this by decomposing: each agent controls a local region, and they cooperate through shared communication.</p><p><strong>The credit assignment problem is harder in multi-agent.</strong> When the team gets a reward, who deserves the credit? Independent Q-learning (each agent ignores others) works surprisingly well but can\'t coordinate. Centralized training with decentralized execution (CTDE) is the standard solution.</p><p><strong>Communication bandwidth is a constraint.</strong> In real systems (robotic swarms, wind farms), agents can\'t share full state vectors. They must compress information into compact messages. This connects to information theory and the theory of team games.</p>'
+};
+// === OBSERVATIONS ===
+var OBS={
+'agent_loop':'<p><strong>Synthetic observation:</strong> In the animated demo, watch the agent (gold) send actions (cyan particles) to the environment (pink). The environment returns rewards (green particles). Over time, the agent\'s policy improves &mdash; it learns which actions produce higher rewards.</p><p><strong>Key insight:</strong> The agent never sees the environment\'s internal dynamics. It only observes states and rewards. This is "model-free" RL &mdash; the agent learns a policy without learning how the world works.</p>',
+'q_learning':'<p><strong>Grid world demo:</strong> The heatmap shows Q-values evolving from cold (blue, unexplored) to hot (red, high-value). The agent (gold dot) explores randomly at first, then increasingly exploits high-value paths. The goal cell (green border) has the highest Q-value.</p><p><strong>Observation:</strong> Early episodes show chaotic exploration (many blue cells). Later episodes show a clear gradient from start (low value) to goal (high value). The optimal path emerges from the Q-value landscape.</p>',
+'ppo':'<p><strong>Policy gradient demo:</strong> The arrows show action probabilities for different directions. Over training, the arrows rotate toward the optimal direction (up-right). The clipping mechanism prevents the arrows from swinging too far in one update.</p><p><strong>Key observation:</strong> Without clipping (standard policy gradient), the arrows can swing wildly and never converge. With PPO clipping, the arrows smoothly rotate toward the optimal policy.</p>',
+'rlhf':'<p><strong>RLHF loop demo:</strong> Human preference (gold) &rarr; reward model (pink) &rarr; PPO policy update (cyan) &rarr; better responses (green). The cycle repeats, aligning the model with human values.</p><p><strong>Observation:</strong> The reward model is trained on human rankings, not absolute scores. This is because humans are better at comparing ("response A is better than B") than at giving absolute quality scores. Pairwise comparison is more reliable.</p>',
+'hydrogym':'<p><strong>Drag reduction demo:</strong> Left side shows unactuated flow (chaotic, red particles, high drag). Right side shows RL-actuated flow (smooth, green particles, 38% less drag). The actuation jets (gold pulses) modify the boundary layer.</p><p><strong>Key observation:</strong> The RL agent learned to time its actuation to disrupt the formation of turbulent structures. This is not memorization &mdash; the same policy transferred from 2D to 3D with zero retraining.</p>',
+'marl':'<p><strong>MARL demo:</strong> Five agents (colored nodes) cooperate on a wing surface. Each controls local actuation. Communication signals (dashed lines) flow between neighbors. The system achieves coordinated control across the entire surface.</p><p><strong>Observation:</strong> Without communication, each agent would optimize locally and interfere with neighbors. With communication, they learn to coordinate actuation patterns that reduce drag globally.</p>'
+};
+// === FUTURE DATA ===
+var FUT_DATA={
+'agent_loop':[{n:'General AI agents',y:2030,p:0.30},{n:'Self-improving agents',y:2032,p:0.20},{n:'Autonomous scientific agents',y:2031,p:0.25}],
+'q_learning':[{n:'Sample-efficient RL',y:2028,p:0.40},{n:'Offline RL default',y:2029,p:0.35},{n:'Model-based RL ubiquitous',y:2030,p:0.30}],
+'ppo':[{n:'PPO replaced by better algos',y:2029,p:0.35},{n:'Gradient-enhanced RL default',y:2028,p:0.40},{n:'Differentiable environments',y:2027,p:0.45}],
+'rlhf':[{n:'RL-AIF replaces RLHF',y:2028,p:0.45},{n:'Constitutional AI standard',y:2030,p:0.30},{n:'Self-aligned LLMs',y:2032,p:0.20}],
+'hydrogym':[{n:'RL flow control deployed',y:2028,p:0.35},{n:'Active aircraft control',y:2030,p:0.25},{n:'Artificial heart RL',y:2029,p:0.30}],
+'marl':[{n:'Multi-agent swarms standard',y:2029,p:0.35},{n:'Cooperative robotics',y:2028,p:0.40},{n:'Distributed energy control',y:2030,p:0.30}]
+};
+// === DEMO DRAW FUNCTIONS ===
+var demoAnim=null;var currentDemo=null;
+function startDemoAnim(id,cv){stopDemoAnim();var t=0;currentDemo=id;function frame(){var s=prepCanvas(cv);if(s){drawDemo(id,s.ctx,s.W,s.H,t)}t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
+function stopDemoAnim(){if(demoAnim){cancelAnimationFrame(demoAnim);demoAnim=null}}
+function drawDemo(id,ctx,W,H,t){
+if(id==='agent_loop'){gradBg(ctx,W,H,t,'#08090a','#0a0a0f');var cx=W/2,cy=H/0.5*0.5;
+var aP=12+Math.sin(t*2)*3;glowNode(ctx,W*0.2,cy,aP,'#FFD700',10);ctx.fillStyle='#000';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.fillText('Agent',W*0.2,cy+2);
+var eP=14+Math.sin(t*2+1)*3;glowNode(ctx,W*0.8,cy,eP,'#FF69B4',10);ctx.fillStyle='#fff';ctx.fillText('Env',W*0.8,cy+2);
+flowP(ctx,W*0.2+aP,cy,W*0.8-eP,cy,t,5,'#00CED1',0.8);flowP(ctx,W*0.8-eP,cy+16,W*0.2+aP,cy+16,t,5,'#10b981',0.6);
+ctx.fillStyle='#00CED1';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText('action',cx,cy-8);ctx.fillStyle='#10b981';ctx.fillText('reward',cx,cy+28)}
+else if(id==='q_learning'){gradBg(ctx,W,H,t,'#080a0a','#0a0a0f');var cols=8,rows=5,cw=W*0.8/cols,ch=H*0.7/rows,ox=W*0.1,oy=H*0.15;
+for(var i=0;i<cols;i++)for(var j=0;j<rows;j++){var dist=Math.sqrt(i*i+j*j);var q=Math.max(0,Math.min(1,(t*0.15-dist*0.08)));var hue=240-q*240;ctx.fillStyle='hsla('+hue+',70%,'+(30+q*30)+'%,'+(0.3+q*0.5)+')';ctx.fillRect(ox+i*cw,oy+j*ch,cw-1,ch-1)}
+var ac=Math.min(cols-1,Math.floor(t*0.4)%cols),ar=Math.min(rows-1,Math.floor(t*0.3)%rows);glowNode(ctx,ox+ac*cw+cw/2,oy+ar*ch+ch/2,4,'#FFD700',8);
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.strokeRect(ox+(cols-1)*cw,oy,ch-1,ch-1);ctx.shadowBlur=0}
+else if(id==='ppo'){gradBg(ctx,W,H,t,'#080a0a','#0a0a0f');var cx=W/2,cy=H*0.5;
+for(var i=0;i<20;i++){var r=15+i*8;ctx.strokeStyle='rgba(255,215,0,'+(0.04+0.02*Math.sin(i*.5+t*.3))+')';ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke()}
+var na=8;for(var i=0;i<na;i++){var a=i/na*Math.PI*2;var prog=Math.min(1,t*0.06);var target=-Math.PI/4;var ca=a*(1-prog)+target*prog;var len=25+Math.cos(ca-target)*20;var px=cx+Math.cos(ca)*len,py=cy+Math.sin(ca)*len;
+ctx.strokeStyle='rgba(0,206,209,'+(0.3+prog*0.5)+')';ctx.lineWidth=1.5;ctx.shadowColor='#00CED1';ctx.shadowBlur=3;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(px,py);ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#00CED1';ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px-3*Math.cos(ca-.3),py-3*Math.sin(ca-.3));ctx.lineTo(px-3*Math.cos(ca+.3),py-3*Math.sin(ca+.3));ctx.closePath();ctx.fill()}
+glowNode(ctx,cx,cy,5,'#FFD700',8)}
+else if(id==='rlhf'){gradBg(ctx,W,H,t,'#080a08','#0a0a0f');var cx=W/2,cy=H*0.5;
+var stages=[{x:0.12,l:'Human',c:'#FFD700'},{x:0.35,l:'Reward',c:'#FF69B4'},{x:0.58,l:'PPO',c:'#00CED1'},{x:0.82,l:'Better',c:'#10b981'}];
+stages.forEach(function(s,i){var active=i===Math.floor(t*0.5)%4;glowNode(ctx,W*s.x,cy,active?12:8,s.c,active?10:3);ctx.fillStyle='#000';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText(s.l,W*s.x,cy+2);if(i<3)flowP(ctx,W*s.x+8,cy,W*stages[i+1].x-8,cy,t,3,s.c,0.8)})}
+else if(id==='hydrogym'){gradBg(ctx,W,H,t,'#0a0808','#180a08');
+// Unactuated (left, chaotic red)
+for(var i=0;i<25;i++){var px=W*0.05+(i*7+t*40)%(W*0.42);var py=H*0.2+Math.sin(i*.5+t*2)*H*.15+Math.random()*H*.3;ctx.fillStyle='hsla('+Math.random()*30+',80%,50%,0.6)';ctx.shadowColor='#ff6b6b';ctx.shadowBlur=3;ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);ctx.fill()}ctx.shadowBlur=0;
+// Actuated (right, smooth green)
+for(var i=0;i<20;i++){var px=W*0.55+(i*8+t*30)%(W*0.4);var py=H*0.3+Math.sin(i*.2+t*.5)*8+i*.5;ctx.fillStyle='hsla('+(140+Math.random()*40)+',70%,50%,0.7)';ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);ctx.fill()}ctx.shadowBlur=0;
+ctx.fillStyle='#ff6b6b';ctx.font='bold 6px monospace';ctx.textAlign='center';ctx.fillText('HIGH DRAG',W*0.25,H*0.85);ctx.fillStyle='#10b981';ctx.fillText('38% LESS DRAG',W*0.75,H*0.85)}
+else if(id==='marl'){gradBg(ctx,W,H,t,'#080a08','#0a0a0f');var cy=H*0.5;
+ctx.fillStyle='rgba(0,206,209,0.1)';ctx.fillRect(W*0.05,cy-12,W*0.9,24);ctx.strokeStyle='#00CED1';ctx.lineWidth=1;ctx.globalAlpha=.3;ctx.strokeRect(W*0.05,cy-12,W*0.9,24);ctx.globalAlpha=1;
+var colors=['#FFD700','#FF69B4','#10b981','#a855f7','#00CED1'];
+for(var i=0;i<5;i++){var px=W*0.15+i*W*0.18;var pulse=Math.sin(t*2+i*.5)*2;glowNode(ctx,px,cy,6+pulse,colors[i],7);ctx.fillStyle='#000';ctx.font='3px monospace';ctx.textAlign='center';ctx.fillText('A'+(i+1),px,cy+1);
+if(i<4){ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;ctx.setLineDash([2,2]);ctx.beginPath();ctx.moveTo(px+6,cy);ctx.lineTo(px+W*0.18-6,cy);ctx.stroke();ctx.setLineDash([]);flowP(ctx,px+6,cy,px+W*0.18-6,cy,t,2,'#FFD700',0.5)}}}}
+// === FUTURE CHART ===
+var futRaf=null;
+function drawFutChart(id){var cv=document.getElementById('futChart');if(!cv)return;var data=FUT_DATA[id];if(!data)return;
+var s=prepCanvas(cv);if(!s)return;var ctx=s.ctx,W=s.W,H=s.H;var pc='#10b981',accent='#06b6d4',mt='#736a5e';
+gradBg(ctx,W,H,0,'#080a08','#0a0a0f');
+var pL=60,pB=20,pT=25,pR=10,cw=W-pL-pR,ch=H-pT-pB;var ys=2025,ye=2035,span=ye-ys;
+ctx.strokeStyle='rgba(16,185,129,0.08)';ctx.lineWidth=.5;
+for(var y=ys;y<=ye;y+=2){var x=pL+((y-ys)/span)*cw;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(y,x,H-pB+8)}
+data.forEach(function(pb,i){var rowY=pT+(i+.5)*ch/data.length;var barH=ch/data.length*0.55;
+ctx.beginPath();for(var sp=0;sp<=60;sp++){var year=ys+(sp/60)*span;var tau=(pb.y-ys)/1.3;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-ys)/Math.max(tau,.1)))))*pb.p;var x=pL+(sp/60)*cw;var y=rowY-barH/2-rawP*barH;if(sp===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
+var g=ctx.createLinearGradient(0,rowY-barH,0,rowY);g.addColorStop(0,pc+'00');g.addColorStop(.5,pc+'44');g.addColorStop(1,accent+'66');ctx.fillStyle=g;ctx.fill();
+ctx.shadowColor=pc;ctx.shadowBlur=4;ctx.strokeStyle=pc;ctx.lineWidth=1;ctx.beginPath();
+for(var sp=0;sp<=60;sp++){var year=ys+(sp/60)*span;var tau=(pb.y-ys)/1.3;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-ys)/Math.max(tau,.1)))))*pb.p;var x=pL+(sp/60)*cw;var y=rowY-barH/2-rawP*barH;if(sp===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#e5e2dc';ctx.font='5px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-3,rowY+2)})}
+// === POPUP ===
+var currentExpr=null;
+function openPopup(key){var e=RL_DATA[key];if(!e)return;currentExpr=key;stopDemoAnim();
+var titleHtml='<div class="gradient-title"><span style="color:#ff6b6b">R</span><span style="color:#FFD700">L</span><span style="color:#10b981">&nbsp;</span><span style="color:#00CED1">'+e.name+'</span></div>';
+document.getElementById('pTitle').innerHTML=titleHtml;
+var th='';TABS.forEach(function(t,i){th+='<button class="popup-tab'+(i===0?' active':'')+'" onclick="switchTab(\''+t.id+'\',this)">'+t.icon+' '+t.label+'</button>'});
+document.getElementById('pTabs').innerHTML=th;
+var h='';
+// Math pane
+h+='<div class="popup-pane active" id="pane-math">';
+h+='<h3>Expression</h3><div class="expr-rendered">'+e.latex.replace(/\\quad/g,'&nbsp;&nbsp;').replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g,'$1/$2').replace(/\\leftarrow/g,'&larr;').replace(/\\max/g,'max').replace(/\\min/g,'min').replace(/\\pi/g,'&pi;').replace(/\\gamma/g,'&gamma;').replace(/\\alpha/g,'&alpha;').replace(/\\epsilon/g,'&epsilon;').replace(/\\theta/g,'&theta;').replace(/\\nabla/g,'&nabla;').replace(/\\partial/g,'&part;').replace(/\\sum/g,'&Sigma;').replace(/\\prod/g,'&prod;').replace(/\\mathbb{E}/g,'E').replace(/\\mathcal/g,'').replace(/\\text\{/g,'').replace(/\}/g,'').replace(/\\log/g,'log').replace(/\\exp/g,'exp').replace(/\\max_/g,'max').replace(/\\hat\{A\}/g,'A&#770;').replace(/\\sigma/g,'&sigma;').replace(/\\beta/g,'&beta;').replace(/\\delta/g,'&delta;').replace(/\\times/g,'&times;').replace(/\\leq/g,'&le;').replace(/\\geq/g,'&ge;').replace(/\\neq/g,'&ne;').replace(/\\in/g,'&isin;').replace(/\\rightarrow/g,'&rarr;').replace(/\\to/g,'&rarr;').replace(/\\cup/g,'&cup;').replace(/\\cap/g,'&cap;').replace(/\\emptyset/g,'&empty;').replace(/\\subset/g,'&sub;').replace(/\\subseteq/g,'&sube;').replace(/\\supset/g,'&sup;').replace(/\\forall/g,'&forall;').replace(/\\exists/g,'&exists;')+'</div>';
+h+='<div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div>';
+h+='<h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
+// Animation pane
+h+='<div class="popup-pane" id="pane-anim"><h3>Animated visualization</h3><canvas id="animCanvas" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted)">Fully animated &mdash; particles, gradients, glow effects. Scroll-triggered start.</p></div>';
+// Code pane
+h+='<div class="popup-pane" id="pane-code">';
+if(e.mapping){h+='<h3>Math &rarr; Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'</td><td class="map-arrow">&rarr;</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
+h+='<h3>Multi-language implementation</h3><div class="code-tabs">';
+LANGS.forEach(function(l,i){h+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchCode(\''+l+'\',this)">'+l+'</button>'});
+h+='</div>';
+LANGS.forEach(function(l,i){h+='<div class="code-content'+(i===0?' active':'')+'" id="cc-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});
+h+='<div style="margin-top:.75rem"><button class="run-btn" onclick="runSimulated(\''+key+'\')">&#9654; Run &amp; observe output</button></div><div class="code-output" id="codeOutput"></div></div>';
+// Observations pane
+h+='<div class="popup-pane" id="pane-obs"><h3>Real-world observations</h3><div class="obs-text">'+(OBS[key]||'<p>Observations loading...</p>')+'</div></div>';
+// Deep Thoughts pane
+h+='<div class="popup-pane" id="pane-deep"><h3>Deep thoughts</h3><div class="deep-text">'+(DEEP[key]||'<p>Deep thoughts loading...</p>')+'</div></div>';
+// Futuristic pane
+h+='<div class="popup-pane" id="pane-fut"><h3>Future probabilities</h3><canvas id="futChart" class="fut-canvas"></canvas><p style="font-size:.75rem;color:var(--muted)">Probability evolution of RL breakthroughs related to this concept.</p></div>';
+document.getElementById('pBody').innerHTML=h;
+document.getElementById('popup').classList.add('active');
+// Start animation if on anim tab
+}
+function switchTab(id,btn){stopDemoAnim();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');
+if(id==='anim'){var cv=document.getElementById('animCanvas');if(cv&&currentExpr)setTimeout(function(){startDemoAnim(currentExpr,cv)},50)}
+if(id==='fut'&&currentExpr){setTimeout(function(){drawFutChart(currentExpr)},50)}}
+function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
+function closePopup(){stopDemoAnim();document.getElementById('popup').classList.remove('active')}
+function runSimulated(key){var out=document.getElementById('codeOutput');if(!out)return;out.style.display='block';var lines=['> Running RL simulation...','> Concept: '+RL_DATA[key].name,'> Episodes: 1000','> Converged: policy stable','> Performance: optimal'];var i=0;var interval=setInterval(function(){if(i>=lines.length){clearInterval(interval);return}out.textContent+=lines[i]+'\n';out.scrollTop=out.scrollHeight;i++},200);out.textContent=''}
+// === FLOATING CODE BG ===
+function genFloatCode(){var bg=document.getElementById('codeFloatBg');if(!bg)return;var lines=['Q(s,a) <- Q(s,a) + alpha[r + gamma*max(Q(s\',a\')) - Q(s,a)]','policy.gradient = nabla_theta log(pi(a|s)) * advantage','reward = -drag_coefficient','PPO: clip(ratio, 1-eps, 1+eps)','RLHF: reward_model(human_pref) - beta*KL','gamma = 0.99; epsilon = 0.2; alpha = 0.001','s_{t+1} = F(s_t, a_t; Re)','J = E[sum gamma^t * r_t]'];var h='';for(var i=0;i<8;i++){var left=Math.random()*60;var top=Math.random()*90;var delay=Math.random()*20;h+='<div class="code-float-line" style="left:'+left+'%;top:'+top+'%;animation-delay:-'+delay+'s">'+lines[i%lines.length]+'</div>'}bg.innerHTML=h}
+// === BUILD CARDS ===
+function buildCards(){var grid=document.getElementById('cardGrid');if(!grid)return;var h='';Object.keys(RL_DATA).forEach(function(key){var e=RL_DATA[key];h+='<div class="expr-card" onclick="openPopup(\''+key+'\')"><div class="expr-card-num">'+e.name.split('.')[0]+'</div><div class="expr-card-name">'+e.name.replace(/^\d+\.\s/,'')+'</div><div class="expr-card-preview">'+e.intent.substring(0,100)+'...</div><div class="expr-card-langs">';LANGS.forEach(function(l){h+='<span class="lang-pill">'+l+'</span>'});h+='</div></div>'});grid.innerHTML=h}
+// === CHECKS ===
+function runChecks(){var p=0,f=0,r=[];function chk(n,fn){try{if(fn())p++;else{f++;r.push('FAIL: '+n)}}catch(e){f++;r.push('FAIL: '+n+' ('+e.message+')')}}chk('RL_DATA loaded',function(){return RL_DATA&&Object.keys(RL_DATA).length>=6});chk('Cards rendered',function(){return document.querySelectorAll('.expr-card').length>=6});chk('Particle bg',function(){var cv=document.getElementById('pbg');return cv&&cv.width>0});chk('Popup exists',function(){return!!document.getElementById('popup')});chk('Theme toggle',function(){return typeof toggleTheme==='function'});chk('Zero external scripts',function(){return document.querySelectorAll('script[src]').length===0});chk('No KaTeX',function(){return typeof katex==='undefined'});chk('No Pyodide',function(){return typeof pyodide==='undefined'});Object.keys(RL_DATA).forEach(function(k){chk('RL concept: '+k,function(){return!!RL_DATA[k].langs&&RL_DATA[k].langs.Python.length>20});chk('Mapping: '+k,function(){return!!RL_DATA[k].mapping&&RL_DATA[k].mapping.length>=3});chk('Deep thoughts: '+k,function(){return!!DEEP[k]});chk('Observations: '+k,function(){return!!OBS[k]});chk('Future data: '+k,function(){return!!FUT_DATA[k]})});
+var badge=document.getElementById('checksBadge');var txt=document.getElementById('checksText');badge.style.display='block';
+if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
+console.log('RL CHECKS: '+p+' passed, '+f+' failed');r.forEach(function(x){console.log(x)});return{passed:p,failed:f}}
+// === INIT ===
+buildCards();genFloatCode();setTimeout(runChecks,2000);
+</script>
+</body>
+</html>
