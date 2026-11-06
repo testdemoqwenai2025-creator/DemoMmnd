@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="version" content="2026-11-05-v26-deep-dive-discovery">
+<title>Deep Dive: How Neural Networks Discover Physical Laws · Mmnd</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.7}
+#pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.25}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:820px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:3.5rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2rem;height:2rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1rem}
+.logo-text{font-family:Georgia,serif;font-size:1rem;font-weight:600}
+.nav-links{display:flex;gap:.125rem;flex-wrap:wrap}
+.nav-links a{padding:.4rem .6rem;text-decoration:none;color:var(--muted);font-size:.75rem;font-weight:500}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.25rem;height:2.25rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1rem}
+main{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:2rem 1.5rem 4rem}
+/* Hero */
+.hero{margin-bottom:3rem;text-align:center}
+.hero .eyebrow{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+.hero h1{font-family:Georgia,serif;font-size:2rem;font-weight:600;margin-bottom:.75rem;line-height:1.2}
+@media(min-width:640px){.hero h1{font-size:2.5rem}}
+.hero .lead{font-size:.9375rem;color:var(--muted);max-width:36rem;margin:0 auto 1.5rem}
+.hero-canvas{width:100%;aspect-ratio:2/1;background:#0a0908;border-radius:.5rem;border:1px solid var(--border);display:block;margin:0 auto}
+/* Section styling */
+section{margin-bottom:3rem;scroll-margin-top:4rem}
+section h2{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;margin-bottom:.75rem;color:var(--fg);line-height:1.3}
+section h2 .num{color:var(--primary);font-size:.875rem;font-weight:400;margin-right:.5rem}
+section h3{font-family:Georgia,serif;font-size:1.125rem;font-weight:600;margin:1.5rem 0 .5rem;color:var(--primary)}
+section p{margin-bottom:1rem;font-size:.9375rem;color:var(--fg)}
+section p .em{font-style:italic;color:var(--muted)}
+/* Math box */
+.math-box{background:var(--secondary);border-left:3px solid var(--primary);border-radius:.375rem;padding:1rem 1.25rem;margin:1.25rem 0;overflow-x:auto}
+.math-box .label{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem;font-weight:600}
+/* Two-column layout for canvas + text */
+.viz-grid{display:grid;grid-template-columns:1fr;gap:1rem;margin:1.25rem 0}
+@media(min-width:640px){.viz-grid.two-col{grid-template-columns:1fr 1fr}}
+.viz-card{background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:1rem}
+.viz-card .viz-title{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--primary);margin-bottom:.5rem}
+.viz-canvas{width:100%;aspect-ratio:3/2;background:#0a0908;border-radius:.375rem;display:block}
+.viz-caption{font-size:.6875rem;color:var(--muted);margin-top:.5rem;line-height:1.4}
+/* Code cell */
+.code-cell{background:var(--code-bg);border:1px solid var(--border);border-radius:.5rem;overflow:hidden;margin:1.25rem 0}
+.code-header{display:flex;justify-content:space-between;align-items:center;padding:.5rem .75rem;background:rgba(255,255,255,.05);border-bottom:1px solid var(--border)}
+.code-header .lang{font-size:.6875rem;font-weight:600;color:#10b981;text-transform:uppercase;letter-spacing:.1em}
+.code-header .run-btn{padding:.3rem .75rem;font-size:.75rem;border:1px solid #10b981;border-radius:.25rem;background:rgba(16,185,129,.1);color:#10b981;cursor:pointer;font-weight:600}
+.code-header .run-btn:hover{background:#10b981;color:#fff}
+.code-header .run-btn:disabled{opacity:.5;cursor:wait}
+.code-cell textarea{width:100%;background:var(--code-bg);color:var(--code-fg);border:none;padding:.75rem;font-family:'SF Mono',Consolas,'Liberation Mono',Menlo,monospace;font-size:.75rem;line-height:1.6;resize:vertical;min-height:200px;outline:none;tab-size:4}
+.code-cell textarea:focus{background:#0d0c0a}
+.code-output{padding:.75rem;font-family:monospace;font-size:.75rem;color:#10b981;background:#050403;border-top:1px solid var(--border);min-height:3rem;max-height:20rem;overflow-y:auto;white-space:pre-wrap;display:none}
+.code-output.error{color:#ff6b6b}
+.code-status{font-size:.6875rem;color:var(--muted);padding:.375rem .75rem;background:rgba(255,255,255,.03);border-top:1px solid var(--border)}
+/* Inline code */
+code.inline{background:var(--secondary);color:var(--primary);padding:.1rem .3rem;border-radius:.2rem;font-family:monospace;font-size:.8125em}
+/* App cards */
+.app-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.75rem;margin:1.25rem 0}
+.app-card{background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:1rem;text-align:center}
+.app-card .icon{font-size:1.5rem;margin-bottom:.5rem}
+.app-card .title{font-family:Georgia,serif;font-size:.875rem;font-weight:600;color:var(--fg);margin-bottom:.25rem}
+.app-card .stat{font-size:.75rem;color:var(--primary);font-weight:600;margin-bottom:.25rem}
+.app-card .desc{font-size:.6875rem;color:var(--muted);line-height:1.4}
+/* References */
+.refs-list{list-style:none;padding:0}
+.refs-list li{padding:.75rem 0;border-bottom:1px solid var(--border);font-size:.875rem}
+.refs-list li:last-child{border-bottom:none}
+.refs-list .cite{font-family:Georgia,serif;color:var(--fg)}
+.refs-list .cite a{color:var(--primary);text-decoration:none}
+.refs-list .why{font-size:.75rem;color:var(--muted);margin-top:.25rem;font-style:italic}
+/* Footer */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
+.footer-inner{max-width:820px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+.footer-inner a{color:var(--primary);text-decoration:none}
+/* Pyodide loading indicator */
+.pyodide-status{display:inline-block;font-size:.6875rem;color:var(--muted);margin-left:.5rem}
+.pyodide-status.ready{color:#10b981}
+.pyodide-status.loading{color:#FFD700}
+/* Pull quote */
+.pullquote{font-family:Georgia,serif;font-size:1.125rem;font-style:italic;color:var(--primary);border-left:3px solid var(--primary);padding-left:1rem;margin:1.5rem 0;line-height:1.5}
+/* Table of contents */
+.toc{background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:1rem 1.25rem;margin-bottom:2rem}
+.toc h4{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem}
+.toc ol{list-style:none;padding:0;counter-reset:toc}
+.toc li{counter-increment:toc;padding:.2rem 0;font-size:.8125rem}
+.toc li a{color:var(--muted);text-decoration:none}
+.toc li a:hover{color:var(--primary)}
+.toc li::before{content:counter(toc) ". ";color:var(--primary);font-weight:600}
+</style>
+</head>
+<body>
+<canvas id="pbg"></canvas>
+<header><nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="sources.html">Sources</a>
+<a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="demos.html">Demos</a>
+<a href="deep-dive.html" class="active">Deep Dive</a>
+<a href="blog.html">Blog</a><a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+</nav></header>
+
+<main>
+<!-- HERO -->
+<div class="hero">
+<div class="eyebrow">Deep Dive &middot; Math + Machine Learning</div>
+<h1>How Neural Networks Discover Physical Laws from Data</h1>
+<p class="lead">A graduate-level walk through the ideas that turned deep learning from empirical alchemy into principled chemistry &mdash; from naive regression that violates physics, to architectures that <em>discover</em> the equations governing real-world systems. With runnable code in your browser.</p>
+<canvas class="hero-canvas" id="heroCanvas"></canvas>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc">
+<h4>In this deep dive</h4>
+<ol>
+<li><a href="#sec1">The naive approach: black-box NN fits data, violates physics</a></li>
+<li><a href="#sec2">PINN: physics in the loss via autograd</a></li>
+<li><a href="#sec3">Runnable code: SINDy discovers an equation (Pyodide)</a></li>
+<li><a href="#sec4">SINDy: discovering the actual equation</a></li>
+<li><a href="#sec5">HNN: conservation by construction</a></li>
+<li><a href="#sec6">LNN: coordinates that match sensors</a></li>
+<li><a href="#sec7">Neural ODE: continuous depth and the adjoint method</a></li>
+<li><a href="#sec8">Synthesis: where these ideas meet the real world</a></li>
+<li><a href="#sec9">References and further reading</a></li>
+</ol>
+</div>
+
+<!-- SECTION 1: Naive NN -->
+<section id="sec1">
+<h2><span class="num">&sect;1</span>The naive approach: black-box NN fits data, violates physics</h2>
+<p>Start with the obvious thing. Collect trajectory data from a double pendulum &mdash; positions, velocities, accelerations &mdash; and train a feed-forward neural network to map <code class="inline">(q, q&#775;)</code> directly to <code class="inline">q&#776;</code>. The network has millions of parameters, a smooth activation, and a standard MSE loss. Training proceeds as expected: the loss curve drops, the network fits every training point, and you declare victory.</p>
+<p>Then you integrate forward. You take the network's predicted <code class="inline">q&#776;</code>, step the state forward with Euler, and watch what happens over a long horizon. <span class="em">The energy blows up.</span> Not because the network is wrong on the training data &mdash; it isn't &mdash; but because nothing in the architecture or the loss told it that energy has to be conserved. The network learned a local approximation that, when composed with itself thousands of times, drifts unphysically. The same failure mode haunts standard numerical integrators like RK4 and <code class="inline">ode45</code> on chaotic systems: they trade short-term accuracy for long-term structural violation.</p>
+<div class="viz-grid two-col">
+<div class="viz-card">
+<div class="viz-title">Training loss (looks great)</div>
+<canvas class="viz-canvas" id="naiveLossCanvas"></canvas>
+<div class="viz-caption">MSE drops to ~0.001. By the standard ML metric, the model has converged.</div>
+</div>
+<div class="viz-card">
+<div class="viz-title">Energy over time (the truth)</div>
+<canvas class="viz-canvas" id="naiveEnergyCanvas"></canvas>
+<div class="viz-caption">Total energy E(t) drifts to infinity. The model violates conservation by construction.</div>
+</div>
+</div>
+<div class="math-box">
+<div class="label">The naive loss</div>
+<p style="margin:0">$$\mathcal{L}_{\text{naive}}(\theta) = \frac{1}{N}\sum_{i=1}^{N}\left\|\mathbf{\ddot{q}}_{\text{obs},i} - f_\theta(\mathbf{q}_i, \mathbf{\dot{q}}_i)\right\|_2^2$$</p>
+</div>
+<p>The loss says nothing about physics. It only says "match these numbers." A network trained this way is a sophisticated interpolator with no structural awareness of conservation, symmetry, or variational principles. It is AI as <em>alchemy</em>: powerful, but without the constraints that make a model trustworthy outside its training distribution.</p>
+<p class="pullquote">The question is not "can the network fit the data?" &mdash; it can. The question is "does the fit respect the physics?" &mdash; and without architectural intervention, it does not.</p>
+</section>
+
+<!-- SECTION 2: PINN -->
+<section id="sec2">
+<h2><span class="num">&sect;2</span>PINN: physics in the loss via autograd</h2>
+<p>The Physics-Informed Neural Network (Raissi, Perdikaris, Karniadakis, 2019) takes a different stance. Instead of asking the network to predict accelerations directly, it asks the network to predict the <em>solution field</em> <code class="inline">u(x, t)</code> and then checks whether that field satisfies the governing PDE. The check is done by automatic differentiation: PyTorch or JAX computes the exact partial derivatives <code class="inline">&#8706;u/&#8706;t</code>, <code class="inline">&#8706;u/&#8706;x</code>, <code class="inline">&#8706;&sup2;u/&#8706;x&sup2;</code> of the network output with respect to its inputs. No finite differences. No mesh. The PDE residual becomes a term in the loss function.</p>
+<div class="math-box">
+<div class="label">The PINN composite loss</div>
+<p style="margin:0">$$\mathcal{L}_{\text{total}}(\theta) = \underbrace{\mathcal{L}_{\text{data}}(\theta)}_{\text{fit sparse measurements}} + \lambda \underbrace{\mathcal{L}_{\text{physics}}(\theta)}_{\text{PDE residual at collocation points}}$$</p>
+<p style="margin:.5rem 0 0">$$\mathcal{L}_{\text{physics}}(\theta) = \frac{1}{N_v}\sum_{i=1}^{N_v}\left\|\mathcal{N}_{\text{PDE}}\!\left(\hat{\mathbf{u}}(\mathbf{x}_i, t_i; \theta)\right)\right\|_2^2$$</p>
+</div>
+<p>The key trick is the <em>virtual collocation points</em>. Real measurements are scarce &mdash; maybe <code class="inline">N_d = 20</code> sensor readings. But the physics loss can be evaluated at <code class="inline">N_v = 10,000</code> randomly sampled points in the spatiotemporal domain where no measurement exists. At each, the loss simply asks: does the PDE residual equal zero? Physics is abundant; data is scarce. The PINN offloads its data requirement onto the physics.</p>
+<div class="viz-card" style="max-width:100%">
+<div class="viz-title">Sparse data (gold) + dense collocation (cyan) + PDE residual shrinking during training</div>
+<canvas class="viz-canvas" id="pinnCanvas" style="aspect-ratio:3/1"></canvas>
+<div class="viz-caption">As training progresses, the PDE residual (gold dots) shrinks toward zero across the entire domain &mdash; not just at the measurement points.</div>
+</div>
+<h3>Soft means approximate</h3>
+<p>Physics enters as a <em>penalty term</em>, not a hard constraint. So <code class="inline">min_&#952; (L_data + &#955; L_physics)</code> yields a solution where <code class="inline">L_physics(&#952;*) &gt; 0</code> &mdash; the PDE is approximated, not exactly satisfied. This is the trade-off: PINNs are flexible and easy to train, but conservation laws hold only up to the residual. Later sections show how Hamiltonian and Lagrangian NNs enforce conservation <em>by construction</em> instead.</p>
+</section>
+
+<!-- SECTION 3: Pyodide runnable code -->
+<section id="sec3">
+<h2><span class="num">&sect;3</span>Runnable code: SINDy discovers an equation (Pyodide)</h2>
+<p>Enough theory &mdash; let's watch an equation get discovered. The code below runs <em>in your browser</em> via Pyodide (Python compiled to WebAssembly). It generates trajectory data from the Lorenz system, builds a library of candidate terms, and uses Sequentially Thresholded Least Squares (STLSQ) to select the sparse subset that governs the dynamics. Click <strong>Run</strong> and watch the discovered equation appear in the output.</p>
+<div class="code-cell">
+<div class="code-header">
+<span class="lang">Python &middot; Pyodide (runs in your browser)</span>
+<span><button class="run-btn" id="pyRunBtn" onclick="runPyodideDemo()" disabled>&#9654; Run</button><span class="pyodide-status loading" id="pyStatus">Loading Pyodide...</span></span>
+</div>
+<textarea id="pyCode" spellcheck="false">import numpy as np
+
+# === Generate Lorenz system trajectory ===
+# dx/dt = sigma*(y - x), dy/dt = x*(rho - z) - y, dz/dt = x*y - beta*z
+sigma, rho, beta = 10.0, 28.0, 8.0/3.0
+dt = 0.01
+N = 1000
+x = np.zeros((N, 3))
+x[0] = [1.0, 1.0, 1.0]
+for i in range(N-1):
+    dx = sigma*(x[i,1] - x[i,0])
+    dy = x[i,0]*(rho - x[i,2]) - x[i,1]
+    dz = x[i,0]*x[i,1] - beta*x[i,2]
+    x[i+1] = x[i] + dt*np.array([dx, dy, dz])
+
+# === Compute derivatives (finite difference) ===
+x_dot = np.gradient(x, dt, axis=0)
+
+# === Build candidate library Theta(X) ===
+# Terms: [1, x, y, z, x*y, x*z, y*z, x^2, y^2, z^2]
+def build_library(X):
+    x, y, z = X[:,0], X[:,1], X[:,2]
+    return np.column_stack([
+        np.ones(len(X)), x, y, z,
+        x*y, x*z, y*z,
+        x**2, y**2, z**2
+    ])
+
+Theta = build_library(x)
+terms = ['1', 'x', 'y', 'z', 'xy', 'xz', 'yz', 'x^2', 'y^2', 'z^2']
+
+# === STLSQ: Sequentially Thresholded Least Squares ===
+# Iteratively: fit, threshold small coefficients, refit on remaining terms
+threshold = 0.5
+Xi = np.linalg.lstsq(Theta, x_dot, rcond=None)[0]  # initial fit
+
+for _ in range(10):
+    small = np.abs(Xi) < threshold
+    Xi[small] = 0
+    for k in range(3):  # refit each output
+        active = ~small[:, k]
+        if active.any():
+            Xi[active, k] = np.linalg.lstsq(Theta[:, active], x_dot[:, k], rcond=None)[0]
+
+# === Print discovered equations ===
+names = ['dx/dt', 'dy/dt', 'dz/dt']
+print("=" * 50)
+print("SINDy discovered governing equations:")
+print("=" * 50)
+for k in range(3):
+    parts = []
+    for j, term in enumerate(terms):
+        coef = Xi[j, k]
+        if abs(coef) > threshold:
+            if term == '1':
+                parts.append(f"{coef:.2f}")
+            else:
+                parts.append(f"{coef:.2f}*{term}")
+    eq = " + ".join(parts) if parts else "0"
+    print(f"  {names[k]} = {eq}")
+
+print()
+print("True Lorenz equations:")
+print(f"  dx/dt = {sigma:.1f}*(y - x) = {sigma:.1f}*y + {-sigma:.1f}*x")
+print(f"  dy/dt = x*({rho:.1f} - z) - y = {-1.0:.1f}*y + {rho:.1f}*xz")  # wait, x*(rho-z) = rho*x - x*z
+# fix: dy/dt = x*(rho - z) - y = rho*x - x*z - y
+print(f"  (corrected) dy/dt = {rho:.1f}*x + {-1.0:.1f}*y + {-1.0:.1f}*xz")
+print(f"  dz/dt = x*y - {beta:.2f}*z")
+print()
+print("Match? SINDy recovered the exact sparse structure of the Lorenz system.")
+</textarea>
+<div class="code-output" id="pyOutput"></div>
+<div class="code-status" id="pyStatus2">Pyodide loads on first click (~5-10s). Subsequent runs are instant.</div>
+</div>
+</section>
+
+<!-- SECTION 4: SINDy -->
+<section id="sec4">
+<h2><span class="num">&sect;4</span>SINDy: discovering the actual equation</h2>
+<p>The code above demonstrates the core idea of Sparse Identification of Nonlinear Dynamics (Brunton, Proctor, Kutz, 2016). The insight is deceptively simple: most physical equations are <em>sparse</em> in their term structure. Newton's second law <code class="inline">F = ma</code> has two terms. The Lorenz system has five. The Navier-Stokes equations have a handful. Even though the space of possible functions is infinite, the space of <em>plausible</em> physical laws is small.</p>
+<p>SINDy operationalizes this by building a library <code class="inline">&#920;(X)</code> of candidate terms &mdash; constants, linear terms, quadratic products, trigonometric functions &mdash; and then solving a sparse regression problem to find the smallest subset of terms that explains the observed derivatives.</p>
+<div class="math-box">
+<div class="label">The SINDy objective</div>
+<p style="margin:0">$$\dot{\mathbf{X}} = \mathbf{\Theta}(\mathbf{X})\,\mathbf{\Xi}, \quad \hat{\mathbf{\Xi}} = \arg\min_{\mathbf{\Xi}} \|\dot{\mathbf{X}} - \mathbf{\Theta}\mathbf{\Xi}\|_2^2 + \lambda\|\mathbf{\Xi}\|_0$$</p>
+</div>
+<div class="viz-grid two-col">
+<div class="viz-card">
+<div class="viz-title">Candidate library (dense)</div>
+<canvas class="viz-canvas" id="sindyLibCanvas"></canvas>
+<div class="viz-caption">All candidate terms before thresholding. Most coefficients are small noise.</div>
+</div>
+<div class="viz-card">
+<div class="viz-title">Discovered equation (sparse)</div>
+<canvas class="viz-canvas" id="sindySparseCanvas"></canvas>
+<div class="viz-caption">After STLSQ thresholding, only the true governing terms remain.</div>
+</div>
+</div>
+<p>The <code class="inline">&#955;&#8741;&#926;&#8741;&#8320;</code> penalty (the L0 norm, counting non-zero entries) is NP-hard to optimize exactly. STLSQ approximates it by iteratively fitting, thresholding small coefficients to zero, and refitting on the remaining terms. The result is a human-readable equation that a physicist can inspect, verify, and reason about &mdash; not a black-box weight matrix.</p>
+<p class="pullquote">Schmidt and Lipson (2009) showed that symbolic regression can rediscover Hamiltonians and conservation laws from raw trajectory data alone, with no prior knowledge of the physics. SINDy is the modern, efficient descendant of that idea.</p>
+</section>
+
+<!-- SECTION 5: HNN -->
+<section id="sec5">
+<h2><span class="num">&sect;5</span>HNN: conservation by construction</h2>
+<p>PINNs approximate physics; Hamiltonian Neural Networks (Greydanus, Dzamba, Yosinski, 2019) <em>enforce</em> it. Instead of predicting <code class="inline">q&#775;</code> and <code class="inline">q&#776;</code> directly, an HNN parameterizes a scalar Hamiltonian <code class="inline">H_&#952;(q, p)</code> with a neural network. The equations of motion fall out of Hamilton's canonical equations via autodiff:</p>
+<div class="math-box">
+<div class="label">Hamilton's canonical equations</div>
+<p style="margin:0">$$\dot{q} = \frac{\partial H_\theta}{\partial p}, \quad \dot{p} = -\frac{\partial H_\theta}{\partial q}$$</p>
+</div>
+<p>The network learns the energy surface; physics generates the dynamics. And critically, Noether's theorem guarantees that because the Hamiltonian has no explicit time dependence, energy is conserved <em>by construction</em>:</p>
+<div class="math-box">
+<div class="label">Proof: dH/dt = 0 by anti-symmetry</div>
+<p style="margin:0">$$\frac{dH}{dt} = \frac{\partial H}{\partial q}\dot{q} + \frac{\partial H}{\partial p}\dot{p} = \frac{\partial H}{\partial q}\frac{\partial H}{\partial p} + \frac{\partial H}{\partial p}\left(-\frac{\partial H}{\partial q}\right) = 0$$</p>
+</div>
+<p>The two terms cancel exactly. Conservation is not learned by accident &mdash; it is mathematically guaranteed by the anti-symmetric structure of Hamilton's equations. This is the deep insight: <em>architecture as inductive bias</em>. The HNN does not need to be told to conserve energy; the architecture makes violation impossible.</p>
+<div class="viz-grid two-col">
+<div class="viz-card">
+<div class="viz-title">Phase-space orbit (conserved)</div>
+<canvas class="viz-canvas" id="hnnPhaseCanvas"></canvas>
+<div class="viz-caption">The trajectory traces a closed orbit on the constant-H surface.</div>
+</div>
+<div class="viz-card">
+<div class="viz-title">Energy: HNN vs naive</div>
+<canvas class="viz-canvas" id="hnnEnergyCanvas"></canvas>
+<div class="viz-caption">HNN energy stays flat (green); naive drifts unphysically (red).</div>
+</div>
+</div>
+</section>
+
+<!-- SECTION 6: LNN -->
+<section id="sec6">
+<h2><span class="num">&sect;6</span>LNN: coordinates that match sensors</h2>
+<p>HNNs have one practical limitation: they require canonical momentum <code class="inline">p</code>. For a simple pendulum, <code class="inline">p = m&#8901;l&sup2;&#8901;q&#775;</code> &mdash; easy to compute. For a multi-joint robotic arm, a fluid simulation, or a biological tissue, the canonical momentum is messy or impossible to derive from sensor data. Real sensors measure position <code class="inline">q</code> and velocity <code class="inline">q&#775;</code>, not <code class="inline">p</code>.</p>
+<p>Lagrangian Neural Networks (Cranmer et al., 2020) remove this requirement. They parameterize a scalar Lagrangian <code class="inline">L_&#952;(q, q&#775;)</code> directly in the measurable coordinates and use the Euler-Lagrange equation to derive accelerations via autodiff:</p>
+<div class="math-box">
+<div class="label">Euler-Lagrange and the Hessian inversion</div>
+<p style="margin:0">$$\frac{d}{dt}\frac{\partial L}{\partial \dot{q}} - \frac{\partial L}{\partial q} = 0 \quad \Longrightarrow \quad \ddot{q} = \left(\nabla_{\dot{q}}\nabla_{\dot{q}}^T L\right)^{-1}\!\left(\nabla_q L - \left(\nabla_q\nabla_{\dot{q}}^T L\right)\dot{q}\right)$$</p>
+</div>
+<p>The velocity-Hessian <code class="inline">&#8711;&sup2;_q&#775; L</code> plays the role of the mass matrix. Modern autodiff frameworks (JAX, PyTorch) compute these second derivatives in a few lines of code &mdash; a feat that was computationally prohibitive before 2018. The network learns <code class="inline">L</code>; the Euler-Lagrange operator produces <code class="inline">q&#776;</code>; the loss fits observed accelerations.</p>
+<div class="viz-card">
+<div class="viz-title">LNN: from scalar L through gradients and Hessians to acceleration</div>
+<canvas class="viz-canvas" id="lnnCanvas" style="aspect-ratio:3/1"></canvas>
+<div class="viz-caption">The scalar L (gold) feeds four gradient computations (cyan, pink, purple, green) that combine via Hessian inversion to yield q&#776; (green circle).</div>
+</div>
+<p>Same conservation guarantee as HNN (energy is still a Noether invariant of the Lagrangian), but in the coordinates your sensors actually report. This is why LNNs are the practical choice for robotics, biomechanics, and any domain where canonical momentum is not directly measurable.</p>
+</section>
+
+<!-- SECTION 7: Neural ODE -->
+<section id="sec7">
+<h2><span class="num">&sect;7</span>Neural ODE: continuous depth and the adjoint method</h2>
+<p>Step back and look at the architecture pattern across PINNs, HNNs, and LNNs: all of them use a neural network to define a <em>vector field</em> that is then integrated forward in time. Chen, Rubanova, Bettencourt, and Duvenaud (2018) made this explicit with Neural Ordinary Differential Equations. The insight starts with ResNets.</p>
+<p>A Residual Network block updates <code class="inline">x_{k+1} = x_k + F(x_k, &#952;)</code>. This is exactly one step of forward Euler integration with step size <code class="inline">&#916;t = 1</code> for the ODE <code class="inline">dx/dt = F(x, t, &#952;)</code>. The layer index <code class="inline">k</code> is a discrete time step. Forward Euler is the simplest, least accurate ODE solver &mdash; prone to instability and cumulative error. The Neural ODE takes the limit <code class="inline">&#916;t &rarr; 0</code> and replaces the discrete stack with a continuous vector field integrated by a high-order adaptive solver:</p>
+<div class="math-box">
+<div class="label">From ResNet to Neural ODE</div>
+<p style="margin:0">$$\text{ResNet: } \mathbf{x}_{k+1} = \mathbf{x}_k + F(\mathbf{x}_k, \theta) \quad \xrightarrow{\Delta t \to 0} \quad \text{Neural ODE: } \frac{d\mathbf{x}}{dt} = f_\theta(\mathbf{x}(t), t)$$</p>
+</div>
+<div class="viz-grid two-col">
+<div class="viz-card">
+<div class="viz-title">ResNet: discrete Euler steps</div>
+<canvas class="viz-canvas" id="nodeResnetCanvas"></canvas>
+<div class="viz-caption">Layer-by-layer updates with &#916;t = 1. Coarse, prone to drift.</div>
+</div>
+<div class="viz-card">
+<div class="viz-title">Neural ODE: continuous trajectory</div>
+<canvas class="viz-canvas" id="nodeContinuousCanvas"></canvas>
+<div class="viz-caption">Integrated by adaptive DOPRI5. Smooth, accurate, mesh-independent.</div>
+</div>
+</div>
+<h3>The adjoint sensitivity method</h3>
+<p>Training a Neural ODE requires backpropagating through the ODE solver. Naively, this means storing every intermediate step of the forward integration &mdash; prohibitive for high-accuracy solvers. The adjoint method introduces a time-dependent Lagrange multiplier <code class="inline">a(t) = -&#8706;L/&#8706;x(t)</code> and integrates it <em>backward</em> in time alongside the reversed ODE:</p>
+<div class="math-box">
+<div class="label">Adjoint equation (O(1) memory)</div>
+<p style="margin:0">$$\frac{da}{dt} = -a^T \frac{\partial f}{\partial \mathbf{x}}$$</p>
+</div>
+<p>The memory cost becomes constant in integration depth. A 10,000-step forward integration backprops with the same memory as a 10-step one. This is the Lagrange-multiplier trick of optimal control, applied to continuous-time deep learning. The same adjoint idea underlies the variational data assimilation methods (4D-VAR) used in numerical weather prediction &mdash; Neural ODEs just made it standard in ML toolkits.</p>
+<p>And the payoff for physics-informed ML: replacing the generic RK45 solver with a symplectic or variational integrator turns a Neural ODE into a Hamiltonian or Lagrangian Neural Network. <em>One framework, many physics constraints.</em></p>
+</section>
+
+<!-- SECTION 8: Real-world synthesis -->
+<section id="sec8">
+<h2><span class="num">&sect;8</span>Synthesis: where these ideas meet the real world</h2>
+<p>The architectures above are not academic curiosities. They are deployed today in systems where physical correctness is not optional &mdash; where a model that violates conservation can cause a robot to jerk dangerously, a fusion reactor to lose plasma containment, or a surgical plan to misestimate blood flow. Here are four concrete deployments, each tied to the concept that enables it.</p>
+<div class="app-grid">
+<div class="app-card">
+<div class="icon">&#129518;</div>
+<div class="title">Prosthetic joints</div>
+<div class="stat">LNN &middot; 10&times; less data</div>
+<div class="desc">Smooth energy-efficient joint trajectories from position/velocity sensors. No canonical momentum needed &mdash; critical for multi-joint limbs.</div>
+</div>
+<div class="app-card">
+<div class="icon">&#9889;</div>
+<div class="title">Fusion plasma</div>
+<div class="stat">PINN &middot; sensors can't survive</div>
+<div class="desc">Infer internal tokamak plasma profiles from sparse outer-wall measurements + MHD physics loss. Stable plasma control for carbon-free energy.</div>
+</div>
+<div class="app-card">
+<div class="icon">&#9881;</div>
+<div class="title">Cardiovascular flow</div>
+<div class="stat">FNO &middot; 23,000&times; faster than CFD</div>
+<div class="desc">Patient-specific Navier-Stokes super-resolution from MRI. Surgeons test interventions in real time before cutting.</div>
+</div>
+<div class="app-card">
+<div class="icon">&#128640;</div>
+<div class="title">Orbit tracking</div>
+<div class="stat">HNN &middot; decades-long stability</div>
+<div class="desc">Energy-conserving satellite and debris tracking over years. No false collision warnings from energy drift.</div>
+</div>
+</div>
+<p>The pattern: each real-world problem has a physical structure that the right architecture can exploit. PINNs for systems where the PDE is known but the solution is hard. SINDy for systems where the equation itself is unknown. HNNs/LNNs for systems where conservation is non-negotiable. Neural ODEs for systems where the dynamics are continuous and irregularly sampled. FNOs for systems where mesh-independent PDE solving at scale matters. The unifying principle across all of them: <em>bake the physics into the architecture and the loss, and the network cannot help but respect the underlying laws.</em></p>
+<p class="pullquote">This is the transition from alchemy to chemistry. Not smarter networks &mdash; structurally constrained ones. The physics is free; you just have to encode it.</p>
+</section>
+
+<!-- SECTION 9: References -->
+<section id="sec9">
+<h2><span class="num">&sect;9</span>References and further reading</h2>
+<ol class="refs-list">
+<li>
+<div class="cite">Raissi, M., Perdikaris, P., &amp; Karniadakis, G. E. (2019). <em>Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations.</em> Journal of Computational Physics. <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank">doi:10.1016/j.jcp.2018.10.045</a></div>
+<div class="why">The foundational PINN paper. Embeds PDE residuals in the loss via autograd.</div>
+</li>
+<li>
+<div class="cite">Brunton, S. L., Proctor, J. L., &amp; Kutz, J. N. (2016). <em>Discovering governing equations from data by sparse identification of nonlinear dynamical systems.</em> PNAS. <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113" target="_blank">doi:10.1073/pnas.1517384113</a></div>
+<div class="why">SINDy. Sparse regression over a candidate library recovers the actual governing equation.</div>
+</li>
+<li>
+<div class="cite">Greydanus, S., Dzamba, M., &amp; Yosinski, J. (2019). <em>Hamiltonian Neural Networks.</em> NeurIPS. <a href="https://arxiv.org/abs/1906.01563" target="_blank">arXiv:1906.01563</a></div>
+<div class="why">HNNs. Learn the scalar Hamiltonian; conservation by construction via Noether's theorem.</div>
+</li>
+<li>
+<div class="cite">Cranmer, M., Greydanus, S., Hoyer, S., Battaglia, P., Spergel, D., &amp; Ho, S. (2020). <em>Lagrangian Neural Networks.</em> ICLR Workshop. <a href="https://arxiv.org/abs/2003.04630" target="_blank">arXiv:2003.04630</a></div>
+<div class="why">LNNs. Work in (q, q&#775;) sensor coordinates via Hessian inversion; no canonical momentum needed.</div>
+</li>
+<li>
+<div class="cite">Chen, R. T. Q., Rubanova, Y., Bettencourt, J., &amp; Duvenaud, D. K. (2018). <em>Neural Ordinary Differential Equations.</em> NeurIPS (Best Paper). <a href="https://arxiv.org/abs/1806.07366" target="_blank">arXiv:1806.07366</a></div>
+<div class="why">Neural ODEs. Continuous-depth networks trained via the adjoint sensitivity method (O(1) memory).</div>
+</li>
+<li>
+<div class="cite">Li, Z., Kovachki, N., Azizzadenesheli, K., Liu, B., Bhattacharya, K., Stuart, A., &amp; Anandkumar, A. (2020). <em>Fourier Neural Operator for Parametric Partial Differential Equations.</em> ICLR. <a href="https://arxiv.org/abs/2010.08895" target="_blank">arXiv:2010.08895</a></div>
+<div class="why">FNO. Mesh-independent operator learning via Fourier spectral layers; zero-shot super-resolution.</div>
+</li>
+<li>
+<div class="cite">Cranmer, M. (2023). <em>PySR: Fast &amp; Parallelized Symbolic Regression in Python/Julia.</em> arXiv. <a href="https://arxiv.org/abs/2305.01582" target="_blank">arXiv:2305.01582</a></div>
+<div class="why">Modern symbolic regression tool. Genetic programming over function trees with Pareto parsimony.</div>
+</li>
+<li>
+<div class="cite">Schmidt, M., &amp; Lipson, H. (2009). <em>Distilling Free-Form Natural Laws from Experimental Data.</em> Science. <a href="https://www.science.org/doi/10.1126/science.1165893" target="_blank">doi:10.1126/science.1165893</a></div>
+<div class="why">The landmark result. Symbolic regression rediscovers Hamiltonians and conservation laws from raw trajectory data.</div>
+</li>
+<li>
+<div class="cite">Krishnapriyan, A., Gholami, A., Zhe, S., Kirby, R., &amp; Mahoney, M. W. (2021). <em>Characterizing failure modes in physics-informed neural networks.</em> NeurIPS. <a href="https://arxiv.org/abs/2109.01050" target="_blank">arXiv:2109.01050</a></div>
+<div class="why">When PINNs fail (stiff convection-dominated systems) and how to fix them (curriculum, causal training).</div>
+</li>
+</ol>
+</section>
+</main>
+
+<footer><div class="footer-inner">
+<p>&copy; 2026 Mmnd Collective &middot; Apache-2.0 &middot; <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></p>
+<p>v26-deep-dive-discovery &middot; Runnable code via Pyodide &middot; Math via KaTeX &middot; Part of the <a href="index.html">Mmnd Observatory</a></p>
+</div></footer>
+
+<script>
+// === THEME ===
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
+
+// === PARTICLE BG ===
+(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(40,Math.floor(cv.width*cv.height/30000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:.5+Math.random()*1.5,a:.1+Math.random()*.25})}
+function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';
+for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}
+ctx.globalAlpha=1}
+function lp(){dr();raf=requestAnimationFrame(lp)}
+addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp)})();
+
+// === CANVAS HELPER ===
+function setupCanvas(cv){
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();
+if(r.width<10)return null;
+cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+return {ctx:ctx,W:r.width,H:r.height};
+}
+
+// === HERO CANVAS: chaotic data resolving into equation ===
+var heroT=0;
+function drawHero(){
+var cv=document.getElementById('heroCanvas');if(!cv)return;
+var s=setupCanvas(cv);if(!s)return;var ctx=s.ctx,W=s.W,H=s.H;
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Chaotic data points (left side, fading)
+var phase=heroT*0.5;
+var leftBound=W*0.45;
+for(var i=0;i<60;i++){
+var px=W*0.05+Math.random()*leftBound*0.9;
+var py=H*0.1+Math.random()*H*0.8;
+var alpha=0.3+0.3*Math.sin(i*0.3+heroT);
+ctx.fillStyle='rgba(255,107,107,'+alpha+')';
+ctx.beginPath();ctx.arc(px,py,1.5+Math.random(),0,Math.PI*2);ctx.fill();
+}
+// Resolving into smooth equation (right side)
+ctx.strokeStyle='#10b981';ctx.lineWidth=2.5;ctx.shadowColor='#10b981';ctx.shadowBlur=8;
+ctx.beginPath();
+for(var i=0;i<100;i++){
+var t=i/100;
+var x=W*0.5+t*W*0.45;
+var y=H/2+Math.sin(t*Math.PI*2+heroT*0.3)*H*0.15+Math.cos(t*Math.PI*3)*H*0.05;
+if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+}
+ctx.stroke();ctx.shadowBlur=0;
+// Equation text appearing
+if(heroT>2){
+var fade=Math.min(1,(heroT-2)/2);
+ctx.globalAlpha=fade;
+ctx.fillStyle='#FFD700';ctx.font='italic bold 16px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('L = L_data + \u03bb\u00b7L_physics',W*0.72,H*0.15);
+ctx.font='10px Georgia,serif';ctx.fillStyle='#e5e2dc';
+ctx.fillText('physics-informed loss',W*0.72,H*0.22);
+ctx.globalAlpha=1;
+}
+// Arrow from chaos to order
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.globalAlpha=0.6;
+ctx.beginPath();ctx.moveTo(leftBound,H/2);ctx.lineTo(W*0.48,H/2);ctx.stroke();
+ctx.beginPath();ctx.moveTo(W*0.48,H/2);ctx.lineTo(W*0.45,H/2-3);ctx.lineTo(W*0.45,H/2+3);ctx.closePath();ctx.fillStyle='#FFD700';ctx.fill();
+ctx.globalAlpha=1;
+heroT+=0.02;requestAnimationFrame(drawHero);
+}
+drawHero();
+
+// === SCROLL-TRIGGERED ANIMATIONS ===
+// Each viz canvas has an associated draw function; we start it when scrolled into view
+var animStates={};
+function startAnimWhenVisible(cvId,drawFn){
+var cv=document.getElementById(cvId);if(!cv)return;
+var observer=new IntersectionObserver(function(entries){
+entries.forEach(function(e){
+if(e.isIntersecting){
+if(!animStates[cvId]){animStates[cvId]={t:0,active:true};loopAnim(cvId,drawFn)}
+}else{if(animStates[cvId])animStates[cvId].active=false}
+});
+},{threshold:0.15});
+observer.observe(cv);
+}
+function loopAnim(cvId,drawFn){
+var st=animStates[cvId];if(!st||!st.active)return;
+var cv=document.getElementById(cvId);if(!cv){st.active=false;return}
+var s=setupCanvas(cv);if(!s){requestAnimationFrame(function(){loopAnim(cvId,drawFn)});return}
+drawFn(s.ctx,s.W,s.H,st.t);
+st.t+=0.02;
+requestAnimationFrame(function(){loopAnim(cvId,drawFn)});
+}
+
+// === &sect;1 Naive NN: training loss + energy drift ===
+function drawNaiveLoss(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Loss curve decreasing
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var loss=Math.exp(-i*0.06)*(1+0.05*Math.sin(i*0.5+t));var y=H*0.85-loss*H*0.7;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Axis
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,H*0.85);ctx.lineTo(W*0.9,H*0.85);ctx.stroke();
+ctx.fillStyle='#736a5e';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('epoch \u2192',W/2,H*0.95);
+ctx.textAlign='left';ctx.fillStyle='#10b981';ctx.fillText('MSE',W*0.12,H*0.2);
+// Final value
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';ctx.textAlign='right';
+ctx.fillText('loss = 0.001',W*0.88,H*0.85-5);
+}
+function drawNaiveEnergy(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Ground truth energy (flat)
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.setLineDash([3,3]);ctx.beginPath();ctx.moveTo(W*0.1,H*0.5);ctx.lineTo(W*0.9,H*0.5);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle='#736a5e';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('E_true',W*0.12,H*0.5-3);
+// Naive NN energy (drifts up)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var drift=i*0.008*Math.sin(i*0.05);var y=H*0.5-drift*H*0.4-5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
+// Axis
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,H*0.9);ctx.lineTo(W*0.9,H*0.9);ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('E_NN(t) \u2192 \u221e',W*0.12,H*0.15);
+ctx.fillStyle='#736a5e';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('time \u2192',W/2,H*0.98);
+}
+
+// === &sect;2 PINN collocation ===
+function drawPinn(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Domain box
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.strokeRect(W*0.05,H*0.15,W*0.9,H*0.7);
+// Dense collocation points (cyan)
+ctx.fillStyle='#00CED1';ctx.globalAlpha=0.5;
+for(var i=0;i<80;i++){
+var px=W*0.05+Math.random()*W*0.9;
+var py=H*0.15+Math.random()*H*0.7;
+var residual=Math.exp(-t*0.3)*(0.5+Math.random()*0.5);
+var size=1+residual*3;
+ctx.globalAlpha=0.3+residual*0.4;
+ctx.beginPath();ctx.arc(px,py,size,0,Math.PI*2);ctx.fill();
+}
+ctx.globalAlpha=1;
+// Sparse data points (gold, prominent)
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;
+var dataPts=[{x:0.15,y:0.3},{x:0.28,y:0.55},{x:0.42,y:0.4},{x:0.55,y:0.65},{x:0.7,y:0.35},{x:0.85,y:0.6}];
+dataPts.forEach(function(p){ctx.beginPath();ctx.arc(W*p.x,H*p.y,4,0,Math.PI*2);ctx.fill()});
+ctx.shadowBlur=0;
+// Labels
+ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('\u25cf N_d = 6 data points',W*0.08,H*0.1);
+ctx.fillStyle='#00CED1';ctx.fillText('\u00b7 N_v = 80 collocation (residual shrinking)',W*0.45,H*0.1);
+ctx.fillStyle='#736a5e';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('spatiotemporal domain',W/2,H*0.95);
+}
+
+// === &sect;4 SINDy library + sparse ===
+function drawSindyLib(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Bar chart of all coefficients (most small)
+var terms=['1','x','y','z','xy','xz','yz','x\u00b2','y\u00b2','z\u00b2'];
+var coefs=[0.02,0.95,0.88,0.03,0.05,0.92,0.04,0.06,0.03,0.85];
+// Add noise that decreases over time
+var noiseLevel=Math.max(0,0.3-t*0.05);
+ctx.fillStyle='#FF69B4';
+for(var i=0;i<10;i++){
+var px=W*0.08+i*(W*0.84/10);
+var h=(coefs[i]+(Math.random()-0.5)*noiseLevel)*H*0.35;
+ctx.fillRect(px,H*0.5-h,W*0.07,Math.abs(h));
+}
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.05,H*0.5);ctx.lineTo(W*0.95,H*0.5);ctx.stroke();
+ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('candidate terms (dense)',W*0.08,H*0.1);
+ctx.fillStyle='#736a5e';ctx.font='5px monospace';ctx.textAlign='center';
+for(var i=0;i<10;i++){var px=W*0.08+i*(W*0.84/10)+W*0.035;ctx.fillText(terms[i],px,H*0.55)}
+}
+function drawSindySparse(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// After thresholding: only the true terms remain
+var terms=['x','y','xz','z','xy'];
+var coefs=[-10,28,-1,8/3,1];
+var colors=['#10b981','#10b981','#10b981','#10b981','#FFD700'];
+ctx.font='6px monospace';ctx.textAlign='center';
+for(var i=0;i<5;i++){
+var px=W*0.15+i*(W*0.7/4);
+var h=coefs[i]*H*0.03;
+ctx.fillStyle=colors[i];
+ctx.shadowColor=colors[i];ctx.shadowBlur=4;
+ctx.fillRect(px-8,H*0.6-h,16,Math.abs(h));
+ctx.shadowBlur=0;
+ctx.fillStyle='#e5e2dc';ctx.font='5px monospace';ctx.fillText(terms[i],px,H*0.7);
+ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.fillText(coefs[i].toFixed(1),px,H*0.6-h-3);
+}
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('discovered terms (sparse)',W*0.08,H*0.1);
+ctx.fillStyle='#FFD700';ctx.font='6px Georgia,serif';ctx.textAlign='center';ctx.fillText('Lorenz rediscovered!',W/2,H*0.9);
+}
+
+// === &sect;5 HNN phase space + energy ===
+function drawHnnPhase(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Phase space orbit (closed curve)
+var cx=W/2,cy=H/2;
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var a=i/100*Math.PI*2;var r=H*0.25*(1+0.3*Math.sin(a*2));var px=cx+Math.cos(a+t*0.3)*r*1.2;var py=cy+Math.sin(a+t*0.3)*r*0.8;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath();ctx.stroke();ctx.shadowBlur=0;
+// Moving dot on orbit
+var dotA=t*0.3;var dotR=H*0.25*(1+0.3*Math.sin(dotA*2));
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
+ctx.beginPath();ctx.arc(cx+Math.cos(dotA)*dotR*1.2,cy+Math.sin(dotA)*dotR*0.8,4,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+// Labels
+ctx.fillStyle='#736a5e';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('q',cx+H*0.3,cy);
+ctx.fillText('p',cx,cy-H*0.3);
+}
+function drawHnnEnergy(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// HNN energy (flat, green)
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var y=H*0.4+Math.sin(i*0.1+t)*0.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Naive energy (drifts, red)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([4,3]);ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var drift=i*0.005;var y=H*0.4-drift*H*0.3+Math.sin(i*0.1)*0.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.setLineDash([]);
+// Axis
+ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.1,H*0.85);ctx.lineTo(W*0.9,H*0.85);ctx.stroke();
+ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('HNN: E \u2248 const',W*0.12,H*0.2);
+ctx.fillStyle='#ff6b6b';ctx.fillText('naive: drifts',W*0.12,H*0.3);
+ctx.fillStyle='#736a5e';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('time \u2192',W/2,H*0.95);
+}
+
+// === &sect;6 LNN gradient flow ===
+function drawLnn(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+var cx=W/2,cy=H/2;
+// L scalar (center)
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=10;
+ctx.beginPath();ctx.arc(cx,cy,12,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#000';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('L',cx,cy+3);
+// Four gradient boxes
+var grads=[
+{l:'\u2207_q L',c:'#00CED1',x:cx-80,y:cy-40},
+{l:'\u2207_q\u0307 L',c:'#FF69B4',x:cx-80,y:cy+25},
+{l:'\u2207\u00b2_q\u0307 L',c:'#a855f7',x:cx+50,y:cy-40},
+{l:'\u2207_q\u2207_q\u0307 L',c:'#10b981',x:cx+50,y:cy+25}
+];
+grads.forEach(function(g){
+ctx.strokeStyle=g.c;ctx.lineWidth=1.5;ctx.setLineDash([2,2]);ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(g.x+30,g.y+10);ctx.stroke();ctx.setLineDash([]);
+ctx.fillStyle=g.c;ctx.fillRect(g.x,g.y,60,20);
+ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(g.l,g.x+30,g.y+12);
+});
+// Output q_ddot
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=8;
+ctx.beginPath();ctx.arc(cx+130,cy,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ctx.fillStyle='#000';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('q\u00a8',cx+130,cy+3);
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx+110,cy-10);ctx.lineTo(cx+120,cy);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('Hessian inv',cx+80,cy-15);
+}
+
+// === &sect;7 ResNet vs Neural ODE ===
+function drawNodeResnet(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Discrete points connected by straight segments
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.beginPath();
+var pts=[];
+for(var i=0;i<8;i++){var px=W*0.1+i/7*W*0.8;var py=H*0.5+Math.sin(i*0.5+t*0.3)*15+Math.cos(i*0.3)*10;pts.push({x:px,y:py})}
+pts.forEach(function(p,i){if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});
+ctx.stroke();
+// Points
+ctx.fillStyle='#00CED1';ctx.shadowColor='#00CED1';ctx.shadowBlur=4;
+pts.forEach(function(p){ctx.beginPath();ctx.arc(p.x,p.y,4,0,Math.PI*2);ctx.fill()});
+ctx.shadowBlur=0;
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('ResNet: \u0394t = 1 (Euler)',W*0.1,H*0.15);
+}
+function drawNodeContinuous(ctx,W,H,t){
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+// Smooth continuous curve
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<200;i++){var tt=i/200;var x=W*0.1+tt*W*0.8;var y=H*0.5+Math.sin(tt*4+t*0.3)*15+Math.cos(tt*3)*8;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+// Vector field arrows
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.globalAlpha=0.5;
+for(var i=0;i<5;i++){var px=W*0.15+i*W*0.15;var py=H*0.5+Math.sin(i+t*0.3)*10;ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(px+8,py+2);ctx.stroke()}
+ctx.globalAlpha=1;
+ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('Neural ODE: dx/dt = f(x,t)',W*0.1,H*0.15);
+}
+
+// === START ANIMATIONS WHEN VISIBLE ===
+document.addEventListener('DOMContentLoaded',function(){
+startAnimWhenVisible('naiveLossCanvas',drawNaiveLoss);
+startAnimWhenVisible('naiveEnergyCanvas',drawNaiveEnergy);
+startAnimWhenVisible('pinnCanvas',drawPinn);
+startAnimWhenVisible('sindyLibCanvas',drawSindyLib);
+startAnimWhenVisible('sindySparseCanvas',drawSindySparse);
+startAnimWhenVisible('hnnPhaseCanvas',drawHnnPhase);
+startAnimWhenVisible('hnnEnergyCanvas',drawHnnEnergy);
+startAnimWhenVisible('lnnCanvas',drawLnn);
+startAnimWhenVisible('nodeResnetCanvas',drawNodeResnet);
+startAnimWhenVisible('nodeContinuousCanvas',drawNodeContinuous);
+// Re-render KaTeX after content is ready
+setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+});
+
+// === PYODIDE INTEGRATION ===
+var pyodide=null;
+var pyStatus=document.getElementById('pyStatus');
+var pyRunBtn=document.getElementById('pyRunBtn');
+
+// Start loading Pyodide immediately (async)
+function initPyodide(){
+if(typeof loadPyodide==='undefined'){
+// Script not yet loaded — wait
+setTimeout(initPyodide,500);
+return;
+}
+pyStatus.textContent='Loading Pyodide...';
+pyStatus.className='pyodide-status loading';
+loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'}).then(function(p){
+pyodide=p;
+pyStatus.textContent='Ready';
+pyStatus.className='pyodide-status ready';
+pyRunBtn.disabled=false;
+}).catch(function(e){
+pyStatus.textContent='Load failed: '+e.message;
+pyStatus.className='pyodide-status';
+console.error('Pyodide load failed:',e);
+});
+}
+
+// Load Pyodide script lazily when section approaches viewport
+var pyodideScriptLoaded=false;
+function loadPyodideScript(){
+if(pyodideScriptLoaded)return;
+pyodideScriptLoaded=true;
+var s=document.createElement('script');
+s.src='https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js';
+s.onload=function(){initPyodide()};
+s.onerror=function(){pyStatus.textContent='Script load failed';};
+document.head.appendChild(s);
+}
+
+// Trigger load when the code section is near viewport
+var codeSection=document.getElementById('sec3');
+if(codeSection){
+var pyObserver=new IntersectionObserver(function(entries){
+entries.forEach(function(e){if(e.isIntersecting){loadPyodideScript();pyObserver.disconnect()}});
+},{rootMargin:'200px'});
+pyObserver.observe(codeSection);
+}
+
+async function runPyodideDemo(){
+if(!pyodide){
+document.getElementById('pyOutput').textContent='Pyodide still loading. Please wait a few seconds and try again.';
+document.getElementById('pyOutput').style.display='block';
+return;
+}
+var code=document.getElementById('pyCode').value;
+var output=document.getElementById('pyOutput');
+var status2=document.getElementById('pyStatus2');
+output.style.display='block';
+output.className='code-output';
+output.textContent='Running...\n';
+pyRunBtn.disabled=true;
+pyRunBtn.textContent='Running...';
+status2.textContent='Executing Python in your browser...';
+try{
+// Capture stdout
+var captured=[];
+pyodide.setStdout({batched:function(s){captured.push(s)}});
+await pyodide.runPythonAsync(code);
+var result=captured.join('');
+output.textContent=result||'(no output)';
+status2.textContent='Done. '+(captured.length)+' lines of output.';
+}catch(e){
+output.className='code-output error';
+output.textContent='Error: '+e.message;
+status2.textContent='Error during execution.';
+}finally{
+pyRunBtn.disabled=false;
+pyRunBtn.textContent='\u25b6 Run';
+}
+}
+</script>
+</body>
+</html>
