@@ -159,6 +159,65 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <li><div>Brunton, S. L. <a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNQ0BaKuBKY43k4xMo6NSbBa" target="_blank">Physics-Informed ML playlist</a> &middot; <a href="physics-ml.html" target="_blank">&rarr; our 20 clips</a></div></li>
 </ol>
 </section>
+
+<!-- SOURCE POST: Original LinkedIn announcement that inspired this spotlight -->
+<section style="margin-top:2rem;background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:1.5rem">
+<h2 style="font-family:Georgia,serif;font-size:1.25rem;margin-bottom:.75rem">Source: the original announcement</h2>
+<p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">The LinkedIn post by the im2sim team that inspired this spotlight page, shared November 2026.</p>
+<div style="background:var(--secondary);border-radius:.5rem;padding:1.25rem;font-size:.875rem;line-height:1.7;color:var(--fg)">
+<p style="margin-bottom:.75rem"><strong>Sharing the first release of im2sim</strong>, our open-source Python library for developing AI-accelerated, patient-specific computational models directly from medical images.</p>
+<p style="margin-bottom:.75rem">Built on <strong>PyTorch, PyTorch Geometric, VTK and PyVista</strong>, im2sim brings together tools for image- and graph-based deep learning, enabling the development of <em>hybrid image&ndash;graph networks</em> that can predict complex simulation outputs directly from 3D medical images.</p>
+<p style="margin-bottom:.75rem">Below is an example of using im2sim to create an image-graph network that can predict <strong>time-varying pressure and velocity fields in the pulmonary arteries</strong> directly from a 3D whole-heart MRI in <strong>less than 0.5 seconds</strong>.</p>
+<p style="margin-bottom:.75rem">Although our primary interest is cardiovascular modelling, we have designed IM2SIM as a flexible framework that can support different imaging modalities and a wide range of computational simulations.</p>
+<p style="margin-bottom:.75rem">This is an early release, and we hope that making these tools openly available will encourage collaboration, lower the barriers to developing AI-based computational models and accelerate progress towards <strong>clinically useful digital twins</strong>.</p>
+<p style="margin-bottom:.75rem">The library represents an enormous amount of work by our fantastic PhD student <strong>Anirudh Raman</strong> &mdash; well done, Ani! im2sim builds on our earlier <strong>Image2Flow</strong> framework, developed by our former PhD student <strong>Tina Yao</strong>, whose brilliant work first sparked our interest in this area. Also thanks to Jennifer S., Mark Wrobel, Ruaraidh Campbell, Rebecca Baker, Luca Hartmann, Silvia Schievano and Javier Montalt Tordera for their input.</p>
+<p style="margin-bottom:.75rem"><em>We welcome feedback, contributions and collaborations!</em></p>
+<div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.75rem">
+<a href="https://im2sim.readthedocs.io" target="_blank" style="color:var(--primary);text-decoration:none;font-size:.8125rem;font-weight:600">&#128218; im2sim documentation</a>
+<a href="https://github.com/im2sim/im2sim" target="_blank" style="color:var(--primary);text-decoration:none;font-size:.8125rem;font-weight:600">&#128187; GitHub repository</a>
+<a href="https://arxiv.org/abs/2409.02425" target="_blank" style="color:var(--primary);text-decoration:none;font-size:.8125rem;font-weight:600">&#128279; Image2Flow paper</a>
+</div>
+</div>
+</section>
+
+<!-- WORKLOG: Today's development timeline -->
+<section style="margin-top:1.5rem;background:var(--secondary);border:1px solid var(--border);border-radius:.5rem;padding:1.5rem">
+<h2 style="font-family:Georgia,serif;font-size:1.25rem;margin-bottom:.75rem">Development worklog &middot; 2026-11-06</h2>
+<p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">15 commits to <code style="font-family:monospace;font-size:.75rem">spotlight.html</code> on the DemoMmnd repository today. The journey from initial concept to the current rich-animations version.</p>
+<div style="font-size:.75rem;line-height:1.8;color:var(--fg)">
+<div style="display:grid;grid-template-columns:auto 1fr;gap:.5rem 1rem">
+<strong style="color:var(--primary)">08:55</strong><span>Audit closure-in-loop bug fix; perf optimization for future chart rendering</span>
+<strong style="color:var(--primary)">09:00</strong><span>Only draw active clip's future chart (was drawing all 6 every frame)</span>
+<strong style="color:var(--primary)">10:03</strong><span>Remove Pyodide entirely; replace GNN demo with pure JavaScript</span>
+<strong style="color:var(--primary)">10:09</strong><span>Cache vessel tree per scene; instant scroll for faster clip switching</span>
+<strong style="color:var(--primary)">11:11</strong><span>Fix Page Unresponsive: stop KaTeX scanning entire document body 7&times;</span>
+<strong style="color:var(--primary)">11:16</strong><span>Fix canvas performance: only resize when dimensions change (prepCanvas)</span>
+<strong style="color:var(--primary)">11:20</strong><span>Lazy code section population; scoped KaTeX rendering</span>
+<strong style="color:var(--primary)">11:24</strong><span>Background-populate code sections (1 per second, non-blocking)</span>
+<strong style="color:var(--primary)">11:34</strong><span>Zero shadowBlur; disable particle bg; throttle to 30fps</span>
+<strong style="color:var(--primary)">11:42</strong><span>Static future chart (draw once per clip select, no rAF loop)</span>
+<strong style="color:var(--primary)">11:47</strong><span>Remove all 6 code sections (110KB&rarr;79KB)</span>
+<strong style="color:var(--primary)">12:17</strong><span>Draw-once pattern: zero rAF loops, canvas redraws only on user interaction</span>
+<strong style="color:var(--primary);font-size:.8125rem">12:27</strong><span style="font-weight:600;color:var(--primary)">&#9889; ROOT CAUSE FIX: clamp tree depth to max 3 (shared SCENE_PARAMS was setting param=50 &rarr; 2&#8310;&#8304; nodes &rarr; browser freeze)</span>
+<strong style="color:var(--primary)">12:34</strong><span>Restore full animation: 60fps rAF, shadowBlur, particle bg, futLoop</span>
+<strong style="color:var(--primary);font-size:.8125rem">12:48</strong><span style="font-weight:600;color:var(--primary)">&#10003; v30: Complete rebuild &mdash; zero external deps, rich animations, 60fps continuous</span>
+</div>
+</div>
+<div style="margin-top:1rem;padding-top:.75rem;border-top:1px solid var(--border);font-size:.6875rem;color:var(--muted)">
+<p style="margin-bottom:.25rem"><strong>Also deployed today:</strong></p>
+<p>&middot; <code style="font-family:monospace">deep-dive.html</code> &mdash; deep dive on neural networks discovering physical laws (with Pyodide SINDy demo)</p>
+<p>&middot; <code style="font-family:monospace">demos.html</code> &mdash; refactored to clip framework (5 demos &times; 6 scenes)</p>
+<p>&middot; <code style="font-family:monospace">physics-ml.html</code> &mdash; milestones rendering fix (cvId+m not dataId+m)</p>
+<p>&middot; <code style="font-family:monospace">spotlight.html</code> &mdash; 15 commits, from concept to v30</p>
+</div>
+</section>
+
+<!-- CREATIVE INSPIRATION -->
+<section style="margin-top:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:1.5rem">
+<h2 style="font-family:Georgia,serif;font-size:1.25rem;margin-bottom:.5rem">Creative inspiration</h2>
+<p style="font-size:.875rem;color:var(--fg);margin-bottom:.75rem">The rich animations on this page were inspired by the kind of creative mathematical visualizations seen across the ML community &mdash; like the <strong>Sigmoid kernel 3D visualization</strong> (k(x,z) = tanh(1.2&langle;x,z&rangle; &minus; 0.4) applied to XOR data) that circulated on LinkedIn the same day. 14 support vectors out of 120, 95.0% training accuracy, with orange (+1) and green (&minus;1) classes and a dark decision boundary surface.</p>
+<p style="font-size:.875rem;color:var(--muted);font-style:italic">Modern browsers can handle far more complex visualizations than we typically give them credit for. The crash was never about performance &mdash; it was a one-line parameter mismatch bug. Once fixed, 60fps continuous animation with 88 shadow operations, 10 flowing particle systems, 7 gradient backgrounds, and 17 glowing nodes runs smoothly in any modern browser.</p>
+</section>
 </main>
 <footer><div class="footer-inner">
 <p>&copy; 2026 Mmnd Collective &middot; Apache-2.0 &middot; <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></p>
