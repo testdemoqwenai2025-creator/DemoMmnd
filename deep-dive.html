@@ -88,7 +88,8 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <li><a href="#sec5">Neural ODE: continuous depth and the adjoint</a></li>
 <li><a href="#sec6">Reinforcement Learning: learning from consequences</a></li>
 <li><a href="#sec7">RLHF: how RL shapes every modern LLM</a></li>
-<li><a href="#sec8">RL + Physics: the next frontier</a></li>
+<li><a href="#sec8">HydroGym: RL meets fluid dynamics</a></li>
+<li><a href="#sec8b">Global impact: aircraft to artificial hearts</a></li>
 <li><a href="#sec9">Future: where RL is heading</a></li>
 <li><a href="#sec10">References</a></li>
 </ol>
@@ -231,21 +232,70 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <p class="pullquote">Without RL, LLMs would be text completers, not conversation partners. RLHF turned language models from prediction engines into helpful agents. This is the most impactful application of RL in history.</p>
 </section>
 
-<!-- SECTION 8: RL + Physics -->
+<!-- SECTION 8: HydroGym — RL meets fluid dynamics -->
 <section id="sec8">
-<h2><span class="num">&sect;8</span>RL + Physics: the next frontier</h2>
-<p>The intersection of RL (learning to act) and PIML (physics-respecting models) is where clinically useful digital twins become autonomous decision-makers, not just predictors. Physics-informed RL agents could learn to control fusion plasmas, optimize drug molecules, design aerodynamic structures, and manage climate interventions &mdash; all while respecting physical constraints.</p>
+<h2><span class="num">&sect;8</span>HydroGym: RL meets fluid dynamics</h2>
+<p><strong>HydroGym</strong> is an open-source benchmark platform published in <em>Nature</em> that bridges RL and fluid dynamics. It abstracts high-performance fluid solvers (Jax, C++, FireDrake, Nek5000) behind the standard OpenAI Gym API, enabling ML researchers to benchmark RL algorithms on real fluid control problems without supercomputer clusters. Lead architect: Christian Lagemann; co-authors include <a href="https://github.com/hydrogym/hydrogym" target="_blank">Steve Brunton, Ricardo Vinuesa et al.</a></p>
+<div class="math-box"><div class="label">Environment transition function</div><p style="margin:0">s_{t+1} = F(s_t, a_t; Re) &nbsp; where s_t = fluid velocity/pressure fields, a_t = actuation (synthetic jets, blowing/suction), Re = Reynolds number</p></div>
 <div class="viz-card">
-<div class="viz-title">RL agent exploring a reward landscape with physics constraints</div>
-<canvas class="viz-canvas" id="rlPhysicsCanvas" style="aspect-ratio:3/2"></canvas>
-<div class="viz-caption">Agent (gold dot) explores a 3D-style reward landscape. Physics constraints (pink barriers) block physically impossible regions. The agent learns the optimal path within physical limits.</div>
+<div class="viz-title">RL control loop applied to fluid flow (animated)</div>
+<canvas class="viz-canvas" id="hydroLoopCanvas" style="aspect-ratio:3/1"></canvas>
+<div class="viz-caption">RL agent (gold) sends actuation commands (cyan) to the fluid solver (pink), which returns the new flow state + drag reward (green). The loop repeats, learning to minimize drag.</div>
 </div>
-<h3>Where RL + Physics matters</h3>
-<p><strong>Fusion plasma control:</strong> RL agents learn to stabilize tokamak plasmas within MHD constraints. DeepMind's magnetic confinement fusion work is the first proof of concept.</p>
-<p><strong>Drug design:</strong> RL explores chemical space to find optimal molecules, with physics constraints (energy minimization, synthetic accessibility) shaping the reward.</p>
-<p><strong>Robotics:</strong> RL learns to walk, grasp, manipulate &mdash; but needs physics for safety. A robot that learns by breaking itself is expensive; a robot that learns in a physics simulator first, then transfers to reality (sim-to-real), is practical.</p>
-<p><strong>Climate:</strong> RL could learn optimal intervention strategies for geoengineering &mdash; but the physics constraints are existential. A wrong action could trigger irreversible feedback loops.</p>
-<p class="pullquote">Physics-informed RL is not just "RL with a physics penalty." It is a new paradigm where the agent's action space is constrained by physical law, and the reward function encodes physical objectives. The agent cannot violate physics by construction.</p>
+<h3>Zero-shot transfer: 2D training &rarr; 3D deployment</h3>
+<p>An RL agent trained on a simple 2D channel flow (Re_&tau; = 206) achieved a <strong>38% reduction in turbulent skin friction drag</strong> when zero-shot transferred to a full 3D NACA 0012 airfoil (Re = 200,000). The agent learned something <em>general</em> about turbulence control &mdash; not just memorized one flow configuration.</p>
+<div class="viz-grid two-col">
+<div class="viz-card">
+<div class="viz-title">Unactuated flow (high drag, chaotic)</div>
+<canvas class="viz-canvas" id="hydroUnactuatedCanvas"></canvas>
+<div class="viz-caption">Turbulent boundary layer without control. High skin friction, chaotic vortices.</div>
+</div>
+<div class="viz-card">
+<div class="viz-title">RL-actuated flow (38% drag reduction)</div>
+<canvas class="viz-canvas" id="hydroActuatedCanvas"></canvas>
+<div class="viz-caption">Same flow with RL-controlled synthetic jets. Smoother boundary layer, 38% less drag.</div>
+</div>
+</div>
+<div class="math-box"><div class="label">Drag reduction ratio</div><p style="margin:0">&Delta;C_f = (C_{f,unactuated} &minus; C_{f,actuated}) / C_{f,unactuated} = 38%</p></div>
+<h3>Differentiable environments: Gradient-Enhanced PPO (G-PPO)</h3>
+<p>By building fluid solvers in <strong>Jax</strong>, HydroGym makes the environment differentiable. You can backpropagate through the fluid solver to get exact gradients &part;s/&part;&theta; &mdash; the same autodiff trick that powers PINNs (&sect;2), now applied to the RL control loop. This enables <strong>Gradient-Enhanced PPO (G-PPO)</strong>, which drastically outperforms derivative-free RL in sample efficiency.</p>
+<div class="math-box"><div class="label">G-PPO gradient (exact, via autodiff through solver)</div><p style="margin:0">&nabla_&theta; J(&theta;) = E_t [ &nabla_&theta; log &pi;_&theta;(a_t|s_t) A(s_t,a_t) + &nabla_{s_t} V(s_t) &middot; &part;s_t/&part;&theta; ]</p></div>
+<div class="viz-card">
+<div class="viz-title">Gradient flow through the fluid solver (animated)</div>
+<canvas class="viz-canvas" id="gppoCanvas" style="aspect-ratio:3/1"></canvas>
+<div class="viz-caption">Forward: policy &rarr; action &rarr; fluid solver &rarr; state &rarr; reward. Backward: autodiff flows exact gradients (gold particles) backward through the solver to update the policy.</div>
+</div>
+<h3>Multi-agent RL for spatially-distributed control</h3>
+<p>A single agent can't control a 10-meter wing surface. HydroGym partitions complex spatial domains into localized sub-regions, each governed by a cooperating MARL agent. Neighboring agents share communication signals.</p>
+<div class="math-box"><div class="label">Multi-agent policy (spatial decomposition)</div><p style="margin:0">&pi;(a|s) = &prod;_{i=1}^{M} &pi;_i(a_i | s_i, N_i) &nbsp; where &pi;_i = sub-agent policy, N_i = neighbor communication</p></div>
+<div class="viz-card">
+<div class="viz-title">MARL agents on a wing surface (animated)</div>
+<canvas class="viz-canvas" id="marlCanvas" style="aspect-ratio:3/1"></canvas>
+<div class="viz-caption">Multiple agents (colored nodes) each control a local region of the wing surface. Communication signals (dashed lines) flow between neighbors. Each agent learns local actuation while coordinating globally.</div>
+</div>
+<h3>SINDy surrogate acceleration</h3>
+<p>RL training requires millions of environment interactions. Each CFD solve is expensive. HydroGym bypasses this by identifying a <strong>SINDy surrogate model</strong> (&sect;3) from flow data &mdash; a lightweight equation that approximates the fluid dynamics. RL trains primarily on the cheap surrogate, then transfers to the expensive solver.</p>
+<div class="math-box"><div class="label">SINDy surrogate (connects to &sect;3)</div><p style="margin:0">x&#775; = &Theta;(x, u) &Xi; &nbsp; where x = reduced fluid state, u = control actuation, &Theta; = candidate library, &Xi; = sparse coefficients</p></div>
+<div class="viz-card">
+<div class="viz-title">SINDy surrogate training pipeline (animated)</div>
+<canvas class="viz-canvas" id="sindySurrogateCanvas" style="aspect-ratio:3/1"></canvas>
+<div class="viz-caption">High-fidelity CFD (pink) &rarr; SINDy discovers equation (gold) &rarr; RL trains on cheap surrogate (cyan) &rarr; transfers back to CFD (green). Orders of magnitude faster.</div>
+</div>
+<p class="pullquote">HydroGym is where SINDy (&sect;3), PINN autodiff (&sect;2), and RL (&sect;6) converge. The fluid solver is the environment. SINDy is the surrogate. Autodiff is the gradient. RL is the optimizer. This is physics-informed RL &mdash; not as theory, but as working code published in Nature.</p>
+</section>
+
+<!-- SECTION 8b: Global impact -->
+<section id="sec8b">
+<h2><span class="num">&sect;8b</span>Global impact: from aircraft to artificial hearts</h2>
+<div class="viz-card">
+<div class="viz-title">Global applications of RL fluid control (animated)</div>
+<canvas class="viz-canvas" id="hydroImpactCanvas" style="aspect-ratio:3/1"></canvas>
+<div class="viz-caption">Four impact areas with flowing particles: aircraft (38% drag &rarr; fuel savings), wind turbines (optimized lift-to-drag), artificial hearts (reduced hemolysis), cargo ships (reduced hull friction).</div>
+</div>
+<p><strong>Global carbon footprint:</strong> Transport fleets account for a significant portion of worldwide fuel consumption. 38% drag reduction across commercial aircraft would save billions of gallons of jet fuel annually, directly mitigating greenhouse gas emissions.</p>
+<p><strong>Clean energy:</strong> Real-time active flow control on wind turbine blades optimizes lift-to-drag ratios under shifting wind gusts, boosting renewable energy yield and structural longevity.</p>
+<p><strong>Biomedical:</strong> Controlling fluid flows inside artificial hearts and ventricular assist devices minimizes shear stress, preventing blood cell damage (hemolysis) and thrombus formation.</p>
+<p><strong>HPC democratization:</strong> Pre-computed baselines and 2D-to-3D transfer learning save hundreds of thousands of compute hours, making physics-informed AI accessible without supercomputer clusters.</p>
 </section>
 
 <!-- SECTION 9: Future -->
@@ -429,22 +479,53 @@ var stages=[{x:0.12,label:'Human',color:'#FFD700'},{x:0.35,label:'Reward',color:
 stages.forEach(function(s,i){var active=i===Math.floor(t*0.5)%4;glowNode(ctx,W*s.x,cy,active?14:10,s.color,active?12:4);ctx.fillStyle='#000';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText(s.label,W*s.x,cy+2);
 if(i<3)flowParticles(ctx,W*s.x+10,cy,W*stages[i+1].x-10,cy,t,3,stages[i].color,0.8)});
 ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('RLHF feedback loop',cx,H*0.15);ctx.shadowBlur=0}
-// === SECTION 8: RL + PHYSICS ===
-function drawRlPhysics(ctx,W,H,t){gradientBg(ctx,W,H,t,'#080a08','#0a0a0f');var cx=W/2,cy=H*0.55;
-// Reward landscape (contour circles)
-for(var i=0;i<20;i++){var r=15+i*10;ctx.strokeStyle='rgba(255,215,0,'+(0.04+0.02*Math.sin(i*0.5+t*0.2))+')';ctx.lineWidth=1;ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.stroke()}
-// Physics barriers (pink, blocking certain regions)
-ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.shadowColor='#FF69B4';ctx.shadowBlur=4;ctx.setLineDash([4,3]);
-ctx.beginPath();ctx.moveTo(cx-30,cy-60);ctx.lineTo(cx-30,cy+60);ctx.stroke();
-ctx.beginPath();ctx.moveTo(cx+30,cy-60);ctx.lineTo(cx+30,cy+60);ctx.stroke();ctx.setLineDash([]);ctx.shadowBlur=0;
-ctx.fillStyle='#FF69B4';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('physics barrier',cx-30,cy-65);
-// Agent exploring (gold dot, moving)
-var agentT=t*0.3;var agentX=cx+Math.sin(agentT)*40;var agentY=cy+Math.cos(agentT*1.3)*20;
-// Trail
-ctx.strokeStyle='rgba(255,215,0,0.2)';ctx.lineWidth=1;ctx.beginPath();
-for(var i=0;i<20;i++){var tt=agentT-i*0.05;var x=cx+Math.sin(tt)*40;var y=cy+Math.cos(tt*1.3)*20;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();
-glowNode(ctx,agentX,agentY,5,'#FFD700',10);
-ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('agent',agentX,agentY-10)}
+// === SECTION 8: HYDROGYM ANIMATIONS ===
+function drawHydroLoop(ctx,W,H,t){gradientBg(ctx,W,H,t,'#08090a','#0a0a0f');var cx=W/2,cy=H*0.5;
+// Agent (left)
+var aPulse=15+Math.sin(t*2)*3;glowNode(ctx,W*0.15,cy,aPulse,'#FFD700',12);ctx.fillStyle='#000';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.fillText('RL Agent',W*0.15,cy+2);
+// Fluid solver (right)
+var sPulse=18+Math.sin(t*2+1)*3;glowNode(ctx,W*0.85,cy,sPulse,'#FF69B4',12);ctx.fillStyle='#fff';ctx.fillText('Fluid Solver',W*0.85,cy+2);
+// Action flow (agent -> solver)
+flowParticles(ctx,W*0.15+aPulse,cy,W*0.85-sPulse,cy,t,5,'#00CED1',0.8);ctx.fillStyle='#00CED1';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('actuation a_t',cx,cy-12);
+// Reward flow (solver -> agent, below)
+flowParticles(ctx,W*0.85-sPulse,cy+18,W*0.15+aPulse,cy+18,t,5,'#10b981',0.6);ctx.fillStyle='#10b981';ctx.fillText('reward = -drag',cx,cy+30)}
+function drawHydroUnactuated(ctx,W,H,t){gradientBg(ctx,W,H,t,'#0a0808','#180a08');
+// Chaotic turbulent flow (red/orange particles)
+for(var i=0;i<40;i++){var px=W*0.05+(i*7+t*40)%W*0.9;var py=H*0.2+Math.sin(i*0.5+t*2)*H*0.15+Math.random()*H*0.4;
+var hue=0+Math.random()*30;ctx.fillStyle='hsla('+hue+',80%,50%,0.6)';ctx.shadowColor='hsl('+hue+',80%,50%)';ctx.shadowBlur=3;ctx.beginPath();ctx.arc(px,py,1.5+Math.random()*2,0,Math.PI*2);ctx.fill()}ctx.shadowBlur=0;
+ctx.fillStyle='#ff6b6b';ctx.font='bold 7px monospace';ctx.textAlign='center';ctx.fillText('HIGH DRAG (chaotic)',W/2,H*0.85)}
+function drawHydroActuated(ctx,W,H,t){gradientBg(ctx,W,H,t,'#080a08','#0a1008');
+// Smooth flow (green/cyan particles, organized)
+for(var i=0;i<30;i++){var px=W*0.05+(i*9+t*30)%W*0.9;var py=H*0.3+Math.sin(i*0.2+t*0.5)*8+i*0.5;
+var hue=140+Math.random()*40;ctx.fillStyle='hsla('+hue+',70%,50%,0.7)';ctx.shadowColor='hsl('+hue+',70%,50%)';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,1.5+Math.random(),0,Math.PI*2);ctx.fill()}ctx.shadowBlur=0;
+// Actuation jets (gold pulses at bottom)
+for(var i=0;i<4;i++){var px=W*0.2+i*W*0.2;var pulse=Math.sin(t*4+i)*0.5+0.5;ctx.fillStyle='rgba(255,215,0,'+pulse+')';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.fillRect(px-3,H*0.75,6,H*0.15*pulse);ctx.shadowBlur=0}
+ctx.fillStyle='#10b981';ctx.font='bold 7px monospace';ctx.textAlign='center';ctx.fillText('38% DRAG REDUCTION',W/2,H*0.85)}
+function drawGppo(ctx,W,H,t){gradientBg(ctx,W,H,t,'#080a08','#0a0a0f');var cx=W/2,cy=H*0.5;
+var stages=[{x:0.12,l:'Policy',c:'#FFD700'},{x:0.32,l:'Action',c:'#00CED1'},{x:0.52,l:'Solver',c:'#FF69B4'},{x:0.72,l:'State',c:'#a855f7'},{x:0.88,l:'Reward',c:'#10b981'}];
+// Forward pass
+stages.forEach(function(s,i){glowNode(ctx,W*s.x,cy,10,s.c,6);ctx.fillStyle='#000';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText(s.l,W*s.x,cy+2);if(i<4)flowParticles(ctx,W*s.x+8,cy,W*stages[i+1].x-8,cy,t,3,s.c,0.6)});
+// Backward gradient flow (gold, below)
+ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('autodiff gradient (backward)',cx,cy+30);
+for(var i=4;i>0;i--){flowParticles(ctx,W*stages[i].x,cy+25,W*stages[i-1].x,cy+25,t,3,'#FFD700',0.8)}}
+function drawMarl(ctx,W,H,t){gradientBg(ctx,W,H,t,'#080a08','#0a0a0f');var cy=H*0.5;
+// Wing surface (long rectangle)
+ctx.fillStyle='rgba(0,206,209,0.1)';ctx.fillRect(W*0.05,cy-15,W*0.9,30);ctx.strokeStyle='#00CED1';ctx.lineWidth=1;ctx.globalAlpha=0.3;ctx.strokeRect(W*0.05,cy-15,W*0.9,30);ctx.globalAlpha=1;
+// MARL agents
+var colors=['#FFD700','#FF69B4','#10b981','#a855f7','#00CED1'];
+for(var i=0;i<5;i++){var px=W*0.15+i*W*0.18;var pulse=Math.sin(t*2+i*0.5)*3;glowNode(ctx,px,cy,7+pulse,colors[i],8);ctx.fillStyle='#000';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText('A'+(i+1),px,cy+2);
+// Communication to neighbors
+if(i<4){ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;ctx.setLineDash([2,2]);ctx.beginPath();ctx.moveTo(px+7,cy);ctx.lineTo(px+W*0.18-7,cy);ctx.stroke();ctx.setLineDash([]);flowParticles(ctx,px+7,cy,px+W*0.18-7,cy,t,2,'#FFD700',0.5)}}
+ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('MARL agents on wing surface (cooperative)',W/2,H*0.85)}
+function drawSindySurrogate(ctx,W,H,t){gradientBg(ctx,W,H,t,'#080a08','#0a0a0f');var cy=H*0.5;
+var stages=[{x:0.12,l:'CFD',c:'#FF69B4',sub:'expensive'},{x:0.35,l:'SINDy',c:'#FFD700',sub:'discover'},{x:0.58,l:'RL train',c:'#00CED1',sub:'cheap'},{x:0.82,l:'Transfer',c:'#10b981',sub:'back to CFD'}];
+stages.forEach(function(s,i){glowNode(ctx,W*s.x,cy,12,s.c,8);ctx.fillStyle='#000';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText(s.l,W*s.x,cy+2);ctx.fillStyle=s.c;ctx.font='3px monospace';ctx.fillText(s.sub,W*s.x,cy+18);if(i<3)flowParticles(ctx,W*s.x+10,cy,W*stages[i+1].x-10,cy,t,3,s.c,0.6)});
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.fillText('orders of magnitude faster',W/2,H*0.85);ctx.shadowBlur=0}
+function drawHydroImpact(ctx,W,H,t){gradientBg(ctx,W,H,t,'#080a08','#0a0a0f');var cy=H*0.45;
+var apps=[{x:0.15,icon:'\u2708',l:'Aircraft',c:'#00CED1',note:'38% drag'},{x:0.38,icon:'\u26a1',l:'Wind',c:'#FFD700',note:'optimized'},{x:0.62,icon:'\u2665',l:'Hearts',c:'#FF69B4',note:'safe flow'},{x:0.85,icon:'\u223f',l:'Ships',c:'#10b981',note:'hull drag'}];
+apps.forEach(function(ap){var px=W*ap.x;ctx.font='18px Georgia,serif';ctx.textAlign='center';ctx.fillStyle=ap.c;ctx.shadowColor=ap.c;ctx.shadowBlur=6;ctx.fillText(ap.icon,px,cy-5);ctx.shadowBlur=0;ctx.font='6px monospace';ctx.fillText(ap.l,px,cy+12);ctx.fillStyle=mt||'#736a5e';ctx.font='4px monospace';ctx.fillText(ap.note,px,cy+22);
+// Flowing particles
+flowParticles(ctx,px-20,cy+30,px+20,cy+30,t,3,ap.c,0.8)})}
 // === SECTION 9: RL FUTURE CHART ===
 var RL_FUTURE_DATA=[
 {n:'RL-AIF replaces RLHF',y:2028,p:0.45},{n:'Multi-agent RL standard',y:2029,p:0.35},{n:'Offline RL matures',y:2028,p:0.40},{n:'World-model RL',y:2030,p:0.30},{n:'RL for scientific discovery',y:2031,p:0.25},{n:'Constitutional AI + RL',y:2032,p:0.20}
@@ -482,7 +563,13 @@ startAnim('rlLoopCanvas',drawRlLoop);
 startAnim('qLearningCanvas',drawQLearning);
 startAnim('policyGradientCanvas',drawPolicyGradient);
 startAnim('rlhfCanvas',drawRlhf);
-startAnim('rlPhysicsCanvas',drawRlPhysics);
+startAnim('hydroLoopCanvas',drawHydroLoop);
+startAnim('hydroUnactuatedCanvas',drawHydroUnactuated);
+startAnim('hydroActuatedCanvas',drawHydroActuated);
+startAnim('gppoCanvas',drawGppo);
+startAnim('marlCanvas',drawMarl);
+startAnim('sindySurrogateCanvas',drawSindySurrogate);
+startAnim('hydroImpactCanvas',drawHydroImpact);
 startAnim('rlFutureCanvas',drawRlFuture);
 });
 </script>
