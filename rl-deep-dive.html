@@ -261,7 +261,23 @@ for(var i=0;i<30;i++){var tx=mx-15+i;var ty=my+25+Math.sin(i*0.3+t*0.5+m)*5;if(i
 ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText('Modes + Dynamics + Eigenvalues',cx,H*0.88);
 // Eigenvalue dots in complex plane (small)
 var ex=W*0.85,ey=H*0.75;ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(ex-20,ey);ctx.lineTo(ex+20,ey);ctx.moveTo(ex,ey-15);ctx.lineTo(ex,ey+15);ctx.stroke();
-for(var m=0;m<3;m++){var ang=m*0.8+0.3;glowNode(ctx,ex+Math.cos(ang)*12,ey+Math.sin(ang)*8,3,modeColors[m],4)}}}
+for(var m=0;m<3;m++){var ang=m*0.8+0.3;glowNode(ctx,ex+Math.cos(ang)*12,ey+Math.sin(ang)*8,3,modeColors[m],4)}}
+else if(id==='mode_sens'){gradBg(ctx,W,H,t,'#080908','#0a0a0f');var cx=W/2,cy=H*0.5;
+// FTLE field heatmap (Finite-Time Lyapunov Exponent)
+for(var i=0;i<W;i+=4)for(var j=0;j<H;j+=4){var fx=(i-cx)/30;var fy=(j-cy)/30;var ftle=Math.exp(-(fx*fx+fy*fy)*0.5)*Math.abs(Math.sin(fx*2+t*0.3)*Math.cos(fy*1.5));var hue=240-ftle*240;ctx.fillStyle='hsla('+hue+',70%,'+(20+ftle*40)+'%,'+(0.1+ftle*0.3)+')';ctx.fillRect(i,j,4,4)}
+// LCS ridges (gold) - Lagrangian Coherent Structures
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();
+for(var i=0;i<80;i++){var a=i/80*Math.PI*2;var r=40+Math.sin(a*3+t*0.2)*15;var px=cx+Math.cos(a+t*0.1)*r;var py=cy+Math.sin(a+t*0.1)*r*0.7;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath();ctx.stroke();ctx.shadowBlur=0;
+// Mode perturbation (red dashed, deformed ring)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([3,2]);ctx.beginPath();
+for(var i=0;i<80;i++){var a=i/80*Math.PI*2;var r=40+Math.sin(a*3+t*0.2)*15+Math.sin(a*5+t)*5;var px=cx+Math.cos(a+t*0.1)*r;var py=cy+Math.sin(a+t*0.1)*r*0.7;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath();ctx.stroke();ctx.setLineDash([]);
+// Particles along LCS (showing transport barriers)
+for(var i=0;i<15;i++){var a=(i/15+t*0.3)*Math.PI*2;var r=40+Math.sin(a*3)*15;ctx.globalAlpha=0.6;glowNode(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r*0.7,2,'#00CED1',4);ctx.globalAlpha=1}
+// Math overlays
+ctx.fillStyle='#FFD700';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('FTLE = (1/|T|) \u00b7 ln \u221a\u03bb\u2098\u2090\u2093(C)',cx,12);
+ctx.fillStyle='#10b981';ctx.font='5px monospace';ctx.fillText('C = (\u2207\u03c6)\u1d40(\u2207\u03c6)   \u03b6 = MS \u2212 FTLE\u2080',cx,H-6);
+ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.fillText('LCS ridge (gold)',cx,cy-8);
+ctx.fillStyle='#ff6b6b';ctx.fillText('mode perturbation (red)',cx,H*0.88)}}
 // === CONCEPT-SPECIFIC FUTURE CHARTS ===
 function drawFutChart(id){
 var cv=document.getElementById('futChart');if(!cv)return;var s=prepCanvas(cv);if(!s)return;var ctx=s.ctx,W=s.W,H=s.H;
@@ -406,7 +422,23 @@ var ex=pL+cw*0.85,ey=pT+ch*0.75;ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.line
 ctx.fillStyle='#736a5e';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText('Re',ex+28,ey+2);ctx.fillText('Im',ex,ey-17);
 for(var m=0;m<3;m++){var ang=m*0.8+0.3;glowNode(ctx,ex+Math.cos(ang)*15,ey+Math.sin(ang)*10,4,modeColors[m],6);
 ctx.fillStyle=modeColors[m];ctx.font='4px monospace';ctx.fillText('\u03c9'+(m+1),ex+Math.cos(ang)*22,ey+Math.sin(ang)*15)}
-ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('DMD: 3 modes + eigenvalue spectrum',W/2,12)}else if(id==='mode_sens'){gradBg(ctx,W,H,t,'#080908','#0a0a0f');var cx=W/2,cy=H*0.5;for(var i=0;i<W;i+=4)for(var j=0;j<H;j+=4){var fx=(i-cx)/30;var fy=(j-cy)/30;var ftle=Math.exp(-(fx*fx+fy*fy)*0.5)*Math.abs(Math.sin(fx*2+t*0.3)*Math.cos(fy*1.5));var hue=240-ftle*240;ctx.fillStyle='hsla('+hue+',70%,'+(20+ftle*40)+'%,'+(0.1+ftle*0.3)+')';ctx.fillRect(i,j,4,4)}ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();for(var i=0;i<80;i++){var a=i/80*Math.PI*2;var r=40+Math.sin(a*3+t*0.2)*15;var px=cx+Math.cos(a+t*0.1)*r;var py=cy+Math.sin(a+t*0.1)*r*0.7;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath();ctx.stroke();ctx.shadowBlur=0;ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([3,2]);ctx.beginPath();for(var i=0;i<80;i++){var a=i/80*Math.PI*2;var r=40+Math.sin(a*3+t*0.2)*15+Math.sin(a*5+t)*5;var px=cx+Math.cos(a+t*0.1)*r;var py=cy+Math.sin(a+t*0.1)*r*0.7;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath();ctx.stroke();ctx.setLineDash([]);for(var i=0;i<15;i++){var a=(i/15+t*0.3)*Math.PI*2;var r=40+Math.sin(a*3)*15;ctx.globalAlpha=0.6;glowNode(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r*0.7,2,'#00CED1',4);ctx.globalAlpha=1}ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('LCS (FTLE ridges)',cx,cy-5);ctx.fillStyle='#ff6b6b';ctx.fillText('mode perturbation',cx,H*0.88)}else if(key==='mode_sens'){for(var i=0;i<W;i+=3)for(var j=0;j<H;j+=3){var fx=(i-W*0.35)/25;var fy=(j-H*0.4)/25;var ftle=Math.exp(-(fx*fx+fy*fy)*0.3)*Math.abs(Math.sin(fx*2+t*0.3)*Math.cos(fy*1.5));var hue=240-ftle*240;ctx.fillStyle='hsla('+hue+',70%,'+(20+ftle*40)+'%,'+(0.1+ftle*0.3)+')';ctx.fillRect(i,j,3,3)}ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();for(var i=0;i<60;i++){var a=i/60*Math.PI*2;var r=30+Math.sin(a*3+t*0.2)*10;ctx.lineTo(W*0.35+Math.cos(a+t*0.1)*r,H*0.4+Math.sin(a+t*0.1)*r*0.7)}ctx.closePath();ctx.stroke();ctx.shadowBlur=0;ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([3,2]);ctx.beginPath();for(var i=0;i<60;i++){var a=i/60*Math.PI*2;var r=30+Math.sin(a*3+t*0.2)*10+Math.sin(a*5+t)*4;ctx.lineTo(W*0.35+Math.cos(a+t*0.1)*r,H*0.4+Math.sin(a+t*0.1)*r*0.7)}ctx.closePath();ctx.stroke();ctx.setLineDash([]);for(var i=0;i<10;i++){var a=(i/10+t*0.3)*Math.PI*2;var r=30+Math.sin(a*3)*10;ctx.globalAlpha=0.6;glowNode(ctx,W*0.35+Math.cos(a)*r,H*0.4+Math.sin(a)*r*0.7,2,'#00CED1',4);ctx.globalAlpha=1}ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('FTLE field + LCS deformation',W/2,12)}}
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('DMD: 3 modes + eigenvalue spectrum',W/2,12)}
+else if(key==='mode_sens'){var mcx=W/2,mcy=H*0.5;
+// Centered FTLE field heatmap
+for(var i=0;i<W;i+=3)for(var j=0;j<H;j+=3){var fx=(i-mcx)/28;var fy=(j-mcy)/28;var ftle=Math.exp(-(fx*fx+fy*fy)*0.5)*Math.abs(Math.sin(fx*2+t*0.3)*Math.cos(fy*1.5));var hue=240-ftle*240;ctx.fillStyle='hsla('+hue+',70%,'+(20+ftle*40)+'%,'+(0.1+ftle*0.3)+')';ctx.fillRect(i,j,3,3)}
+// LCS ridge (gold, animated)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();
+for(var i=0;i<70;i++){var a=i/70*Math.PI*2;var r=35+Math.sin(a*3+t*0.2)*12;var px=mcx+Math.cos(a+t*0.1)*r;var py=mcy+Math.sin(a+t*0.1)*r*0.7;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath();ctx.stroke();ctx.shadowBlur=0;
+// Mode perturbation (red dashed, deformed)
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=1.5;ctx.setLineDash([3,2]);ctx.beginPath();
+for(var i=0;i<70;i++){var a=i/70*Math.PI*2;var r=35+Math.sin(a*3+t*0.2)*12+Math.sin(a*5+t)*4;var px=mcx+Math.cos(a+t*0.1)*r;var py=mcy+Math.sin(a+t*0.1)*r*0.7;if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py)}ctx.closePath();ctx.stroke();ctx.setLineDash([]);
+// Particles flowing along LCS
+for(var i=0;i<12;i++){var a=(i/12+t*0.3)*Math.PI*2;var r=35+Math.sin(a*3)*12;ctx.globalAlpha=0.6;glowNode(ctx,mcx+Math.cos(a)*r,mcy+Math.sin(a)*r*0.7,2,'#00CED1',4);ctx.globalAlpha=1}
+// Math symbols
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('FTLE field + LCS deformation',W/2,12);
+ctx.fillStyle='#10b981';ctx.font='5px monospace';ctx.fillText('FTLE = (1/|T|) ln \u221a\u03bb\u2098\u2090\u2093(C)',mcx,H-6);
+ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.fillText('LCS ridge',mcx,mcy-8);
+ctx.fillStyle='#ff6b6b';ctx.fillText('mode perturbation',mcx,H*0.88)}}
 // === POPUP ===
 var currentExpr=null;
 function openPopup(key){var e=RL_DATA[key];if(!e)return;currentExpr=key;stopDemoAnim();
@@ -448,7 +480,7 @@ if(id==='fut'&&currentExpr){setTimeout(function(){drawFutChart(currentExpr)},50)
 function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
 function closePopup(){stopDemoAnim();document.getElementById('popup').classList.remove('active')}
 function runSimulated(key){var out=document.getElementById('codeOutput');if(!out)return;out.style.display='block';out.textContent='';
-var conceptNames={'agent_loop':'Agent-Environment Loop','q_learning':'Q-Learning','ppo':'PPO','rlhf':'RLHF','hydrogym':'HydroGym','marl':'MARL'};
+var conceptNames={'agent_loop':'Agent-Environment Loop','q_learning':'Q-Learning','ppo':'PPO','rlhf':'RLHF','hydrogym':'HydroGym','marl':'MARL','pydmd':'PyDMD','mode_sens':'Mode Sensitivity via LCS'};
 var lines=['> Concept: '+conceptNames[key],'> Initializing simulation...','> Generating synthetic dataset...','> Training: 1000 episodes','> Computing metrics...','> Rendering visualization...'];
 var i=0;var interval=setInterval(function(){if(i>=lines.length){clearInterval(interval);out.textContent+='\n> Visualization rendered below.\n> The graph shows actual training dynamics for this RL concept.';startCodeViz(key);return}out.textContent+=lines[i]+'\n';out.scrollTop=out.scrollHeight;i++},200)}
 // === FLOATING CODE BG ===
