@@ -111,10 +111,7 @@ main{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2rem 1.5
 .clip-nav-btn{padding:.5rem 1rem;font-size:.8125rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600;text-decoration:none}
 .clip-nav-btn:hover{background:var(--primary);color:#fff}
 .clip-nav-btn.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
-/* Pyodide status */
-.pyodide-status{display:inline-block;font-size:.6875rem;color:var(--muted);margin-left:.5rem}
-.pyodide-status.ready{color:#10b981}
-.pyodide-status.loading{color:#FFD700}
+/* GNN status */
 /* Analysis */
 .analysis{background:var(--secondary);border:1px solid var(--border);border-radius:.5rem;padding:1.5rem;margin:2rem 0}
 .analysis h2{font-family:Georgia,serif;font-size:1.25rem;margin-bottom:.75rem}
@@ -326,11 +323,11 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <div class="expr-rendered" id="expr3">Loading...</div>
 <h3>Math &rarr; Code mapping</h3>
 <div class="map-table" id="map3"></div>
-<h3>Runnable: GNN message passing (Pyodide)</h3>
-<div style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">Loads Pyodide lazily when this section approaches viewport. Click Run to execute a real GNN forward pass on a synthetic vessel graph.</div>
+<h3>Runnable: GNN message passing (JavaScript)</h3>
+<div style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">Pure JavaScript &mdash; no external loading. Click Run to execute a GNN forward pass on a synthetic vessel graph. See the message-passing loop that propagates flow info along vessel topology.</div>
 <div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-<button class="run-btn" onclick="runSpot3GNN()" id="gnnRunBtn" disabled>&#9654; Run GNN forward pass</button>
-<span class="pyodide-status loading" id="gnnStatus">Loading Pyodide...</span>
+<button class="run-btn" onclick="runSpot3GNN()" id="gnnRunBtn">&#9654; Run GNN forward pass</button>
+<span id="gnnStatus" style="font-size:.6875rem;color:var(--muted)"></span>
 </div>
 <div class="code-output" id="codeOutput3"></div>
 <div class="code-viz-wrap" id="codeVizWrap3"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">GNN message passing visualization</div><canvas class="code-viz-canvas" id="codeVizCanvas3"></canvas></div>
@@ -642,7 +639,7 @@ else if(scene===5){ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx
 drawPhaseBar(ctx,W,H)}});
 SPOT2.setActive(false);
 
-// === CLIP 3: Vessel tree as graph (with Pyodide GNN) ===
+// === CLIP 3: Vessel tree as graph (with JS GNN demo) ===
 var SPOT3_SCENES=[{title:'Vessel segmentation',desc:'Extract vessel mask from 3D MRI'},{title:'Node extraction',desc:'Branching points become graph nodes'},{title:'Edge extraction',desc:'Vessel segments become edges'},{title:'Node/edge attributes',desc:'Position, radius, length, orientation'},{title:'Message passing',desc:'Flow info propagates along topology (runnable below)'},{title:'Synthetic tree generator',desc:'Procedural vessel trees; lazy evaluation'}];
 var SCENE3_MATH=[['MRI &#8594; mask','segmentation','vessels'],['branching pts','nodes','graph'],['segments','edges','topology'],['r, L, n&#770;','attributes','rich'],['message passing','GNN','propagate'],['procedural','lazy eval','generate']];
 var SPOT3=makeClip({varName:'SPOT3',cvId:'cv3',wrapId:'wrap3',lblId:'lbl3',titleId:'title3',zoomId:'zoom3',zoomValId:'zoom3v',paramId:'param3',paramValId:'param3v',paramLabelId:'paramLabel3',paramDefault:4,paramDecimals:0,lightId:'light3',narrId:'narr3',recId:'rec3',narrationKey:'spot3',sceneListId:'scenes3',thoughtsId:'thoughts3',scenes:SPOT3_SCENES,draw:function(cv,scene,t,zoom,dark,param){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);drawFloatingMath(ctx,W,H,t,SCENE3_MATH[scene]);var cx=W/2,cy=H*0.5;var depth=Math.round(param);var tree=generateTree(60,cy,0,depth,3,42+scene);var sx=W*0.7/tree.nodes.reduce(function(m,n){return Math.max(m,n.x)},0);var sy=H*0.7/tree.nodes.reduce(function(m,n){return Math.max(m,n.y)},0);sx=Math.min(sx,sy);
@@ -741,68 +738,62 @@ drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 // Wrapper functions for onclick
 function runSpot1Code(k){runSpotCode(1,k)}function runSpot2Code(k){runSpotCode(2,k)}function runSpot4Code(k){runSpotCode(4,k)}function runSpot5Code(k){runSpotCode(5,k)}function runSpot6Code(k){runSpotCode(6,k)}
 
-// === PYODIDE GNN DEMO (Clip 3) ===
-var pyodide=null;
-var gnnStatus=document.getElementById('gnnStatus');
-var gnnRunBtn=document.getElementById('gnnRunBtn');
-function initPyodide(){
-if(typeof loadPyodide==='undefined'){setTimeout(initPyodide,500);return}
-gnnStatus.textContent='Loading Pyodide...';gnnStatus.className='pyodide-status loading';
-loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'}).then(function(p){pyodide=p;gnnStatus.textContent='Loading numpy...';return p.loadPackage('numpy')}).then(function(){gnnStatus.textContent='Ready';gnnStatus.className='pyodide-status ready';gnnRunBtn.disabled=false}).catch(function(e){gnnStatus.textContent='Load failed: '+e.message;gnnStatus.className='pyodide-status';console.error('Pyodide load failed:',e)});
-}
-var pyodideScriptLoaded=false;
-function loadPyodideScript(){if(pyodideScriptLoaded)return;pyodideScriptLoaded=true;var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js';s.onload=function(){initPyodide()};document.head.appendChild(s)}
-var codeSection=document.getElementById('clip3');
-if(codeSection){var pyObserver=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){loadPyodideScript();pyObserver.disconnect()}})},{rootMargin:'200px'});pyObserver.observe(codeSection)}
-async function runSpot3GNN(){
-if(!pyodide){document.getElementById('codeOutput3').textContent='Pyodide still loading. Please wait a few seconds and try again.';document.getElementById('codeOutput3').style.display='block';return}
-var code=`import numpy as np
-# Synthetic vessel graph: 8 nodes, 7 edges (binary tree)
-nodes = np.array([
-    [0, 0],   # 0: inlet
-    [1, -1], [1, 1],   # 1, 2: first branch
-    [2, -2], [2, 0], [2, 2],  # 3, 4, 5: second branch
-    [3, -1], [3, 1],   # 6, 7: outlets
-], dtype=float)
-edges = [(0,1),(0,2),(1,3),(1,4),(2,5),(3,6),(5,7)]  # connectivity
-node_feats = np.column_stack([nodes, np.ones(len(nodes))])  # x, y, flag
-print(f"Graph: {len(nodes)} nodes, {len(edges)} edges")
-# Message passing: 1 round, mean aggregation
-new_feats = node_feats.copy()
-for src, dst in edges:
-    new_feats[dst] += 0.5 * node_feats[src]
-    new_feats[src] += 0.5 * node_feats[dst]
-print("After 1 round of message passing:")
-print(f"  node 0 (inlet):   {new_feats[0]}")
-print(f"  node 6 (outlet):  {new_feats[6]}")
-print(f"  info propagated from inlet to outlet in 1 hop")
-# Simple field prediction: pressure = distance from inlet
-pressure = np.sqrt(nodes[:,0]**2 + nodes[:,1]**2)
-print(f"\\nPredicted pressure at each node:")
-for i, p in enumerate(pressure):
-    print(f"  node {i}: p = {p:.3f}")
-print("\\nGNN forward pass complete. This is the core operation")
-print("im2sim uses to predict hemodynamics from vessel topology.")`;
+// === PURE JS GNN DEMO (Clip 3) — no Pyodide, no external loading ===
+function runSpot3GNN(){
 var output=document.getElementById('codeOutput3');
-output.style.display='block';output.className='code-output';output.textContent='Running GNN forward pass...\\n';
-gnnRunBtn.disabled=true;gnnRunBtn.textContent='Running...';
-try{var captured=[];pyodide.setStdout({batched:function(s){captured.push(s)}});await pyodide.runPythonAsync(code);var result=captured.join('');output.textContent=result||'(no output)';startSpot3GNNViz()}catch(e){output.className='code-output error';output.textContent='Error: '+e.message}finally{gnnRunBtn.disabled=false;gnnRunBtn.textContent='\\u25b6 Run GNN forward pass'}
+var st=document.getElementById('gnnStatus');
+var btn=document.getElementById('gnnRunBtn');
+output.style.display='block';output.className='code-output';output.textContent='Running GNN forward pass...\n';
+btn.disabled=true;btn.textContent='Running...';st.textContent='';
+// Synthetic vessel graph: 8 nodes, 7 edges (binary tree)
+var nodes=[[0,0],[1,-1],[1,1],[2,-2],[2,0],[2,2],[3,-1],[3,1]];
+var edges=[[0,1],[0,2],[1,3],[1,4],[2,5],[3,6],[5,7]];
+// Node features: [x, y, flag]
+var feats=nodes.map(function(n){return [n[0],n[1],1]});
+var lines=[];
+lines.push('=== GNN Forward Pass (pure JavaScript) ===');
+lines.push('Graph: '+nodes.length+' nodes, '+edges.length+' edges');
+lines.push('');
+lines.push('Initial node features:');
+feats.forEach(function(f,i){lines.push('  node '+i+': ['+f.map(function(x){return x.toFixed(2)}).join(', ')+']')});
+lines.push('');
+// Message passing: 1 round, mean aggregation
+var newFeats=feats.map(function(f){return f.slice()});
+edges.forEach(function(e){
+var src=e[0],dst=e[1];
+for(var k=0;k<3;k++){newFeats[dst][k]+=0.5*feats[src][k];newFeats[src][k]+=0.5*feats[dst][k]}
+});
+lines.push('After 1 round of message passing:');
+lines.push('  node 0 (inlet):   ['+newFeats[0].map(function(x){return x.toFixed(3)}).join(', ')+']');
+lines.push('  node 6 (outlet):  ['+newFeats[6].map(function(x){return x.toFixed(3)}).join(', ')+']');
+lines.push('  info propagated from inlet to outlet in 1 hop');
+lines.push('');
+// Simple field prediction: pressure = distance from inlet
+var pressure=nodes.map(function(n){return Math.sqrt(n[0]*n[0]+n[1]*n[1])});
+lines.push('Predicted pressure at each node:');
+pressure.forEach(function(p,i){lines.push('  node '+i+': p = '+p.toFixed(3))});
+lines.push('');
+lines.push('GNN forward pass complete. This is the core operation');
+lines.push('im2sim uses to predict hemodynamics from vessel topology.');
+// Animate output
+var i=0;
+var interval=setInterval(function(){
+if(i>=lines.length){clearInterval(interval);btn.disabled=false;btn.textContent='\u25b6 Run GNN forward pass';st.textContent='Done ('+lines.length+' lines)';startSpot3GNNViz();return}
+output.textContent+=lines[i]+'\n';output.scrollTop=output.scrollHeight;i++
+},80);
 }
 function startSpot3GNNViz(){
 var wrap=document.getElementById('codeVizWrap3');if(!wrap)return;wrap.style.display='block';var cv=document.getElementById('codeVizCanvas3');if(!cv)return;var tt=0;
-function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();if(r.width<10){requestAnimationFrame(frame);return}cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
 ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('GNN message passing on vessel graph',W/2,16);
 var cx=W/2,cy=H*0.55;
 var nodes=[[0,0],[1,-1],[1,1],[2,-2],[2,0],[2,2],[3,-1],[3,1]];
 var edges=[[0,1],[0,2],[1,3],[1,4],[2,5],[3,6],[5,7]];
-var sx=W*0.15,sy=H*0.15,px0=W*0.1,py0=H*0.2;
-// Draw edges
+var sx=W*0.15,sy=H*0.12,px0=W*0.1,py0=H*0.25;
 ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.globalAlpha=0.6;
 edges.forEach(function(e){ctx.beginPath();ctx.moveTo(px0+nodes[e[0]][0]*sx,py0+nodes[e[0]][1]*sy);ctx.lineTo(px0+nodes[e[1]][0]*sx,py0+nodes[e[1]][1]*sy);ctx.stroke()});
 ctx.globalAlpha=1;
-// Draw nodes
 nodes.forEach(function(n,i){ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(px0+n[0]*sx,py0+n[1]*sy,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(i,px0+n[0]*sx,py0+n[1]*sy+2)});
-// Animated flow particles along edges
 edges.forEach(function(e,i){var phase=(tt*0.5+i*0.15)%1;var x1=nodes[e[0]][0]*sx,x2=nodes[e[1]][0]*sx;var y1=nodes[e[0]][1]*sy,y2=nodes[e[1]][1]*sy;var px=px0+x1+(x2-x1)*phase;var py=py0+y1+(y2-y1)*phase;ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0});
 drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
@@ -832,7 +823,7 @@ chk('Clip '+i+' cross-link',function(){return!!document.querySelector('#wrap'+i+
 chk('Clip '+i+' expr',function(){var e=document.getElementById('expr'+i);return e&&e.innerHTML.indexOf('katex')>=0});
 })(i);
 }
-chk('Pyodide GNN button',function(){return!!document.getElementById('gnnRunBtn')});
+chk('GNN run button',function(){return!!document.getElementById('gnnRunBtn')});
 chk('Analysis section',function(){return!!document.querySelector('.analysis')});
 chk('References (6)',function(){return document.querySelectorAll('.refs li').length>=6});
 chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
