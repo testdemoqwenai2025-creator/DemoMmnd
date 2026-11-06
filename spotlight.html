@@ -545,7 +545,12 @@ var SPOT_CURRICULUM=[
 ];
 var activeClipNum=1;
 function buildClipGrid(){var grid=document.getElementById('clipGrid');if(!grid)return;var h='';SPOT_CURRICULUM.forEach(function(c){var cls='clip-card';if(c.n===activeClipNum)cls+=' active';h+='<div class="'+cls+'" onclick="selectClip('+c.n+')" title="'+c.desc+'"><div class="clip-num">'+c.n+'</div><div class="clip-title">'+c.title+'</div><div class="clip-status">&#10003; Ready</div></div>'});grid.innerHTML=h}
-function selectClip(n){var c=SPOT_CURRICULUM[n-1];if(!c)return;for(var i=1;i<=6;i++){var s=document.getElementById('clip'+i);if(s)s.style.display='none';if(window['SPOT'+i])window['SPOT'+i].setActive(false)}var sec=document.getElementById('clip'+n);if(sec)sec.style.display='';if(window['SPOT'+n])window['SPOT'+n].setActive(true);activeClipNum=n;buildClipGrid();updateNavButtons();if(sec)sec.scrollIntoView({behavior:'auto',block:'start'})}
+function selectClip(n){var c=SPOT_CURRICULUM[n-1];if(!c)return;for(var i=1;i<=6;i++){var s=document.getElementById('clip'+i);if(s)s.style.display='none';if(window['SPOT'+i])window['SPOT'+i].setActive(false)}var sec=document.getElementById('clip'+n);if(sec)sec.style.display='';if(window['SPOT'+n])window['SPOT'+n].setActive(true);activeClipNum=n;buildClipGrid();updateNavButtons();
+// Lazy-populate code section on first visit (avoids creating 36 pre blocks at init)
+if(!window['_spotCodePopulated_'+n]){populateSpotCode(n);window['_spotCodePopulated_'+n]=true;
+// Render KaTeX only for this clip's expression element
+var exprEl=document.getElementById('expr'+n);if(exprEl&&typeof renderMathInElement!=='undefined'){renderMathInElement(exprEl,{delimiters:[{left:'$$',right:'$$',display:true}],throwOnError:false})}}
+if(sec)sec.scrollIntoView({behavior:'auto',block:'start'})}
 function updateNavButtons(){var prev=document.getElementById('prevClipBtn');var next=document.getElementById('nextClipBtn');if(prev){if(activeClipNum<=1){prev.classList.add('disabled');prev.removeAttribute('onclick')}else{prev.classList.remove('disabled');prev.setAttribute('onclick','selectClip('+(activeClipNum-1)+')')}}if(next){if(activeClipNum>=6){next.classList.add('disabled');next.removeAttribute('onclick')}else{next.classList.remove('disabled');next.setAttribute('onclick','selectClip('+(activeClipNum+1)+')')}}}
 
 // === PHASE BAR + FLOATING MATH ===
@@ -815,19 +820,15 @@ drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 
 // === INIT ===
 buildClipGrid();updateNavButtons();
-for(var i=1;i<=6;i++){populateSpotCode(i)}
+// Only populate clip 1's code section at init — others are lazy-populated on first select
+populateSpotCode(1);window['_spotCodePopulated_1']=true;
 setTimeout(function(){selectClip(1)},100);
-// Render KaTeX ONLY on .expr-rendered elements (not document.body)
-// Scanning body would hit $ signs in code snippets and freeze the browser
+// Render KaTeX only on .math-box elements in analysis section (not document.body)
 setTimeout(function(){
 if(typeof renderMathInElement!=='undefined'){
-document.querySelectorAll('.expr-rendered').forEach(function(el){
-renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true}],throwOnError:false})
-});
-// Also render math in .math-box elements in the analysis section
 document.querySelectorAll('.math-box').forEach(function(el){
 renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})
-});
+})
 }
 },500);
 
