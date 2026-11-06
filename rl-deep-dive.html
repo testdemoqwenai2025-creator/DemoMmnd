@@ -164,6 +164,86 @@ function glowNode(ctx,x,y,r,c,g){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlu
 function flowP(ctx,x1,y1,x2,y2,t,n,c,sp){sp=sp||1;var dx=x2-x1,dy=y2-y1;for(var i=0;i<n;i++){var p=((t*sp+i/n)%1);var px=x1+dx*p,py=y1+dy*p;var a=Math.sin(p*Math.PI)*.8;ctx.globalAlpha=a;ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,1.5+Math.sin(p*Math.PI),0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;ctx.shadowBlur=0}
 function gradBg(ctx,W,H,t,c1,c2){var g=ctx.createLinearGradient(0,0,W,H);var s=Math.sin(t*.3)*.2;g.addColorStop(Math.max(0,.3-s),c1);g.addColorStop(Math.min(1,.7+s),c2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+// Comprehensive LaTeX-to-HTML cleaner. Handles \mathbf{}, \boldsymbol{},
+// \text{}, \frac{}{}, \sqrt{}, \hat{}, _{}/^{}, Greek letters, math symbols.
+function cleanLatex(s){
+return String(s)
+// 1. Extract content from wrapper commands (BEFORE stripping braces)
+// Supports one level of nested braces inside the wrapper
+.replace(/\\mathbf\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<b>$1</b>')
+.replace(/\\boldsymbol\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<b>$1</b>')
+.replace(/\\mathbb\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\mathcal\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\mathrm\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\operatorname\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\text\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\textit\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<i>$1</i>')
+.replace(/\\textbf\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<b>$1</b>')
+// 2. Structured commands with content (supports nesting)
+.replace(/\\frac\{((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1/$2')
+.replace(/\\sqrt\{((?:[^{}]|\{[^{}]*\})*)\}/g,'\u221a$1')
+.replace(/\\hat\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1\u0302')
+.replace(/\\bar\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1\u0304')
+.replace(/\\vec\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1\u20d7')
+.replace(/\\dot\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1\u0307')
+// 3. Subscripts/superscripts with braces (HTML <sub>/<sup>)
+.replace(/_\{([^{}]*)\}/g,'<sub>$1</sub>')
+.replace(/\^\{([^{}]*)\}/g,'<sup>$1</sup>')
+// 4. Single-char subscripts/superscripts
+.replace(/_([a-zA-Z0-9])/g,'<sub>$1</sub>')
+.replace(/\^([a-zA-Z0-9])/g,'<sup>$1</sup>')
+// 5. Greek letters (lowercase)
+.replace(/\\alpha/g,'\u03b1').replace(/\\beta/g,'\u03b2')
+.replace(/\\gamma/g,'\u03b3').replace(/\\delta/g,'\u03b4')
+.replace(/\\epsilon/g,'\u03b5').replace(/\\varepsilon/g,'\u03b5')
+.replace(/\\zeta/g,'\u03b6').replace(/\\eta/g,'\u03b7')
+.replace(/\\theta/g,'\u03b8').replace(/\\vartheta/g,'\u03b8')
+.replace(/\\iota/g,'\u03b9').replace(/\\kappa/g,'\u03ba')
+.replace(/\\lambda/g,'\u03bb').replace(/\\mu/g,'\u03bc')
+.replace(/\\nu/g,'\u03bd').replace(/\\xi/g,'\u03be')
+.replace(/\\pi/g,'\u03c0').replace(/\\rho/g,'\u03c1')
+.replace(/\\sigma/g,'\u03c3').replace(/\\tau/g,'\u03c4')
+.replace(/\\upsilon/g,'\u03c5').replace(/\\phi/g,'\u03c6')
+.replace(/\\varphi/g,'\u03c6').replace(/\\chi/g,'\u03c7')
+.replace(/\\psi/g,'\u03c8').replace(/\\omega/g,'\u03c9')
+// 6. Greek letters (uppercase)
+.replace(/\\Gamma/g,'\u0393').replace(/\\Delta/g,'\u0394')
+.replace(/\\Theta/g,'\u0398').replace(/\\Lambda/g,'\u039b')
+.replace(/\\Xi/g,'\u039e').replace(/\\Pi/g,'\u03a0')
+.replace(/\\Sigma/g,'\u03a3').replace(/\\Phi/g,'\u03a6')
+.replace(/\\Psi/g,'\u03a8').replace(/\\Omega/g,'\u03a9')
+// 7. Math operators
+.replace(/\\nabla/g,'\u2207').replace(/\\partial/g,'\u2202')
+.replace(/\\infty/g,'\u221e').replace(/\\cdot/g,'\u00b7')
+.replace(/\\times/g,'\u00d7').replace(/\\div/g,'\u00f7')
+.replace(/\\pm/g,'\u00b1').replace(/\\mp/g,'\u2213')
+.replace(/\\leq/g,'\u2264').replace(/\\geq/g,'\u2265')
+.replace(/\\neq/g,'\u2260').replace(/\\approx/g,'\u2248')
+.replace(/\\equiv/g,'\u2261').replace(/\\sim/g,'\u223c')
+.replace(/\\propto/g,'\u221d')
+.replace(/\\sum/g,'\u03a3').replace(/\\prod/g,'\u03a0')
+.replace(/\\int/g,'\u222b').replace(/\\oint/g,'\u222e')
+.replace(/\\forall/g,'\u2200').replace(/\\exists/g,'\u2203')
+.replace(/\\in/g,'\u2208').replace(/\\notin/g,'\u2209')
+.replace(/\\subset/g,'\u2282').replace(/\\subseteq/g,'\u2286')
+.replace(/\\supset/g,'\u2283').replace(/\\supseteq/g,'\u2287')
+.replace(/\\cup/g,'\u222a').replace(/\\cap/g,'\u2229')
+.replace(/\\emptyset/g,'\u2205').replace(/\\neg/g,'\u00ac')
+.replace(/\\to/g,'\u2192').replace(/\\rightarrow/g,'\u2192')
+.replace(/\\leftarrow/g,'\u2190').replace(/\\Rightarrow/g,'\u21d2')
+.replace(/\\Leftarrow/g,'\u21d0').replace(/\\leftrightarrow/g,'\u2194')
+.replace(/\\mapsto/g,'\u21a6')
+.replace(/\\quad/g,'&nbsp;&nbsp;').replace(/\\qquad/g,'&nbsp;&nbsp;&nbsp;&nbsp;')
+.replace(/\\,/g,' ').replace(/\\;/g,' ').replace(/\\:/g,' ')
+.replace(/\\ln/g,'ln').replace(/\\log/g,'log')
+.replace(/\\exp/g,'exp').replace(/\\max/g,'max')
+.replace(/\\min/g,'min').replace(/\\argmax/g,'argmax')
+.replace(/\\argmin/g,'argmin').replace(/\\sin/g,'sin')
+.replace(/\\cos/g,'cos').replace(/\\tan/g,'tan')
+.replace(/\\det/g,'det').replace(/\\dim/g,'dim')
+// 8. Strip remaining unknown backslash commands and leftover braces
+.replace(/\\[a-zA-Z]+/g,'').replace(/[{}]/g,'');
+}
 var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
 // === RL DATA (matching sources.html pattern) ===
 var RL_DATA={
@@ -213,7 +293,7 @@ var demoAnim=null;var currentDemo=null;
 function startDemoAnim(id,cv){stopDemoAnim();var t=0;currentDemo=id;function frame(){var s=prepCanvas(cv);if(s){drawDemo(id,s.ctx,s.W,s.H,t)}t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
 function stopDemoAnim(){if(demoAnim){cancelAnimationFrame(demoAnim);demoAnim=null}}
 function drawDemo(id,ctx,W,H,t){
-if(id==='agent_loop'){gradBg(ctx,W,H,t,'#08090a','#0a0a0f');var cx=W/2,cy=H/0.5*0.5;
+if(id==='agent_loop'){gradBg(ctx,W,H,t,'#08090a','#0a0a0f');var cx=W/2,cy=H*0.5;
 var aP=12+Math.sin(t*2)*3;glowNode(ctx,W*0.2,cy,aP,'#FFD700',10);ctx.fillStyle='#000';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.fillText('Agent',W*0.2,cy+2);
 var eP=14+Math.sin(t*2+1)*3;glowNode(ctx,W*0.8,cy,eP,'#FF69B4',10);ctx.fillStyle='#fff';ctx.fillText('Env',W*0.8,cy+2);
 flowP(ctx,W*0.2+aP,cy,W*0.8-eP,cy,t,5,'#00CED1',0.8);flowP(ctx,W*0.8-eP,cy+16,W*0.2+aP,cy+16,t,5,'#10b981',0.6);
@@ -449,14 +529,14 @@ document.getElementById('pTabs').innerHTML=th;
 var h='';
 // Math pane
 h+='<div class="popup-pane active" id="pane-math">';
-h+='<h3>Expression</h3><div class="expr-rendered">'+e.latex.replace(/\\quad/g,'&nbsp;&nbsp;').replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g,'$1/$2').replace(/\\leftarrow/g,'&larr;').replace(/\\max/g,'max').replace(/\\min/g,'min').replace(/\\pi/g,'&pi;').replace(/\\gamma/g,'&gamma;').replace(/\\alpha/g,'&alpha;').replace(/\\epsilon/g,'&epsilon;').replace(/\\theta/g,'&theta;').replace(/\\nabla/g,'&nabla;').replace(/\\partial/g,'&part;').replace(/\\sum/g,'&Sigma;').replace(/\\prod/g,'&prod;').replace(/\\mathbb{E}/g,'E').replace(/\\mathcal/g,'').replace(/\\text\{/g,'').replace(/\}/g,'').replace(/\\log/g,'log').replace(/\\exp/g,'exp').replace(/\\max_/g,'max').replace(/\\hat\{A\}/g,'A&#770;').replace(/\\sigma/g,'&sigma;').replace(/\\beta/g,'&beta;').replace(/\\delta/g,'&delta;').replace(/\\times/g,'&times;').replace(/\\leq/g,'&le;').replace(/\\geq/g,'&ge;').replace(/\\neq/g,'&ne;').replace(/\\in/g,'&isin;').replace(/\\rightarrow/g,'&rarr;').replace(/\\to/g,'&rarr;').replace(/\\cup/g,'&cup;').replace(/\\cap/g,'&cap;').replace(/\\emptyset/g,'&empty;').replace(/\\subset/g,'&sub;').replace(/\\subseteq/g,'&sube;').replace(/\\supset/g,'&sup;').replace(/\\forall/g,'&forall;').replace(/\\exists/g,'&exists;')+'</div>';
+h+='<h3>Expression</h3><div class="expr-rendered">'+cleanLatex(e.latex)+'</div>';
 h+='<div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div>';
 h+='<h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
 // Animation pane
 h+='<div class="popup-pane" id="pane-anim"><h3>Animated visualization</h3><canvas id="animCanvas" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted)">Fully animated &mdash; particles, gradients, glow effects. Scroll-triggered start.</p></div>';
 // Code pane
 h+='<div class="popup-pane" id="pane-code">';
-if(e.mapping){h+='<h3>Math &rarr; Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'</td><td class="map-arrow">&rarr;</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
+if(e.mapping){h+='<h3>Math &rarr; Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+cleanLatex(m.symbol)+'</td><td class="map-arrow">&rarr;</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
 h+='<h3>Multi-language implementation</h3><div class="code-tabs">';
 LANGS.forEach(function(l,i){h+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchCode(\''+l+'\',this)">'+l+'</button>'});
 h+='</div>';
