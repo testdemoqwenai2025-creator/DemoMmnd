@@ -820,17 +820,28 @@ drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 
 // === INIT ===
 buildClipGrid();updateNavButtons();
-// Only populate clip 1's code section at init — others are lazy-populated on first select
+// Populate clip 1 immediately; others in background (1 per second, non-blocking)
 populateSpotCode(1);window['_spotCodePopulated_1']=true;
+if(document.getElementById('expr1')&&typeof renderMathInElement!=='undefined'){renderMathInElement(document.getElementById('expr1'),{delimiters:[{left:'$$',right:'$$',display:true}],throwOnError:false})}
 setTimeout(function(){selectClip(1)},100);
-// Render KaTeX only on .math-box elements in analysis section (not document.body)
+// Background-populate remaining code sections (spread over 5 seconds to avoid blocking)
+for(var i=2;i<=6;i++){
+(function(n){
+setTimeout(function(){
+populateSpotCode(n);window['_spotCodePopulated_'+n]=true;
+var e=document.getElementById('expr'+n);
+if(e&&typeof renderMathInElement!=='undefined'){renderMathInElement(e,{delimiters:[{left:'$$',right:'$$',display:true}],throwOnError:false})}
+},n*1000)
+})(i)
+}
+// Render KaTeX on analysis math boxes after all clip code is populated (7s)
 setTimeout(function(){
 if(typeof renderMathInElement!=='undefined'){
 document.querySelectorAll('.math-box').forEach(function(el){
 renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})
 })
 }
-},500);
+},7000);
 
 // === AUDIT ===
 function runAudit(){
