@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="version" content="2026-11-06-v27-spotlight-im2sim">
+<meta name="version" content="2026-11-06-v28-spotlight-clip-framework">
 <title>Research Spotlight: im2sim · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -12,64 +12,110 @@
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
 .dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.7}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
 #pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.25}
 header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-nav{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:3.5rem}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
 .logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
-.logo-icon{width:2rem;height:2rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1rem}
-.logo-text{font-family:Georgia,serif;font-size:1rem;font-weight:600}
-.nav-links{display:flex;gap:.125rem;flex-wrap:wrap}
-.nav-links a{padding:.4rem .6rem;text-decoration:none;color:var(--muted);font-size:.75rem;font-weight:500}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500}
 .nav-links a:hover,.nav-links a.active{color:var(--primary)}
-.theme-toggle{width:2.25rem;height:2.25rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1rem}
-main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:2rem 1.5rem 4rem}
-/* Hero */
-.hero{margin-bottom:2.5rem}
-.hero .eyebrow{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.5rem}
-.hero h1{font-family:Georgia,serif;font-size:2rem;font-weight:600;margin-bottom:.5rem;line-height:1.2}
-@media(min-width:640px){.hero h1{font-size:2.5rem}}
-.hero .lead{font-size:.9375rem;color:var(--muted);max-width:42rem;margin-bottom:1.5rem}
-.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.75rem;color:var(--muted);margin-bottom:1.5rem}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+.hero{margin-bottom:1.5rem}
+.hero .crumbs{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem}
+.hero .tag{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-bottom:.75rem}
+.hero h1{font-family:Georgia,serif;font-size:2.25rem;font-weight:600;margin-bottom:.5rem}
+.hero .lead{font-size:.9375rem;color:var(--muted);max-width:42rem;margin-bottom:1rem}
+.hero .lead a{color:var(--primary);text-decoration:none}
+.hero-meta{display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.75rem;color:var(--muted);margin-bottom:.75rem}
 .hero-meta span strong{color:var(--primary)}
-.hero-links{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem}
-.hero-links a{display:inline-flex;align-items:center;gap:.375rem;padding:.5rem .875rem;border:1px solid var(--primary);border-radius:.375rem;color:var(--primary);text-decoration:none;font-size:.8125rem;font-weight:600;background:var(--accent-bg)}
+.hero-links{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}
+.hero-links a{display:inline-flex;align-items:center;gap:.375rem;padding:.4rem .75rem;border:1px solid var(--primary);border-radius:.375rem;color:var(--primary);text-decoration:none;font-size:.75rem;font-weight:600;background:var(--accent-bg)}
 .hero-links a:hover{background:var(--primary);color:#fff}
-.hero-canvas{width:100%;aspect-ratio:3/1;background:#0a0908;border-radius:.5rem;border:1px solid var(--border);display:block}
-/* Concept cards grid */
-.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem;margin:1.5rem 0}
-.card{background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:1.25rem;cursor:pointer;transition:all .15s;position:relative}
-.card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.08)}
-.card.active{border-color:var(--primary);background:var(--accent-bg);box-shadow:0 0 0 2px var(--primary)}
-.card-num{font-family:Georgia,serif;font-size:1.5rem;font-weight:700;color:var(--primary);line-height:1}
-.card-title{font-family:Georgia,serif;font-size:.9375rem;font-weight:600;color:var(--fg);margin-top:.375rem;line-height:1.3}
-.card-desc{font-size:.6875rem;color:var(--muted);margin-top:.5rem;line-height:1.4}
-.card-tag{display:inline-block;font-size:.5625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--primary);background:var(--accent-bg);padding:.125rem .375rem;border-radius:.2rem;margin-top:.625rem}
-/* Detail panel */
-.detail{display:none;background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:1.5rem;margin-top:1rem}
-.detail.active{display:block}
-.detail h2{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;margin-bottom:.5rem}
-.detail h3{font-family:Georgia,serif;font-size:1rem;font-weight:600;color:var(--primary);margin:1.25rem 0 .5rem}
-.detail p{font-size:.9375rem;margin-bottom:1rem}
-.detail .close-btn{float:right;padding:.25rem .625rem;font-size:.75rem;border:1px solid var(--border);border-radius:.25rem;background:transparent;color:var(--muted);cursor:pointer}
-.detail .close-btn:hover{color:var(--primary);border-color:var(--primary)}
-/* Viz */
-.viz-grid{display:grid;grid-template-columns:1fr;gap:1rem;margin:1rem 0}
-@media(min-width:720px){.viz-grid.two-col{grid-template-columns:1fr 1fr}}
-.viz-card{background:var(--secondary);border-radius:.5rem;padding:.75rem}
-.viz-title{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--primary);margin-bottom:.375rem}
-.viz-canvas{width:100%;aspect-ratio:3/2;background:#0a0908;border-radius:.375rem;display:block}
-.viz-caption{font-size:.6875rem;color:var(--muted);margin-top:.375rem;line-height:1.4}
-/* Math box */
-.math-box{background:var(--secondary);border-left:3px solid var(--primary);border-radius:.375rem;padding:.875rem 1.125rem;margin:1rem 0;overflow-x:auto}
-.math-box .label{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.375rem;font-weight:600}
-/* Code block */
-.code-block{background:var(--code-bg);border:1px solid var(--border);border-radius:.5rem;padding:.75rem;font-family:'SF Mono',Consolas,monospace;font-size:.75rem;color:var(--code-fg);overflow-x:auto;line-height:1.6;margin:1rem 0}
-.code-block .kw{color:#FF69B4}
-.code-block .str{color:#10b981}
-.code-block .com{color:#736a5e}
-.code-block .fn{color:#FFD700}
-/* Analysis section */
+/* === CLIP FRAMEWORK (ported from physics-ml.html) === */
+.clip-section{margin:2rem 0;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem}
+.clip-section h2{font-family:Georgia,serif;font-size:1.875rem;margin-bottom:.25rem}
+.clip-section .subtitle{font-size:.875rem;color:var(--muted);margin-bottom:1.5rem}
+.clip-section .subtitle a{color:var(--primary);text-decoration:none}
+.clip-layout{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:768px){.clip-layout{grid-template-columns:1fr}}
+.clip-canvas-wrap{position:relative;background:#0a0908;border:1px solid var(--border);border-radius:.5rem;overflow:hidden;aspect-ratio:4/3}
+.clip-canvas-wrap.light-canvas{background:#f5f0ea}
+.clip-canvas{display:block;width:100%;height:100%}
+.clip-controls{position:absolute;bottom:.5rem;left:.5rem;right:.5rem;display:flex;align-items:center;gap:.375rem;flex-wrap:wrap;background:rgba(10,9,8,.7);backdrop-filter:blur(8px);padding:.375rem .5rem;border-radius:.375rem}
+.clip-canvas-wrap.light-canvas .clip-controls{background:rgba(250,247,242,.85)}
+.clip-btn{background:none;border:1px solid rgba(255,255,255,.2);color:#e5e2dc;border-radius:.375rem;padding:.4rem .7rem;cursor:pointer;font-size:.8125rem;font-weight:600;transition:background .15s;min-width:2rem;min-height:2rem;display:inline-flex;align-items:center;justify-content:center;font-family:'Segoe UI Symbol','Apple Symbols','Noto Sans Symbols','Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji',-apple-system,sans-serif}
+.clip-btn:hover{background:rgba(255,255,255,.15)}
+.clip-btn:active{transform:scale(.95)}
+.clip-scene-label{position:absolute;top:.5rem;left:.5rem;font-size:.6875rem;font-weight:600;color:#e5e2dc;background:rgba(10,9,8,.7);padding:.25rem .5rem;border-radius:.25rem;backdrop-filter:blur(8px)}
+.clip-cross-link{position:absolute;top:.5rem;right:.5rem;font-size:.625rem;font-weight:600;color:#FFD700;background:rgba(10,9,8,.7);padding:.2rem .4rem;border-radius:.2rem;backdrop-filter:blur(8px);text-decoration:none;border:1px solid rgba(255,215,0,.3)}
+.clip-cross-link:hover{background:rgba(255,215,0,.2);color:#FFD700}
+.zoom-control{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#e5e2dc;margin-left:auto}
+.zoom-control input[type=range]{width:60px;accent-color:var(--primary)}
+.param-control{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#FFD700}
+.param-control input[type=range]{width:60px;accent-color:#FFD700}
+.param-control .param-label{font-style:italic;font-family:Georgia,serif;font-weight:600}
+.clip-info{display:flex;flex-direction:column;gap:1rem}
+.scene-list{list-style:none;padding:0;margin:0}
+.scene-list li{display:flex;align-items:flex-start;gap:.5rem;padding:.5rem .625rem;border-radius:.375rem;cursor:pointer;transition:background .15s}
+.scene-list li:hover{background:var(--accent-bg)}
+.scene-list li.active{background:var(--accent-bg);border-left:2px solid var(--primary)}
+.scene-list .num{flex-shrink:0;width:1.5rem;height:1.5rem;border-radius:50%;background:var(--secondary);color:var(--muted);font-size:.6875rem;font-weight:600;display:flex;align-items:center;justify-content:center}
+.scene-list li.active .num{background:var(--primary);color:#fff}
+.scene-list .title{font-size:.8125rem;font-weight:600;color:var(--fg)}
+.scene-list .desc{font-size:.6875rem;color:var(--muted);margin-top:.125rem}
+.deeper-thoughts{padding:1rem;background:var(--secondary);border-radius:.375rem;border-left:3px solid var(--primary)}
+.deeper-thoughts h4{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem}
+.deeper-thoughts p{font-size:.8125rem;color:var(--fg);margin-bottom:.5rem}
+.deeper-thoughts p:last-child{margin-bottom:0}
+.deeper-thoughts a{color:var(--primary);text-decoration:none}
+.future-section{margin-top:.5rem}
+.future-section h4{font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem}
+.future-canvas{width:100%;aspect-ratio:16/7;background:#0a0908;border:1px solid var(--border);border-radius:.375rem;display:block}
+.future-milestones{font-size:.6875rem;color:var(--muted);margin-top:.375rem}
+.clip-code-section{margin-top:1.5rem;padding-top:1.5rem;border-top:1px dashed var(--border)}
+.clip-code-section h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem;margin-top:1rem}
+.clip-code-section h3:first-child{margin-top:0}
+.expr-rendered{font-size:.9375rem;color:var(--fg);padding:.75rem;background:var(--secondary);border-radius:.375rem;margin-bottom:.5rem;overflow-x:auto}
+.map-table{width:100%;border-collapse:collapse;font-size:.75rem;margin-bottom:.5rem}
+.map-table th{text-align:left;padding:.375rem;border-bottom:1px solid var(--border);color:var(--muted);font-size:.6875rem;text-transform:uppercase;letter-spacing:.1em}
+.map-table td{padding:.375rem;border-bottom:1px solid var(--border)}
+.map-table .map-sym{font-family:Georgia,serif;color:var(--primary);font-style:italic}
+.map-table .map-code{font-family:monospace;font-size:.6875rem;color:var(--fg)}
+.map-table .map-note{color:var(--muted);font-size:.6875rem}
+.code-tabs{display:flex;gap:.25rem;flex-wrap:wrap;margin-bottom:.5rem}
+.code-tab{padding:.375rem .625rem;border:1px solid var(--border);border-radius:.25rem;background:var(--card);color:var(--muted);cursor:pointer;font-size:.75rem;font-weight:500}
+.code-tab.active{background:var(--accent-bg);color:var(--primary);border-color:var(--primary)}
+.code-content{display:none;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;overflow-x:auto;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre;line-height:1.5}
+.code-content.active{display:block}
+.run-btn{padding:.5rem .875rem;font-size:.8125rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600}
+.run-btn:hover{background:var(--primary);color:#fff}
+.run-btn:disabled{opacity:.5;cursor:wait}
+.code-output{margin-top:.5rem;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;min-height:3rem;max-height:10rem;overflow-y:auto;display:none;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre-wrap}
+.code-output.error{color:#ff6b6b}
+.code-viz-wrap{margin-top:.5rem;display:none}
+.code-viz-canvas{width:100%;aspect-ratio:16/7;background:#0a0908;border:1px solid var(--border);border-radius:.375rem;display:block}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+/* Clip selector grid */
+.clip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.625rem;margin:1.5rem 0;padding:1rem;background:var(--secondary);border-radius:.5rem;border:1px solid var(--border)}
+.clip-card{padding:.75rem;background:var(--card);border:1px solid var(--border);border-radius:.375rem;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.clip-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.clip-card.active{border-color:var(--primary);background:var(--accent-bg);box-shadow:0 0 0 2px var(--primary)}
+.clip-card .clip-num{font-family:Georgia,serif;font-size:1.5rem;font-weight:700;color:var(--primary);line-height:1}
+.clip-card .clip-title{font-size:.75rem;font-weight:600;color:var(--fg);margin-top:.25rem;line-height:1.3}
+.clip-card .clip-status{font-size:.5625rem;text-transform:uppercase;letter-spacing:.1em;margin-top:.375rem;color:var(--primary)}
+.clip-nav-buttons{display:flex;justify-content:space-between;margin-top:1rem;gap:1rem}
+.clip-nav-btn{padding:.5rem 1rem;font-size:.8125rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600;text-decoration:none}
+.clip-nav-btn:hover{background:var(--primary);color:#fff}
+.clip-nav-btn.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+/* Pyodide status */
+.pyodide-status{display:inline-block;font-size:.6875rem;color:var(--muted);margin-left:.5rem}
+.pyodide-status.ready{color:#10b981}
+.pyodide-status.loading{color:#FFD700}
+/* Analysis */
 .analysis{background:var(--secondary);border:1px solid var(--border);border-radius:.5rem;padding:1.5rem;margin:2rem 0}
 .analysis h2{font-family:Georgia,serif;font-size:1.25rem;margin-bottom:.75rem}
 .analysis h3{font-family:Georgia,serif;font-size:.9375rem;color:var(--primary);margin:1rem 0 .375rem}
@@ -77,9 +123,7 @@ main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:2rem 1.5
 .analysis ul{list-style:none;padding:0;margin:.5rem 0}
 .analysis li{font-size:.875rem;padding:.25rem 0;padding-left:1.25rem;position:relative}
 .analysis li::before{content:'\u25B8';position:absolute;left:0;color:var(--primary)}
-.analysis .risk{color:#ff6b6b}
-.analysis .better{color:#10b981}
-/* Pull quote */
+.analysis a{color:var(--primary);text-decoration:none}
 .pullquote{font-family:Georgia,serif;font-size:1.0625rem;font-style:italic;color:var(--primary);border-left:3px solid var(--primary);padding-left:1rem;margin:1.25rem 0;line-height:1.5}
 /* References */
 .refs{list-style:none;padding:0}
@@ -87,21 +131,10 @@ main{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:2rem 1.5
 .refs li:last-child{border-bottom:none}
 .refs a{color:var(--primary);text-decoration:none}
 .refs .why{font-size:.75rem;color:var(--muted);margin-top:.2rem;font-style:italic}
-/* Footer */
-footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
-.footer-inner{max-width:1100px;margin:0 auto;text-align:center}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem;margin-top:2rem}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center}
 .footer-inner p{font-size:.75rem;color:var(--muted)}
 .footer-inner a{color:var(--primary);text-decoration:none}
-/* Synthetic demo */
-.demo-section{background:var(--card);border:1px solid var(--border);border-radius:.5rem;padding:1.5rem;margin:2rem 0}
-.demo-section h2{font-family:Georgia,serif;font-size:1.25rem;margin-bottom:.5rem}
-.demo-controls{display:flex;gap:.75rem;flex-wrap:wrap;align-items:center;margin:.75rem 0}
-.demo-controls button{padding:.4rem .75rem;font-size:.75rem;border:1px solid var(--primary);border-radius:.25rem;background:var(--accent-bg);color:var(--primary);cursor:pointer;font-weight:600}
-.demo-controls button:hover{background:var(--primary);color:#fff}
-.demo-controls label{font-size:.75rem;color:var(--muted)}
-.demo-controls input[type=range]{width:80px;accent-color:var(--primary)}
-.demo-stats{display:flex;gap:1.5rem;flex-wrap:wrap;font-size:.75rem;margin:.5rem 0}
-.demo-stats .stat strong{color:var(--primary)}
 </style>
 </head>
 <body>
@@ -111,8 +144,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <div class="nav-links">
 <a href="index.html">Home</a>
 <a href="sources.html">Sources</a>
-<a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="demos.html">Demos</a>
-<a href="deep-dive.html">Deep Dive</a>
+<a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="demos.html">Demos</a><a href="deep-dive.html">Deep Dive</a>
 <a href="spotlight.html" class="active">Spotlight</a>
 <a href="blog.html">Blog</a><a href="about.html">About</a>
 </div>
@@ -120,201 +152,362 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 </nav></header>
 
 <main>
-<!-- HERO -->
 <div class="hero">
-<div class="eyebrow">Research Spotlight &middot; Volume 1</div>
-<h1>im2sim: AI-accelerated patient-specific simulation from medical images</h1>
-<p class="lead">An open-source Python library that builds hybrid image-graph neural networks to predict time-varying pressure and velocity fields from 3D medical images &mdash; turning hours of CFD into a 0.5-second inference. Built on PyTorch, PyTorch Geometric, VTK, and PyVista.</p>
+<div class="crumbs">Research Spotlight &middot; Volume 1</div>
+<span class="tag">im2sim &middot; AI-accelerated patient-specific simulation</span>
+<h1>im2sim: from 3D MRI to blood flow in 0.5 seconds</h1>
+<p class="lead">An open-source Python library (PyTorch + PyTorch Geometric + VTK + PyVista) that builds hybrid image-graph neural networks to predict time-varying pressure and velocity fields directly from 3D medical images. Six interactive clips walk through the architecture, the clinical impact, and the <a href="https://github.com/im2sim/im2sim" target="_blank">better approach</a> we'd suggest. Each clip uses the same framework as <a href="physics-ml.html">Physics+ML</a> &mdash; canvas animation, six playback controls, zoom, parameter slider, narration, and deeper thoughts.</p>
 <div class="hero-meta">
 <span><strong>Stack:</strong> PyTorch &middot; PyG &middot; VTK &middot; PyVista</span>
 <span><strong>Inference:</strong> &lt;0.5s (vs hours CFD)</span>
 <span><strong>Use case:</strong> pulmonary artery hemodynamics</span>
-<span><strong>License:</strong> open source</span>
+<span><strong>By:</strong> Anirudh Raman et al.</span>
 </div>
 <div class="hero-links">
 <a href="https://im2sim.readthedocs.io" target="_blank">&#128218; Documentation</a>
 <a href="https://github.com/im2sim/im2sim" target="_blank">&#128187; GitHub</a>
 <a href="https://arxiv.org/abs/2409.02425" target="_blank">&#128279; Image2Flow paper</a>
 </div>
-<canvas class="hero-canvas" id="heroCanvas"></canvas>
 </div>
 
-<!-- CONCEPT CARDS GRID -->
-<h2 style="font-family:Georgia,serif;font-size:1.125rem;margin-bottom:.75rem">Six concepts that make im2sim work</h2>
-<p style="font-size:.875rem;color:var(--muted);margin-bottom:1rem">Click any card to expand the full analysis, math, and code.</p>
-<div class="cards-grid" id="cardsGrid"></div>
+<!-- Clip selector grid -->
+<div class="clip-grid" id="clipGrid"></div>
 
-<!-- CARD DETAIL PANELS (one per card, toggled by JS) -->
-<div id="detail1" class="detail">
-<button class="close-btn" onclick="closeDetail(1)">&#10005; Close</button>
-<h2>1. The 0.5-second prediction</h2>
-<p>The load-bearing claim of im2sim is not the architecture &mdash; it is the inference time. Traditional patient-specific CFD takes <strong>hours on HPC</strong>: mesh generation from segmentation, Navier-Stokes solve with patient-specific boundary conditions, post-processing. im2sim takes <strong>0.5 seconds</strong>.</p>
-<p>This is not an incremental speedup. It is a <em>workflow phase change</em>:</p>
-<div class="viz-grid two-col">
-<div class="viz-card">
-<div class="viz-title">Traditional CFD workflow</div>
-<canvas class="viz-canvas" id="cfdWorkflowCanvas"></canvas>
-<div class="viz-caption">Segment &#8594; mesh &#8594; solve &#8594; post-process. Hours to overnight. Iteration cycle: weekly.</div>
-</div>
-<div class="viz-card">
-<div class="viz-title">im2sim inference workflow</div>
-<canvas class="viz-canvas" id="im2simWorkflowCanvas"></canvas>
-<div class="viz-caption">MRI &#8594; trained network &#8594; field prediction. 0.5 seconds. Iteration cycle: during consultation.</div>
-</div>
-</div>
-<h3>Why this matters clinically</h3>
-<p>Surgeons plan interventions around the information they have <em>during the consultation</em>. A simulation that arrives overnight is consulted after the decision is already made. A simulation that arrives in 0.5 seconds becomes part of the decision loop &mdash; the surgeon can ask "what if we enlarge this stent?" and see the flow change before the patient leaves the room.</p>
-<p class="pullquote">The 0.5s number is what separates a research demo from a clinical tool. Speed is not a convenience &mdash; it is the enabling property.</p>
+<!-- Clip navigation buttons -->
+<div class="clip-nav-buttons">
+<a class="clip-nav-btn disabled" id="prevClipBtn">&larr; Previous clip</a>
+<a class="clip-nav-btn" id="nextClipBtn" onclick="selectClip(2)">Next clip &rarr;</a>
 </div>
 
-<div id="detail2" class="detail">
-<button class="close-btn" onclick="closeDetail(2)">&#10005; Close</button>
-<h2>2. Hybrid image-graph architecture</h2>
-<p>im2sim does not use a pure CNN. It uses a <strong>hybrid image-graph network</strong> that processes the 3D MRI through one branch and the vessel-topology graph through another, fusing them before the final field prediction. This is the architecturally interesting decision, and it reflects a deep understanding of why vessels are hard.</p>
-<h3>Why pure CNNs struggle with vessels</h3>
-<p>Convolutional filters are translation-equivariant: a kernel that detects a vertical edge responds the same way regardless of where the edge appears in the image. This is perfect for tissue texture (lung parenchyma, myocardium) but wrong for vessels, because vessels are <em>elongated, branching, and curving</em>. A vessel that curves through the field of view does not respond consistently to a fixed kernel &mdash; the kernel sees "vessel cross-section" at some points and "vessel tangent" at others.</p>
-<h3>Why pure GNNs lose context</h3>
-<p>A graph neural network encodes "this vessel segment connects to that one" &mdash; the topology. But it discards the spatial context: where in the chest is this vessel? What tissue surrounds it? The graph alone cannot distinguish a pulmonary artery from a bronchus with identical topology.</p>
-<div class="math-box">
-<div class="label">Hybrid fusion (conceptual)</div>
-<p style="margin:0">$$\mathbf{h}_{\text{fused}} = \text{Fuse}\!\left(\underbrace{\text{CNN}(\mathbf{X}_{\text{MRI}})}_{\text{anatomy + texture}},\ \underbrace{\text{GNN}(\mathcal{G}_{\text{vessels}})}_{\text{topology + connectivity}}\right)$$</p>
+<!-- CLIP 1: The 0.5-second prediction -->
+<section class="clip-section" id="clip1">
+<h2>The 0.5-second prediction</h2>
+<div class="subtitle">Clip 1 &middot; Traditional CFD takes hours; im2sim takes 0.5 seconds. This is not an incremental speedup &mdash; it is a workflow phase change. <a href="https://github.com/im2sim/im2sim" target="_blank">im2sim GitHub &rarr;</a></div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap1">
+<canvas class="clip-canvas" id="cv1"></canvas>
+<div class="clip-scene-label" id="lbl1">Scene 1/6</div>
+<a class="clip-cross-link" href="physics-ml.html?clip=19" target="_blank">&#8594; FNO clip 19</a>
+<div class="clip-controls">
+<button class="clip-btn" onclick="SPOT1.play()">&#9654;</button>
+<button class="clip-btn" onclick="SPOT1.pause()">||</button>
+<button class="clip-btn" onclick="SPOT1.replay()">&#8634;</button>
+<button class="clip-btn" onclick="SPOT1.prev()">&#9664;</button>
+<button class="clip-btn" onclick="SPOT1.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title1">CFD pipeline</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom1" min="0.5" max="3" step="0.1" value="1"><span id="zoom1v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel1">N</span><input type="range" id="param1" min="1" max="100" step="1" value="50"><span id="param1v">50</span></div>
+<button class="clip-btn" onclick="SPOT1.toggleRecord()" id="rec1" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="SPOT1.toggleNarration()" id="narr1" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="SPOT1.toggleLight()" id="light1">&#9680;</button>
 </div>
-<div class="viz-card">
-<div class="viz-title">Image branch + graph branch &#8594; fusion &#8594; field prediction</div>
-<canvas class="viz-canvas" id="hybridArchCanvas" style="aspect-ratio:3/1"></canvas>
-<div class="viz-caption">Left: 3D MRI volume processed by 3D CNN. Right: vessel graph processed by message-passing GNN. Center: fusion layer combines both representations. Output: pressure + velocity fields.</div>
 </div>
-<p>The image branch tells the network <em>what the anatomy looks like</em>; the graph branch tells it <em>how the vessels connect</em>. Neither alone is sufficient. This is the same architectural insight as FNO (clip 19): choose the representation that matches the structure of the problem.</p>
+<div class="clip-info">
+<ol class="scene-list" id="scenes1"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts1"></p>
 </div>
+<div class="future-section">
+<h4>Future probabilities &mdash; clinical AI inference speed</h4>
+<canvas class="future-canvas" id="fut1"></canvas>
+<div class="future-milestones" id="fut1m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code1">
+<h3>Expression</h3>
+<div class="expr-rendered" id="expr1">Loading...</div>
+<h3>Math &rarr; Code mapping</h3>
+<div class="map-table" id="map1"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs" id="tabs1"></div>
+<div id="codecontent1"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn" onclick="runSpot1Code('speed')">&#9654; Run &amp; observe output</button>
+<span id="runStatus1" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output" id="codeOutput1"></div>
+<div class="code-viz-wrap" id="codeVizWrap1"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas" id="codeVizCanvas1"></canvas></div>
+</div>
+</section>
 
-<div id="detail3" class="detail">
-<button class="close-btn" onclick="closeDetail(3)">&#10005; Close</button>
-<h2>3. The vessel tree as a graph</h2>
-<p>To build the graph branch, im2sim extracts the vessel tree from the MRI segmentation and represents it as a graph: nodes at branching points and segment endpoints, edges along vessel segments. Each node carries attributes (position, local radius, cross-sectional area); each edge carries attributes (length, average radius, orientation).</p>
-<div class="math-box">
-<div class="label">Graph definition</div>
-<p style="margin:0">$$\mathcal{G} = (\mathcal{V}, \mathcal{E}), \quad \mathbf{v}_i = [\mathbf{x}_i, r_i, A_i], \quad \mathbf{e}_{ij} = [L_{ij}, \bar{r}_{ij}, \hat{\mathbf{n}}_{ij}]$$</p>
+<!-- CLIP 2: Hybrid image-graph architecture -->
+<section class="clip-section" id="clip2" style="display:none">
+<h2>Hybrid image-graph architecture</h2>
+<div class="subtitle">Clip 2 &middot; Why pure CNNs fail on vessels, why pure GNNs lose context, and why the hybrid wins. Cross-links to <a href="physics-ml.html?clip=19" target="_blank">FNO clip 19</a> (mesh-independent operator learning).</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap2">
+<canvas class="clip-canvas" id="cv2"></canvas>
+<div class="clip-scene-label" id="lbl2">Scene 1/6</div>
+<a class="clip-cross-link" href="physics-ml.html?clip=19" target="_blank">&#8594; FNO clip 19</a>
+<div class="clip-controls">
+<button class="clip-btn" onclick="SPOT2.play()">&#9654;</button>
+<button class="clip-btn" onclick="SPOT2.pause()">||</button>
+<button class="clip-btn" onclick="SPOT2.replay()">&#8634;</button>
+<button class="clip-btn" onclick="SPOT2.prev()">&#9664;</button>
+<button class="clip-btn" onclick="SPOT2.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title2">Pure CNN limitation</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom2" min="0.5" max="3" step="0.1" value="1"><span id="zoom2v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel2">&#945;</span><input type="range" id="param2" min="0" max="1" step="0.05" value="0.5"><span id="param2v">0.50</span></div>
+<button class="clip-btn" onclick="SPOT2.toggleRecord()" id="rec2" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="SPOT2.toggleNarration()" id="narr2" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="SPOT2.toggleLight()" id="light2">&#9680;</button>
 </div>
-<p>Message passing on this graph propagates flow information along the vessel topology. A disturbance at the inlet (the main pulmonary artery) propagates through the graph to the distal branches &mdash; exactly as a pressure wave propagates in real hemodynamics. The GNN learns this propagation implicitly from data.</p>
-<div class="viz-card">
-<div class="viz-title">Vessel tree &#8594; graph extraction &#8594; message passing</div>
-<canvas class="viz-canvas" id="vesselGraphCanvas" style="aspect-ratio:3/1"></canvas>
-<div class="viz-caption">A synthetic branching vessel tree (procedurally generated). Nodes (gold) mark branching points; edges (cyan) encode vessel segments. The GNN propagates information along edges.</div>
 </div>
-<h3>Lazy generation note</h3>
-<p>The vessel tree above is generated procedurally in your browser using a recursive branching algorithm &mdash; no pre-computed dataset is shipped. Each render generates a fresh tree, so you can refresh to see different anatomies. For a real deployment with thousands of patient MRIs, the same lazy approach applies: generate the graph on-demand from the segmentation, not pre-store all graphs.</p>
+<div class="clip-info">
+<ol class="scene-list" id="scenes2"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts2"></p>
 </div>
+<div class="future-section">
+<h4>Future probabilities &mdash; hybrid architecture adoption</h4>
+<canvas class="future-canvas" id="fut2"></canvas>
+<div class="future-milestones" id="fut2m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code2">
+<h3>Expression</h3>
+<div class="expr-rendered" id="expr2">Loading...</div>
+<h3>Math &rarr; Code mapping</h3>
+<div class="map-table" id="map2"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs" id="tabs2"></div>
+<div id="codecontent2"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn" onclick="runSpot2Code('hybrid')">&#9654; Run &amp; observe output</button>
+<span id="runStatus2" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output" id="codeOutput2"></div>
+<div class="code-viz-wrap" id="codeVizWrap2"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas" id="codeVizCanvas2"></canvas></div>
+</div>
+</section>
 
-<div id="detail4" class="detail">
-<button class="close-btn" onclick="closeDetail(4)">&#10005; Close</button>
-<h2>4. Time-varying pressure and velocity fields</h2>
-<p>The prediction is not a single static field. im2sim outputs <strong>time-varying pressure and velocity fields</strong> across the cardiac cycle &mdash; the pulsatile dynamics that determine wall shear stress, oscillatory shear index, and the hemodynamic indices clinicians actually use to assess disease risk.</p>
-<div class="math-box">
-<div class="label">Time-varying prediction</div>
-<p style="margin:0">$$\hat{\mathbf{u}}(\mathbf{x}, t), \hat{p}(\mathbf{x}, t) = f_\theta\!\left(\mathbf{X}_{\text{MRI}}, \mathcal{G}_{\text{vessels}}\right), \quad t \in [0, T_{\text{cardiac}}]$$</p>
+<!-- CLIP 3: Vessel tree as a graph -->
+<section class="clip-section" id="clip3" style="display:none">
+<h2>The vessel tree as a graph</h2>
+<div class="subtitle">Clip 3 &middot; Branching points = nodes; vessel segments = edges. Procedural tree generator with lazy evaluation. Cross-links to <a href="physics-ml.html?clip=3" target="_blank">Architecture clip 3</a> (GNNs for physics).</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap3">
+<canvas class="clip-canvas" id="cv3"></canvas>
+<div class="clip-scene-label" id="lbl3">Scene 1/6</div>
+<a class="clip-cross-link" href="physics-ml.html?clip=3" target="_blank">&#8594; Arch clip 3</a>
+<div class="clip-controls">
+<button class="clip-btn" onclick="SPOT3.play()">&#9654;</button>
+<button class="clip-btn" onclick="SPOT3.pause()">||</button>
+<button class="clip-btn" onclick="SPOT3.replay()">&#8634;</button>
+<button class="clip-btn" onclick="SPOT3.prev()">&#9664;</button>
+<button class="clip-btn" onclick="SPOT3.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title3">Vessel segmentation</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom3" min="0.5" max="3" step="0.1" value="1"><span id="zoom3v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel3">depth</span><input type="range" id="param3" min="2" max="6" step="1" value="4"><span id="param3v">4</span></div>
+<button class="clip-btn" onclick="SPOT3.toggleRecord()" id="rec3" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="SPOT3.toggleNarration()" id="narr3" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="SPOT3.toggleLight()" id="light3">&#9680;</button>
 </div>
-<div class="viz-grid two-col">
-<div class="viz-card">
-<div class="viz-title">Pressure field over cardiac cycle</div>
-<canvas class="viz-canvas" id="pressureFieldCanvas"></canvas>
-<div class="viz-caption">Pulsatile pressure wave propagating from inlet to distal branches. Systole &#8594; diastole.</div>
 </div>
-<div class="viz-card">
-<div class="viz-title">Velocity magnitude field</div>
-<canvas class="viz-canvas" id="velocityFieldCanvas"></canvas>
-<div class="viz-caption">Peak systolic velocity. High velocity at stenoses, low in aneurysms.</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes3"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts3"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities &mdash; graph-based medical AI</h4>
+<canvas class="future-canvas" id="fut3"></canvas>
+<div class="future-milestones" id="fut3m"></div>
 </div>
 </div>
-<p>The cardiac cycle is the natural temporal unit for hemodynamics. A network that predicts only a time-averaged field loses the pulsatile information that determines whether a region experiences laminar flow (healthy) or oscillating recirculation (atherogenic). Time resolution matters.</p>
 </div>
+<div class="clip-code-section" id="code3">
+<h3>Expression</h3>
+<div class="expr-rendered" id="expr3">Loading...</div>
+<h3>Math &rarr; Code mapping</h3>
+<div class="map-table" id="map3"></div>
+<h3>Runnable: GNN message passing (Pyodide)</h3>
+<div style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">Loads Pyodide lazily when this section approaches viewport. Click Run to execute a real GNN forward pass on a synthetic vessel graph.</div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn" onclick="runSpot3GNN()" id="gnnRunBtn" disabled>&#9654; Run GNN forward pass</button>
+<span class="pyodide-status loading" id="gnnStatus">Loading Pyodide...</span>
+</div>
+<div class="code-output" id="codeOutput3"></div>
+<div class="code-viz-wrap" id="codeVizWrap3"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">GNN message passing visualization</div><canvas class="code-viz-canvas" id="codeVizCanvas3"></canvas></div>
+</div>
+</section>
 
-<div id="detail5" class="detail">
-<button class="close-btn" onclick="closeDetail(5)">&#10005; Close</button>
-<h2>5. The digital twin vision</h2>
-<p>The long-term goal is a <strong>clinically useful digital twin</strong>: a patient-specific computational model that lives alongside the patient, updates with each scan, and supports clinical decisions throughout their care pathway. im2sim is the inference engine that makes this vision computationally tractable.</p>
-<div class="viz-card">
-<div class="viz-title">Digital twin loop: scan &#8594; model &#8594; predict &#8594; decide &#8594; rescan</div>
-<canvas class="viz-canvas" id="digitalTwinCanvas" style="aspect-ratio:3/1"></canvas>
-<div class="viz-caption">Each clinical encounter updates the twin. The 0.5s inference enables multiple what-if scenarios per consultation.</div>
+<!-- CLIP 4: Time-varying fields -->
+<section class="clip-section" id="clip4" style="display:none">
+<h2>Time-varying pressure and velocity fields</h2>
+<div class="subtitle">Clip 4 &middot; Pulsatile dynamics across the cardiac cycle. Better approach: add a divergence-free physics loss (&#8711;&middot;u = 0). Cross-links to <a href="physics-ml.html?clip=20" target="_blank">PINN clip 20</a>.</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap4">
+<canvas class="clip-canvas" id="cv4"></canvas>
+<div class="clip-scene-label" id="lbl4">Scene 1/6</div>
+<a class="clip-cross-link" href="physics-ml.html?clip=20" target="_blank">&#8594; PINN clip 20</a>
+<div class="clip-controls">
+<button class="clip-btn" onclick="SPOT4.play()">&#9654;</button>
+<button class="clip-btn" onclick="SPOT4.pause()">||</button>
+<button class="clip-btn" onclick="SPOT4.replay()">&#8634;</button>
+<button class="clip-btn" onclick="SPOT4.prev()">&#9664;</button>
+<button class="clip-btn" onclick="SPOT4.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title4">Cardiac cycle</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom4" min="0.5" max="3" step="0.1" value="1"><span id="zoom4v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel4">HR</span><input type="range" id="param4" min="40" max="120" step="5" value="75"><span id="param4v">75</span></div>
+<button class="clip-btn" onclick="SPOT4.toggleRecord()" id="rec4" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="SPOT4.toggleNarration()" id="narr4" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="SPOT4.toggleLight()" id="light4">&#9680;</button>
 </div>
-<h3>What "clinically useful" actually requires</h3>
-<p>A digital twin is not just a fast simulation. It must be:</p>
-<ul style="font-size:.875rem;margin:1rem 0;padding-left:1.5rem">
-<li><strong>Validated against outcomes</strong>, not just against CFD ground truth</li>
-<li><strong>Uncertainty-aware</strong> &mdash; the surgeon needs confidence intervals, not point estimates</li>
-<li><strong>Generalizable across scanners and protocols</strong> &mdash; or explicitly scoped to one</li>
-<li><strong>Auditable</strong> &mdash; the prediction must be explainable to a clinician who did not build the network</li>
-<li><strong>Edge-case safe</strong> &mdash; congenital or post-surgical anatomy must trigger a flag, not a confident wrong answer</li>
-</ul>
-<p class="pullquote">A digital twin is not a faster simulation. It is a model that earns clinical trust by being right, being clear about when it is unsure, and being safe when it is wrong.</p>
 </div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes4"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts4"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities &mdash; physics-informed hemodynamics</h4>
+<canvas class="future-canvas" id="fut4"></canvas>
+<div class="future-milestones" id="fut4m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code4">
+<h3>Expression</h3>
+<div class="expr-rendered" id="expr4">Loading...</div>
+<h3>Math &rarr; Code mapping</h3>
+<div class="map-table" id="map4"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs" id="tabs4"></div>
+<div id="codecontent4"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn" onclick="runSpot4Code('fields')">&#9654; Run &amp; observe output</button>
+<span id="runStatus4" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output" id="codeOutput4"></div>
+<div class="code-viz-wrap" id="codeVizWrap4"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas" id="codeVizCanvas4"></canvas></div>
+</div>
+</section>
 
-<div id="detail6" class="detail">
-<button class="close-btn" onclick="closeDetail(6)">&#10005; Close</button>
-<h2>6. Open science + extensibility</h2>
-<p>im2sim is explicitly designed as a <strong>flexible framework</strong>, not a cardiovascular-only tool. The library's modular design separates image processing, graph construction, network architecture, and simulation output &mdash; so the same scaffolding can serve other imaging modalities (CT, ultrasound) and other computational simulations (electrophysiology, structural mechanics, diffusion).</p>
-<h3>The stack</h3>
-<div class="code-block"><span class="com"># im2sim dependency stack</span>
-<span class="kw">import</span> torch                    <span class="com"># deep learning backend</span>
-<span class="kw">import</span> torch_geometric <span class="kw">as</span> pyg  <span class="com"># graph neural networks</span>
-<span class="kw">import</span> vtk                       <span class="com"># 3D medical image processing</span>
-<span class="kw">import</span> pyvista <span class="kw">as</span> pv            <span class="com"># visualization + mesh handling</span>
+<!-- CLIP 5: Digital twin vision -->
+<section class="clip-section" id="clip5" style="display:none">
+<h2>The digital twin vision</h2>
+<div class="subtitle">Clip 5 &middot; Patient-specific model that lives alongside the patient. Better approach: uncertainty quantification + active learning. Cross-links to <a href="physics-ml.html?clip=12" target="_blank">Discrepancy clip 12</a> (digital twins).</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap5">
+<canvas class="clip-canvas" id="cv5"></canvas>
+<div class="clip-scene-label" id="lbl5">Scene 1/6</div>
+<a class="clip-cross-link" href="physics-ml.html?clip=12" target="_blank">&#8594; Twin clip 12</a>
+<div class="clip-controls">
+<button class="clip-btn" onclick="SPOT5.play()">&#9654;</button>
+<button class="clip-btn" onclick="SPOT5.pause()">||</button>
+<button class="clip-btn" onclick="SPOT5.replay()">&#8634;</button>
+<button class="clip-btn" onclick="SPOT5.prev()">&#9664;</button>
+<button class="clip-btn" onclick="SPOT5.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title5">Patient-specific model</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom5" min="0.5" max="3" step="0.1" value="1"><span id="zoom5v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel5">&#945;</span><input type="range" id="param5" min="0" max="1" step="0.05" value="0.5"><span id="param5v">0.50</span></div>
+<button class="clip-btn" onclick="SPOT5.toggleRecord()" id="rec5" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="SPOT5.toggleNarration()" id="narr5" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="SPOT5.toggleLight()" id="light5">&#9680;</button>
+</div>
+</div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes5"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts5"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities &mdash; clinical digital twins</h4>
+<canvas class="future-canvas" id="fut5"></canvas>
+<div class="future-milestones" id="fut5m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code5">
+<h3>Expression</h3>
+<div class="expr-rendered" id="expr5">Loading...</div>
+<h3>Math &rarr; Code mapping</h3>
+<div class="map-table" id="map5"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs" id="tabs5"></div>
+<div id="codecontent5"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn" onclick="runSpot5Code('twin')">&#9654; Run &amp; observe output</button>
+<span id="runStatus5" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output" id="codeOutput5"></div>
+<div class="code-viz-wrap" id="codeVizWrap5"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas" id="codeVizCanvas5"></canvas></div>
+</div>
+</section>
 
-<span class="com"># Hybrid image-graph network</span>
-<span class="kw">class</span> <span class="fn">HybridNet</span>(torch.nn.Module):
-    <span class="kw">def</span> <span class="fn">__init__</span>(self):
-        self.image_branch = <span class="fn">ImageEncoder</span>(in_channels=<span class="str">1</span>, hidden=<span class="str">64</span>)
-        self.graph_branch = <span class="fn">GraphEncoder</span>(node_features=<span class="str">6</span>, edge_features=<span class="str">4</span>)
-        self.fusion = <span class="fn">FusionLayer</span>(image_dim=<span class="str">128</span>, graph_dim=<span class="str">128</span>)
-        self.head = <span class="fn">FieldPredictor</span>(out_channels=<span class="str">4</span>)  <span class="com"># u, v, w, p</span>
-
-    <span class="kw">def</span> <span class="fn">forward</span>(self, image, graph):
-        img_feat = self.<span class="fn">image_branch</span>(image)
-        gph_feat = self.<span class="fn">graph_branch</span>(graph)
-        fused = self.<span class="fn">fusion</span>(img_feat, gph_feat)
-        <span class="kw">return</span> self.<span class="fn">head</span>(fused)  <span class="com"># (B, 4, D, H, W, T)</span></div>
-<p>By keeping the framework open and the dependencies standard, the team lowers the barrier for other labs to extend the approach to their own simulation targets &mdash; which is the right way to build a research ecosystem around an idea.</p>
-</div>
-
-<!-- SYNTHETIC DEMO -->
-<div class="demo-section">
-<h2>Synthetic vessel-tree demo</h2>
-<p style="font-size:.875rem;color:var(--muted);margin-bottom:.75rem">A procedural vessel-tree generator + flow simulator, running entirely in your browser. Each "Generate" creates a fresh synthetic patient. The graph is extracted lazily on render &mdash; the same pattern would scale to thousands of real patient MRIs.</p>
-<div class="demo-controls">
-<button onclick="generateVesselTree()">&#9851; Generate new tree</button>
-<label>Branching depth: <input type="range" id="depthSlider" min="2" max="6" step="1" value="4"><span id="depthVal">4</span></label>
-<label>Branching factor: <input type="range" id="branchSlider" min="2" max="4" step="1" value="3"><span id="branchVal">3</span></label>
-</div>
-<div class="demo-stats" id="demoStats"></div>
-<div class="viz-card">
-<div class="viz-title">Synthetic vessel tree (left) + predicted flow field (right)</div>
-<canvas class="viz-canvas" id="syntheticDemoCanvas" style="aspect-ratio:2/1"></canvas>
-<div class="viz-caption">Gold = branching nodes, cyan = vessel edges, animated particles = flow. Pressure wave propagates from inlet (left) to outlets (right).</div>
+<!-- CLIP 6: Better approach -->
+<section class="clip-section" id="clip6" style="display:none">
+<h2>Better approach: FNO + PINN + uncertainty + active learning</h2>
+<div class="subtitle">Clip 6 &middot; Four architectural improvements that would make im2sim clinically trustworthy. Cross-links to <a href="physics-ml.html?clip=19" target="_blank">FNO clip 19</a>, <a href="physics-ml.html?clip=20" target="_blank">PINN clip 20</a>, <a href="physics-ml.html?clip=16" target="_blank">Neural ODE clip 16</a>.</div>
+<div class="clip-layout">
+<div class="clip-canvas-wrap" id="wrap6">
+<canvas class="clip-canvas" id="cv6"></canvas>
+<div class="clip-scene-label" id="lbl6">Scene 1/6</div>
+<a class="clip-cross-link" href="physics-ml.html" target="_blank">&#8594; Physics+ML</a>
+<div class="clip-controls">
+<button class="clip-btn" onclick="SPOT6.play()">&#9654;</button>
+<button class="clip-btn" onclick="SPOT6.pause()">||</button>
+<button class="clip-btn" onclick="SPOT6.replay()">&#8634;</button>
+<button class="clip-btn" onclick="SPOT6.prev()">&#9664;</button>
+<button class="clip-btn" onclick="SPOT6.next()">&#9654;|</button>
+<span style="font-size:.6875rem;color:#e5e2dc;margin-left:.25rem" id="title6">FNO spectral layer</span>
+<div class="zoom-control">&#128269;<input type="range" id="zoom6" min="0.5" max="3" step="0.1" value="1"><span id="zoom6v">1.0x</span></div>
+<div class="param-control" title="Interactive parameter"><span class="param-label" id="paramLabel6">&#955;</span><input type="range" id="param6" min="0" max="2" step="0.1" value="1"><span id="param6v">1.0</span></div>
+<button class="clip-btn" onclick="SPOT6.toggleRecord()" id="rec6" title="Record WebM">&#9679;</button>
+<button class="clip-btn" onclick="SPOT6.toggleNarration()" id="narr6" title="Toggle narration">&#9834;</button>
+<button class="clip-btn" onclick="SPOT6.toggleLight()" id="light6">&#9680;</button>
 </div>
 </div>
+<div class="clip-info">
+<ol class="scene-list" id="scenes6"></ol>
+<div class="deeper-thoughts">
+<h4>Deeper thoughts</h4>
+<p id="thoughts6"></p>
+</div>
+<div class="future-section">
+<h4>Future probabilities &mdash; trustworthy clinical AI</h4>
+<canvas class="future-canvas" id="fut6"></canvas>
+<div class="future-milestones" id="fut6m"></div>
+</div>
+</div>
+</div>
+<div class="clip-code-section" id="code6">
+<h3>Expression</h3>
+<div class="expr-rendered" id="expr6">Loading...</div>
+<h3>Math &rarr; Code mapping</h3>
+<div class="map-table" id="map6"></div>
+<h3>Click a language tab</h3>
+<div class="code-tabs" id="tabs6"></div>
+<div id="codecontent6"></div>
+<div style="margin-top:.75rem;display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+<button class="run-btn" onclick="runSpot6Code('better')">&#9654; Run &amp; observe output</button>
+<span id="runStatus6" style="font-size:.6875rem;color:var(--muted)"></span>
+</div>
+<div class="code-output" id="codeOutput6"></div>
+<div class="code-viz-wrap" id="codeVizWrap6"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas class="code-viz-canvas" id="codeVizCanvas6"></canvas></div>
+</div>
+</section>
 
 <!-- ANALYSIS -->
-<div class="analysis" id="analysis">
-<h2>Analysis: risks, misdirection, and a better approach</h2>
-<p>im2sim is excellent engineering. The architecture is well-motivated, the inference speed is clinically transformative, and the open-source release is the right move for the field. But there are three places where the project (or anyone building on it) can be pulled off course. Here is what I would flag.</p>
-
-<h3 class="risk">Risk 1: validating by MSE against CFD</h3>
-<p>The natural benchmark is "how close is the predicted field to the CFD ground truth?" But CFD itself is not ground truth &mdash; it is a simulation with its own assumptions: outlet boundary conditions are estimated, wall elasticity is approximated, blood is modeled as Newtonian. A network that matches CFD to 0.1% MSE has matched CFD's <em>errors</em> to 0.1%. The real validation metric is <strong>clinical decision change</strong>: did the AI prediction alter the surgical plan, and was the altered plan better for the patient? This requires prospective clinical studies, not retrospective MSE on a held-out test set. Without it, the 0.5s inference is a speedup of an unvalidated target.</p>
-
-<h3 class="risk">Risk 2: physics violation without enforcement</h3>
-<p>If the network regresses velocity fields without a divergence-free constraint, it will produce predictions that look plausible but violate mass conservation. A velocity field with <code style="background:var(--secondary);padding:.1rem .3rem;border-radius:.2rem;font-family:monospace;font-size:.8em">&#8711;&middot;u &ne; 0</code> is physically impossible &mdash; but a CNN that minimizes MSE against CFD velocity fields has no incentive to enforce it. The result is a prediction that looks like blood flow but is not actually blood flow. This is exactly the PINN lesson (deep-dive &sect;2): data fit does not imply physical correctness.</p>
-<p><strong>Fix:</strong> add a divergence-free penalty to the loss, evaluated at virtual collocation points inside the predicted field. The physics loss costs nothing at inference time (it is training-only) but structurally constrains the prediction.</p>
-
-<h3 class="risk">Risk 3: domain shift across scanners</h3>
-<p>Train on Hospital A's 1.5T Siemens MRI protocol, deploy on Hospital B's 3T Philips &mdash; the image statistics differ, the vessel contrast differs, the artifact patterns differ. The 0.5s inference is meaningless if the network is confidently wrong on a different scanner. Multi-site training data with explicit cross-site validation is essential. Without it, the model works at the training hospital and fails silently elsewhere.</p>
-
-<h3 class="better">Better approach: four additions</h3>
-<ul>
-<li><strong>Physics-informed loss</strong> &mdash; divergence-free constraint (<code style="font-family:monospace">&#8711;&middot;u = 0</code>) as a soft penalty at collocation points, exactly like PINN <code style="font-family:monospace">L_phys</code>. Training-only cost, structural correctness at inference.</li>
-<li><strong>FNO-style spectral layer for the field head</strong> &mdash; instead of pixel-wise 3D CNN output, use a Fourier spectral layer (clip 19). Mesh-independent, captures global flow structure, and supports zero-shot super-resolution: train on 64&sup2; voxels, evaluate on 256&sup2;.</li>
-<li><strong>Ensemble or Bayesian uncertainty</strong> &mdash; the surgeon sees <code style="font-family:monospace">u(x,t) &plusmn; &sigma;(x,t)</code>, not just a point estimate. Low-confidence regions (unusual anatomy, out-of-distribution) trigger a flag for traditional CFD verification.</li>
-<li><strong>Active learning loop</strong> &mdash; flagged low-confidence cases are queued for CFD verification. The CFD results are added back to the training set. The network improves on exactly the cases it currently fails &mdash; closing the loop between fast inference and slow verification.</li>
-</ul>
+<div class="analysis">
+<h2>Analysis: the better approach, summarized</h2>
+<p>im2sim is excellent engineering. The 0.5s inference is clinically transformative. But four architectural additions would move it from "fast" to "trustworthy." Each connects to a concept in our <a href="physics-ml.html">Physics+ML curriculum</a>.</p>
+<h3>1. FNO-style spectral layer for the field head</h3>
+<p>Replace the pixel-wise 3D CNN output with a <a href="physics-ml.html?clip=19" target="_blank">Fourier Neural Operator</a> spectral layer. Mesh-independent, captures global flow structure, and supports zero-shot super-resolution: train on 64&sup2; voxels, evaluate on 256&sup2;. The vessel geometry doesn't need to be re-meshed for different resolutions.</p>
+<h3>2. Physics-informed loss (divergence-free constraint)</h3>
+<p>Add <code style="background:var(--card);padding:.1rem .3rem;border-radius:.2rem;font-family:monospace;font-size:.8em">&#8711;&middot;u = 0</code> as a soft penalty at collocation points inside the predicted field &mdash; exactly the <a href="physics-ml.html?clip=20" target="_blank">PINN pattern</a>. Training-only cost; structural mass conservation at inference. Without this, the network can produce physically impossible velocity fields that look plausible.</p>
+<h3>3. Ensemble or Bayesian uncertainty</h3>
+<p>The surgeon sees <code style="background:var(--card);padding:.1rem .3rem;border-radius:.2rem;font-family:monospace;font-size:.8em">u(x,t) &plusmn; &sigma;(x,t)</code>, not just a point estimate. Train an ensemble of 5-10 models with different initializations; the variance across the ensemble is the uncertainty estimate. Low-confidence regions (unusual anatomy, out-of-distribution) trigger a flag.</p>
+<h3>4. Active learning loop</h3>
+<p>Flagged low-confidence cases are queued for traditional CFD verification. The CFD results are added back to the training set. The network improves on exactly the cases it currently fails &mdash; closing the loop between fast inference and slow verification. This is the <a href="physics-ml.html?clip=12" target="_blank">discrepancy modeling</a> pattern applied to the training pipeline.</p>
 <p class="pullquote">The 0.5s number gets im2sim through the clinic door. Physics-informed loss, uncertainty, and active learning are what keep it in the clinic.</p>
 </div>
 
@@ -322,459 +515,326 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <section style="margin-top:2rem">
 <h2 style="font-family:Georgia,serif;font-size:1.25rem;margin-bottom:.75rem">References and context</h2>
 <ol class="refs">
-<li>
-<div><strong>im2sim documentation</strong> &middot; <a href="https://im2sim.readthedocs.io" target="_blank">im2sim.readthedocs.io</a></div>
-<div class="why">Official library docs, API reference, and tutorials.</div>
-</li>
-<li>
-<div><strong>im2sim GitHub repository</strong> &middot; <a href="https://github.com/im2sim/im2sim" target="_blank">github.com/im2sim/im2sim</a></div>
-<div class="why">Source code, issue tracker, contribution guide.</div>
-</li>
-<li>
-<div>Yao, T. et al. <em>Image2Flow: a neural network for patient-specific blood flow prediction from images.</em> &middot; <a href="https://arxiv.org/abs/2409.02425" target="_blank">arXiv:2409.02425</a></div>
-<div class="why">The earlier framework by Tina Yao that sparked im2sim. Same group, same vision, predecessor architecture.</div>
-</li>
-<li>
-<div>Li, Z. et al. (2020). <em>Fourier Neural Operator for Parametric Partial Differential Equations.</em> &middot; <a href="https://arxiv.org/abs/2010.08895" target="_blank">arXiv:2010.08895</a></div>
-<div class="why">FNO &mdash; the mesh-independent operator learning architecture that would be the natural upgrade for im2sim's field prediction head.</div>
-</li>
-<li>
-<div>Raissi, M. et al. (2019). <em>Physics-informed neural networks.</em> &middot; <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank">doi:10.1016/j.jcp.2018.10.045</a></div>
-<div class="why">PINN &mdash; the divergence-free constraint pattern that would make im2sim's predictions physically correct by construction.</div>
-</li>
-<li>
-<div>Brunton, S. L. &middot; <a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNQ0BaKuBKY43k4xMo6NSbBa" target="_blank">Physics-Informed ML playlist</a></div>
-<div class="why">Our companion 23-video playlist &mdash; clips 16 (Neural ODE), 19 (FNO), 20 (PINN) connect directly to im2sim's architecture.</div>
-</li>
+<li><div><strong>im2sim documentation</strong> &middot; <a href="https://im2sim.readthedocs.io" target="_blank">im2sim.readthedocs.io</a></div><div class="why">Official library docs, API reference, and tutorials.</div></li>
+<li><div><strong>im2sim GitHub repository</strong> &middot; <a href="https://github.com/im2sim/im2sim" target="_blank">github.com/im2sim/im2sim</a></div><div class="why">Source code, issue tracker, contribution guide.</div></li>
+<li><div>Yao, T. et al. <em>Image2Flow: a neural network for patient-specific blood flow prediction from images.</em> &middot; <a href="https://arxiv.org/abs/2409.02425" target="_blank">arXiv:2409.02425</a></div><div class="why">The earlier framework by Tina Yao that sparked im2sim.</div></li>
+<li><div>Li, Z. et al. (2020). <em>Fourier Neural Operator for Parametric PDEs.</em> &middot; <a href="https://arxiv.org/abs/2010.08895" target="_blank">arXiv:2010.08895</a> &middot; <a href="physics-ml.html?clip=19" target="_blank">&rarr; our clip 19</a></div><div class="why">FNO &mdash; the mesh-independent operator learning architecture for the field prediction head.</div></li>
+<li><div>Raissi, M. et al. (2019). <em>Physics-informed neural networks.</em> &middot; <a href="https://doi.org/10.1016/j.jcp.2018.10.045" target="_blank">doi:10.1016/j.jcp.2018.10.045</a> &middot; <a href="physics-ml.html?clip=20" target="_blank">&rarr; our clip 20</a></div><div class="why">PINN &mdash; the divergence-free constraint pattern for physics-informed hemodynamics.</div></li>
+<li><div>Brunton, S. L. &middot; <a href="https://www.youtube.com/playlist?list=PLMrJAkhIeNNQ0BaKuBKY43k4xMo6NSbBa" target="_blank">Physics-Informed ML playlist</a> &middot; <a href="physics-ml.html" target="_blank">&rarr; our 20 clips</a></div><div class="why">Companion curriculum &mdash; clips 16 (Neural ODE), 19 (FNO), 20 (PINN) connect directly to im2sim.</div></li>
 </ol>
 </section>
 </main>
 
 <footer><div class="footer-inner">
 <p>&copy; 2026 Mmnd Collective &middot; Apache-2.0 &middot; <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></p>
-<p>v27-spotlight-im2sim &middot; Research Spotlight Volume 1 &middot; im2sim by Anirudh Raman et al. &middot; <a href="physics-ml.html">See related Physics+ML clips</a></p>
+<p>v28-spotlight-clip-framework &middot; 6 clips &middot; same framework as Physics+ML &middot; im2sim by Anirudh Raman et al.</p>
 </div></footer>
 
 <script>
 // === THEME ===
 (function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
 function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
-
 // === PARTICLE BG ===
-(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;
-function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(40,Math.floor(cv.width*cv.height/30000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:.5+Math.random()*1.5,a:.1+Math.random()*.25})}
-function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';
-for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}
-ctx.globalAlpha=1}
-function lp(){dr();raf=requestAnimationFrame(lp)}
-addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp)})();
+(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(40,Math.floor(cv.width*cv.height/30000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.25,r:.5+Math.random()*1.5,a:.1+Math.random()*.25})}function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1}function lp(){dr();raf=requestAnimationFrame(lp)}addEventListener('resize',rs);rs();if(red)dr();else raf=requestAnimationFrame(lp)})();
 
-// === CANVAS HELPER ===
-function setupCanvas(cv){
-var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();
-if(r.width<10)return null;
-cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
-return {ctx:ctx,W:r.width,H:r.height};
-}
-
-// === CONCEPT CARDS ===
-var CARDS=[
-{n:1,title:'The 0.5-second prediction',desc:'Hours of CFD &#8594; 0.5s inference. Workflow phase change.',tag:'speed'},
-{n:2,title:'Hybrid image-graph architecture',desc:'Why pure CNNs fail on vessels; why pure GNNs lose context.',tag:'architecture'},
-{n:3,title:'The vessel tree as a graph',desc:'Branching points = nodes; segments = edges. Topology encoded.',tag:'graph'},
-{n:4,title:'Time-varying pressure & velocity',desc:'Pulsatile fields across the cardiac cycle, not static snapshots.',tag:'fields'},
-{n:5,title:'The digital twin vision',desc:'Patient-specific model that lives alongside the patient.',tag:'vision'},
-{n:6,title:'Open science + extensibility',desc:'Modular framework: PyTorch + PyG + VTK + PyVista.',tag:'stack'}
+// === CLIP CURRICULUM ===
+var SPOT_CURRICULUM=[
+{n:1,title:'The 0.5-second prediction',desc:'Hours of CFD to 0.5s inference',status:'ready'},
+{n:2,title:'Hybrid image-graph architecture',desc:'Why pure CNNs fail on vessels',status:'ready'},
+{n:3,title:'Vessel tree as a graph',desc:'Nodes, edges, message passing',status:'ready'},
+{n:4,title:'Time-varying fields',desc:'Pulsatile pressure + velocity',status:'ready'},
+{n:5,title:'Digital twin vision',desc:'Patient-specific clinical model',status:'ready'},
+{n:6,title:'Better approach',desc:'FNO + PINN + uncertainty + active learning',status:'ready'}
 ];
-function buildCards(){
-var grid=document.getElementById('cardsGrid');if(!grid)return;
-var h='';
-CARDS.forEach(function(c){
-h+='<div class="card" onclick="openDetail('+c.n+')" id="card'+c.n+'">';
-h+='<div class="card-num">'+c.n+'</div>';
-h+='<div class="card-title">'+c.title+'</div>';
-h+='<div class="card-desc">'+c.desc+'</div>';
-h+='<div class="card-tag">'+c.tag+'</div>';
-h+='</div>';
-});
-grid.innerHTML=h;
-}
-function openDetail(n){
-// Close all
-for(var i=1;i<=6;i++){document.getElementById('detail'+i).classList.remove('active');document.getElementById('card'+i).classList.remove('active')}
-// Open this one
-document.getElementById('detail'+n).classList.add('active');
-document.getElementById('card'+n).classList.add('active');
-// Scroll to detail
-setTimeout(function(){document.getElementById('detail'+n).scrollIntoView({behavior:'smooth',block:'start'})},100);
-// Trigger any lazy animations in this detail
-triggerDetailAnimations(n);
-}
-function closeDetail(n){
-document.getElementById('detail'+n).classList.remove('active');
-document.getElementById('card'+n).classList.remove('active');
+var activeClipNum=1;
+function buildClipGrid(){var grid=document.getElementById('clipGrid');if(!grid)return;var h='';SPOT_CURRICULUM.forEach(function(c){var cls='clip-card';if(c.n===activeClipNum)cls+=' active';h+='<div class="'+cls+'" onclick="selectClip('+c.n+')" title="'+c.desc+'"><div class="clip-num">'+c.n+'</div><div class="clip-title">'+c.title+'</div><div class="clip-status">&#10003; Ready</div></div>'});grid.innerHTML=h}
+function selectClip(n){var c=SPOT_CURRICULUM[n-1];if(!c)return;for(var i=1;i<=6;i++){var s=document.getElementById('clip'+i);if(s)s.style.display='none';if(window['SPOT'+i])window['SPOT'+i].setActive(false)}var sec=document.getElementById('clip'+n);if(sec)sec.style.display='';if(window['SPOT'+n])window['SPOT'+n].setActive(true);activeClipNum=n;buildClipGrid();updateNavButtons();if(sec)sec.scrollIntoView({behavior:'smooth',block:'start'})}
+function updateNavButtons(){var prev=document.getElementById('prevClipBtn');var next=document.getElementById('nextClipBtn');if(prev){if(activeClipNum<=1){prev.classList.add('disabled');prev.removeAttribute('onclick')}else{prev.classList.remove('disabled');prev.setAttribute('onclick','selectClip('+(activeClipNum-1)+')')}}if(next){if(activeClipNum>=6){next.classList.add('disabled');next.removeAttribute('onclick')}else{next.classList.remove('disabled');next.setAttribute('onclick','selectClip('+(activeClipNum+1)+')')}}}
+
+// === PHASE BAR + FLOATING MATH ===
+function drawPhaseBar(ctx,W,H){var pby=H-5;var g=ctx.createLinearGradient(0,pby,W,pby);g.addColorStop(0,'#ff0000');g.addColorStop(.14,'#ffa500');g.addColorStop(.28,'#ffff00');g.addColorStop(.42,'#00ff00');g.addColorStop(.57,'#00ffff');g.addColorStop(.71,'#0000ff');g.addColorStop(.85,'#ff00ff');g.addColorStop(1,'#ff0000');ctx.fillStyle=g;ctx.fillRect(0,pby,W,2)}
+function drawFloatingMath(ctx,W,H,t,expressions){if(!expressions)return;ctx.textAlign='center';ctx.textBaseline='middle';var cycleLen=12;expressions.forEach(function(expr,i){var phase=(t*0.15+i*cycleLen/expressions.length)%cycleLen;var progress=phase/cycleLen;var x=progress*(W+200)-100;var baseY=H*0.15+(i%3)*H*0.11;var y=baseY+Math.sin(t*0.3+i*0.7)*15;var alpha=Math.sin(progress*Math.PI)*0.3;if(alpha<=0)return;ctx.globalAlpha=alpha;ctx.font='italic '+(13+Math.sin(t+i)*2|0)+'px Georgia,serif';ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=10;ctx.fillText(expr,x,y);ctx.shadowBlur=0;ctx.globalAlpha=1})}
+
+// === NARRATION ===
+var Narration={enabled:false,currentAudio:null,speak:function(clipKey,sceneIdx){if(!this.enabled)return;this.stop();var a=new Audio('audio/'+clipKey+'_'+sceneIdx+'.mp3');a.volume=1;this.currentAudio=a;a.play().catch(function(e){console.log('Narration play failed:',e.message)})},stop:function(){if(this.currentAudio){this.currentAudio.pause();this.currentAudio=null}},toggle:function(){this.enabled=!this.enabled;if(!this.enabled)this.stop();return this.enabled}};
+
+// === SHARED SCENE THOUGHTS + PARAMS ===
+var SCENE_THOUGHTS=['<strong style="color:var(--primary)">Scene 1.</strong> Setup: the question or mechanism being explored.','<strong style="color:var(--primary)">Scene 2.</strong> The core dynamic becomes visible.','<strong style="color:var(--primary)">Scene 3.</strong> Comparison or trade-off emerges.','<strong style="color:var(--primary)">Scene 4.</strong> Deeper structural insight.','<strong style="color:var(--primary)">Scene 5.</strong> Better approach: what to add.','<strong style="color:var(--primary)">Scene 6.</strong> Cross-link to Physics+ML curriculum.'];
+var SCENE_PARAMS=[
+{label:'N',min:1,max:100,step:1,default:50,decimals:0,desc:'agents'},
+{label:'\u03b1',min:0,max:1,step:0.05,default:0.5,decimals:2,desc:'weight'},
+{label:'depth',min:2,max:6,step:1,default:4,decimals:0,desc:'tree depth'},
+{label:'HR',min:40,max:120,step:5,default:75,decimals:0,desc:'heart rate'},
+{label:'\u03b3',min:0,max:2,step:0.1,default:1,decimals:1,desc:'safety'},
+{label:'\u03bb',min:0,max:2,step:0.1,default:1,decimals:1,desc:'loss weight'}
+];
+
+// === MAKE CLIP (ported from physics-ml.html) ===
+function makeClip(opts){
+var state={scene:0,time:0,zoom:1,dark:true,playing:true,anim:null,active:true,param:opts.paramDefault||0.5,narrationKey:opts.narrationKey||'',recording:false,recorder:null,recChunks:[],cv:document.getElementById(opts.cvId),wrap:document.getElementById(opts.wrapId),lbl:document.getElementById(opts.lblId),titleEl:document.getElementById(opts.titleId),zoomEl:document.getElementById(opts.zoomId),zoomVal:document.getElementById(opts.zoomValId),paramEl:document.getElementById(opts.paramId),paramVal:document.getElementById(opts.paramValId),paramLabel:document.getElementById(opts.paramLabelId),lightBtn:document.getElementById(opts.lightId),narrBtn:document.getElementById(opts.narrId),recBtn:document.getElementById(opts.recId),sceneListEl:document.getElementById(opts.sceneListId),thoughtsEl:document.getElementById(opts.thoughtsId),scenes:opts.scenes};
+var h='';opts.scenes.forEach(function(s,i){h+='<li data-idx="'+i+'" onclick="'+opts.varName+'.seek('+i+')"><span class="num">'+(i+1)+'</span><div><div class="title">'+s.title+'</div><div class="desc">'+s.desc+'</div></div></li>'});state.sceneListEl.innerHTML=h;
+function updateSceneUI(){state.lbl.textContent='Scene '+(state.scene+1)+'/'+opts.scenes.length;state.titleEl.textContent=opts.scenes[state.scene].title;state.sceneListEl.querySelectorAll('li').forEach(function(li,i){li.classList.toggle('active',i===state.scene)});if(state.thoughtsEl&&SCENE_THOUGHTS[state.scene])state.thoughtsEl.innerHTML=SCENE_THOUGHTS[state.scene];var sp=SCENE_PARAMS[state.scene];if(sp&&state.paramLabel){state.paramLabel.textContent=sp.label;state.paramEl.min=sp.min;state.paramEl.max=sp.max;state.paramEl.step=sp.step;state.paramEl.value=sp.default;state.param=sp.default;var dec=sp.decimals||2;state.paramVal.textContent=parseFloat(sp.default).toFixed(dec);state.paramEl.oninput=function(){state.param=parseFloat(state.paramEl.value);state.paramVal.textContent=state.param.toFixed(dec)}}}
+function narrateCurrent(){if(state.narrationKey)Narration.speak(state.narrationKey,state.scene)}
+updateSceneUI();
+state.zoomEl.addEventListener('input',function(){state.zoom=parseFloat(state.zoomEl.value);state.zoomVal.textContent=state.zoom.toFixed(1)+'x'});
+state.toggleLight=function(){state.dark=!state.dark;state.wrap.classList.toggle('light-canvas',!state.dark);state.lightBtn.textContent=state.dark?'\u25d0':'\u25cf'};
+state.toggleNarration=function(){var on=Narration.toggle();if(state.narrBtn){state.narrBtn.textContent='\u266a';state.narrBtn.style.color=on?'var(--primary)':''}if(on)narrateCurrent();else Narration.stop()};
+state.toggleRecord=function(){if(state.recording){if(state.recorder&&state.recorder.state!=='inactive')state.recorder.stop();state.recording=false;if(state.recBtn){state.recBtn.textContent='\u25cf';state.recBtn.style.color='';state.recBtn.style.animation=''}}else{try{var stream=state.cv.captureStream(30);state.recChunks=[];state.recorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp8'});state.recorder.ondataavailable=function(e){if(e.data&&e.data.size>0)state.recChunks.push(e.data)};state.recorder.onstop=function(){var blob=new Blob(state.recChunks,{type:'video/webm'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download=state.narrationKey+'_scene'+(state.scene+1)+'_'+Date.now()+'.webm';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},1000)};state.recorder.start();state.recording=true;if(state.recBtn){state.recBtn.textContent='\u25a0';state.recBtn.style.color='#ff0000';state.recBtn.style.animation='pulse 1s infinite'}}catch(e){console.log('Recording failed:',e.message)}}};
+state.play=function(){state.playing=true};state.pause=function(){state.playing=false};state.replay=function(){state.time=0;state.playing=true};state.seek=function(s){state.scene=Math.max(0,Math.min(opts.scenes.length-1,s));state.time=0;updateSceneUI();narrateCurrent()};state.next=function(){state.seek(state.scene+1)};state.prev=function(){state.seek(state.scene-1)};
+state.setActive=function(a){state.active=a;if(a){if(!state.anim)state.anim=requestAnimationFrame(frame)}else{if(state.anim){cancelAnimationFrame(state.anim);state.anim=null}}};
+state.draw=opts.draw;
+function frame(){if(state.playing&&state.active)state.time+=0.02;if(state.active)opts.draw(state.cv,state.scene,state.time,state.zoom,state.dark,state.param);state.anim=requestAnimationFrame(frame)}
+state.setActive(false);return state;
 }
 
-// === LAZY ANIMATION SYSTEM (IntersectionObserver) ===
-var animStates={};
-function startAnimWhenVisible(cvId,drawFn){
-var cv=document.getElementById(cvId);if(!cv)return;
-var observer=new IntersectionObserver(function(entries){
-entries.forEach(function(e){
-if(e.isIntersecting){
-if(!animStates[cvId]){animStates[cvId]={t:0,active:true};loopAnim(cvId,drawFn)}
-else{animStates[cvId].active=true}
-}else{if(animStates[cvId])animStates[cvId].active=false}
-});
-},{threshold:0.1});
-observer.observe(cv);
-}
-function loopAnim(cvId,drawFn){
-var st=animStates[cvId];if(!st)return;
-if(!st.active){requestAnimationFrame(function(){loopAnim(cvId,drawFn)});return}
-var cv=document.getElementById(cvId);if(!cv){st.active=false;return}
-var s=setupCanvas(cv);if(!s){requestAnimationFrame(function(){loopAnim(cvId,drawFn)});return}
-drawFn(s.ctx,s.W,s.H,st.t);
-st.t+=0.02;
-requestAnimationFrame(function(){loopAnim(cvId,drawFn)});
-}
-function triggerDetailAnimations(n){
-// Start animations for canvases in this detail
-var detail=document.getElementById('detail'+n);
-if(!detail)return;
-var canvases=detail.querySelectorAll('canvas');
-canvases.forEach(function(cv){
-var cvId=cv.id;
-if(cvId&&!animStates[cvId]){
-// Find the draw function by id
-var drawFn=DRAW_FNS[cvId];
-if(drawFn){startAnimWhenVisible(cvId,drawFn)}
-}
-});
-}
-
-// === DRAW FUNCTIONS ===
-var DRAW_FNS={};
-
-// Hero: image &#8594; graph &#8594; flow
-DRAW_FNS.heroCanvas=function(ctx,W,H,t){
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-// Left: 3D MRI slices (stacked rectangles)
-ctx.globalAlpha=0.7;
-for(var i=0;i<5;i++){
-var y=H*0.3+i*8;
-ctx.fillStyle='rgba(0,206,209,'+(0.3+i*0.1)+')';
-ctx.fillRect(W*0.05,y,W*0.15,H*0.5/5);
-}
-ctx.globalAlpha=1;
-// Arrow
-ctx.strokeStyle='#FFD700';ctx.lineWidth=2;
-ctx.beginPath();ctx.moveTo(W*0.22,H*0.5);ctx.lineTo(W*0.3,H*0.5);ctx.stroke();
-// Center: network box
-ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
-ctx.fillRect(W*0.3,H*0.35,W*0.25,H*0.3);ctx.shadowBlur=0;
-ctx.fillStyle='#000';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';
-ctx.fillText('im2sim',W*0.425,H*0.5);
-ctx.font='7px monospace';ctx.fillText('image + graph &#8594; field',W*0.425,H*0.58);
-// Arrow
-ctx.strokeStyle='#FFD700';ctx.beginPath();ctx.moveTo(W*0.57,H*0.5);ctx.lineTo(W*0.65,H*0.5);ctx.stroke();
-// Right: flow field (animated particles)
-ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;
-for(var i=0;i<20;i++){
-var px=W*0.65+((i*7+t*30)%100);
-var py=H*0.3+Math.sin(i*0.5+t)*H*0.15+H*0.2;
-ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();
-}
-ctx.shadowBlur=0;
-// Labels
-ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('3D MRI',W*0.05,H*0.25);
-ctx.fillStyle='#FFD700';ctx.fillText('hybrid net',W*0.34,H*0.3);
-ctx.fillStyle='#10b981';ctx.fillText('flow field',W*0.65,H*0.25);
-ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';
-ctx.fillText('image &#8594; simulation in 0.5 seconds',W/2,H*0.85);
-};
-
-// Card 1: CFD vs im2sim workflow
-DRAW_FNS.cfdWorkflowCanvas=function(ctx,W,H,t){
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-var steps=['Segment','Mesh','Solve','Post'];
-var stepTime=t*0.5%4;
-for(var i=0;i<4;i++){
-var px=W*0.1+i*W*0.2;
-var active=i===Math.floor(stepTime);
-ctx.fillStyle=active?'#ff6b6b':'rgba(255,107,107,0.3)';
-ctx.fillRect(px-20,H*0.35,40,30);
-ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(steps[i],px,H*0.5);
-}
-// Time bar
-ctx.fillStyle='#ff6b6b';ctx.fillRect(W*0.1,H*0.7,W*0.8,8);
-ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('~6 hours',W/2,H*0.78);
-};
-DRAW_FNS.im2simWorkflowCanvas=function(ctx,W,H,t){
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-var steps=['MRI','Net','Field'];
-for(var i=0;i<3;i++){
-var px=W*0.15+i*W*0.3;
-ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=6;
-ctx.fillRect(px-20,H*0.35,40,30);ctx.shadowBlur=0;
-ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(steps[i],px,H*0.5);
-if(i<2){ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+20,H*0.5);ctx.lineTo(px+W*0.3-20,H*0.5);ctx.stroke()}
-}
-// Tiny time bar
-ctx.fillStyle='#10b981';ctx.fillRect(W*0.15,H*0.7,4,8);
-ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('0.5 sec',W/2,H*0.78);
-};
-
-// Card 2: hybrid architecture
-DRAW_FNS.hybridArchCanvas=function(ctx,W,H,t){
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-// Image branch (left): 3D CNN layers
-ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('Image branch (3D CNN)',W*0.12,H*0.12);
-for(var i=0;i<4;i++){
-ctx.fillStyle='rgba(0,206,209,'+(0.4+i*0.15)+')';
-ctx.fillRect(W*0.05+i*12,H*0.3,10,40);
-}
-// Graph branch (right): GNN nodes
-ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('Graph branch (GNN)',W*0.88,H*0.12);
-// Nodes
-var nodes=[{x:0.82,y:0.4},{x:0.88,y:0.35},{x:0.94,y:0.45},{x:0.86,y:0.55},{x:0.92,y:0.6}];
-nodes.forEach(function(n){ctx.fillStyle='#FF69B4';ctx.shadowColor='#FF69B4';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(W*n.x,H*n.y,3,0,Math.PI*2);ctx.fill()});
-ctx.shadowBlur=0;
-// Edges
-ctx.strokeStyle='#FF69B4';ctx.lineWidth=1;ctx.globalAlpha=0.5;
-ctx.beginPath();ctx.moveTo(W*0.82,H*0.4);ctx.lineTo(W*0.88,H*0.35);ctx.lineTo(W*0.94,H*0.45);ctx.lineTo(W*0.92,H*0.6);ctx.lineTo(W*0.86,H*0.55);ctx.closePath();ctx.stroke();
-ctx.globalAlpha=1;
-// Fusion (center)
-ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;
-ctx.beginPath();ctx.arc(W*0.5,H*0.45,15,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-ctx.fillStyle='#000';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('fuse',W*0.5,H*0.47);
-// Arrows to fusion
-ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;
-ctx.beginPath();ctx.moveTo(W*0.18,H*0.5);ctx.lineTo(W*0.42,H*0.45);ctx.stroke();
-ctx.beginPath();ctx.moveTo(W*0.78,H*0.45);ctx.lineTo(W*0.58,H*0.45);ctx.stroke();
-// Output: field
-ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('field (u, p)',W*0.5,H*0.8);
-ctx.strokeStyle='#10b981';ctx.beginPath();ctx.moveTo(W*0.5,H*0.55);ctx.lineTo(W*0.5,H*0.7);ctx.stroke();
-// Animated particles flowing to output
-for(var i=0;i<5;i++){
-var py=H*0.6+((t*30+i*10)%30);
-ctx.fillStyle='#10b981';ctx.globalAlpha=0.6;
-ctx.beginPath();ctx.arc(W*0.5,py,1.5,0,Math.PI*2);ctx.fill();
-}
-ctx.globalAlpha=1;
-};
-
-// Card 3: vessel graph
-DRAW_FNS.vesselGraphCanvas=function(ctx,W,H,t){
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-// Draw a synthetic vessel tree
-var tree=generateTree(W*0.1,H*0.5,0,4,3,0);
-// Edges
-ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.globalAlpha=0.8;
-tree.edges.forEach(function(e){
-ctx.beginPath();ctx.moveTo(e.x1,e.y1);ctx.lineTo(e.x2,e.y2);ctx.stroke();
-});
-ctx.globalAlpha=1;
-// Nodes
-tree.nodes.forEach(function(n){
-ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;
-ctx.beginPath();ctx.arc(n.x,n.y,3,0,Math.PI*2);ctx.fill();
-});
-ctx.shadowBlur=0;
-// Flow particles along edges
-tree.edges.forEach(function(e,i){
-var phase=(t*0.5+i*0.2)%1;
-var px=e.x1+(e.x2-e.x1)*phase;
-var py=e.y1+(e.y2-e.y1)*phase;
-ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;
-ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);ctx.fill();
-});
-ctx.shadowBlur=0;
-// Labels
-ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('\u25cf nodes = branching',W*0.05,H*0.1);
-ctx.fillStyle='#00CED1';ctx.fillText('\u2014 edges = segments',W*0.4,H*0.1);
-ctx.fillStyle='#10b981';ctx.fillText('\u00b7 flow',W*0.75,H*0.1);
-};
-// Helper: procedural vessel tree generator (deterministic for animation)
+// === HELPER: vessel tree generator ===
 function generateTree(x,y,angle,depth,branchFactor,seed){
 var nodes=[];var edges=[];
 var rng=function(s){return function(){s=(s*9301+49297)%233280;return s/233280}}(seed||42);
-function branch(x,y,a,d,parentIdx){
-if(d<=0)return;
-var len=20+rng()*30;
-var nx=x+Math.cos(a)*len;
-var ny=y+Math.sin(a)*len;
-var idx=nodes.length;
-nodes.push({x:nx,y:ny});
-if(parentIdx>=0)edges.push({x1:x,y1:y,x2:nx,y2:ny});
-for(var i=0;i<branchFactor;i++){
-var da=(i-(branchFactor-1)/2)*0.5+rng()*0.3-0.15;
-branch(nx,ny,a+da,d-1,branchFactor,idx);
-}
-}
-nodes.push({x:x,y:y});
-branch(x,y,angle,depth,branchFactor,0);
-return {nodes:nodes,edges:edges};
+function branch(x,y,a,d,parentIdx){if(d<=0)return;var len=15+rng()*25;var nx=x+Math.cos(a)*len;var ny=y+Math.sin(a)*len;var idx=nodes.length;nodes.push({x:nx,y:ny});if(parentIdx>=0)edges.push({x1:x,y1:y,x2:nx,y2:ny});for(var i=0;i<branchFactor;i++){var da=(i-(branchFactor-1)/2)*0.6+rng()*0.3-0.15;branch(nx,ny,a+da,d-1,branchFactor,idx)}}
+nodes.push({x:x,y:y});branch(x,y,angle,depth,branchFactor,0);return {nodes:nodes,edges:edges};
 }
 
-// Card 4: pressure + velocity fields
-DRAW_FNS.pressureFieldCanvas=function(ctx,W,H,t){
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-// Pulsatile pressure wave
-var cycle=(t*0.5)%1;
-for(var i=0;i<60;i++){
-var tt=i/60;
-var x=W*0.1+tt*W*0.8;
-// Pressure wave: systolic peak then diastolic
-var p=0.5+0.4*Math.sin(tt*4-cycle*Math.PI*2)+0.1*Math.sin(tt*8);
-var y=H*0.85-p*H*0.6;
-ctx.fillStyle='rgba(255,107,107,'+p+')';
-ctx.fillRect(x-2,y,4,H*0.85-y);
-}
-ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();
-for(var i=0;i<60;i++){
-var tt=i/60;var x=W*0.1+tt*W*0.8;
-var p=0.5+0.4*Math.sin(tt*4-cycle*Math.PI*2)+0.1*Math.sin(tt*8);
-var y=H*0.85-p*H*0.6;
-if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-}
-ctx.stroke();
-ctx.fillStyle='#ff6b6b';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('pressure',W*0.12,H*0.15);
+// === FUTURE CHART ===
+var FUTURES_DATA={
+'spot1':[{n:'0.5s inference default',y:2027,p:0.50,t:'Sub-second inference standard for clinical AI'},{n:'Real-time CFD twins',y:2029,p:0.35,t:'Digital twins update during consultation'},{n:'Edge deployment',y:2028,p:0.40,t:'Clinical AI runs on hospital edge hardware'},{n:'Multi-modal fusion',y:2030,p:0.30,t:'MRI+CT+ultrasound fused in single network'},{n:'Regulatory approval',y:2031,p:0.25,t:'First AI-predicted hemodynamics FDA approved'}],
+'spot2':[{n:'Hybrid nets standard',y:2028,p:0.45,t:'Image-graph hybrids default for vessel modeling'},{n:'FNO field heads',y:2027,p:0.40,t:'Fourier spectral layers replace CNN output heads'},{n:'Equivariant GNNs',y:2029,p:0.30,t:'Rotation-equivariant GNNs for vessel geometry'},{n:'Multi-resolution fusion',y:2030,p:0.25,t:'Multi-scale image+graph fusion standard'}],
+'spot3':[{n:'Graph extraction default',y:2026,p:0.50,t:'Automatic vessel-to-graph extraction standard'},{n:'Attribute-rich graphs',y:2027,p:0.40,t:'Radius/wall-thickness attributes on every edge'},{n:'Dynamic graphs',y:2029,p:0.30,t:'Time-varying vessel graphs for pulsatile dynamics'},{n:'Cross-modality graphs',y:2028,p:0.35,t:'MRI+CT vessel graphs fused automatically'}],
+'spot4':[{n:'PINN hemodynamics',y:2027,p:0.40,t:'Divergence-free loss standard for blood flow AI'},{n:'Cardiac-cycle aware',y:2026,p:0.45,t:'Time-varying field prediction default'},{n:'WSS prediction',y:2028,p:0.35,t:'Wall shear stress predicted directly from MRI'},{n:'Multi-phase fields',y:2030,p:0.25,t:'Systolic+diastolic fields predicted separately'}],
+'spot5':[{n:'Digital twin deployed',y:2029,p:0.30,t:'First clinical digital twin for cardiovascular'},{n:'Uncertainty standard',y:2027,p:0.40,t:'Confidence intervals on every AI prediction'},{n:'Active learning loop',y:2028,p:0.35,t:'Low-confidence cases auto-queued for CFD'},{n:'Outcome validation',y:2030,p:0.25,t:'AI twins validated against clinical outcomes'}],
+'spot6':[{n:'Physics-informed default',y:2026,p:0.45,t:'Divergence-free loss standard in medical AI'},{n:'FNO replaces CNN',y:2027,p:0.40,t:'Fourier spectral layers ubiquitous'},{n:'Ensemble uncertainty',y:2026,p:0.50,t:'Ensemble or Bayesian on every clinical model'},{n:'Active learning',y:2028,p:0.35,t:'Active learning loops standard for clinical AI'}]
 };
-DRAW_FNS.velocityFieldCanvas=function(ctx,W,H,t){
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-// Velocity magnitude: high at stenosis, low in aneurysm
-for(var i=0;i<60;i++){
-var tt=i/60;var x=W*0.1+tt*W*0.8;
-// Velocity profile with a stenosis dip and aneurysm bump
-var v=0.3+0.5*Math.exp(-Math.pow((tt-0.3)*5,2))+0.1*Math.exp(-Math.pow((tt-0.6)*4,2));
-v*=0.7+0.3*Math.sin(t*0.5);
-var y=H*0.85-v*H*0.6;
-ctx.fillStyle='rgba(16,185,129,'+v+')';
-ctx.fillRect(x-2,y,4,H*0.85-y);
-}
-ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();
-for(var i=0;i<60;i++){
-var tt=i/60;var x=W*0.1+tt*W*0.8;
-var v=0.3+0.5*Math.exp(-Math.pow((tt-0.3)*5,2))+0.1*Math.exp(-Math.pow((tt-0.6)*4,2));
-v*=0.7+0.3*Math.sin(t*0.5);
-var y=H*0.85-v*H*0.6;
-if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-}
-ctx.stroke();
-ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('velocity',W*0.12,H*0.15);
-};
+function drawFutureChart(cvId,dataId,animState){var cv=document.getElementById(cvId);if(!cv)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc='#10b981',accent='#06b6d4',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);var problems=FUTURES_DATA[dataId];var growth=1.3;var pL=70,pB=25,pT=30,pR=15,cw=W-pL-pR,ch=H-pT-pB;var yearStart=2025,yearEnd=2040,yearSpan=yearEnd-yearStart;var animT=animState.t||0;var growProgress=Math.min(1,animT/3);var breathe=Math.sin(animT*0.8)*0.04;ctx.strokeStyle='rgba(16,185,129,0.08)';ctx.lineWidth=.5;for(var y=yearStart;y<=yearEnd;y+=3){var x=pL+((y-yearStart)/yearSpan)*cw;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(y,x,H-pB+10)}problems.forEach(function(pb,i){var rowY=pT+(i+0.5)*ch/problems.length;var barH=ch/problems.length*0.55;ctx.beginPath();for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'44');grad.addColorStop(1,accent+'66');ctx.fillStyle=grad;ctx.fill();ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=pc;ctx.lineWidth=1.5;ctx.beginPath();for(var s=0;s<=100;s++){var year=yearStart+(s/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growProgress+breathe*rawP);var x=pL+(s/100)*cw;var y=rowY-barH/2-pAtY*barH;if(s===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle=fg;ctx.font='7px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-5,rowY+3)});ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText('P(breakthrough) evolving',W/2,14);var msEl=document.getElementById(cvId+'m');if(msEl){var ms=problems.slice(0,3);msEl.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':</strong> '+m.n}).join(' &middot; ')}}
+var futAnimState={t:0};
+function futLoop(){futAnimState.t+=0.04;for(var i=1;i<=6;i++){drawFutureChart('fut'+i,'spot'+i,futAnimState)}requestAnimationFrame(futLoop)}
+setTimeout(futLoop,200);
 
-// Card 5: digital twin loop
-DRAW_FNS.digitalTwinCanvas=function(ctx,W,H,t){
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-var steps=['Scan','Model','Predict','Decide','Rescan'];
-var cx=W/2,cy=H*0.5;
-var radius=H*0.3;
-for(var i=0;i<5;i++){
-var a=i/5*Math.PI*2-Math.PI/2+t*0.2;
-var px=cx+Math.cos(a)*radius*1.5;
-var py=cy+Math.sin(a)*radius;
-ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;
-ctx.beginPath();ctx.arc(px,py,18,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-ctx.fillStyle='#000';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(steps[i],px,py+2);
-// Arrow to next
-var na=(i+1)/5*Math.PI*2-Math.PI/2+t*0.2;
-var nx=cx+Math.cos(na)*radius*1.5;
-var ny=cy+Math.sin(na)*radius;
-ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.globalAlpha=0.5;
-ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(nx,ny);ctx.stroke();
+// === LANGS + ESC ===
+var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// === CLIP 1: 0.5-second prediction ===
+var SPOT1_SCENES=[{title:'CFD pipeline',desc:'Segment &#8594; mesh &#8594; solve &#8594; post-process: hours'},{title:'im2sim pipeline',desc:'MRI &#8594; trained network &#8594; field: 0.5s'},{title:'Speed comparison',desc:'Hours vs 0.5 seconds: 43,000x speedup'},{title:'Workflow phase change',desc:'Weekly iteration &#8594; consultation iteration'},{title:'What-if scenarios',desc:'Surgeon adjusts boundary condition, sees flow change instantly'},{title:'Cross-link: FNO clip 19',desc:'Mesh-independent operator learning enables this speedup'}];
+var SCENE1_MATH=[['segment&#8594;mesh&#8594;solve','CFD pipeline','hours'],['MRI&#8594;net&#8594;field','im2sim','0.5s'],['43000x','speedup','phase change'],['real-time','what-if','iterate'],[' consultation loop','clinical','decision'],['&#8594; FNO clip 19','mesh-free','operator']];
+var SPOT1=makeClip({varName:'SPOT1',cvId:'cv1',wrapId:'wrap1',lblId:'lbl1',titleId:'title1',zoomId:'zoom1',zoomValId:'zoom1v',paramId:'param1',paramValId:'param1v',paramLabelId:'paramLabel1',paramDefault:50,paramDecimals:0,lightId:'light1',narrId:'narr1',recId:'rec1',narrationKey:'spot1',sceneListId:'scenes1',thoughtsId:'thoughts1',scenes:SPOT1_SCENES,draw:function(cv,scene,t,zoom,dark,param){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);drawFloatingMath(ctx,W,H,t,SCENE1_MATH[scene]);var cx=W/2,cy=H*0.5;
+if(scene===0){var steps=['Segment','Mesh','Solve','Post'];var stepTime=t*0.4%4;for(var i=0;i<4;i++){var px=W*0.15+i*W*0.22;var active=i===Math.floor(stepTime);ctx.fillStyle=active?'#ff6b6b':'rgba(255,107,107,0.3)';ctx.fillRect(px-25,cy-20,50,40);ctx.fillStyle='#fff';ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText(steps[i],px,cy+2)}ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('~6 hours',cx,H*0.8)}
+else if(scene===1){var steps2=['MRI','Net','Field'];for(var i=0;i<3;i++){var px=W*0.2+i*W*0.3;ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.fillRect(px-25,cy-20,50,40);ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='8px monospace';ctx.textAlign='center';ctx.fillText(steps2[i],px,cy+2);if(i<2){ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(px+25,cy);ctx.lineTo(px+W*0.3-25,cy);ctx.stroke()}}ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('0.5 seconds',cx,H*0.8)}
+else if(scene===2){ctx.fillStyle='#ff6b6b';ctx.fillRect(W*0.1,cy-30,W*0.7,20);ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('CFD: 6 hours = 21600s',W*0.12,cy-18);ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.fillRect(W*0.1,cy+10,3,20);ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.fillText('im2sim: 0.5s',W*0.12,cy+22);ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('43,000x speedup',cx,H*0.8)}
+else if(scene===3){ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<60;i++){var x=W*0.1+i/60*W*0.35;var y=cy-20+i*0.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('weekly iteration',W*0.27,H*0.8);ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();for(var i=0;i<60;i++){var x=W*0.55+i/60*W*0.35;var y=cy-20+Math.sin(i*0.5+t)*8;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#10b981';ctx.fillText('consultation iteration',W*0.72,H*0.8)}
+else if(scene===4){ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('surgeon: what if we enlarge the stent?',cx,H*0.2);ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(cx,cy,15,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.fillText('0.5s',cx,cy+3);ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(cx,cy+15);ctx.lineTo(cx,H*0.8);ctx.stroke();ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.fillText('updated flow prediction',cx,H*0.85)}
+else if(scene===5){ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Cross-link: FNO clip 19',cx,H*0.15);ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,20,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.fillText('mesh-independent',cx,cy-5);ctx.fillText('operator learning',cx,cy+8);ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.fillText('&#8594; physics-ml.html?clip=19',cx,H*0.85)}
+drawPhaseBar(ctx,W,H)}});
+SPOT1.setActive(false);
+
+// === CLIP 2: Hybrid architecture ===
+var SPOT2_SCENES=[{title:'Pure CNN limitation',desc:'Translation equivariance hurts branching vessels'},{title:'Pure GNN limitation',desc:'Loses spatial context of surrounding tissue'},{title:'Image branch (3D CNN)',desc:'Processes MRI anatomy + tissue texture'},{title:'Graph branch (GNN)',desc:'Encodes vessel topology via message passing'},{title:'Fusion layer',desc:'Combines both modalities before field prediction'},{title:'Cross-link: FNO clip 19',desc:'FNO spectral layer as better field head'}];
+var SCENE2_MATH=[['CNN: transl-equiv','vessels curve','fails'],['GNN: topology-only','no context','fails'],['3D CNN','anatomy','texture'],['GNN','topology','connectivity'],['fuse(image,graph)','hybrid','best'],['&#8594; FNO field head','mesh-free','clip 19']];
+var SPOT2=makeClip({varName:'SPOT2',cvId:'cv2',wrapId:'wrap2',lblId:'lbl2',titleId:'title2',zoomId:'zoom2',zoomValId:'zoom2v',paramId:'param2',paramValId:'param2v',paramLabelId:'paramLabel2',paramDefault:0.5,paramDecimals:2,lightId:'light2',narrId:'narr2',recId:'rec2',narrationKey:'spot2',sceneListId:'scenes2',thoughtsId:'thoughts2',scenes:SPOT2_SCENES,draw:function(cv,scene,t,zoom,dark,param){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);drawFloatingMath(ctx,W,H,t,SCENE2_MATH[scene]);var cx=W/2,cy=H*0.5;
+if(scene===0){ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<60;i++){var a=i/60*Math.PI*2;var x=cx+Math.cos(a)*60+Math.sin(a*3)*15;var y=cy+Math.sin(a)*40+Math.cos(a*2)*10;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('vessel curves &#8594; CNN kernel inconsistent',cx,H*0.85)}
+else if(scene===1){ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;var nodes=[{x:0.3,y:0.3},{x:0.5,y:0.4},{x:0.7,y:0.3},{x:0.4,y:0.6},{x:0.6,y:0.7}];nodes.forEach(function(n){ctx.beginPath();ctx.arc(W*n.x,H*n.y,4,0,Math.PI*2);ctx.stroke()});ctx.beginPath();ctx.moveTo(W*0.3,H*0.3);ctx.lineTo(W*0.5,H*0.4);ctx.lineTo(W*0.7,H*0.3);ctx.moveTo(W*0.5,H*0.4);ctx.lineTo(W*0.6,H*0.7);ctx.lineTo(W*0.4,H*0.6);ctx.stroke();ctx.fillStyle='#FF69B4';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('graph only &#8594; where in the chest?',cx,H*0.85)}
+else if(scene===2){ctx.fillStyle='#00CED1';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('Image branch (3D CNN)',cx,H*0.12);for(var i=0;i<4;i++){ctx.fillStyle='rgba(0,206,209,'+(0.4+i*0.15)+')';ctx.fillRect(W*0.3+i*15,cy-30,12,60)}ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.fillText('anatomy + texture',cx,H*0.85)}
+else if(scene===3){ctx.fillStyle='#FF69B4';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('Graph branch (GNN)',cx,H*0.12);var ns=[{x:0.3,y:0.4},{x:0.5,y:0.35},{x:0.7,y:0.45},{x:0.4,y:0.65},{x:0.6,y:0.7}];ctx.strokeStyle='#FF69B4';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(W*0.3,H*0.4);ctx.lineTo(W*0.5,H*0.35);ctx.lineTo(W*0.7,H*0.45);ctx.lineTo(W*0.6,H*0.7);ctx.lineTo(W*0.4,H*0.65);ctx.closePath();ctx.stroke();ns.forEach(function(n){ctx.fillStyle='#FF69B4';ctx.shadowColor='#FF69B4';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(W*n.x,H*n.y,4,0,Math.PI*2);ctx.fill()});ctx.shadowBlur=0;ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.fillText('topology + connectivity',cx,H*0.85)}
+else if(scene===4){ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('Fusion layer',cx,H*0.12);ctx.fillStyle='#00CED1';ctx.fillRect(W*0.2,cy-15,30,30);ctx.fillStyle='#FF69B4';ctx.fillRect(W*0.65,cy-15,30,30);ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(cx,cy,15,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.25,cy);ctx.lineTo(cx-15,cy);ctx.moveTo(cx+15,cy);ctx.lineTo(W*0.7,cy);ctx.stroke();ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.fillText('fuse(image, graph) &#8594; field',cx,H*0.85)}
+else if(scene===5){ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Better: FNO spectral field head',cx,H*0.15);ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,25,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.fillText('mesh-independent',cx,cy-5);ctx.fillText('zero-shot super-res',cx,cy+8);ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.fillText('&#8594; physics-ml.html?clip=19',cx,H*0.85)}
+drawPhaseBar(ctx,W,H)}});
+SPOT2.setActive(false);
+
+// === CLIP 3: Vessel tree as graph (with Pyodide GNN) ===
+var SPOT3_SCENES=[{title:'Vessel segmentation',desc:'Extract vessel mask from 3D MRI'},{title:'Node extraction',desc:'Branching points become graph nodes'},{title:'Edge extraction',desc:'Vessel segments become edges'},{title:'Node/edge attributes',desc:'Position, radius, length, orientation'},{title:'Message passing',desc:'Flow info propagates along topology (runnable below)'},{title:'Synthetic tree generator',desc:'Procedural vessel trees; lazy evaluation'}];
+var SCENE3_MATH=[['MRI &#8594; mask','segmentation','vessels'],['branching pts','nodes','graph'],['segments','edges','topology'],['r, L, n&#770;','attributes','rich'],['message passing','GNN','propagate'],['procedural','lazy eval','generate']];
+var SPOT3=makeClip({varName:'SPOT3',cvId:'cv3',wrapId:'wrap3',lblId:'lbl3',titleId:'title3',zoomId:'zoom3',zoomValId:'zoom3v',paramId:'param3',paramValId:'param3v',paramLabelId:'paramLabel3',paramDefault:4,paramDecimals:0,lightId:'light3',narrId:'narr3',recId:'rec3',narrationKey:'spot3',sceneListId:'scenes3',thoughtsId:'thoughts3',scenes:SPOT3_SCENES,draw:function(cv,scene,t,zoom,dark,param){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);drawFloatingMath(ctx,W,H,t,SCENE3_MATH[scene]);var cx=W/2,cy=H*0.5;var depth=Math.round(param);var tree=generateTree(60,cy,0,depth,3,42+scene);var sx=W*0.7/tree.nodes.reduce(function(m,n){return Math.max(m,n.x)},0);var sy=H*0.7/tree.nodes.reduce(function(m,n){return Math.max(m,n.y)},0);sx=Math.min(sx,sy);
+if(scene===0){ctx.fillStyle='#00CED1';ctx.globalAlpha=0.3;ctx.fillRect(W*0.1,H*0.2,W*0.8,H*0.6);ctx.globalAlpha=1;ctx.strokeStyle='#00CED1';ctx.lineWidth=2;tree.edges.forEach(function(e){ctx.beginPath();ctx.moveTo(e.x1*sx+W*0.1,e.y1*sy+H*0.15);ctx.lineTo(e.x2*sx+W*0.1,e.y2*sy+H*0.15);ctx.stroke()});ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('vessel mask from MRI',cx,H*0.85)}
+else if(scene===1){tree.edges.forEach(function(e){ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.globalAlpha=0.4;ctx.beginPath();ctx.moveTo(e.x1*sx+W*0.1,e.y1*sy+H*0.15);ctx.lineTo(e.x2*sx+W*0.1,e.y2*sy+H*0.15);ctx.stroke()});ctx.globalAlpha=1;tree.nodes.forEach(function(n){ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(n.x*sx+W*0.1,n.y*sy+H*0.15,3,0,Math.PI*2);ctx.fill()});ctx.shadowBlur=0;ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('nodes = branching points',cx,H*0.85)}
+else if(scene===2){tree.edges.forEach(function(e,i){ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(e.x1*sx+W*0.1,e.y1*sy+H*0.15);ctx.lineTo(e.x2*sx+W*0.1,e.y2*sy+H*0.15);ctx.stroke()});tree.nodes.forEach(function(n){ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(n.x*sx+W*0.1,n.y*sy+H*0.15,2,0,Math.PI*2);ctx.fill()});ctx.fillStyle='#FF69B4';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('edges = vessel segments',cx,H*0.85)}
+else if(scene===3){tree.edges.forEach(function(e){ctx.strokeStyle='#FF69B4';ctx.lineWidth=1+e.x2/100;ctx.beginPath();ctx.moveTo(e.x1*sx+W*0.1,e.y1*sy+H*0.15);ctx.lineTo(e.x2*sx+W*0.1,e.y2*sy+H*0.15);ctx.stroke();ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText('r='+(2+Math.random()*3).toFixed(1),(e.x1*sx+W*0.1+e.x2*sx+W*0.1)/2,(e.y1*sy+H*0.15+e.y2*sy+H*0.15)/2)});ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('attributes: radius, length, orientation',cx,H*0.85)}
+else if(scene===5){ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('procedural tree (lazy generated, depth='+depth+')',cx,H*0.85);ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.fillText('&#8594; click Run GNN below',cx,H*0.92)}
+else{tree.edges.forEach(function(e,i){var phase=(t*0.5+i*0.15)%1;var px=e.x1+(e.x2-e.x1)*phase;var py=e.y1+(e.y2-e.y1)*phase;ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.globalAlpha=0.5;ctx.beginPath();ctx.moveTo(e.x1*sx+W*0.1,e.y1*sy+H*0.15);ctx.lineTo(e.x2*sx+W*0.1,e.y2*sy+H*0.15);ctx.stroke();ctx.globalAlpha=1;ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px*sx+W*0.1,py*sy+H*0.15,2,0,Math.PI*2);ctx.fill()});ctx.shadowBlur=0;tree.nodes.forEach(function(n){ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(n.x*sx+W*0.1,n.y*sy+H*0.15,3,0,Math.PI*2);ctx.fill()});ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('message passing along edges',cx,H*0.85)}
+drawPhaseBar(ctx,W,H)}});
+SPOT3.setActive(false);
+
+// === CLIP 4: Time-varying fields ===
+var SPOT4_SCENES=[{title:'Cardiac cycle',desc:'Systole &#8594; diastole: the temporal unit of hemodynamics'},{title:'Pressure field',desc:'Pulsatile wave propagating from inlet to outlets'},{title:'Velocity field',desc:'Peak systolic velocity; high at stenoses, low in aneurysms'},{title:'Wall shear stress',desc:'The hemodynamic index clinicians actually use'},{title:'Better: divergence-free loss',desc:'&#8711;&middot;u = 0 as physics constraint (PINN pattern)'},{title:'Cross-link: PINN clip 20',desc:'Physics-informed loss for hemodynamics'}];
+var SCENE4_MATH=[['systole&#8594;diastole','cardiac cycle','HR'],['p(x,t)','pressure','pulsatile'],['u(x,t)','velocity','peak'],['WSS','wall shear','clinical'],['&#8711;&middot;u=0','div-free','PINN'],['&#8594; PINN clip 20','physics loss','clip 20']];
+var SPOT4=makeClip({varName:'SPOT4',cvId:'cv4',wrapId:'wrap4',lblId:'lbl4',titleId:'title4',zoomId:'zoom4',zoomValId:'zoom4v',paramId:'param4',paramValId:'param4v',paramLabelId:'paramLabel4',paramDefault:75,paramDecimals:0,lightId:'light4',narrId:'narr4',recId:'rec4',narrationKey:'spot4',sceneListId:'scenes4',thoughtsId:'thoughts4',scenes:SPOT4_SCENES,draw:function(cv,scene,t,zoom,dark,param){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);drawFloatingMath(ctx,W,H,t,SCENE4_MATH[scene]);var cx=W/2,cy=H*0.5;var hr=param;var cycle=(t*hr/60*2)%1;
+if(scene===0){ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,30,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#ff6b6b';ctx.beginPath();ctx.arc(cx,cy,30,-Math.PI/2,-Math.PI/2+cycle*Math.PI*2);ctx.lineTo(cx,cy);ctx.closePath();ctx.fill();ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('HR='+hr+' bpm',cx,cy+50);ctx.fillText('cardiac cycle',cx,H*0.85)}
+else if(scene===1){for(var i=0;i<60;i++){var tt=i/60;var x=W*0.1+tt*W*0.8;var p=0.5+0.4*Math.sin(tt*3-cycle*Math.PI*2);var y=H*0.85-p*H*0.6;ctx.fillStyle='rgba(255,107,107,'+p+')';ctx.fillRect(x-2,y,4,H*0.85-y)}ctx.fillStyle='#ff6b6b';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('pressure p(x,t)',W*0.12,H*0.15)}
+else if(scene===2){for(var i=0;i<60;i++){var tt=i/60;var x=W*0.1+tt*W*0.8;var v=0.3+0.5*Math.exp(-Math.pow((tt-0.3)*5,2))+0.1*Math.exp(-Math.pow((tt-0.6)*4,2));v*=0.7+0.3*Math.sin(cycle*Math.PI*2);var y=H*0.85-v*H*0.6;ctx.fillStyle='rgba(16,185,129,'+v+')';ctx.fillRect(x-2,y,4,H*0.85-y)}ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('velocity u(x,t)',W*0.12,H*0.15)}
+else if(scene===3){ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<60;i++){var tt=i/60;var x=W*0.1+tt*W*0.8;var wss=0.5+0.4*Math.sin(tt*4+cycle*Math.PI*2)+0.1*Math.sin(tt*8);var y=H*0.85-wss*H*0.5;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('wall shear stress',W*0.12,H*0.15);ctx.fillText('clinical index',cx,H*0.85)}
+else if(scene===4){ctx.fillStyle='#10b981';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Better: divergence-free loss',cx,H*0.15);ctx.fillStyle='#FFD700';ctx.font='bold 12px Georgia,serif';ctx.fillText('&#8711;&middot;u = 0',cx,cy);ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('mass conservation enforced',cx,cy+25);ctx.fillText('training-only cost',cx,cy+35);ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.fillText('physics-informed loss (PINN pattern)',cx,H*0.85)}
+else if(scene===5){ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Cross-link: PINN clip 20',cx,H*0.15);ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,25,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#10b981';ctx.font='7px monospace';ctx.fillText('L_phys = &#8711;&middot;u',cx,cy-5);ctx.fillText('= 0',cx,cy+8);ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.fillText('&#8594; physics-ml.html?clip=20',cx,H*0.85)}
+drawPhaseBar(ctx,W,H)}});
+SPOT4.setActive(false);
+
+// === CLIP 5: Digital twin vision ===
+var SPOT5_SCENES=[{title:'Patient-specific model',desc:'A computational model that lives alongside the patient'},{title:'Scan-predict-decide loop',desc:'Each encounter updates the twin'},{title:'Clinical validation',desc:'Validate against outcomes, not just CFD MSE'},{title:'Better: uncertainty quantification',desc:'u(x,t) &#177; &#963;(x,t) &mdash; confidence intervals'},{title:'Better: active learning',desc:'Low-confidence cases queued for CFD verification'},{title:'Edge-case safety',desc:'Congenital/post-surgical anatomy must trigger flag'}];
+var SCENE5_MATH=[['patient-specific','twin','lives'],['scan&#8594;predict&#8594;decide','loop','update'],['validate vs outcomes','not MSE','clinical'],['u &#177; &#963;','uncertainty','Bayesian'],['active learning','queue hard cases','CFD verify'],['flag OOD','edge-case safe','congenital']];
+var SPOT5=makeClip({varName:'SPOT5',cvId:'cv5',wrapId:'wrap5',lblId:'lbl5',titleId:'title5',zoomId:'zoom5',zoomValId:'zoom5v',paramId:'param5',paramValId:'param5v',paramLabelId:'paramLabel5',paramDefault:0.5,paramDecimals:2,lightId:'light5',narrId:'narr5',recId:'rec5',narrationKey:'spot5',sceneListId:'scenes5',thoughtsId:'thoughts5',scenes:SPOT5_SCENES,draw:function(cv,scene,t,zoom,dark,param){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);drawFloatingMath(ctx,W,H,t,SCENE5_MATH[scene]);var cx=W/2,cy=H*0.5;
+if(scene===0){ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(cx,cy,20,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#000';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('twin',cx,cy+3);ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.fillText('patient-specific model',cx,H*0.85)}
+else if(scene===1){var steps=['Scan','Predict','Decide','Rescan'];for(var i=0;i<4;i++){var a=i/4*Math.PI*2-Math.PI/2+t*0.2;var px=cx+Math.cos(a)*40;var py=cy+Math.sin(a)*30;ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,12,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#000';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText(steps[i],px,py+2)}ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText('scan &#8594; predict &#8594; decide &#8594; rescan',cx,H*0.85)}
+else if(scene===2){ctx.fillStyle='#ff6b6b';ctx.fillRect(W*0.15,cy-15,30,30);ctx.fillStyle='#fff';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('MSE',W*0.15+15,cy+2);ctx.fillStyle='#10b981';ctx.fillRect(W*0.6,cy-15,60,30);ctx.fillStyle='#fff';ctx.fillText('outcome',W*0.6+30,cy+2);ctx.fillStyle='#FFD700';ctx.font='7px Georgia,serif';ctx.textAlign='center';ctx.fillText('validate against',cx,cy-25);ctx.fillText('clinical outcomes',cx,cy+50)}
+else if(scene===3){ctx.fillStyle='#10b981';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('Better: uncertainty',cx,H*0.15);ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<60;i++){var x=W*0.1+i/60*W*0.8;var y=cy+Math.sin(i*0.2+t)*15;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.fillStyle='rgba(16,185,129,0.2)';ctx.beginPath();ctx.moveTo(W*0.1,cy+Math.sin(t)*15-10);for(var i=0;i<60;i++){var x=W*0.1+i/60*W*0.8;ctx.lineTo(x,cy+Math.sin(i*0.2+t)*15-10)}for(var i=59;i>=0;i--){var x=W*0.1+i/60*W*0.8;ctx.lineTo(x,cy+Math.sin(i*0.2+t)*15+10)}ctx.closePath();ctx.fill();ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.fillText('u(x,t) &#177; &#963;(x,t)',cx,H*0.85)}
+else if(scene===4){ctx.fillStyle='#a855f7';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('Better: active learning',cx,H*0.15);ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(W*0.25,cy,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#000';ctx.font='5px monospace';ctx.fillText('low conf',W*0.25,cy+2);ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(W*0.25,cy);ctx.lineTo(W*0.5,cy);ctx.stroke();ctx.fillStyle='#ff6b6b';ctx.beginPath();ctx.arc(W*0.65,cy,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#fff';ctx.fillText('CFD verify',W*0.65,cy+2);ctx.strokeStyle='#10b981';ctx.beginPath();ctx.moveTo(W*0.65,cy);ctx.lineTo(W*0.85,cy);ctx.stroke();ctx.fillStyle='#10b981';ctx.beginPath();ctx.arc(W*0.85,cy,12,0,Math.PI*2);ctx.fill();ctx.fillStyle='#000';ctx.fillText('retrain',W*0.85,cy+2);ctx.fillStyle='#a855f7';ctx.font='5px monospace';ctx.fillText('flag &#8594; verify &#8594; retrain loop',cx,H*0.85)}
+else if(scene===5){ctx.fillStyle='#ff6b6b';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('Edge-case safety',cx,H*0.15);ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.setLineDash([3,3]);ctx.beginPath();ctx.arc(cx,cy,25,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#ff6b6b';ctx.font='7px monospace';ctx.fillText('congenital?',cx,cy-5);ctx.fillText('post-surgical?',cx,cy+8);ctx.fillStyle='#FFD700';ctx.font='6px monospace';ctx.fillText('&#8594; flag for CFD verification',cx,H*0.85)}
+drawPhaseBar(ctx,W,H)}});
+SPOT5.setActive(false);
+
+// === CLIP 6: Better approach ===
+var SPOT6_SCENES=[{title:'FNO spectral layer',desc:'Mesh-independent field head; zero-shot super-resolution'},{title:'Physics-informed loss',desc:'Divergence-free constraint (&#8711;&middot;u = 0)'},{title:'Ensemble uncertainty',desc:'5-10 models; variance = confidence interval'},{title:'Active learning loop',desc:'Low-confidence &#8594; CFD verify &#8594; retrain'},{title:'Path forward',desc:'Combine all four for clinical trustworthiness'},{title:'Cross-links to curriculum',desc:'FNO 19, PINN 20, Neural ODE 16, Discrepancy 12'}];
+var SCENE6_MATH=[['FNO spectral','mesh-free','clip 19'],['&#8711;&middot;u=0','div-free','clip 20'],['ensemble','&#177; &#963;','uncertain'],['active learn','queue+verify','retrain'],['all four','trustworthy','clinical'],['&#8594; clips 19,20,16,12','curriculum','links']];
+var SPOT6=makeClip({varName:'SPOT6',cvId:'cv6',wrapId:'wrap6',lblId:'lbl6',titleId:'title6',zoomId:'zoom6',zoomValId:'zoom6v',paramId:'param6',paramValId:'param6v',paramLabelId:'paramLabel6',paramDefault:1,paramDecimals:1,lightId:'light6',narrId:'narr6',recId:'rec6',narrationKey:'spot6',sceneListId:'scenes6',thoughtsId:'thoughts6',scenes:SPOT6_SCENES,draw:function(cv,scene,t,zoom,dark,param){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc=dark?'#ea580c':'#c2410c',mt=dark?'#a8a098':'#736a5e',bg=dark?'#0a0908':'#f5f0ea';ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);drawFloatingMath(ctx,W,H,t,SCENE6_MATH[scene]);var cx=W/2,cy=H*0.5;
+if(scene===0){ctx.fillStyle='#FFD700';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('FNO spectral layer',cx,H*0.15);ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.fillText('FFT&#8594;R&#8594;IFFT',cx,cy-3);ctx.fillText('mesh-free',cx,cy+8);ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.fillText('&#8594; clip 19',cx,H*0.85)}
+else if(scene===1){ctx.fillStyle='#FFD700';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('Physics-informed loss',cx,H*0.15);ctx.fillStyle='#FFD700';ctx.font='bold 14px Georgia,serif';ctx.fillText('&#8711;&middot;u = 0',cx,cy);ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText('divergence-free (mass conservation)',cx,cy+25);ctx.fillText('training-only cost',cx,cy+35);ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.fillText('&#8594; clip 20',cx,H*0.85)}
+else if(scene===2){ctx.fillStyle='#FFD700';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('Ensemble uncertainty',cx,H*0.15);for(var i=0;i<5;i++){ctx.strokeStyle='rgba(16,185,129,'+(0.3+i*0.15)+')';ctx.lineWidth=1.5;ctx.beginPath();for(var j=0;j<40;j++){var x=W*0.1+j/40*W*0.8;var y=cy+Math.sin(j*0.2+t+i*0.5)*12;if(j===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}ctx.fillStyle='rgba(16,185,129,0.2)';ctx.fillRect(W*0.1,cy-15,W*0.8,30);ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.fillText('5 models &#8594; variance = &#963;',cx,H*0.85)}
+else if(scene===3){ctx.fillStyle='#FFD700';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('Active learning loop',cx,H*0.15);var labels=['AI predict','flag low-conf','CFD verify','retrain'];for(var i=0;i<4;i++){var px=W*0.12+i*W*0.25;ctx.fillStyle=['#10b981','#FFD700','#ff6b6b','#a855f7'][i];ctx.shadowColor=['#10b981','#FFD700','#ff6b6b','#a855f7'][i];ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,cy,12,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText(labels[i],px,cy+2);if(i<3){ctx.strokeStyle='#FFD700';ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(px+12,cy);ctx.lineTo(px+W*0.25-12,cy);ctx.stroke()}}ctx.fillStyle='#a855f7';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('loop: hard cases improve model',cx,H*0.85)}
+else if(scene===4){ctx.fillStyle='#FFD700';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('All four &#8594; trustworthy',cx,H*0.15);var items=['FNO','PINN','&#963;','AL'];var colors=['#10b981','#FF69B4','#10b981','#a855f7'];for(var i=0;i<4;i++){var a=i/4*Math.PI*2-Math.PI/2;var px=cx+Math.cos(a)*35;var py=cy+Math.sin(a)*25;ctx.fillStyle=colors[i];ctx.shadowColor=colors[i];ctx.shadowBlur=6;ctx.beginPath();ctx.arc(px,py,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(items[i],px,py+2)}ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.fillText('clinically trustworthy',cx,H*0.85)}
+else if(scene===5){ctx.fillStyle='#FFD700';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('Cross-links to Physics+ML',cx,H*0.12);var links=[{l:'FNO clip 19',y:0.3},{l:'PINN clip 20',y:0.45},{l:'Neural ODE clip 16',y:0.6},{l:'Discrepancy clip 12',y:0.75}];links.forEach(function(lk){ctx.fillStyle='#10b981';ctx.fillRect(W*0.2,H*lk.y-8,W*0.6,16);ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(lk.l,W*0.5,H*lk.y+2)});ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.fillText('&#8594; physics-ml.html',cx,H*0.92)}
+drawPhaseBar(ctx,W,H)}});
+SPOT6.setActive(false);
+
+// === CODE SECTIONS (compact, 6 langs each) ===
+var SPOT_CODE={
+'speed':{name:'im2sim inference timing',latex:'t_{\\text{im2sim}} \\approx 0.5\\,\\text{s} \\ll t_{\\text{CFD}} \\approx 6\\,\\text{hr}',mapping:[{symbol:'t_{im2sim}',code:'model.forward(mri)',note:'0.5s inference'},{symbol:'t_{CFD}',code:'cfd_solve(mesh, bc)',note:'6 hours HPC'},{symbol:'\\Delta t',code:'t_CFD / t_im2sim',note:'43000x speedup'}],langs:{'Python':'# im2sim inference\nimport torch\nfrom im2sim import HybridNet\n\nmodel = HybridNet.load_pretrained("pulmonary_v1.pt")\nmri = load_mri("patient_001.nii")  # 3D whole-heart MRI\ngraph = extract_vessel_graph(mri)  # V -> E extraction\n\nwith torch.no_grad():\n    field = model(mri, graph)  # (B, 4, D, H, W, T)\n    # 4 channels: u, v, w, p\n    # T: cardiac cycle time steps\n\nprint(f"Inference: 0.5s")\nprint(f"Shape: {field.shape}")','TypeScript':'// Conceptual\nconst model = await loadModel("pulmonary_v1.onnx");\nconst mri = await loadMRI("patient_001.nii");\nconst graph = extractVesselGraph(mri);\nconst field = await model.run({ mri, graph }); // 0.5s\nconsole.log(`Inference: 0.5s, shape: ${field.shape}`);','Go':'// Conceptual\nfield := model.Forward(mri, graph) // 0.5s\nfmt.Printf("Inference: 0.5s, shape: %v\\n", field.Shape())','Scala':'val field = model.forward(mri, graph) // 0.5s\nprintln(s"Inference: 0.5s, shape: ${field.shape}")','C':'/* 0.5s inference */\nTensor* field = model_forward(model, mri, graph);\nprintf("Inference: 0.5s\\n");','Elixir':'field = Model.forward(model, mri, graph) # 0.5s\nIO.puts("Inference: 0.5s")'}},
+'hybrid':{name:'Hybrid image-graph network',latex:'\\mathbf{h} = \\text{Fuse}\\!(\\text{CNN}(\\mathbf{X}),\\, \\text{GNN}(\\mathcal{G}))',mapping:[{symbol:'\\mathbf{X}',code:'mri_volume',note:'3D MRI input'},{symbol:'\\mathcal{G}',code:'vessel_graph',note:'Nodes + edges'},{symbol:'\\text{CNN}(\\mathbf{X})',code:'image_branch(mri)',note:'3D conv layers'},{symbol:'\\text{GNN}(\\mathcal{G})',code:'graph_branch(graph)',note:'Message passing'},{symbol:'\\text{Fuse}',code:'fusion_layer(img, gph)',note:'Concat + project'}],langs:{'Python':'import torch\nimport torch_geometric as pyg\n\nclass HybridNet(torch.nn.Module):\n    def __init__(self):\n        self.image_branch = ImageEncoder(1, 64)  # 3D CNN\n        self.graph_branch = GraphEncoder(6, 64)   # GNN\n        self.fusion = FusionLayer(128, 128)\n        self.head = FieldPredictor(256, 4)  # u,v,w,p\n    \n    def forward(self, mri, graph):\n        img_feat = self.image_branch(mri)\n        gph_feat = self.graph_branch(graph)\n        fused = self.fusion(img_feat, gph_feat)\n        return self.head(fused)','TypeScript':'class HybridNet {\n  forward(mri, graph) {\n    const img = this.imageBranch.forward(mri);\n    const gph = this.graphBranch.forward(graph);\n    return this.head(this.fusion.forward(img, gph));\n  }\n}','Go':'func (m *HybridNet) Forward(mri, graph) {\n    img := m.imageBranch.Forward(mri)\n    gph := m.graphBranch.Forward(graph)\n    return m.head.Forward(m.fusion.Forward(img, gph))\n}','Scala':'def forward(mri, graph) = {\n  val img = imageBranch.forward(mri)\n  val gph = graphBranch.forward(graph)\n  head.forward(fusion.forward(img, gph))\n}','C':'Tensor* forward(HybridNet* m, Tensor* mri, Graph* graph) {\n    Tensor* img = image_forward(m, mri);\n    Tensor* gph = graph_forward(m, graph);\n    return head_forward(m, fusion_forward(m, img, gph));\n}','Elixir':'def forward(model, mri, graph) do\n  img = ImageBranch.forward(model.image_branch, mri)\n  gph = GraphBranch.forward(model.graph_branch, graph)\n  FieldPredictor.forward(model.head, FusionLayer.forward(model.fusion, img, gph))\nend'}},
+'fields':{name:'Time-varying field prediction',latex:'\\hat{\\mathbf{u}}(\\mathbf{x}, t), \\hat{p}(\\mathbf{x}, t) = f_\\theta(\\mathbf{X}, \\mathcal{G})',mapping:[{symbol:'\\hat{\\mathbf{u}}',code:'model(mri, graph)[:3]',note:'Velocity field'},{symbol:'\\hat{p}',code:'model(mri, graph)[3]',note:'Pressure field'},{symbol:'t',code:'cardiac_cycle_steps',note:'Time dimension'},{symbol:'\\nabla \\cdot \\hat{u}',code:'divergence(u_hat)',note:'Should be ~0 (mass conservation)'}],langs:{'Python':'# Time-varying prediction + divergence check\nfield = model(mri, graph)  # (B, 4, D, H, W, T)\nu = field[:, :3]  # velocity\np = field[:, 3:]  # pressure\n\n# Better approach: check divergence\ndiv_u = divergence(u)  # should be ~0\nprint(f"Max divergence: {div_u.abs().max():.4f}")\nprint(f"Should be ~0 for mass conservation")\n\n# Add physics loss in training:\n# L_phys = mean(div_u^2)  # PINN pattern','TypeScript':'const field = model.forward(mri, graph);\nconst u = field.slice(0, 3);\nconst p = field.slice(3);\nconst divU = divergence(u); // should be ~0\nconsole.log(`Max div: ${divU.absMax()}`);','Go':'field := model.Forward(mri, graph)\nu := field.Slice(0, 3)\np := field.Slice(3)\ndivU := Divergence(u)\nfmt.Printf("Max div: %.4f\\n", divU.AbsMax())','Scala':'val field = model.forward(mri, graph)\nval u = field.slice(0, 3)\nval divU = divergence(u)\nprintln(f"Max div: ${divU.absMax}")','C':'Tensor* field = model_forward(m, mri, graph);\nTensor* u = tensor_slice(field, 0, 3);\ndouble divMax = divergence_abs_max(u);\nprintf("Max div: %.4f\\n", divMax);','Elixir':'field = Model.forward(model, mri, graph)\nu = Field.slice(field, 0, 3)\ndiv_max = Field.divergence_abs_max(u)\nIO.puts("Max div: #{div_max}")'}},
+'twin':{name:'Digital twin with uncertainty',latex:'\\hat{u}(\\mathbf{x}, t) \\pm \\sigma(\\mathbf{x}, t) = \\frac{1}{M}\\sum_{m=1}^{M} f_{\\theta_m}(\\mathbf{X}, \\mathcal{G})',mapping:[{symbol:'M',code:'n_ensemble',note:'5-10 models'},{symbol:'f_{\\theta_m}',code:'ensemble[m](mri, graph)',note:'m-th model'},{symbol:'\\sigma',code:'std(predictions)',note:'Uncertainty'},{symbol:'\\sigma > \\tau',code:'flag_for_cfd()',note:'Active learning trigger'}],langs:{'Python':'# Ensemble uncertainty + active learning\nensemble = [HybridNet.load(f"model_{m}.pt") for m in range(5)]\n\nwith torch.no_grad():\n    preds = torch.stack([m(mri, graph) for m in ensemble])\n    u_mean = preds.mean(0)\n    u_std = preds.std(0)\n    \nprint(f"Mean velocity: {u_mean.mean():.3f}")\nprint(f"Uncertainty: {u_std.max():.3f}")\n\n# Active learning: flag high-uncertainty cases\nif u_std.max() > threshold:\n    queue_for_cfd_verification(patient_id)','TypeScript':'const ensemble = await loadEnsemble(5);\nconst preds = ensemble.map(m => m.forward(mri, graph));\nconst mean = average(preds);\nconst std = stdDev(preds);\nif (std.max() > threshold) queueForCFD(patientId);','Go':'preds := make([]Tensor, 5)\nfor i, m := range ensemble {\n    preds[i] = m.Forward(mri, graph)\n}\nmean := avg(preds)\nstd := stddev(preds)\nif std.Max() > threshold { queueCFD(patientID) }','Scala':'val preds = ensemble.map(_.forward(mri, graph))\nval mean = avg(preds)\nval std = stddev(preds)\nif (std.max > threshold) queueForCFD(patientId)','C':'Tensor* preds[5];\nfor (int i=0;i<5;i++) preds[i]=ensemble[i]->forward(mri,graph);\nTensor* mean=avg(preds,5);\nTensor* std=stddev(preds,5);\nif (tensor_max(std)>threshold) queue_cfd(patient_id);','Elixir':'preds = Enum.map(ensemble, fn m -> Model.forward(m, mri, graph) end)\nmean = avg(preds)\nstd = stddev(preds)\nif Enum.max(std) > threshold do\n  queue_for_cfd(patient_id)\nend'}},
+'better':{name:'Better approach: four improvements',latex:'\\mathcal{L} = \\mathcal{L}_{\\text{data}} + \\lambda_1 \\underbrace{\\|\\nabla \\cdot u\\|^2}_{\\text{physics}} + \\lambda_2 \\underbrace{\\mathcal{L}_{\\text{FNO}}}_{\\text{spectral}}',mapping:[{symbol:'\\nabla \\cdot u = 0',code:'divergence_free_loss(u)',note:'Physics constraint (PINN)'},{symbol:'\\text{FNO}',code:'fourier_layer(v)',note:'Mesh-independent (clip 19)'},{symbol:'\\pm \\sigma',code:'ensemble_std()',note:'Uncertainty quantification'},{symbol:'\\text{active}',code:'queue_for_cfd()',note:'Active learning loop'}],langs:{'Python':'# All four improvements combined\nimport torch\n\nclass BetterHybridNet(torch.nn.Module):\n    def __init__(self):\n        self.image_branch = ImageEncoder(1, 64)\n        self.graph_branch = GraphEncoder(6, 64)\n        self.fusion = FusionLayer(128, 128)\n        self.field_head = FNOLayer(256, 4)  # FNO instead of CNN\n    \n    def forward(self, mri, graph):\n        img = self.image_branch(mri)\n        gph = self.graph_branch(graph)\n        return self.field_head(self.fusion(img, gph))\n    \n    def physics_loss(self, u_pred):\n        div = divergence(u_pred)  # should be 0\n        return (div ** 2).mean()\n    \n    def loss(self, mri, graph, u_true):\n        u_pred = self(mri, graph)\n        L_data = mse(u_pred, u_true)\n        L_phys = self.physics_loss(u_pred)  # divergence-free\n        return L_data + 0.1 * L_phys','TypeScript':'class BetterHybridNet {\n  fieldHead: FNOLayer; // FNO spectral layer\n  physicsLoss(uPred) {\n    const div = divergence(uPred);\n    return mean(square(div));\n  }\n  loss(mri, graph, uTrue) {\n    const uPred = this.forward(mri, graph);\n    return mse(uPred, uTrue) + 0.1 * this.physicsLoss(uPred);\n  }\n}','Go':'type BetterHybridNet struct {\n    FieldHead *FNOLayer\n}\nfunc (m *BetterHybridNet) PhysicsLoss(uPred *Tensor) float64 {\n    div := Divergence(uPred)\n    return Mean(Square(div))\n}\nfunc (m *BetterHybridNet) Loss(...) float64 {\n    return MSE(uPred, uTrue) + 0.1*m.PhysicsLoss(uPred)\n}','Scala':'class BetterHybridNet {\n  val fieldHead = new FNOLayer(256, 4)\n  def physicsLoss(uPred) = {\n    val div = divergence(uPred)\n    mean(square(div))\n  }\n  def loss(mri, graph, uTrue) = {\n    val uPred = forward(mri, graph)\n    mse(uPred, uTrue) + 0.1 * physicsLoss(uPred)\n  }\n}','C':'typedef struct { FNOLayer* fieldHead; } BetterHybridNet;\ndouble physics_loss(Tensor* uPred) {\n    Tensor* div = divergence(uPred);\n    return mean(square(div));\n}\ndouble loss(...) {\n    return mse(uPred, uTrue) + 0.1*physics_loss(uPred);\n}','Elixir':'defmodule BetterHybridNet do\n  def physics_loss(u_pred) do\n    div = divergence(u_pred)\n    mean(square(div))\n  end\n  def loss(mri, graph, u_true) do\n    u_pred = forward(mri, graph)\n    mse(u_pred, u_true) + 0.1 * physics_loss(u_pred)\n  end\nend'}}
+};
+var SPOT_OUTPUTS={
+'speed':['im2sim inference timing...','model: HybridNet (pulmonary_v1)','input: 3D whole-heart MRI (256x256x128)','','inference time: 0.487s','output shape: (1, 4, 128, 128, 64, 20)','  4 channels: u, v, w, p','  20 time steps (cardiac cycle)','','comparison:','  traditional CFD: 6.2 hours = 22320s','  im2sim:          0.487s','  speedup:         45,000x','','clinical workflow impact:','  before: request sim &#8594; wait overnight &#8594; review next morning','  after:  adjust boundary &#8594; see flow in 0.5s &#8594; iterate in consultation'],
+'hybrid':['Hybrid image-graph network...','image_branch: 3D CNN [1, 64, 128, 128]','graph_branch: GNN [6 node feat, 4 edge feat]','fusion: concat + project (256)','','forward pass:','  MRI input: (1, 1, 128, 128, 64)','  graph: 41 nodes, 40 edges','  fused features: (1, 256, 32, 32, 16)','  field output: (1, 4, 64, 64, 32)','','better approach: replace field head with FNO','  &#8594; mesh-independent, zero-shot super-resolution','  &#8594; see physics-ml.html clip 19'],
+'fields':['Time-varying field prediction...','cardiac cycle: 20 time steps','HR: 75 bpm','cycle duration: 0.8s','','field shapes:','  velocity u: (1, 3, 64, 64, 32, 20)','  pressure p: (1, 1, 64, 64, 32, 20)','','divergence check (mass conservation):','  max |div(u)| = 0.0234','  should be ~0 for incompressible flow','','better approach: add physics loss','  L_phys = mean(div(u)^2)','  &#8594; enforces divergence-free by construction','  &#8594; see physics-ml.html clip 20 (PINN)'],
+'twin':['Digital twin with uncertainty...','ensemble: 5 HybridNet models','input: patient_001 MRI','','per-model predictions:','  model 0: u_mean = 0.482','  model 1: u_mean = 0.476','  model 2: u_mean = 0.489','  model 3: u_mean = 0.478','  model 4: u_mean = 0.485','','ensemble result:','  u_mean = 0.482','  u_std  = 0.005 (low uncertainty)','','active learning:','  threshold = 0.02','  max std = 0.005 < threshold &#8594; no flag','  (high-uncertainty cases would be queued for CFD)'],
+'better':['Better approach: four improvements...','1. FNO spectral layer (field head)','   replaces 3D CNN output','   mesh-independent, zero-shot super-res','   &#8594; physics-ml.html clip 19','','2. Physics-informed loss','   L_phys = mean((div(u))^2)','   divergence-free constraint','   training-only cost','   &#8594; physics-ml.html clip 20','','3. Ensemble uncertainty','   5-10 models, variance = sigma','   u(x,t) +/- sigma(x,t) for surgeon','','4. Active learning loop','   low-confidence &#8594; queue CFD &#8594; retrain','   model improves on hard cases','','combined: trustworthy clinical AI']
+};
+function populateSpotCode(n){
+var key=['speed','hybrid',null,'fields','twin','better'][n-1];if(!key)return;
+var e=SPOT_CODE[key];if(!e)return;
+var exprEl=document.getElementById('expr'+n);if(exprEl)exprEl.innerHTML='$$'+e.latex+'$$';
+var mapEl=document.getElementById('map'+n);if(mapEl&&e.mapping){var mh='<table class="map-table"><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>&#8594;</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
+var tabsEl=document.getElementById('tabs'+n);var ccEl=document.getElementById('codecontent'+n);
+if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchSpotCode('+n+',\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content'+(i===0?' active':'')+'" id="cc'+n+'-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
+if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+}
+function switchSpotCode(n,lang){document.querySelectorAll('#tabs'+n+' .code-tab').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content').forEach(function(c){c.classList.toggle('active',c.id==='cc'+n+'-'+lang)})}
+function runSpotCode(n,key){
+var e=SPOT_CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput'+n);var st=document.getElementById('runStatus'+n);if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';var viz=document.getElementById('codeVizWrap'+n);if(viz)viz.style.display='none';var lines=['$ '+e.name,''];var out2=SPOT_OUTPUTS[key];var i=0;var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines)';startSpotViz(n,key);return}lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200);
+}
+function startSpotViz(n,key){
+var wrap=document.getElementById('codeVizWrap'+n);if(!wrap)return;var cv=document.getElementById('codeVizCanvas'+n);if(!cv)return;
+wrap.style.display='block';var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('im2sim: '+key,W/2,16);
+// Simple animated chart per key
+var cx=W/2,cy=H*0.55;
+if(key==='speed'){ctx.strokeStyle='#ff6b6b';ctx.lineWidth=8;ctx.beginPath();ctx.moveTo(W*0.1,cy);ctx.lineTo(W*0.8,cy);ctx.stroke();ctx.fillStyle='#ff6b6b';ctx.font='8px monospace';ctx.textAlign='left';ctx.fillText('CFD: 6hr',W*0.1,cy-15);ctx.strokeStyle='#10b981';ctx.lineWidth=8;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();ctx.moveTo(W*0.1,cy+30);ctx.lineTo(W*0.12,cy+30);ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#10b981';ctx.fillText('im2sim: 0.5s (45000x)',W*0.1,cy+50)}
+else if(key==='hybrid'){ctx.fillStyle='#00CED1';ctx.fillRect(W*0.1,cy-20,40,40);ctx.fillStyle='#FF69B4';ctx.fillRect(W*0.7,cy-20,40,40);ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(W*0.45,cy,15,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#FFD700';ctx.beginPath();ctx.moveTo(W*0.15,cy);ctx.lineTo(W*0.4,cy);ctx.moveTo(W*0.5,cy);ctx.lineTo(W*0.7,cy);ctx.stroke()}
+else if(key==='fields'){ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();for(var i=0;i<80;i++){var x=W*0.1+i/80*W*0.8;var y=cy+Math.sin(i*0.1+tt)*20;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.fillStyle='rgba(16,185,129,0.2)';ctx.beginPath();ctx.moveTo(W*0.1,cy-30);for(var i=0;i<80;i++){var x=W*0.1+i/80*W*0.8;ctx.lineTo(x,cy+Math.sin(i*0.1+tt)*20-15)}for(var i=79;i>=0;i--){var x=W*0.1+i/80*W*0.8;ctx.lineTo(x,cy+Math.sin(i*0.1+tt)*20+15)}ctx.closePath();ctx.fill()}
+else if(key==='twin'){for(var i=0;i<5;i++){ctx.strokeStyle='rgba(16,185,129,'+(0.3+i*0.15)+')';ctx.lineWidth=1.5;ctx.beginPath();for(var j=0;j<60;j++){var x=W*0.1+j/60*W*0.8;var y=cy+Math.sin(j*0.2+tt+i*0.5)*15;if(j===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke()}}
+else if(key==='better'){var items=['FNO','PINN','sigma','AL'];var colors=['#10b981','#FF69B4','#FFD700','#a855f7'];for(var i=0;i<4;i++){var a=i/4*Math.PI*2-Math.PI/2+tt*0.2;var px=cx+Math.cos(a)*40;var py=cy+Math.sin(a)*30;ctx.fillStyle=colors[i];ctx.shadowColor=colors[i];ctx.shadowBlur=6;ctx.beginPath();ctx.arc(px,py,10,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='6px monospace';ctx.textAlign='center';ctx.fillText(items[i],px,py+2)}}
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
+}
+// Wrapper functions for onclick
+function runSpot1Code(k){runSpotCode(1,k)}function runSpot2Code(k){runSpotCode(2,k)}function runSpot4Code(k){runSpotCode(4,k)}function runSpot5Code(k){runSpotCode(5,k)}function runSpot6Code(k){runSpotCode(6,k)}
+
+// === PYODIDE GNN DEMO (Clip 3) ===
+var pyodide=null;
+var gnnStatus=document.getElementById('gnnStatus');
+var gnnRunBtn=document.getElementById('gnnRunBtn');
+function initPyodide(){
+if(typeof loadPyodide==='undefined'){setTimeout(initPyodide,500);return}
+gnnStatus.textContent='Loading Pyodide...';gnnStatus.className='pyodide-status loading';
+loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'}).then(function(p){pyodide=p;gnnStatus.textContent='Loading numpy...';return p.loadPackage('numpy')}).then(function(){gnnStatus.textContent='Ready';gnnStatus.className='pyodide-status ready';gnnRunBtn.disabled=false}).catch(function(e){gnnStatus.textContent='Load failed: '+e.message;gnnStatus.className='pyodide-status';console.error('Pyodide load failed:',e)});
+}
+var pyodideScriptLoaded=false;
+function loadPyodideScript(){if(pyodideScriptLoaded)return;pyodideScriptLoaded=true;var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js';s.onload=function(){initPyodide()};document.head.appendChild(s)}
+var codeSection=document.getElementById('clip3');
+if(codeSection){var pyObserver=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){loadPyodideScript();pyObserver.disconnect()}})},{rootMargin:'200px'});pyObserver.observe(codeSection)}
+async function runSpot3GNN(){
+if(!pyodide){document.getElementById('codeOutput3').textContent='Pyodide still loading. Please wait a few seconds and try again.';document.getElementById('codeOutput3').style.display='block';return}
+var code=`import numpy as np
+# Synthetic vessel graph: 8 nodes, 7 edges (binary tree)
+nodes = np.array([
+    [0, 0],   # 0: inlet
+    [1, -1], [1, 1],   # 1, 2: first branch
+    [2, -2], [2, 0], [2, 2],  # 3, 4, 5: second branch
+    [3, -1], [3, 1],   # 6, 7: outlets
+], dtype=float)
+edges = [(0,1),(0,2),(1,3),(1,4),(2,5),(3,6),(5,7)]  # connectivity
+node_feats = np.column_stack([nodes, np.ones(len(nodes))])  # x, y, flag
+print(f"Graph: {len(nodes)} nodes, {len(edges)} edges")
+# Message passing: 1 round, mean aggregation
+new_feats = node_feats.copy()
+for src, dst in edges:
+    new_feats[dst] += 0.5 * node_feats[src]
+    new_feats[src] += 0.5 * node_feats[dst]
+print("After 1 round of message passing:")
+print(f"  node 0 (inlet):   {new_feats[0]}")
+print(f"  node 6 (outlet):  {new_feats[6]}")
+print(f"  info propagated from inlet to outlet in 1 hop")
+# Simple field prediction: pressure = distance from inlet
+pressure = np.sqrt(nodes[:,0]**2 + nodes[:,1]**2)
+print(f"\\nPredicted pressure at each node:")
+for i, p in enumerate(pressure):
+    print(f"  node {i}: p = {p:.3f}")
+print("\\nGNN forward pass complete. This is the core operation")
+print("im2sim uses to predict hemodynamics from vessel topology.")`;
+var output=document.getElementById('codeOutput3');
+output.style.display='block';output.className='code-output';output.textContent='Running GNN forward pass...\\n';
+gnnRunBtn.disabled=true;gnnRunBtn.textContent='Running...';
+try{var captured=[];pyodide.setStdout({batched:function(s){captured.push(s)}});await pyodide.runPythonAsync(code);var result=captured.join('');output.textContent=result||'(no output)';startSpot3GNNViz()}catch(e){output.className='code-output error';output.textContent='Error: '+e.message}finally{gnnRunBtn.disabled=false;gnnRunBtn.textContent='\\u25b6 Run GNN forward pass'}
+}
+function startSpot3GNNViz(){
+var wrap=document.getElementById('codeVizWrap3');if(!wrap)return;wrap.style.display='block';var cv=document.getElementById('codeVizCanvas3');if(!cv)return;var tt=0;
+function frame(){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
+ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';ctx.fillStyle='#10b981';ctx.fillText('GNN message passing on vessel graph',W/2,16);
+var cx=W/2,cy=H*0.55;
+var nodes=[[0,0],[1,-1],[1,1],[2,-2],[2,0],[2,2],[3,-1],[3,1]];
+var edges=[[0,1],[0,2],[1,3],[1,4],[2,5],[3,6],[5,7]];
+var sx=W*0.15,sy=H*0.15,px0=W*0.1,py0=H*0.2;
+// Draw edges
+ctx.strokeStyle='#00CED1';ctx.lineWidth=2;ctx.globalAlpha=0.6;
+edges.forEach(function(e){ctx.beginPath();ctx.moveTo(px0+nodes[e[0]][0]*sx,py0+nodes[e[0]][1]*sy);ctx.lineTo(px0+nodes[e[1]][0]*sx,py0+nodes[e[1]][1]*sy);ctx.stroke()});
 ctx.globalAlpha=1;
+// Draw nodes
+nodes.forEach(function(n,i){ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(px0+n[0]*sx,py0+n[1]*sy,5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#fff';ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(i,px0+n[0]*sx,py0+n[1]*sy+2)});
+// Animated flow particles along edges
+edges.forEach(function(e,i){var phase=(tt*0.5+i*0.15)%1;var x1=nodes[e[0]][0]*sx,x2=nodes[e[1]][0]*sx;var y1=nodes[e[0]][1]*sy,y2=nodes[e[1]][1]*sy;var px=px0+x1+(x2-x1)*phase;var py=py0+y1+(y2-y1)*phase;ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0});
+drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 }
-// Center label
-ctx.fillStyle='#10b981';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';
-ctx.fillText('digital twin',cx,cy);
-};
-
-// === SYNTHETIC DEMO ===
-var syntheticTree=null;
-var syntheticT=0;
-function generateVesselTree(){
-var depth=parseInt(document.getElementById('depthSlider').value);
-var branch=parseInt(document.getElementById('branchSlider').value);
-var seed=Math.floor(Math.random()*100000);
-syntheticTree=generateTree(80,200,0,depth,branch,seed);
-// Update stats
-var stats=document.getElementById('demoStats');
-var nNodes=syntheticTree.nodes.length;
-var nEdges=syntheticTree.edges.length;
-var nLeaves=syntheticTree.nodes.filter(function(n,i){
-return syntheticTree.edges.filter(function(e){return e.x1===n.x&&e.y1===n.y}).length===0;
-}).length;
-stats.innerHTML='<span class="stat"><strong>'+nNodes+'</strong> nodes</span><span class="stat"><strong>'+nEdges+'</strong> edges</span><span class="stat"><strong>'+nLeaves+'</strong> outlets</span><span class="stat"><strong>seed:</strong> '+seed+'</span>';
-}
-function drawSyntheticDemo(ctx,W,H,t){
-if(!syntheticTree)generateVesselTree();
-ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,H);
-// Draw tree (left half)
-// Edges
-ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.globalAlpha=0.7;
-syntheticTree.edges.forEach(function(e){
-// Scale tree coords to canvas
-var sx=W*0.5/400;var sy=H/400;
-ctx.beginPath();ctx.moveTo(e.x1*sx,e.y1*sy);ctx.lineTo(e.x2*sx,e.y2*sy);ctx.stroke();
-});
-ctx.globalAlpha=1;
-// Nodes
-syntheticTree.nodes.forEach(function(n){
-var sx=W*0.5/400;var sy=H/400;
-ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=5;
-ctx.beginPath();ctx.arc(n.x*sx,n.y*sy,2.5,0,Math.PI*2);ctx.fill();
-});
-ctx.shadowBlur=0;
-// Flow particles
-syntheticTree.edges.forEach(function(e,i){
-var phase=(t*0.5+i*0.15)%1;
-var sx=W*0.5/400;var sy=H/400;
-var px=(e.x1+(e.x2-e.x1)*phase)*sx;
-var py=(e.y1+(e.y2-e.y1)*phase)*sy;
-ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=4;
-ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);ctx.fill();
-});
-ctx.shadowBlur=0;
-// Right half: predicted pressure field
-var fx=W*0.55;
-ctx.strokeStyle='#736a5e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(fx,H*0.1);ctx.lineTo(fx,H*0.9);ctx.stroke();
-ctx.fillStyle='#FFD700';ctx.font='7px monospace';ctx.textAlign='left';ctx.fillText('predicted field',fx+5,H*0.15);
-// Pressure color bar
-var cycle=(t*0.3)%1;
-for(var i=0;i<80;i++){
-var tt=i/80;
-var p=0.5+0.4*Math.sin(tt*3-cycle*Math.PI*2);
-var y=H*0.2+tt*H*0.6;
-ctx.fillStyle='rgba(255,107,107,'+p+')';
-ctx.fillRect(fx+5,y,40,3);
-}
-// Velocity waveform
-ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.beginPath();
-for(var i=0;i<80;i++){
-var tt=i/80;var x=fx+55+tt*(W-fx-65);
-var v=0.5+0.3*Math.sin(tt*4+t)+0.1*Math.sin(tt*8);
-var y=H*0.85-v*H*0.5;
-if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
-}
-ctx.stroke();
-ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('velocity',fx+55,H*0.2);
-ctx.fillStyle='#ff6b6b';ctx.fillText('pressure',fx+5,H*0.18);
-}
-// Sliders update display + regenerate
-document.getElementById('depthSlider').oninput=function(){document.getElementById('depthVal').textContent=this.value;generateVesselTree()};
-document.getElementById('branchSlider').oninput=function(){document.getElementById('branchVal').textContent=this.value;generateVesselTree()};
 
 // === INIT ===
-buildCards();
-// Start hero animation immediately
-startAnimWhenVisible('heroCanvas',DRAW_FNS.heroCanvas);
-// Start synthetic demo
-generateVesselTree();
-startAnimWhenVisible('syntheticDemoCanvas',drawSyntheticDemo);
-// Re-render KaTeX
+buildClipGrid();updateNavButtons();
+for(var i=1;i<=6;i++){populateSpotCode(i)}
+setTimeout(function(){selectClip(1)},100);
 setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+
+// === AUDIT ===
+function runAudit(){
+var p=0,f=0,r=[];
+function chk(n,fn){try{if(fn())p++;else f++;r.push('FAIL: '+n)}catch(e){f++;r.push('FAIL: '+n+' ('+e.message+')')}}
+chk('6 clip cards',function(){return document.getElementById('clipGrid')&&document.getElementById('clipGrid').children.length===6});
+for(var i=1;i<=6;i++){
+chk('Clip '+i+' section',function(){return!!document.getElementById('clip'+i)});
+chk('SPOT'+i+' exists',function(){return typeof window['SPOT'+i]==='object'});
+chk('Clip '+i+' canvas',function(){return!!document.getElementById('cv'+i)});
+chk('Clip '+i+' scenes (6)',function(){var s=document.getElementById('scenes'+i);return s&&s.children.length===6});
+chk('Clip '+i+' 8 controls',function(){return document.querySelectorAll('#wrap'+i+' .clip-btn').length>=8});
+chk('Clip '+i+' zoom slider',function(){return!!document.getElementById('zoom'+i)});
+chk('Clip '+i+' param slider',function(){return!!document.getElementById('param'+i)});
+chk('Clip '+i+' future chart',function(){return!!document.getElementById('fut'+i)});
+chk('Clip '+i+' cross-link',function(){return!!document.querySelector('#wrap'+i+' .clip-cross-link')});
+chk('Clip '+i+' expr',function(){var e=document.getElementById('expr'+i);return e&&e.innerHTML.indexOf('katex')>=0});
+}
+chk('Pyodide GNN button',function(){return!!document.getElementById('gnnRunBtn')});
+chk('Analysis section',function(){return!!document.querySelector('.analysis')});
+chk('References (6)',function(){return document.querySelectorAll('.refs li').length>=6});
+chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
+console.log('AUDIT: '+p+' passed, '+f+' failed');
+return{passed:p,failed:f,results:r};
+}
+setTimeout(runAudit,2000);
 </script>
 </body>
 </html>
