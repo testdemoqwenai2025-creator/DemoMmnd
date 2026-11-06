@@ -816,6 +816,7 @@ var p=0,f=0,r=[];
 function chk(n,fn){try{if(fn())p++;else f++;r.push('FAIL: '+n)}catch(e){f++;r.push('FAIL: '+n+' ('+e.message+')')}}
 chk('6 clip cards',function(){return document.getElementById('clipGrid')&&document.getElementById('clipGrid').children.length===6});
 for(var i=1;i<=6;i++){
+(function(i){
 chk('Clip '+i+' section',function(){return!!document.getElementById('clip'+i)});
 chk('SPOT'+i+' exists',function(){return typeof window['SPOT'+i]==='object'});
 chk('Clip '+i+' canvas',function(){return!!document.getElementById('cv'+i)});
@@ -826,6 +827,7 @@ chk('Clip '+i+' param slider',function(){return!!document.getElementById('param'
 chk('Clip '+i+' future chart',function(){return!!document.getElementById('fut'+i)});
 chk('Clip '+i+' cross-link',function(){return!!document.querySelector('#wrap'+i+' .clip-cross-link')});
 chk('Clip '+i+' expr',function(){var e=document.getElementById('expr'+i);return e&&e.innerHTML.indexOf('katex')>=0});
+})(i);
 }
 chk('Pyodide GNN button',function(){return!!document.getElementById('gnnRunBtn')});
 chk('Analysis section',function(){return!!document.querySelector('.analysis')});
