@@ -716,7 +716,9 @@ var exprEl=document.getElementById('expr'+n);if(exprEl)exprEl.innerHTML='$$'+e.l
 var mapEl=document.getElementById('map'+n);if(mapEl&&e.mapping){var mh='<table class="map-table"><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){mh+='<tr><td class="map-sym">'+m.symbol+'</td><td>&#8594;</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});mh+='</table>';mapEl.innerHTML=mh}
 var tabsEl=document.getElementById('tabs'+n);var ccEl=document.getElementById('codecontent'+n);
 if(tabsEl&&ccEl){var th='';LANGS.forEach(function(l,i){th+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchSpotCode('+n+',\''+l+'\')">'+l+'</button>'});tabsEl.innerHTML=th;var ch='';LANGS.forEach(function(l,i){ch+='<div class="code-content'+(i===0?' active':'')+'" id="cc'+n+'-'+l+'"><pre>'+esc(e.langs[l])+'</pre></div>'});ccEl.innerHTML=ch}
-if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+// NOTE: do NOT call renderMathInElement(document.body) here — it scans code
+// snippets containing $ signs (template literals) and freezes the browser.
+// Math is rendered once, scoped to .expr-rendered elements only, at init.
 }
 function switchSpotCode(n,lang){document.querySelectorAll('#tabs'+n+' .code-tab').forEach(function(t){t.classList.toggle('active',t.textContent.trim()===lang)});document.querySelectorAll('.code-content').forEach(function(c){c.classList.toggle('active',c.id==='cc'+n+'-'+lang)})}
 function runSpotCode(n,key){
@@ -805,7 +807,19 @@ drawPhaseBar(ctx,W,H);tt+=0.02;requestAnimationFrame(frame)}frame();
 buildClipGrid();updateNavButtons();
 for(var i=1;i<=6;i++){populateSpotCode(i)}
 setTimeout(function(){selectClip(1)},100);
-setTimeout(function(){if(typeof renderMathInElement!=='undefined')renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})},500);
+// Render KaTeX ONLY on .expr-rendered elements (not document.body)
+// Scanning body would hit $ signs in code snippets and freeze the browser
+setTimeout(function(){
+if(typeof renderMathInElement!=='undefined'){
+document.querySelectorAll('.expr-rendered').forEach(function(el){
+renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true}],throwOnError:false})
+});
+// Also render math in .math-box elements in the analysis section
+document.querySelectorAll('.math-box').forEach(function(el){
+renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})
+});
+}
+},500);
 
 // === AUDIT ===
 function runAudit(){
