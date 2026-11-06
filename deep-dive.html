@@ -752,6 +752,10 @@ pyStatus.textContent='Loading Pyodide...';
 pyStatus.className='pyodide-status loading';
 loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'}).then(function(p){
 pyodide=p;
+pyStatus.textContent='Loading numpy...';
+// Pre-load numpy (required by the SINDy demo)
+return p.loadPackage('numpy');
+}).then(function(){
 pyStatus.textContent='Ready';
 pyStatus.className='pyodide-status ready';
 pyRunBtn.disabled=false;
