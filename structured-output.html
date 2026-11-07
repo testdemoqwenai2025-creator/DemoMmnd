@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="version" content="2026-11-07-v1-structured-output">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>Structured Output · Mmnd</title>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;overflow-x:hidden}
+#pbg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
+main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:3rem 1.5rem}
+.eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
+h1{font-family:Georgia,serif;font-size:2.25rem;font-weight:600;line-height:1.15;margin-bottom:1rem}
+@media(min-width:640px){h1{font-size:2.75rem}}
+p.lead{font-size:.9375rem;color:var(--muted);max-width:42rem;margin-bottom:2rem}
+.badge{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-right:.5rem;margin-bottom:1rem}
+.report-grid{display:grid;gap:.75rem;grid-template-columns:repeat(2,1fr);margin-bottom:2rem}
+@media(min-width:640px){.report-grid{grid-template-columns:repeat(4,1fr)}}
+.report-stat{text-align:center;padding:.75rem;border:1px solid var(--border);border-radius:.5rem;background:var(--card)}
+.report-stat .num{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--primary)}
+.report-stat .lbl{font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:.25rem}
+/* === GUIDED DECODING ANIMATION === */
+.decode-panel{background:linear-gradient(135deg,rgba(10,9,8,0.97),rgba(20,15,10,0.95));border:1px solid rgba(194,65,12,.2);border-radius:1rem;padding:1.5rem;margin-bottom:2rem;position:relative;overflow:hidden}
+.decode-panel::before{content:'';position:absolute;inset:0;border-radius:1rem;background:radial-gradient(circle at 30% 20%,rgba(194,65,12,.06),transparent 60%);pointer-events:none;z-index:0}
+.decode-title{font-family:Georgia,serif;font-size:1rem;font-weight:600;color:#FFD700;margin-bottom:.75rem;position:relative;z-index:1}
+.decode-schema{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.75rem;color:#00CED1;margin-bottom:.5rem;position:relative;z-index:1}
+.decode-output{font-family:'SF Mono',Monaco,Consolas,monospace;font-size:1rem;color:#10b981;margin-bottom:1rem;min-height:1.5rem;position:relative;z-index:1;word-break:break-all}
+.decode-output .cursor{display:inline-block;width:.5rem;height:1rem;background:#FFD700;animation:blink 1s infinite;vertical-align:text-bottom;margin-left:2px}
+@keyframes blink{0%,50%{opacity:1}51%,100%{opacity:0}}
+.decode-canvas{width:100%;height:280px;border:1px solid rgba(255,255,255,.1);border-radius:.5rem;background:#0a0908;margin-bottom:.75rem;position:relative;z-index:1}
+.decode-controls{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;position:relative;z-index:1}
+.decode-btn{padding:.375rem .75rem;font-size:.75rem;border:1px solid rgba(194,65,12,.4);border-radius:.375rem;cursor:pointer;background:rgba(194,65,12,.1);color:#FFD700;font-weight:600;transition:all .2s}
+.decode-btn:hover{background:rgba(194,65,12,.3);color:#fff}
+.decode-btn.active{background:#c2410c;color:#fff}
+.decode-step-info{font-size:.6875rem;color:var(--muted);margin-left:auto}
+/* === CONCEPT CARDS === */
+.expr-grid{display:grid;gap:1rem;grid-template-columns:1fr;margin-bottom:2rem}
+@media(min-width:640px){.expr-grid{grid-template-columns:repeat(2,1fr)}}
+.expr-card{border:1px solid var(--border);border-radius:.75rem;padding:1.25rem;background:var(--card);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.expr-card:hover{border-color:var(--primary);transform:translateY(-2px);box-shadow:0 8px 24px rgba(194,65,12,.12)}
+.expr-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--primary),transparent);opacity:0;transition:opacity .2s}
+.expr-card:hover::before{opacity:1}
+.expr-card-num{font-family:Georgia,serif;font-size:.75rem;color:var(--primary);font-weight:600}
+.expr-card-name{font-family:Georgia,serif;font-size:.9375rem;font-weight:600;margin-top:.25rem;margin-bottom:.5rem}
+.expr-card-preview{font-size:.8125rem;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+/* === POPUP === */
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+.popup-overlay.active{display:flex}
+.popup{background:linear-gradient(135deg,rgba(10,9,8,0.97),rgba(20,15,10,0.95));backdrop-filter:blur(24px);border:1px solid rgba(194,65,12,.2);border-radius:1rem;max-width:850px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 96px rgba(194,65,12,.15);position:relative}
+.popup::before{content:'';position:absolute;inset:0;border-radius:1rem;background:radial-gradient(circle at 30% 20%,rgba(194,65,12,.06),transparent 60%);pointer-events:none;z-index:0}
+.gradient-title{font-family:Georgia,serif;font-size:1.375rem;font-weight:700}
+.gradient-title span{display:inline-block}
+.popup-header{padding:1.5rem 1.5rem 0;border-bottom:1px solid var(--border);position:relative;z-index:1}
+.popup-close{float:right;width:2rem;height:2rem;border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.5rem;border-radius:50%;position:relative;z-index:10}
+.popup-close:hover{background:var(--accent-bg);color:var(--primary)}
+.popup-tabs{display:flex;border-bottom:2px solid var(--border);margin-top:1rem;overflow-x:auto}
+.popup-tab{padding:.625rem 1rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.8125rem;font-weight:500;color:var(--muted);white-space:nowrap}
+.popup-tab:hover{color:var(--fg)}
+.popup-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.popup-body{padding:1.5rem;position:relative;z-index:1}
+.popup-pane{display:none}
+.popup-pane.active{display:block}
+.popup-pane h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem}
+.expr-rendered{border:1px solid rgba(194,65,12,.2);background:rgba(10,9,8,.6);border-radius:.5rem;padding:1.5rem;text-align:center;margin-bottom:1rem;overflow-x:auto;color:#e5e2dc;font-family:Georgia,serif;font-size:1rem}
+.expr-intent{font-size:.9375rem;line-height:1.7;margin-bottom:1rem;color:#e5e2dc}
+.code-content{background:var(--code-bg);border-radius:.5rem;padding:1rem;overflow-x:auto}
+.code-content pre{margin:0;color:var(--code-fg);font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.75rem;line-height:1.6;white-space:pre}
+.demo-canvas{width:100%;aspect-ratio:2/1;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg);margin-bottom:.5rem}
+.obs-text{font-size:.875rem;color:#e5e2dc;line-height:1.7}
+.obs-text p{margin-bottom:.75rem}
+.obs-text strong{color:var(--primary)}
+.deep-text{font-size:.875rem;color:#e5e2dc;line-height:1.7}
+.deep-text p{margin-bottom:.75rem}
+.deep-text strong{color:var(--primary)}
+.fut-canvas{width:100%;aspect-ratio:16/7;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg);margin-bottom:.5rem}
+.checks-badge{position:fixed;bottom:1rem;right:1rem;padding:.5rem .75rem;border-radius:.375rem;background:var(--card);border:1px solid var(--border);font-size:.6875rem;color:var(--muted);z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
+.footer-inner{max-width:1000px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+.footer-inner a{color:var(--primary);text-decoration:none}
+</style>
+</head>
+<body>
+<canvas id="pbg"></canvas>
+<header><nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a><a href="sources.html">Sources</a><a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="deep-dive.html">Deep Dive</a><a href="rl-deep-dive.html">RL Deep Dive</a><a href="spotlight.html">Spotlight</a><a href="structured-output.html" class="active">Structured Output</a><a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
+</nav></header>
+<main>
+<div class="eyebrow">LLM Infrastructure &middot; Interactive Animation</div>
+<h1>Structured Output: Guided Decoding</h1>
+<p class="lead">How vLLM and SGLang guarantee valid JSON output through grammar-based token masking. The model still chooses what to write, but it can only choose among tokens that keep the output valid. Watch the decoding step by step.</p>
+<div class="badge">Interactive animation</div>
+<div class="badge">5 mechanism stages</div>
+<div class="badge">Zero external deps</div>
+<div class="report-grid">
+<div class="report-stat"><div class="num">5</div><div class="lbl">Mechanism stages</div></div>
+<div class="report-stat"><div class="num">30</div><div class="lbl">Code blocks</div></div>
+<div class="report-stat"><div class="num">1</div><div class="lbl">Live animation</div></div>
+<div class="report-stat"><div class="num">0</div><div class="lbl">External deps</div></div>
+</div>
+<!-- === GUIDED DECODING ANIMATION === -->
+<div class="decode-panel">
+<div class="decode-title">&#9881; Guided Decoding: Token-by-Token JSON Generation</div>
+<div class="decode-schema">Schema: <span style="color:#FFD700">{"name": string, "age": integer}</span></div>
+<div class="decode-output" id="decodeOutput"><span style="color:#736a5e">{"name": "</span></div>
+<canvas class="decode-canvas" id="decodeCanvas"></canvas>
+<div class="decode-controls">
+<button class="decode-btn" onclick="decodePlay()">&#9654; Play</button>
+<button class="decode-btn" onclick="decodePause()">&#9208; Pause</button>
+<button class="decode-btn" onclick="decodeStep()">&#9654;&#9654; Step</button>
+<button class="decode-btn" onclick="decodeReset()">&#8634; Reset</button>
+<span class="decode-step-info" id="decodeStepInfo">Step 0/17 &middot; Ready</span>
+</div>
+</div>
+<!-- === CONCEPT CARDS === -->
+<div class="expr-grid" id="cardGrid"></div>
+</main>
+<!-- === POPUP === -->
+<div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
+<div class="popup">
+<div class="popup-header">
+<button class="popup-close" onclick="closePopup()">&times;</button>
+<div class="gradient-title" id="pTitle"></div>
+<div class="popup-tabs" id="pTabs"></div>
+</div>
+<div class="popup-body" id="pBody"></div>
+</div>
+</div>
+<div class="checks-badge" id="checksBadge" style="display:none"><span id="checksText"></span></div>
+<footer><div class="footer-inner"><p>Mmnd Observatory &middot; <a href="index.html">Home</a> &middot; Zero external dependencies &middot; All animations rendered in-browser</p></div></footer>
+<script>
+// === THEME ===
+(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+function toggleTheme(){var c=document.documentElement.classList;c.toggle('dark');localStorage.setItem('mmnd-theme',c.contains('dark')?'dark':'light')}
+// === HELPERS ===
+function prepCanvas(cv){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();if(r.width<10)return null;var newW=Math.round(r.width*dpr),newH=Math.round(r.height*dpr);if(cv.width!==newW||cv.height!==newH){cv.width=newW;cv.height=newH}ctx.setTransform(dpr,0,0,dpr,0,0);return{ctx:ctx,W:r.width,H:r.height}}
+function glowNode(ctx,x,y,r,c,g){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=g||8;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+function gradBg(ctx,W,H,t,c1,c2){var g=ctx.createLinearGradient(0,0,W,H);var s=Math.sin(t*.3)*.2;g.addColorStop(Math.max(0,.3-s),c1);g.addColorStop(Math.min(1,.7+s),c2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+// === CLEAN LATEX ===
+function cleanLatex(s){return String(s)
+.replace(/\\mathbf\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<b>$1</b>')
+.replace(/\\boldsymbol\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<b>$1</b>')
+.replace(/\\text\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\mathcal\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\frac\{((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1/$2')
+.replace(/\\sqrt\{((?:[^{}]|\{[^{}]*\})*)\}/g,'\u221a$1')
+.replace(/\\hat\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1\u0302')
+.replace(/\\%/g,'%').replace(/\\&/g,'&amp;')
+.replace(/_\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<sub>$1</sub>')
+.replace(/\^\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<sup>$1</sup>')
+.replace(/_([a-zA-Z0-9])/g,'<sub>$1</sub>')
+.replace(/\^([a-zA-Z0-9])/g,'<sup>$1</sup>')
+.replace(/\\alpha/g,'\u03b1').replace(/\\beta/g,'\u03b2').replace(/\\gamma/g,'\u03b3').replace(/\\delta/g,'\u03b4')
+.replace(/\\epsilon/g,'\u03b5').replace(/\\theta/g,'\u03b8').replace(/\\lambda/g,'\u03bb').replace(/\\mu/g,'\u03bc')
+.replace(/\\pi/g,'\u03c0').replace(/\\sigma/g,'\u03c3').replace(/\\phi/g,'\u03c6').replace(/\\omega/g,'\u03c9')
+.replace(/\\Delta/g,'\u0394').replace(/\\Sigma/g,'\u03a3').replace(/\\Theta/g,'\u0398').replace(/\\Xi/g,'\u039e')
+.replace(/\\nabla/g,'\u2207').replace(/\\partial/g,'\u2202').replace(/\\infty/g,'\u221e')
+.replace(/\\times/g,'\u00d7').replace(/\\cdot/g,'\u00b7').replace(/\\leq/g,'\u2264').replace(/\\geq/g,'\u2265')
+.replace(/\\neq/g,'\u2260').replace(/\\approx/g,'\u2248').replace(/\\sum/g,'\u03a3').replace(/\\prod/g,'\u03a0')
+.replace(/\\to/g,'\u2192').replace(/\\rightarrow/g,'\u2192').replace(/\\in/g,'\u2208')
+.replace(/\\quad/g,'&nbsp;&nbsp;').replace(/\\ln/g,'ln').replace(/\\log/g,'log').replace(/\\exp/g,'exp')
+.replace(/\\max/g,'max').replace(/\\min/g,'min').replace(/\\dots/g,'\u2026').replace(/\\infty/g,'\u221e')
+.replace(/\\[a-zA-Z]+/g,'').replace(/[{}]/g,'')}
+// === DECODE STEPS ===
+// Each step: {output, tokens: [{tok, prob, legal}], chosen, grammar, jumpForward}
+var DECODE_STEPS=[
+{s:'Start',out:'{',tokens:[{t:'{',p:0.95,l:1},{t:'"',p:0.02,l:0},{t:'A',p:0.01,l:0},{t:'1',p:0.01,l:0},{t:'}',p:0.005,l:0},{t:',',p:0.002,l:0},{t:':',p:0.001,l:0},{t:' ',p:0.001,l:0},{t:'[',p:0.001,l:0},{t:']',p:0.001,l:0},{t:'n',p:0.001,l:0},{t:'a',p:0.001,l:0}],chosen:0,grammar:'expect: {',jf:1},
+{s:'Key start',out:'{"',tokens:[{t:'{',p:0.01,l:0},{t:'"',p:0.92,l:1},{t:'A',p:0.02,l:0},{t:'n',p:0.02,l:0},{t:':',p:0.01,l:0},{t:'}',p:0.005,l:0},{t:',',p:0.005,l:0},{t:'1',p:0.003,l:0},{t:' ',p:0.002,l:0},{t:'[',p:0.002,l:0},{t:']',p:0.001,l:0},{t:'a',p:0.002,l:0}],chosen:1,grammar:'expect: " (string key)',jf:1},
+{s:'Key: "n"',out:'{"n',tokens:[{t:'n',p:0.35,l:1},{t:'a',p:0.20,l:1},{t:'m',p:0.15,l:1},{t:'e',p:0.10,l:1},{t:'"',p:0.08,l:1},{t:'N',p:0.04,l:1},{t:'{',p:0.01,l:0},{t:':',p:0.02,l:0},{t:'1',p:0.01,l:0},{t:' ',p:0.02,l:0},{t:',',p:0.01,l:0},{t:'}',p:0.01,l:0}],chosen:0,grammar:'expect: key chars or "',jf:0},
+{s:'Key: "na"',out:'{"na',tokens:[{t:'a',p:0.30,l:1},{t:'m',p:0.25,l:1},{t:'e',p:0.20,l:1},{t:'"',p:0.10,l:1},{t:'n',p:0.05,l:1},{t:'A',p:0.03,l:1},{t:':',p:0.02,l:0},{t:'1',p:0.01,l:0},{t:' ',p:0.02,l:0},{t:',',p:0.01,l:0},{t:'}',p:0.01,l:0},{t:'{',p:0.005,l:0}],chosen:0,grammar:'expect: key chars or "',jf:0},
+{s:'Key: "nam"',out:'{"nam',tokens:[{t:'e',p:0.45,l:1},{t:'a',p:0.15,l:1},{t:'"',p:0.15,l:1},{t:'m',p:0.10,l:1},{t:'n',p:0.05,l:1},{t:'E',p:0.03,l:1},{t:':',p:0.02,l:0},{t:'1',p:0.01,l:0},{t:' ',p:0.02,l:0},{t:',',p:0.01,l:0},{t:'}',p:0.01,l:0},{t:'{',p:0.005,l:0}],chosen:0,grammar:'expect: key chars or "',jf:0},
+{s:'Key done',out:'{"name"',tokens:[{t:'"',p:0.01,l:0},{t:':',p:0.88,l:1},{t:'e',p:0.03,l:1},{t:' ',p:0.03,l:0},{t:'}',p:0.02,l:0},{t:',',p:0.01,l:0},{t:'1',p:0.01,l:0},{t:'{',p:0.005,l:0},{t:'a',p:0.005,l:0},{t:'n',p:0.005,l:0},{t:'[',p:0.005,l:0},{t:']',p:0.005,l:0}],chosen:1,grammar:'expect: :',jf:1},
+{s:'Colon+space',out:'{"name": ',tokens:[{t:':',p:0.01,l:0},{t:' ',p:0.90,l:1},{t:'"',p:0.05,l:1},{t:'1',p:0.02,l:0},{t:'}',p:0.01,l:0},{t:',',p:0.005,l:0},{t:'{',p:0.002,l:0},{t:'a',p:0.001,l:0},{t:'n',p:0.001,l:0},{t:'[',p:0.001,l:0},{t:']',p:0.001,l:0},{t:'.',p:0.002,l:0}],chosen:1,grammar:'expect: space or "',jf:1},
+{s:'Value start',out:'{"name": "',tokens:[{t:'"',p:0.01,l:0},{t:'A',p:0.25,l:1},{t:'a',p:0.20,l:1},{t:'B',p:0.15,l:1},{t:'C',p:0.10,l:1},{t:'D',p:0.08,l:1},{t:' ',p:0.02,l:0},{t:':',p:0.02,l:0},{t:'1',p:0.01,l:0},{t:'}',p:0.01,l:0},{t:',',p:0.01,l:0},{t:'{',p:0.005,l:0}],chosen:0,grammar:'expect: string content',jf:0},
+{s:'Value: "A"',out:'{"name": "A',tokens:[{t:'d',p:0.30,l:1},{t:'a',p:0.25,l:1},{t:'b',p:0.15,l:1},{t:'"',p:0.10,l:1},{t:'c',p:0.08,l:1},{t:'e',p:0.05,l:1},{t:' ',p:0.02,l:0},{t:':',p:0.02,l:0},{t:'1',p:0.01,l:0},{t:'}',p:0.01,l:0},{t:',',p:0.01,l:0},{t:'{',p:0.005,l:0}],chosen:0,grammar:'expect: string chars or "',jf:0},
+{s:'Value: "Ad"',out:'{"name": "Ad',tokens:[{t:'a',p:0.55,l:1},{t:'"',p:0.15,l:1},{t:'e',p:0.10,l:1},{t:'b',p:0.08,l:1},{t:'c',p:0.05,l:1},{t:'d',p:0.03,l:1},{t:' ',p:0.01,l:0},{t:':',p:0.01,l:0},{t:'1',p:0.01,l:0},{t:'}',p:0.005,l:0},{t:',',p:0.005,l:0},{t:'{',p:0.002,l:0}],chosen:0,grammar:'expect: string chars or "',jf:0},
+{s:'Value done',out:'{"name": "Ada"',tokens:[{t:'"',p:0.02,l:0},{t:',',p:0.85,l:1},{t:'a',p:0.05,l:1},{t:' ',p:0.03,l:0},{t:'}',p:0.02,l:0},{t:':',p:0.01,l:0},{t:'1',p:0.01,l:0},{t:'{',p:0.005,l:0},{t:'n',p:0.002,l:0},{t:'[',p:0.002,l:0},{t:']',p:0.002,l:0},{t:'.',p:0.002,l:0}],chosen:1,grammar:'expect: ,',jf:1},
+{s:'Comma+space+key',out:'{"name": "Ada", "age',tokens:[{t:',',p:0.01,l:0},{t:' ',p:0.01,l:0},{t:'"',p:0.01,l:0},{t:'a',p:0.40,l:1},{t:'g',p:0.30,l:1},{t:'e',p:0.15,l:1},{t:':',p:0.01,l:0},{t:'1',p:0.005,l:0},{t:'}',p:0.005,l:0},{t:'{',p:0.002,l:0},{t:'n',p:0.005,l:0},{t:'[',p:0.002,l:0}],chosen:3,grammar:'expect: key chars (age)',jf:0},
+{s:'Key: "ag"',out:'{"name": "Ada", "ag',tokens:[{t:'e',p:0.65,l:1},{t:'g',p:0.15,l:1},{t:'a',p:0.10,l:1},{t:'"',p:0.05,l:1},{t:':',p:0.01,l:0},{t:'1',p:0.01,l:0},{t:' ',p:0.01,l:0},{t:'}',p:0.005,l:0},{t:',',p:0.005,l:0},{t:'{',p:0.002,l:0},{t:'n',p:0.002,l:0},{t:'[',p:0.002,l:0}],chosen:0,grammar:'expect: key chars or "',jf:0},
+{s:'Key done+colon',out:'{"name": "Ada", "age": ',tokens:[{t:'"',p:0.02,l:0},{t:' ',p:0.05,l:0},{t:'1',p:0.25,l:1},{t:'2',p:0.15,l:1},{t:'3',p:0.12,l:1},{t:'4',p:0.08,l:1},{t:'5',p:0.06,l:1},{t:'0',p:0.10,l:1},{t:'6',p:0.07,l:1},{t:'7',p:0.05,l:1},{t:'8',p:0.04,l:1},{t:'9',p:0.03,l:1}],chosen:2,grammar:'expect: INTEGER (digits only!)',jf:0},
+{s:'Age: 3',out:'{"name": "Ada", "age": 3',tokens:[{t:'6',p:0.25,l:1},{t:'0',p:0.20,l:1},{t:'5',p:0.15,l:1},{t:',',p:0.15,l:1},{t:'1',p:0.08,l:1},{t:'2',p:0.06,l:1},{t:'7',p:0.04,l:1},{t:'8',p:0.03,l:1},{t:'9',p:0.02,l:1},{t:'4',p:0.01,l:1},{t:'"',p:0.005,l:0},{t:' ',p:0.005,l:0}],chosen:0,grammar:'expect: more digits or ,',jf:0},
+{s:'Age done',out:'{"name": "Ada", "age": 36',tokens:[{t:'6',p:0.02,l:0},{t:'}',p:0.88,l:1},{t:',',p:0.05,l:1},{t:'0',p:0.02,l:1},{t:'1',p:0.01,l:1},{t:'5',p:0.005,l:1},{t:' ',p:0.005,l:0},{t:'"',p:0.002,l:0},{t:':',p:0.002,l:0},{t:'{',p:0.002,l:0},{t:'[',p:0.002,l:0},{t:']',p:0.002,l:0}],chosen:1,grammar:'expect: }',jf:1},
+{s:'Complete!',out:'{"name": "Ada", "age": 36}',tokens:[{t:'}',p:0.01,l:0},{t:'{',p:0.01,l:0},{t:'"',p:0.01,l:0},{t:' ',p:0.01,l:0},{t:'1',p:0.01,l:0},{t:'a',p:0.01,l:0},{t:',',p:0.01,l:0},{t:':',p:0.01,l:0},{t:'[',p:0.01,l:0},{t:']',p:0.01,l:0},{t:'n',p:0.01,l:0},{t:'A',p:0.01,l:0}],chosen:-1,grammar:'DONE &mdash; valid JSON!',jf:0}
+];
+var decodeStepIdx=0;
+var decodePlaying=false;
+var decodeTimer=null;
+function decodeReset(){decodePause();decodeStepIdx=0;decodeRender()}
+function decodePlay(){decodePlaying=true;decodeTimer=setInterval(function(){if(decodeStepIdx>=DECODE_STEPS.length-1){decodePause();return}decodeStepIdx++;decodeRender()},1200)}
+function decodePause(){decodePlaying=false;if(decodeTimer){clearInterval(decodeTimer);decodeTimer=null}}
+function decodeStep(){decodePause();if(decodeStepIdx<DECODE_STEPS.length-1){decodeStepIdx++;decodeRender()}}
+function decodeRender(){
+var step=DECODE_STEPS[decodeStepIdx];
+var out=document.getElementById('decodeOutput');
+// Build output display: prefix (dimmed) + current char (bright) + cursor
+var prefix=decodeStepIdx>0?DECODE_STEPS[decodeStepIdx-1].out:'';
+var current=step.out.substring(prefix.length);
+out.innerHTML='<span style="color:#5a5550">'+escapeHtml(prefix)+'</span><span style="color:#10b981;font-weight:bold">'+escapeHtml(current)+'</span><span class="cursor"></span>';
+var info=document.getElementById('decodeStepInfo');
+var jfLabel=step.jf?' &middot; <span style="color:#FFD700">JUMP-FORWARD</span>':'';
+info.innerHTML='Step '+(decodeStepIdx+1)+'/'+DECODE_STEPS.length+' &middot; '+step.s+jfLabel;
+// Draw token bars on canvas
+var cv=document.getElementById('decodeCanvas');
+var s=prepCanvas(cv);if(!s)return;
+var ctx=s.ctx,W=s.W,H=s.H;
+gradBg(ctx,W,H,0,'#080908','#0a0a0f');
+// Title
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Candidate Tokens ('+step.tokens.length+') &mdash; '+(step.jf?'Jump-Forward (single path)':'Model chooses among legal tokens'),W/2,14);
+// Grammar state
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='left';
+ctx.fillText('Grammar: '+step.grammar.replace(/&mdash;/g,'-').replace(/<[^>]+>/g,''),8,24);
+// Token bars
+var nTokens=step.tokens.length;
+var barH=Math.min(14,(H-35)/nTokens-2);
+var barW=W*0.55;
+var barX=W*0.25;
+var legalCount=step.tokens.filter(function(t){return t.l}).length;
+for(var i=0;i<nTokens;i++){
+var tk=step.tokens[i];
+var y=30+i*(barH+2);
+// Token label
+ctx.fillStyle=tk.l?'#e5e2dc':'#5a5550';
+ctx.font='bold 6px monospace';ctx.textAlign='right';
+var label=tk.t===' '?'" "':tk.t;
+ctx.fillText(label,barX-4,y+barH*0.7);
+// Bar background
+ctx.fillStyle='rgba(255,255,255,0.05)';
+ctx.fillRect(barX,y,barW,barH);
+// Probability bar
+var probW=tk.p*barW*1.2;
+if(tk.l){
+ctx.fillStyle=step.chosen===i?'#FFD700':'#10b981';
+ctx.shadowColor=step.chosen===i?'#FFD700':'#10b981';
+ctx.shadowBlur=step.chosen===i?6:3;
+ctx.fillRect(barX,y,Math.min(barW,probW),barH);
+ctx.shadowBlur=0;
+// Probability text
+ctx.fillStyle='#fff';ctx.font='5px monospace';ctx.textAlign='left';
+ctx.fillText((tk.p*100).toFixed(1)+'%',barX+Math.min(barW,probW)+3,y+barH*0.7);
+}else{
+// Illegal: strike-through
+ctx.fillStyle='rgba(255,107,107,0.15)';
+ctx.fillRect(barX,y,barW,barH);
+ctx.strokeStyle='rgba(255,107,107,0.5)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(barX,y+barH/2);ctx.lineTo(barX+barW,y+barH/2);ctx.stroke();
+ctx.fillStyle='#ff6b6b';ctx.font='5px monospace';ctx.textAlign='left';
+ctx.fillText('BLOCKED',barX+barW-35,y+barH*0.7);
+}
+// Chosen indicator
+if(step.chosen===i){
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;
+ctx.strokeRect(barX-1,y-1,barW+2,barH+2);
+ctx.fillStyle='#FFD700';ctx.font='bold 5px monospace';ctx.textAlign='left';
+ctx.fillText('\\u2713 CHOSEN',barX+barW+40,y+barH*0.7);
+}
+}
+// Legal count badge
+ctx.fillStyle='rgba(16,185,129,0.15)';ctx.fillRect(W*0.82,H-22,60,16);
+ctx.fillStyle='#10b981';ctx.font='bold 6px monospace';ctx.textAlign='center';
+ctx.fillText(legalCount+'/'+nTokens+' legal',W*0.82+30,H-12);
+// Jump-forward badge
+if(step.jf){
+ctx.fillStyle='rgba(255,215,0,0.15)';ctx.fillRect(W*0.82,H-40,60,16);
+ctx.fillStyle='#FFD700';
+ctx.fillText('JUMP-FWD',W*0.82+30,H-30);
+}
+}
+function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+// === CONCEPT DATA ===
+var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
+var TABS=[{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'anim',icon:'\ud83c\udfa8',label:'Animation'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
+var CONCEPTS={
+'compile':{name:'1. Compile: Schema to State Machine',latex:'\\mathcal{G} = \\text{compile}(\\text{schema}), \\quad \\mathcal{G}: (S, \\Sigma, \\delta, s_0, F)',intent:'The JSON schema, regex, or grammar is compiled into a state machine using backends such as XGrammar. Each state represents a valid position in the grammar, and transitions represent legal tokens. This compilation happens once before generation begins.',langs:{'Python':'from xgrammar import GrammarCompiler\nimport json\n\n# Compile JSON schema into a grammar state machine\nschema = {\n    "type": "object",\n    "properties": {\n        "name": {"type": "string"},\n        "age": {"type": "integer"}\n    },\n    "required": ["name", "age"]\n}\n\n# XGrammar compiles schema -> state machine\ncompiler = GrammarCompiler()\ngrammar = compiler.compile_json_schema(json.dumps(schema))\n# grammar.states: set of valid states\n# grammar.transitions: state x token -> next_state\n# grammar.initial_state: s_0\n# grammar.accept_states: F (valid completion)\n\n# The state machine tracks: after each token,\n# which state are we in? What tokens are legal?','TypeScript':'import { GrammarCompiler } from "xgrammar";\n\nconst schema = {\n  type: "object",\n  properties: {\n    name: { type: "string" },\n    age: { type: "integer" }\n  },\n  required: ["name", "age"]\n};\n\n// Compile schema -> state machine\nconst compiler = new GrammarCompiler();\nconst grammar = compiler.compileJsonSchema(schema);\n// grammar.states: Set<State>\n// grammar.transitions: Map<State, Map<Token, State>>\n// grammar.initialState: s0\n// grammar.acceptStates: Set<State> (valid completion)','Go':'type Grammar struct {\n    States       []int\n    Transitions  map[int]map[string]int\n    InitialState int\n    AcceptStates map[int]bool\n}\n\nfunc CompileSchema(schema []byte) *Grammar {\n    // XGrammar: JSON schema -> state machine\n    // States: valid positions in grammar\n    // Transitions: state x token -> next state\n    g := &Grammar{\n        States:       []int{},\n        Transitions:  make(map[int]map[string]int),\n        InitialState: 0,\n        AcceptStates: make(map[int]bool),\n    }\n    // Parse schema, build DFA...\n    return g\n}','Scala':'case class Grammar(\n  states: Set[Int],\n  transitions: Map[Int, Map[String, Int]],\n  initialState: Int,\n  acceptStates: Set[Int]\n)\n\ndef compileSchema(schema: String): Grammar = {\n  // XGrammar: JSON schema -> state machine\n  // Each state = valid position in grammar\n  // Transitions = legal tokens from each state\n  Grammar(\n    states = Set(0, 1, 2, ...),\n    transitions = Map(0 -> Map("{" -> 1), ...),\n    initialState = 0,\n    acceptStates = Set(finalState)\n  )\n}','C':'typedef struct {\n    int* states;\n    int n_states;\n    /* transitions[state][token_id] = next_state or -1 */\n    int** transitions;\n    int initial_state;\n    int* accept_states;\n    int n_accept;\n} grammar_t;\n\ngrammar_t* compile_schema(const char* schema_json) {\n    /* XGrammar: parse JSON schema, build DFA */\n    /* States = valid grammar positions */\n    /* Transitions = legal tokens per state */\n    grammar_t* g = malloc(sizeof(grammar_t));\n    /* ... build state machine ... */\n    return g;\n}','Elixir':'defmodule GrammarCompiler do\n  def compile_schema(schema) do\n    # XGrammar: JSON schema -> state machine\n    %{\n      states: MapSet.new([0, 1, 2, ...]),\n      transitions: %{0 => %{"{" => 1}, ...},\n      initial_state: 0,\n      accept_states: MapSet.new([final_state])\n    }\n  end\nend'},mapping:[{symbol:'\\mathcal{G}',code:'grammar object',note:'Compiled state machine'},{symbol:'S',code:'grammar.states',note:'Set of valid states'},{symbol:'\\Sigma',code:'vocabulary',note:'Token alphabet'},{symbol:'\\delta',code:'transitions[s][t]',note:'State transition function'},{symbol:'s_0',code:'initial_state',note:'Initial state'},{symbol:'F',code:'accept_states',note:'Accepting (complete) states'}],demo:'compile'},
+'mask':{name:'2. Mask: Identify Legal Tokens',latex:'M_t(s) = \\{t \\in \\Sigma : \\delta(s, t) \\neq \\emptyset\\}',intent:'At each decoding step, the engine builds a mask over the vocabulary that marks which tokens are legal in the current state of the grammar. The mask is a boolean vector of size |vocabulary|, computed by checking which tokens have a valid transition from the current grammar state.',langs:{'Python':'import torch\n\ndef build_mask(grammar, current_state, vocab_size):\n    """Build boolean mask: True for legal tokens."""\n    mask = torch.zeros(vocab_size, dtype=torch.bool)\n    # Check which tokens have a valid transition from current_state\n    for token_id in range(vocab_size):\n        token = tokenizer.id_to_token(token_id)\n        if token and grammar.has_transition(current_state, token):\n            mask[token_id] = True  # legal in this state\n    return mask  # shape: (vocab_size,), True = allowed\n\n# At step t, with grammar in state s:\nmask = build_mask(grammar, current_state, vocab_size=32000)\n# mask[156]: True if token 156 is legal now\n# Only legal tokens can be sampled','TypeScript':'function buildMask(grammar: Grammar, state: number, vocab: Tokenizer): boolean[] {\n  const mask = new Array(vocab.size).fill(false);\n  for (let id = 0; id < vocab.size; id++) {\n    const token = vocab.idToToken(id);\n    if (token && grammar.transitions.get(state)?.has(token))\n      mask[id] = true;  // legal in this state\n  }\n  return mask;  // boolean[vocabSize], true = allowed\n}','Go':'func BuildMask(grammar *Grammar, state int, vocabSize int) []bool {\n    mask := make([]bool, vocabSize)\n    for tokenID := 0; tokenID < vocabSize; tokenID++ {\n        token := tokenizer.IDToToken(tokenID)\n        if _, ok := grammar.Transitions[state][token]; ok {\n            mask[tokenID] = true  // legal\n        }\n    }\n    return mask  // bool[vocabSize]\n}','Scala':'def buildMask(grammar: Grammar, state: Int, vocabSize: Int): Array[Boolean] = {\n  val mask = Array.fill(vocabSize)(false)\n  for (tokenId <- 0 until vocabSize) {\n    val token = tokenizer.idToToken(tokenId)\n    if (grammar.transitions.get(state).exists(_.contains(token)))\n      mask(tokenId) = true  // legal in this state\n  }\n  mask  // Boolean[vocabSize]','C':'void build_mask(grammar_t* g, int state, int vocab_size, int* tokenizer_ids,\n                    char** tokenizer_tokens, int n_tokens, bool* mask) {\n    /* mask: bool[vocab_size], true = legal token */\n    memset(mask, 0, vocab_size * sizeof(bool));\n    for (int i = 0; i < n_tokens; i++) {\n        int id = tokenizer_ids[i];\n        /* Check if transition exists: delta(state, token) != -1 */\n        if (g->transitions[state][id] != -1)\n            mask[id] = true;\n    }\n}','Elixir':'def build_mask(grammar, state, vocab_size) do\n  # Boolean mask: true for legal tokens\n  Enum.map(0..(vocab_size-1), fn token_id ->\n    token = tokenizer.id_to_token(token_id)\n    case grammar.transitions[state][token] do\n      nil -> false\n      _ -> true  # legal transition exists\n    end\n  end)\n  # Returns: list of booleans, true = allowed\nend'},mapping:[{symbol:'M_t(s)',code:'build_mask(grammar, state)',note:'Token mask at state s'},{symbol:'\\Sigma',code:'vocabulary',note:'Token alphabet'},{symbol:'\\delta(s, t)',code:'transitions[state][token]',note:'Transition function'},{symbol:'|M_t|',code:'sum(mask)',note:'Count of legal tokens'}],demo:'mask'},
+'block':{name:'3. Block: Set Illegal Logits to -Infinity',latex:'\\text{logits}_t = \\begin{cases} \\text{logits}_t & \\text{if } M_t[t] = 1 \\\\ -\\infty & \\text{if } M_t[t] = 0 \\end{cases}',intent:'The logits of every illegal token are set to minus infinity before sampling. After softmax, their probability becomes exactly zero, so they can never be picked. The remaining legal probabilities are renormalized to sum to 1.',langs:{'Python':'import torch\nimport torch.nn.functional as F\n\ndef apply_mask(logits, mask):\n    """Set illegal token logits to -inf, then renormalize."""\n    # logits: (vocab_size,) model output\n    # mask: (vocab_size,) boolean, True = legal\n    masked_logits = logits.masked_fill(~mask, float("-inf"))\n    # softmax now gives 0 probability to illegal tokens\n    probs = F.softmax(masked_logits, dim=-1)\n    # probs[illegal] == 0.0 exactly\n    # probs[legal] renormalized to sum to 1\n    return masked_logits, probs\n\n# Before: logits = [2.1, 0.5, -1.2, 3.8, ...]\n# After mask: [2.1, -inf, -1.2, -inf, ...]\n# softmax: [0.27, 0.0, 0.05, 0.0, ...] (renormalized)','TypeScript':'function applyMask(logits: number[], mask: boolean[]): {logits: number[], probs: number[]} {\n  const masked = logits.map((l, i) => mask[i] ? l : -Infinity);\n  // softmax: exp(x) / sum(exp(x))\n  // exp(-Infinity) = 0, so illegal tokens get 0 probability\n  const exps = masked.map(l => Math.exp(l));\n  const sum = exps.reduce((a, b) => a + b, 0);\n  const probs = exps.map(e => e / sum);  // renormalized\n  return { logits: masked, probs };\n}','Go':'func ApplyMask(logits []float64, mask []bool) (maskedLogits []float64, probs []float64) {\n    maskedLogits = make([]float64, len(logits))\n    for i := range logits {\n        if mask[i] {\n            maskedLogits[i] = logits[i]\n        } else {\n            maskedLogits[i] = math.Inf(-1)  // -inf\n        }\n    }\n    // softmax: illegal tokens get exp(-inf) = 0\n    var sum float64\n    probs = make([]float64, len(maskedLogits))\n    for i, l := range maskedLogits {\n        probs[i] = math.Exp(l)\n        sum += probs[i]\n    }\n    for i := range probs { probs[i] /= sum }  // renormalize\n    return\n}','Scala':'def applyMask(logits: Vector[Double], mask: Vector[Boolean]): (Vector[Double], Vector[Double]) = {\n  val masked = logits.zip(mask).map { case (l, m) =>\n    if (m) l else Double.NegativeInfinity\n  }\n  // softmax: exp(-inf) = 0 for illegal tokens\n  val exps = masked.map(l => math.exp(l))\n  val sum = exps.sum\n  val probs = exps.map(_ / sum)  // renormalized\n  (masked, probs)\n}','C':'void apply_mask(double* logits, bool* mask, int vocab_size,\n                  double* masked_logits, double* probs) {\n    double sum = 0;\n    for (int i = 0; i < vocab_size; i++) {\n        if (mask[i]) {\n            masked_logits[i] = logits[i];\n        } else {\n            masked_logits[i] = -INFINITY;  // block illegal\n        }\n        probs[i] = exp(masked_logits[i]);  // exp(-inf) = 0\n        sum += probs[i];\n    }\n    // Renormalize: legal tokens sum to 1\n    for (int i = 0; i < vocab_size; i++)\n        probs[i] /= sum;\n}','Elixir':'def apply_mask(logits, mask) do\n  masked = Enum.zip(logits, mask)\n    |> Enum.map(fn {l, m} -> if m, do: l, else: :neg_infinity end)\n  # softmax: exp(-inf) = 0 for illegal tokens\n  exps = Enum.map(masked, fn l ->\n    case l do\n      :neg_infinity -> 0.0\n      v -> :math.exp(v)\n    end\n  end)\n  sum = Enum.sum(exps)\n  probs = Enum.map(exps, fn e -> e / sum end)  # renormalized\n  {masked, probs}\nend'},mapping:[{symbol:'\\text{logits}_t',code:'model.output',note:'Raw model logits at step t'},{symbol:'M_t[t]',code:'mask[token_id]',note:'Boolean: 1=legal, 0=blocked'},{symbol:'-\\infty',code:'float("-inf")',note:'Blocked logit (prob=0 after softmax)'},{symbol:'p(t)',code:'softmax(masked_logits)',note:'Renormalized probabilities'}],demo:'block'},
+'advance':{name:'4. Advance: Transition Grammar State',latex:'s_{t+1} = \\delta(s_t, t_{\\text{chosen}}), \\quad t_{\\text{chosen}} \\sim \\text{softmax}(\\text{logits}_t)',intent:'The chosen token moves the grammar to its next state via the transition function. The next decoding step gets a new mask based on the new state. This creates a tight coupling between the language model and the grammar state machine.',langs:{'Python':'def advance(grammar, current_state, chosen_token, logits, mask):\n    """Sample a legal token and advance the grammar state."""\n    # 1. Apply mask (block illegal logits)\n    masked_logits = logits.masked_fill(~mask, float("-inf"))\n    probs = torch.softmax(masked_logits, dim=-1)\n    \n    # 2. Sample from legal tokens only\n    chosen_id = torch.multinomial(probs, num_samples=1).item()\n    chosen_token = tokenizer.id_to_token(chosen_id)\n    \n    # 3. Advance grammar state\n    next_state = grammar.transitions[current_state][chosen_token]\n    \n    return chosen_token, next_state\n\n# The loop: sample -> advance -> mask -> sample -> advance -> ...\n# Each step tightens the grammar constraint','TypeScript':'function advance(grammar: Grammar, state: number,\n                    logits: number[], mask: boolean[]): {token: string, nextState: number} {\n  // 1. Apply mask, compute softmax\n  const { probs } = applyMask(logits, mask);\n  // 2. Sample from legal tokens only\n  const chosenId = sample(probs);\n  const token = tokenizer.idToToken(chosenId);\n  // 3. Advance grammar state\n  const nextState = grammar.transitions.get(state)!.get(token)!;\n  return { token, nextState };\n}','Go':'func Advance(grammar *Grammar, state int, logits []float64,\n                mask []bool) (string, int) {\n    maskedLogits, probs := ApplyMask(logits, mask)\n    chosenID := Sample(probs)              // sample legal token\n    token := tokenizer.IDToToken(chosenID)\n    nextState := grammar.Transitions[state][token]  // advance state\n    return token, nextState\n}','Scala':'def advance(grammar: Grammar, state: Int, logits: Vector[Double],\n              mask: Vector[Boolean]): (String, Int) = {\n  val (_, probs) = applyMask(logits, mask)\n  val chosenId = sample(probs)  // sample from legal tokens\n  val token = tokenizer.idToToken(chosenId)\n  val nextState = grammar.transitions(state)(token)  // advance\n  (token, nextState)\n}','C':'int advance(grammar_t* g, int state, double* logits, bool* mask,\n               int vocab_size, /* out */ char* chosen_token) {\n    apply_mask(logits, mask, vocab_size, masked, probs);\n    int chosen_id = sample(probs, vocab_size);  // sample legal\n    strcpy(chosen_token, tokenizer.id_to_token(chosen_id));\n    int next_state = g->transitions[state][chosen_id];  // advance\n    return next_state;\n}','Elixir':'def advance(grammar, state, logits, mask) do\n  {_, probs} = apply_mask(logits, mask)\n  chosen_id = sample(probs)  # sample from legal tokens only\n  token = tokenizer.id_to_token(chosen_id)\n  next_state = grammar.transitions[state][token]  # advance state\n  {token, next_state}\nend'},mapping:[{symbol:'s_{t+1}',code:'next_state',note:'Next grammar state'},{symbol:'\\delta(s_t, t)',code:'transitions[state][token]',note:'State transition'},{symbol:'t_{\\text{chosen}}',code:'sample(probs)',note:'Sampled token (legal only)'}],demo:'advance'},
+'jump_fwd':{name:'5. Jump-Forward: Single-Path Optimization',latex:'\\text{if } |M_t(s)| = 1: \\quad t_{\\text{forced}} = \\arg\\max M_t(s), \\quad \\text{write full token in one step}',intent:'SGLang optimization: when the grammar allows only one continuation (e.g., a fixed key like "age" or structural characters like {"}), the engine writes that text in one step instead of sampling token by token. This eliminates wasted compute on deterministic parts of the output.',langs:{'Python':'def jump_forward(grammar, current_state, output_so_far):\n    """If only one token is legal, write it without sampling."""\n    legal_tokens = grammar.get_legal_tokens(current_state)\n    \n    if len(legal_tokens) == 1:\n        # Single path: force this token, no sampling needed\n        forced_token = legal_tokens[0]\n        next_state = grammar.transitions[current_state][forced_token]\n        \n        # Check if NEXT state also has single path (chain)\n        chained = [forced_token]\n        state = next_state\n        while True:\n            next_legal = grammar.get_legal_tokens(state)\n            if len(next_legal) == 1:\n                chained.append(next_legal[0])\n                state = grammar.transitions[state][next_legal[0]]\n            else:\n                break\n        \n        # Write entire chain in one step\n        return "".join(chained), state\n    \n    return None, current_state  # no jump-forward possible\n\n# Example: after {"name": "Ada",\n# grammar forces: [", ", "age", ": "] in one jump','TypeScript':'function jumpForward(grammar: Grammar, state: number): {text: string, state: number} | null {\n  const legal = grammar.getLegalTokens(state);\n  if (legal.length === 1) {\n    // Single path: chain all forced tokens\n    let text = legal[0];\n    let s = grammar.transitions.get(state)!.get(legal[0])!;\n    while (true) {\n      const nextLegal = grammar.getLegalTokens(s);\n      if (nextLegal.length === 1) {\n        text += nextLegal[0];\n        s = grammar.transitions.get(s)!.get(nextLegal[0])!;\n      } else break;\n    }\n    return { text, state: s };  // write entire chain in one step\n  }\n  return null;  // no jump-forward\n}','Go':'func JumpForward(grammar *Grammar, state int) (string, int, bool) {\n    legal := grammar.GetLegalTokens(state)\n    if len(legal) == 1 {\n        // Chain single-path tokens\n        var text string\n        s := state\n        for {\n            nextLegal := grammar.GetLegalTokens(s)\n            if len(nextLegal) == 1 {\n                text += nextLegal[0]\n                s = grammar.Transitions[s][nextLegal[0]]\n            } else { break }\n        }\n        return text, s, true  // jumped forward\n    }\n    return "", state, false  // no jump\n}','Scala':'def jumpForward(grammar: Grammar, state: Int): Option[(String, Int)] = {\n  val legal = grammar.getLegalTokens(state)\n  if (legal.length == 1) {\n    // Chain single-path tokens\n    var text = legal(0)\n    var s = grammar.transitions(state)(legal(0))\n    while (true) {\n      val nextLegal = grammar.getLegalTokens(s)\n      if (nextLegal.length == 1) {\n        text += nextLegal(0)\n        s = grammar.transitions(s)(nextLegal(0))\n      } else { None }  // break\n    }\n    Some((text, s))  // write entire chain in one step\n  } else None  // no jump-forward\n}','C':'int jump_forward(grammar_t* g, int state, char* output, int max_len) {\n    /* If only 1 legal token, chain all forced tokens */\n    char* legal = get_legal_tokens(g, state);\n    if (count_legal(legal) == 1) {\n        int s = state, pos = 0;\n        while (1) {\n            char* next_legal = get_legal_tokens(g, s);\n            if (count_legal(next_legal) == 1) {\n                output[pos++] = next_legal[0];\n                s = g->transitions[s][next_legal[0]];\n            } else break;\n        }\n        output[pos] = 0;  // null terminator\n        return s;  // jumped forward\n    }\n    return state;  // no jump, stay at current state\n}','Elixir':'def jump_forward(grammar, state) do\n  legal = grammar.get_legal_tokens(state)\n  if length(legal) == 1 do\n    # Chain single-path tokens\n    {text, final_state} = chain_forced(grammar, state, hd(legal))\n    {:ok, text, final_state}  # write entire chain in one step\n  else\n    :no_jump  # multiple paths, normal sampling needed\n  end\nend'},mapping:[{symbol:'|M_t(s)|',code:'len(legal_tokens)',note:'Count of legal tokens at state s'},{symbol:'|M_t(s)| = 1',code:'len(legal) == 1',note:'Single-path condition'},{symbol:'t_{\\text{forced}}',code:'legal_tokens[0]',note:'Forced (only) token'}],demo:'jump_fwd'}
+};
+// === OBSERVATIONS ===
+var OBS={
+'compile':'<p><strong>Compilation happens once.</strong> Before generation begins, the JSON schema is compiled into a deterministic finite automaton (DFA). This compilation takes milliseconds and produces a state machine that can be queried at every decoding step in O(1) time per token.</p><p><strong>XGrammar is the backend.</strong> vLLM and SGLang use XGrammar, which supports JSON Schema, regex, and context-free grammars. It compiles these into optimized DFAs that can handle 32,000+ token vocabularies efficiently.</p><p><strong>Real-life example: tool calling.</strong> When an LLM calls a function like get_weather(location="London"), the arguments must be valid JSON matching the tool schema. Grammar compilation ensures the model can never produce malformed arguments.</p>',
+'mask':'<p><strong>The mask is a boolean vector.</strong> For a 32,000-token vocabulary, the mask is a boolean array of length 32,000. At each step, most entries are False (illegal) and only a handful are True (legal). For JSON structural tokens like { or :, often only 1-3 tokens are legal.</p><p><strong>Real-life example: data extraction.</strong> Extracting structured data from unstructured text (names, dates, amounts) requires specific types. The mask ensures age is always an integer, never a float or string.</p><p><strong>Efficiency:</strong> Building the mask is O(vocabulary) per step, but XGrammar optimizes this with bitset operations and precomputed transition tables, achieving sub-millisecond mask computation even for large vocabularies.</p>',
+'block':'<p><strong>-infinity guarantees zero probability.</strong> After softmax, exp(-infinity) = 0. This means illegal tokens have exactly zero probability of being sampled, regardless of how high the model logits are. Even if the model desperately wants to output a letter for an integer field, it cannot.</p><p><strong>Renormalization is automatic.</strong> Softmax naturally renormalizes the remaining probabilities to sum to 1. The model still chooses among legal tokens with its original relative preferences preserved.</p><p><strong>Real-life example: preventing hallucinated fields.</strong> Without blocking, a model might add extra fields like {"name": "Ada", "age": 36, "email": "..."} when the schema only allows name and age. The grammar block prevents this entirely.</p>',
+'advance':'<p><strong>The tight loop.</strong> Each decoding step: model produces logits -> mask identifies legal tokens -> block sets illegal to -inf -> sample from remaining -> advance grammar state -> repeat. This creates a tight coupling between the LM and the grammar.</p><p><strong>State tracking.</strong> The grammar state machine tracks exactly where we are in the JSON structure: inside a key, inside a string value, expecting a comma, etc. Each token moves us to the next state deterministically.</p><p><strong>Real-life example: nested objects.</strong> For {"user": {"name": "Ada", "tags": ["a", "b"]}}, the state machine tracks nesting depth, array context, and expected types at every level. The mask adapts automatically.</p>',
+'jump_fwd':'<p><strong>SGLang optimization.</strong> When the grammar allows only one continuation, SGLang writes that text in one step instead of sampling token by token. For fixed keys like "age" or structural characters like {": , the engine writes multiple tokens at once.</p><p><strong>Massive speedup for structural JSON.</strong> A JSON object like {"name": "X", "age": Y} has ~40% structural tokens (braces, quotes, colons, commas). Jump-forward eliminates sampling for all of them, reducing decode steps by ~40%.</p><p><strong>Real-life example: large schemas.</strong> For a schema with 20 fields, the structural overhead (key names, colons, commas) is enormous. Jump-forward writes all fixed keys in a single step, making structured output nearly as fast as unstructured generation.</p>'
+};
+// === DEEP THOUGHTS ===
+var DEEP={
+'compile':'<p><strong>Compilation is the key insight.</strong> Instead of checking validity after generation (post-hoc validation), guided decoding compiles the schema into a state machine BEFORE generation. This shifts the computational cost from runtime validation to one-time compilation, making it essentially free per token.</p><p><strong>The grammar is a DFA.</strong> Deterministic Finite Automata have O(1) transition time per token. This means the overhead of guided decoding is constant per step, regardless of schema complexity. A 100-field schema costs the same per token as a 2-field schema.</p><p><strong>Beyond JSON.</strong> The same compilation approach works for regex, context-free grammars, and even custom grammars. This makes guided decoding applicable to any structured output format: SQL queries, code, YAML, XML, domain-specific languages.</p>',
+'mask':'<p><strong>The mask is the bridge between grammar and model.</strong> The grammar state machine produces a boolean mask. The language model produces logits. The mask filters the logits. This separation of concerns allows any grammar backend (XGrammar, outlines, lm-format-enforcer) to work with any LLM (vLLM, SGLang, TGI).</p><p><strong>Vocabulary granularity matters.</strong> Tokenizers split text into subword tokens, not characters. The mask must handle multi-character tokens (like "name" as a single token) and partial tokens (like "Ad" before "a"). XGrammar handles this with a trie-based tokenizer integration.</p>',
+'block':'<p><strong>-infinity is mathematically exact.</strong> Unlike thresholding (set logits below X to X), setting to -infinity guarantees zero probability after softmax. This is not an approximation &mdash; the blocked tokens truly cannot be sampled. This mathematical guarantee is what makes structured output reliable enough for production use.</p><p><strong>The model still has agency.</strong> Guided decoding does not force specific output &mdash; it constrains the space. The model still chooses what to write among legal tokens. This preserves the model creativity and capability while guaranteeing format compliance.</p><p><strong>Quality impact.</strong> Studies show guided decoding has minimal impact on output quality. The model adapts to the constraints and produces equally informative content within the allowed format.</p>',
+'advance':'<p><strong>The grammar is a co-pilot.</strong> The state machine and the language model work together: the model provides the content, the grammar provides the structure. This co-pilot relationship ensures the output is both semantically meaningful (model choice) and structurally valid (grammar constraint).</p><p><strong>Deterministic structure, stochastic content.</strong> The structural parts of JSON (braces, colons, key names when fixed) are deterministic. The content parts (string values, numbers) are stochastic. Guided decoding makes this distinction explicit: deterministic parts are forced, content parts are sampled.</p>',
+'jump_fwd':'<p><strong>Jump-forward is speculative execution for grammars.</strong> Just as speculative execution in CPUs predicts and pre-executes branches, jump-forward predicts and pre-writes deterministic grammar paths. When the grammar has a single continuation, there is nothing to speculate &mdash; the path is certain.</p><p><strong>The future: adaptive grammars.</strong> Current guided decoding uses static schemas. The future involves adaptive grammars that learn from model behavior &mdash; if the model consistently produces certain patterns, the grammar can pre-compile those paths for faster jump-forward. This closes the loop between model and grammar.</p>'
+};
+// === DEMO DRAW ===
+var demoAnim=null;var currentDemo=null;
+function startDemoAnim(id,cv){stopDemoAnim();var t=0;currentDemo=id;function frame(){var s=prepCanvas(cv);if(s){drawDemo(id,s.ctx,s.W,s.H,t)}t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
+function stopDemoAnim(){if(demoAnim){cancelAnimationFrame(demoAnim);demoAnim=null}}
+function drawDemo(id,ctx,W,H,t){
+gradBg(ctx,W,H,t,'#080908','#0a0a0f');
+if(id==='compile'){
+// State machine visualization
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Schema -> Grammar -> State Machine',W/2,12);
+var states=[{x:W*0.1,y:H*0.5,l:'S0'},{x:W*0.3,y:H*0.3,l:'S1'},{x:W*0.3,y:H*0.7,l:'S2'},{x:W*0.55,y:H*0.5,l:'S3'},{x:W*0.8,y:H*0.5,l:'S4'}];
+var trans=[{f:0,t:1,tok:'{'},{f:1,t:2,tok:'"'},{f:2,t:3,tok:'key'},{f:3,t:4,tok:':'}];
+// Draw transitions
+ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;ctx.setLineDash([2,2]);
+trans.forEach(function(tr){var s=states[tr.f],e=states[tr.t];ctx.beginPath();ctx.moveTo(s.x,s.y);ctx.lineTo(e.x,e.y);ctx.stroke();ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText(tr.tok,(s.x+e.x)/2,(s.y+e.y)/2-2)});ctx.setLineDash([]);
+// Draw states with active highlight
+var active=Math.floor(t*0.5)%states.length;
+states.forEach(function(st,i){glowNode(ctx,st.x,st.y,i===active?8:5,i===active?'#FFD700':'#00CED1',i===active?8:4);ctx.fillStyle=i===active?'#000':'#fff';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText(st.l,st.x,st.y+1)});
+ctx.fillStyle='#10b981';ctx.font='5px monospace';ctx.fillText('Accept: S_final',W*0.8,H*0.5+15)}
+else if(id==='mask'){
+// Token mask visualization
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Mask: legal (green) vs illegal (red)',W/2,12);
+var nTokens=12;
+for(var i=0;i<nTokens;i++){var y=20+i*(H-30)/nTokens;var legal=i<3;var prob=legal?(0.4-i*0.1):Math.random()*0.05;var barW=W*0.6*prob;ctx.fillStyle=legal?'#10b981':'#ff6b6b';ctx.globalAlpha=legal?0.8:0.3;ctx.shadowColor=legal?'#10b981':'#ff6b6b';ctx.shadowBlur=legal?3:0;ctx.fillRect(W*0.15,y,Math.max(2,barW),8);ctx.globalAlpha=1;ctx.shadowBlur=0;ctx.fillStyle=legal?'#e5e2dc':'#5a5550';ctx.font='4px monospace';ctx.textAlign='right';ctx.fillText('tok_'+i,W*0.15-3,y+6);if(!legal){ctx.strokeStyle='rgba(255,107,107,0.5)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.15,y+4);ctx.lineTo(W*0.15+W*0.6,y+4);ctx.stroke()}}
+ctx.fillStyle='#10b981';ctx.font='bold 5px monospace';ctx.textAlign='center';ctx.fillText('3/12 legal tokens',W/2,H-5)}
+else if(id==='block'){
+// Logit blocking visualization
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Block: illegal logits -> -inf',W/2,12);
+var nTokens=10;
+for(var i=0;i<nTokens;i++){var y=20+i*(H-30)/nTokens;var legal=i<3;var rawLogit=legal?(2-i*0.5):Math.random()*0.5;var maskedLogit=legal?rawLogit:-999;var barW=W*0.35*(rawLogit/2.5);var barW2=W*0.35*(Math.max(0,maskedLogit)/2.5);
+// Raw logits
+ctx.fillStyle='rgba(255,107,107,0.5)';ctx.fillRect(W*0.1,y,Math.max(1,barW),8);ctx.fillStyle='#ff6b6b';ctx.font='3px monospace';ctx.textAlign='left';ctx.fillText(rawLogit.toFixed(1),W*0.1+Math.max(1,barW)+2,y+6);
+// Masked logits
+ctx.fillStyle=legal?'#10b981':'#ff6b6b';ctx.globalAlpha=legal?0.8:0.2;ctx.fillRect(W*0.55,y,Math.max(1,barW2),8);ctx.globalAlpha=1;ctx.fillStyle=legal?'#10b981':'#ff6b6b';ctx.font='3px monospace';ctx.fillText(legal?maskedLogit.toFixed(1):'-inf',W*0.55+Math.max(1,barW2)+2,y+6)}
+ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText('raw logits',W*0.27,H-5);ctx.fillText('after mask',W*0.72,H-5)}
+else if(id==='advance'){
+// State transition animation
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Advance: sample token -> transition state',W/2,12);
+var cx=W/2,cy=H*0.4;
+// Current state
+glowNode(ctx,cx-W*0.2,cy,8,'#FFD700',6);ctx.fillStyle='#000';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('S_t',cx-W*0.2,cy+1);
+// Chosen token
+var tokens=['"name"','"Ada"','36','}'];var active=Math.floor(t*0.5)%tokens.length;ctx.fillStyle='#10b981';ctx.font='bold 6px monospace';ctx.fillText('t = "'+tokens[active]+'"',cx,cy);
+// Arrow
+flowP(ctx,cx-W*0.15,cy,cx+W*0.05,cy,t,3,'#00CED1',0.8);
+// Next state
+glowNode(ctx,cx+W*0.2,cy,8,'#00CED1',6);ctx.fillStyle='#000';ctx.font='5px monospace';ctx.fillText('S_{t+1}',cx+W*0.2,cy+1);
+// Loop indicator
+ctx.strokeStyle='rgba(255,215,0,0.2)';ctx.lineWidth=1;ctx.setLineDash([2,3]);ctx.beginPath();ctx.arc(cx,cy+30,W*0.15,0,Math.PI*2);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.fillText('repeat',cx,cy+35)}
+else if(id==='jump_fwd'){
+// Jump-forward visualization
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Jump-Forward: single-path -> write in one step',W/2,12);
+// Normal path (top): many small steps
+ctx.fillStyle='#ff6b6b';ctx.font='4px monospace';ctx.textAlign='left';ctx.fillText('Normal:',W*0.05,H*0.25);
+var chars='{ " n a m e " : ';for(var i=0;i<chars.length;i++){var x=W*0.2+i*8;var active=Math.floor(t*2)%chars.length;if(i===active){glowNode(ctx,x,H*0.25,3,'#ff6b6b',4)}else{ctx.fillStyle='rgba(255,107,107,0.3)';ctx.fillRect(x-2,H*0.25-3,6,6)}}
+// Jump-forward path (bottom): one big step
+ctx.fillStyle='#10b981';ctx.font='4px monospace';ctx.textAlign='left';ctx.fillText('Jump:',W*0.05,H*0.6);
+ctx.fillStyle='rgba(16,185,129,0.2)';ctx.fillRect(W*0.2,H*0.6-5,W*0.4,10);ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.strokeRect(W*0.2,H*0.6-5,W*0.4,10);ctx.shadowBlur=0;ctx.fillStyle='#10b981';ctx.font='bold 5px monospace';ctx.textAlign='center';ctx.fillText('{"name": ',W*0.4,H*0.6+1);
+// Speed comparison
+ctx.fillStyle='#FFD700';ctx.font='bold 5px Georgia,serif';ctx.textAlign='center';ctx.fillText('8 steps -> 1 step (8x faster)',W/2,H-8)}
+}
+// === FUTURE DATA ===
+var FUT_DATA={
+'compile':[{n:'Custom grammar backends',y:2027,p:0.40},{n:'Adaptive schema compilation',y:2028,p:0.30}],
+'mask':[{n:'Sub-microsecond masking',y:2027,p:0.45},{n:'Neural-aware masking',y:2029,p:0.25}],
+'block':[{n:'Hardware-level blocking',y:2028,p:0.35},{n:'Probabilistic grammars',y:2029,p:0.30}],
+'advance':[{n:'Parallel state tracking',y:2027,p:0.40},{n:'Learned grammar transitions',y:2030,p:0.20}],
+'jump_fwd':[{n:'Multi-token jump-forward',y:2027,p:0.50},{n:'Predictive grammar execution',y:2029,p:0.30}]
+};
+// === POPUP ===
+var currentExpr=null;
+function openPopup(key){var e=CONCEPTS[key];if(!e)return;currentExpr=key;stopDemoAnim();
+var titleHtml='<div class="gradient-title"><span style="color:#ff6b6b">S</span><span style="color:#FFD700">O</span><span style="color:#10b981">&nbsp;</span><span style="color:#00CED1">'+e.name+'</span></div>';
+document.getElementById('pTitle').innerHTML=titleHtml;
+var th='';TABS.forEach(function(t,i){th+='<button class="popup-tab'+(i===0?' active':'')+'" onclick="switchTab(\''+t.id+'\',this)">'+t.icon+' '+t.label+'</button>'});
+document.getElementById('pTabs').innerHTML=th;
+var h='';
+h+='<div class="popup-pane active" id="pane-math">';
+h+='<h3>Expression</h3><div class="expr-rendered">'+cleanLatex(e.latex)+'</div>';
+h+='<h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
+h+='<div class="popup-pane" id="pane-anim"><h3>Animated visualization</h3><canvas id="animCanvas" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted)">Fully animated &mdash; state machines, token bars, transitions.</p></div>';
+h+='<div class="popup-pane" id="pane-code">';
+if(e.mapping){h+='<h3>Math &rarr; Code mapping</h3><div style="margin-bottom:1rem;border:1px solid var(--border);border-radius:.5rem;overflow:hidden"><table style="width:100%;border-collapse:collapse;font-size:.75rem"><tr><th style="background:var(--accent-bg);color:var(--primary);text-align:left;padding:.5rem .75rem;font-size:.625rem;text-transform:uppercase">Symbol</th><th></th><th style="background:var(--accent-bg);color:var(--primary);text-align:left;padding:.5rem .75rem;font-size:.625rem;text-transform:uppercase">Code</th><th style="background:var(--accent-bg);color:var(--primary);text-align:left;padding:.5rem .75rem;font-size:.625rem;text-transform:uppercase">Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td style="padding:.4rem .75rem;border-bottom:1px solid var(--border);font-family:Georgia,serif;color:var(--primary);font-weight:600">'+cleanLatex(m.symbol)+'</td><td style="color:var(--muted);text-align:center;width:1.5rem">&rarr;</td><td style="padding:.4rem .75rem;border-bottom:1px solid var(--border);font-family:monospace;font-size:.6875rem">'+esc(m.code)+'</td><td style="padding:.4rem .75rem;border-bottom:1px solid var(--border);color:var(--muted);font-size:.6875rem;font-style:italic">'+m.note+'</td></tr>'});h+='</table></div>'}
+h+='<h3>Multi-language implementation</h3><div class="code-content"><pre>'+esc(e.langs.Python)+'</pre></div></div>';
+h+='<div class="popup-pane" id="pane-obs"><h3>Real-world observations</h3><div class="obs-text">'+(OBS[key]||'<p>Loading...</p>')+'</div></div>';
+h+='<div class="popup-pane" id="pane-deep"><h3>Deep thoughts</h3><div class="deep-text">'+(DEEP[key]||'<p>Loading...</p>')+'</div></div>';
+var futTitles={'compile':'Schema compilation timeline','mask':'Mask computation speedup','block':'Blocking accuracy','advance':'State transition optimization','jump_fwd':'Jump-forward speedup gains'};
+var futDescs={'compile':'Compilation time per schema complexity. XGrammar achieves sub-ms for most schemas.','mask':'Mask build time decreasing with bitset optimization. Sub-microsecond targeting.','block':'Probability of illegal token escaping (should be exactly 0.0).','advance':'Steps per second increasing with parallel state tracking.','jump_fwd':'Decode step reduction from jump-forward optimization. 40%+ for structural JSON.'};
+h+='<div class="popup-pane" id="pane-fut"><h3>'+(futTitles[key]||'Future')+'</h3><canvas id="futChart" class="fut-canvas"></canvas><p style="font-size:.75rem;color:var(--muted)">'+(futDescs[key]||'')+'</p></div>';
+document.getElementById('pBody').innerHTML=h;
+document.getElementById('popup').classList.add('active')}
+function switchTab(id,btn){stopDemoAnim();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');
+if(id==='anim'){var cv=document.getElementById('animCanvas');if(cv&&currentExpr)setTimeout(function(){startDemoAnim(currentExpr,cv)},50)}
+if(id==='fut'&&currentExpr){setTimeout(function(){drawFutChart(currentExpr)},50)}}
+function closePopup(){stopDemoAnim();document.getElementById('popup').classList.remove('active')}
+function flowP(ctx,x1,y1,x2,y2,t,n,c,sp){sp=sp||1;var dx=x2-x1,dy=y2-y1;for(var i=0;i<n;i++){var p=((t*sp+i/n)%1);var px=x1+dx*p,py=y1+dy*p;var a=Math.sin(p*Math.PI)*.8;ctx.globalAlpha=a;ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,1.5,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;ctx.shadowBlur=0}
+// === FUTURE CHART ===
+function drawFutChart(key){var cv=document.getElementById('futChart');if(!cv)return;var s=prepCanvas(cv);if(!s)return;var ctx=s.ctx,W=s.W,H=s.H;
+gradBg(ctx,W,H,0,'#080a08','#0a0a0f');var pL=50,pB=20,pT=20,pR=10,cw=W-pL-pR,ch=H-pT-pB;
+ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var x=pL+i/100*cw;var v=Math.exp(-i*0.04)*(1+0.1*Math.sin(i*0.3))+0.02;var y=pT+v*ch*0.7;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='6px monospace';ctx.textAlign='left';ctx.fillText('Metric',pL+5,pT+8);ctx.fillStyle='#736a5e';ctx.textAlign='center';ctx.fillText('Time / complexity',W/2,H-4)}
+// === BUILD CARDS ===
+function buildCards(){var grid=document.getElementById('cardGrid');if(!grid)return;var h='';Object.keys(CONCEPTS).forEach(function(key){var e=CONCEPTS[key];h+='<div class="expr-card" onclick="openPopup(\''+key+'\')"><div class="expr-card-num">'+e.name.split('.')[0]+'</div><div class="expr-card-name">'+e.name.replace(/^\d+\.\s/,'')+'</div><div class="expr-card-preview">'+e.intent.substring(0,100)+'...</div></div>'});grid.innerHTML=h}
+// === PARTICLE BG ===
+var pbgAnim=null;
+function startPbg(){var cv=document.getElementById('pbg');if(!cv)return;var t=0;function frame(){var s=prepCanvas(cv);if(s){var ctx=s.ctx,W=s.W,H=s.H;ctx.clearRect(0,0,W,H);for(var i=0;i<30;i++){var x=(i*37+t*0.5)%W;var y=(i*53+Math.sin(t*0.01+i)*20)%H;var r=1+Math.sin(t*0.02+i)*0.5;ctx.fillStyle='rgba(194,65,12,'+(0.05+Math.sin(t*0.01+i)*0.03)+')';ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}}t+=1;pbgAnim=requestAnimationFrame(frame)}frame()}
+// === CHECKS ===
+function runChecks(){var p=0,f=0;function chk(n,fn){try{if(fn())p++;else{f++;console.log('FAIL: '+n)}}catch(e){f++;console.log('FAIL: '+n+' ('+e.message+')')}}chk('CONCEPTS loaded',function(){return CONCEPTS&&Object.keys(CONCEPTS).length>=5});chk('Cards rendered',function(){return document.querySelectorAll('.expr-card').length>=5});chk('Decode canvas',function(){return!!document.getElementById('decodeCanvas')});chk('Decode steps',function(){return DECODE_STEPS&&DECODE_STEPS.length>=10});chk('Popup exists',function(){return!!document.getElementById('popup')});chk('Zero external scripts',function(){return document.querySelectorAll('script[src]').length===0});var badge=document.getElementById('checksBadge');var txt=document.getElementById('checksText');badge.style.display='block';txt.textContent=p+' checks passed';console.log('CHECKS: '+p+' passed, '+f+' failed')}
+// === INIT ===
+buildCards();startPbg();decodeRender();setTimeout(runChecks,2000);
+</script>
+</body>
+</html>
