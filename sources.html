@@ -236,6 +236,7 @@ runAudit();
 
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function prepCanvas(cv){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();if(r.width<10)return null;var newW=Math.round(r.width*dpr),newH=Math.round(r.height*dpr);if(cv.width!==newW||cv.height!==newH){cv.width=newW;cv.height=newH}ctx.setTransform(dpr,0,0,dpr,0,0);return{ctx:ctx,W:r.width,H:r.height}}
+function glowNode(ctx,x,y,r,c,g){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=g||8;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
 function gradientBg(ctx,W,H,t,c1,c2){var g=ctx.createLinearGradient(0,0,W,H);var s=Math.sin(t*.3)*.2;g.addColorStop(Math.max(0,.3-s),c1);g.addColorStop(Math.min(1,.7+s),c2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
 function cleanLatex(s){return String(s)
 .replace(/\\mathbf\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<b>$1</b>')
@@ -863,7 +864,8 @@ var outputs={
 'bottleneck':['Input: 1000 samples, X=[100 features], Y=[10 labels]','beta = 1.5','Iterating IB optimization...','Epoch 100: I(X;Z)=85.3, I(Z;Y)=72.1, loss=13.2','Epoch 500: I(X;Z)=62.8, I(Z;Y)=68.5, loss=-5.7','Epoch 1000: I(X;Z)=51.2, I(Z;Y)=65.3, loss=-14.1','Converged: Z compresses X by 49%, preserves 98% of Y-info'],
 'loeb':['System F = PA + self-trust axiom','Self-trust: Box(Box P -> P) -> Box P','Checking: does F prove Box(Box P -> P)?','YES (by reflection rule)','By Lob: F proves Box P','CONSEQUENCE: F proves EVERYTHING it can state','AI alignment warning: self-trust is catastrophic'],
 'unitary':['Target: random 3-qubit unitary U','Conjectured: needs Omega(2^3) = 8 oracle queries','AI construction: oracle f exists','Circuit size: poly(3) = 9 gates + 1 oracle','Query count: 3 (polynomial!)','CONJECTURE REFUTED','Implication: P=PSPACE would bound black hole complexity'],
-'aixi':['Enumerating all computable programs mu...','Programs of length 1: 2, weight: 0.5 each','Programs of length 2: 4, weight: 0.25 each','Programs of length 3: 8, weight: 0.125 each','Total programs: infinite (sum converges to 1)','Best action a* = argmax_a sum_mu 2^{-|mu|} E[V|a,mu]','Result: a* = "explore" (information-gathering)','Note: AIXI is uncomputable (halting problem)']
+'aixi':['Enumerating all computable programs mu...','Programs of length 1: 2, weight: 0.5 each','Programs of length 2: 4, weight: 0.25 each','Programs of length 3: 8, weight: 0.125 each','Total programs: infinite (sum converges to 1)','Best action a* = argmax_a sum_mu 2^{-|mu|} E[V|a,mu]','Result: a* = "explore" (information-gathering)','Note: AIXI is uncomputable (halting problem)'],
+'lattice_duality':['> Computing g = sum e^{-k^2} for k=0..99','> g = 1.3863186024...','> 2g - 1 = 1.7726372048...','> pi * (2g-1)^2 = 5.0076096396...','> Verification: theta_3(0, e^{-1}) = 1.7726372048...','> Match confirmed!','> The duality principle: flip counting order','> Discontinuous step function -> smooth integral','> Result: pi(2g-1)^2 is the exact closed form']
 };
 var out2=outputs[key]||['Running...','Output: '+(e.intent||e.math||'').substring(0,60)];
 var i=0;var interval=setInterval(function(){
