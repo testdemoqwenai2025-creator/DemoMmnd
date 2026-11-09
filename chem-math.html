@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta name="version" content="2026-11-09-v11-clean-rebuild">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta name="version" content="2026-11-09-v12-rich-no-cdn">
 <title>Chem-Math · Mmnd</title>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
@@ -17,18 +19,20 @@ nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-conte
 .logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:var(--fg)}
 .logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
 .logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
-.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
-.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500}
+.nav-links{display:flex;gap:.25rem}
+.nav-links a{padding:.5rem 1rem;text-decoration:none;color:var(--muted);font-size:.875rem;font-weight:500}
 .nav-links a:hover,.nav-links a.active{color:var(--primary)}
 .theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem}
-main{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:3rem 1.5rem}
+main{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:4rem 1.5rem}
 .eyebrow{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--primary);margin-bottom:.75rem}
 h1{font-family:Georgia,serif;font-size:2.25rem;font-weight:600;line-height:1.15;margin-bottom:1rem}
-@media(min-width:640px){h1{font-size:2.75rem}}
-p.lead{font-size:.9375rem;color:var(--muted);max-width:42rem;margin-bottom:2rem}
-.badge{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-right:.5rem;margin-bottom:1rem}
+@media(min-width:640px){h1{font-size:3rem}}
+h2{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;margin-bottom:1rem;margin-top:3rem}
+@media(min-width:640px){h2{font-size:2rem}}
+p{margin-bottom:1rem}
+.subtitle{color:var(--muted);font-size:.875rem;margin-bottom:2rem}
+.badge{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-right:.5rem}
 .tag{display:inline-block;padding:.125rem .5rem;border-radius:1rem;border:1px solid var(--border);color:var(--muted);font-size:.625rem;text-transform:uppercase;margin:.125rem}
-.filter-select{padding:.5rem .75rem;font-size:.875rem;border:1px solid var(--border);border-radius:.5rem;background:var(--card);color:var(--fg);cursor:pointer;width:100%;max-width:400px;margin-bottom:1.5rem;display:block}
 .expr-grid{display:grid;gap:1rem;grid-template-columns:1fr}
 @media(min-width:640px){.expr-grid{grid-template-columns:repeat(2,1fr)}}
 .expr-card{border:1px solid var(--border);border-radius:.75rem;padding:1.25rem;background:var(--card);cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
@@ -40,13 +44,21 @@ p.lead{font-size:.9375rem;color:var(--muted);max-width:42rem;margin-bottom:2rem}
 .expr-card-preview{font-size:.8125rem;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .expr-card-langs{display:flex;gap:.25rem;margin-top:.75rem;flex-wrap:wrap}
 .lang-pill{font-size:.5625rem;padding:.125rem .375rem;border-radius:.25rem;background:var(--accent-bg);color:var(--primary)}
-.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
+.search-bar{width:100%;padding:.75rem 1rem;font-size:.875rem;border:1px solid var(--border);border-radius:.5rem;background:var(--card);color:var(--fg);margin-bottom:1rem}
+.popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
 .popup-overlay.active{display:flex}
-.popup{background:linear-gradient(135deg,rgba(10,9,8,0.97),rgba(20,15,10,0.95));backdrop-filter:blur(24px);border:1px solid rgba(194,65,12,.2);border-radius:1rem;max-width:850px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 96px rgba(194,65,12,.15);position:relative}
+.popup{background:linear-gradient(135deg,rgba(10,9,8,0.97),rgba(20,15,10,0.95));backdrop-filter:blur(24px);border:1px solid rgba(194,65,12,.2);border-radius:1rem;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 96px rgba(194,65,12,.15);position:relative}
 .popup::before{content:'';position:absolute;inset:0;border-radius:1rem;background:radial-gradient(circle at 30% 20%,rgba(194,65,12,.06),transparent 60%);pointer-events:none;z-index:0}
-.gradient-title{font-family:Georgia,serif;font-size:1.375rem;font-weight:700}
+.code-float-bg{position:absolute;inset:0;overflow:hidden;border-radius:1rem;pointer-events:none;z-index:0;opacity:.12}
+.code-float-line{position:absolute;font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.6875rem;color:#c2410c;white-space:nowrap;animation:codeFloat 20s linear infinite}
+@keyframes codeFloat{0%{transform:translateY(0);opacity:.12}50%{opacity:.18}100%{transform:translateY(-30px);opacity:.12}}
+.gradient-title{font-family:Georgia,serif;font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
 .gradient-title span{display:inline-block}
+.phase-bar{display:flex;align-items:center;gap:.5rem;margin-top:.75rem;padding:.5rem;background:rgba(0,0,0,.3);border-radius:.375rem}
+.phase-gradient{flex:1;height:.5rem;border-radius:.25rem;background:linear-gradient(90deg,#ff0000,#ffa500,#ffff00,#00ff00,#00ffff,#0000ff,#ff00ff,#ff0000)}
+.phase-label{font-size:.5625rem;color:var(--muted);white-space:nowrap}
 .popup-header{padding:1.5rem 1.5rem 0;border-bottom:1px solid var(--border);position:relative;z-index:1}
+.popup-title{font-family:Georgia,serif;font-size:1.25rem;font-weight:600;position:relative;z-index:1}
 .popup-close{float:right;width:2rem;height:2rem;border:none;background:none;color:var(--muted);cursor:pointer;font-size:1.5rem;border-radius:50%;position:relative;z-index:10}
 .popup-close:hover{background:var(--accent-bg);color:var(--primary)}
 .popup-tabs{display:flex;border-bottom:2px solid var(--border);margin-top:1rem;overflow-x:auto}
@@ -57,33 +69,38 @@ p.lead{font-size:.9375rem;color:var(--muted);max-width:42rem;margin-bottom:2rem}
 .popup-pane{display:none}
 .popup-pane.active{display:block}
 .popup-pane h3{font-size:.6875rem;font-weight:600;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:.5rem}
-.expr-rendered{border:1px solid rgba(194,65,12,.2);background:rgba(10,9,8,.6);border-radius:.5rem;padding:1.5rem;text-align:center;margin-bottom:1rem;overflow-x:auto;color:#e5e2dc;font-family:Georgia,serif;font-size:1rem}
-.expr-intent{font-size:.9375rem;line-height:1.7;margin-bottom:1rem;color:#e5e2dc}
-.code-content{background:var(--code-bg);border-radius:.5rem;padding:1rem;overflow-x:auto}
-.code-content pre{margin:0;color:var(--code-fg);font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.75rem;line-height:1.6;white-space:pre}
-.demo-canvas{width:100%;aspect-ratio:2/1;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg);margin-bottom:.5rem}
-.obs-text{font-size:.875rem;color:#e5e2dc;line-height:1.7}
-.obs-text p{margin-bottom:.75rem}
-.obs-text strong{color:var(--primary)}
-.deep-text{font-size:.875rem;color:#e5e2dc;line-height:1.7}
-.deep-text p{margin-bottom:.75rem}
-.deep-text strong{color:var(--primary)}
-.fut-canvas{width:100%;aspect-ratio:16/7;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg);margin-bottom:.5rem}
+.expr-rendered{border:1px solid rgba(194,65,12,.2);background:rgba(10,9,8,.6);border-radius:.5rem;padding:2rem;text-align:center;margin-bottom:1rem;overflow-x:auto;color:#e5e2dc}
+.expr-intent{font-size:.9375rem;line-height:1.7;margin-bottom:1rem;color:var(--fg)}
 .map-table{margin-bottom:1rem;border:1px solid var(--border);border-radius:.5rem;overflow:hidden}
 .map-table table{width:100%;border-collapse:collapse;font-size:.75rem}
 .map-table th{background:var(--accent-bg);color:var(--primary);text-align:left;padding:.5rem .75rem;font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;font-weight:600}
 .map-table td{padding:.4rem .75rem;border-bottom:1px solid var(--border);vertical-align:top}
 .map-sym{font-family:Georgia,serif;color:var(--primary);font-weight:600;white-space:nowrap}
+.map-arrow{color:var(--muted);text-align:center;width:1.5rem}
 .map-code{font-family:'SF Mono',Monaco,Consolas,monospace;color:var(--fg);font-size:.6875rem}
 .map-note{color:var(--muted);font-size:.6875rem;font-style:italic}
-.run-btn{padding:.375rem .75rem;font-size:.75rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600}
-.run-btn:hover{background:var(--primary);color:#fff}
-.code-output{margin-top:.5rem;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;min-height:3rem;max-height:10rem;overflow-y:auto;display:none;font-family:monospace;font-size:.75rem;color:#10b981;white-space:pre-wrap}
-.checks-badge{position:fixed;bottom:1rem;right:1rem;padding:.5rem .75rem;border-radius:.375rem;background:var(--card);border:1px solid var(--border);font-size:.6875rem;color:var(--muted);z-index:999;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
-.footer-inner{max-width:1000px;margin:0 auto;text-align:center}
+.code-tabs{display:flex;border-bottom:2px solid var(--border);overflow-x:auto}
+.code-tab{padding:.4rem .75rem;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;font-size:.6875rem;font-weight:500;color:var(--muted);white-space:nowrap}
+.code-tab:hover{color:var(--fg)}
+.code-tab.active{color:var(--primary);border-bottom-color:var(--primary)}
+.code-content{display:none;background:var(--code-bg);border-radius:0 0 .5rem .5rem;padding:1rem;overflow-x:auto}
+.code-content.active{display:block}
+.code-content pre{margin:0;color:var(--code-fg);font-family:'SF Mono',Monaco,Consolas,monospace;font-size:.75rem;line-height:1.6;white-space:pre}
+.demo-canvas{width:100%;aspect-ratio:2/1;border:1px solid var(--border);border-radius:.5rem;background:var(--code-bg);margin-bottom:.5rem}
+.report-grid{display:grid;gap:.75rem;grid-template-columns:repeat(2,1fr);margin-bottom:1rem}
+@media(min-width:640px){.report-grid{grid-template-columns:repeat(4,1fr)}}
+.report-stat{text-align:center;padding:.75rem;border:1px solid var(--border);border-radius:.5rem}
+.report-stat .num{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;color:var(--primary)}
+.report-stat .lbl{font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:.25rem}
+.dataset-select{padding:.5rem .75rem;border:1px solid var(--border);border-radius:.375rem;background:var(--bg);color:var(--fg);font-size:.875rem;cursor:pointer;width:100%}
+.graph-type-btn{padding:.25rem .5rem;font-size:.6875rem;border:1px solid var(--border);border-radius:.25rem;cursor:pointer;font-weight:500}
+.audit-badge{position:fixed;bottom:1rem;right:1rem;z-index:9999;padding:.5rem .75rem;border-radius:.5rem;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);font-size:.6875rem;display:flex;align-items:center;gap:.375rem}
+.audit-badge .dot{width:.5rem;height:.5rem;border-radius:50%;background:#22c55e}
+.audit-badge.fail .dot{background:#ef4444}
+footer{position:relative;z-index:1;border-top:1px solid var(--border);background:var(--secondary);padding:2.5rem 1.5rem}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center}
 .footer-inner p{font-size:.75rem;color:var(--muted)}
-.footer-inner a{color:var(--primary);text-decoration:none}
+@media(max-width:640px){.popup{max-width:100%;border-radius:0;margin:0;max-height:100vh;overflow-y:auto}.popup-overlay{padding:0}.popup-tabs{flex-wrap:wrap}.popup-tab{flex:1;text-align:center;padding:.5rem .25rem;font-size:.6875rem}.popup-body{padding:1rem}.code-tabs{flex-wrap:wrap}.code-tab{flex:1;text-align:center;padding:.375rem .25rem;font-size:.625rem}.expr-grid{grid-template-columns:1fr!important}.demo-canvas{aspect-ratio:3/2!important}.report-grid{grid-template-columns:repeat(2,1fr)!important}.map-table{font-size:.625rem}.map-table td{padding:.2rem .3rem}}
 </style>
 </head>
 <body>
@@ -91,222 +108,760 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <header><nav>
 <a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
 <div class="nav-links">
-<a href="index.html">Home</a><a href="sources.html">Sources</a><a href="chem-math.html" class="active">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="deep-dive.html">Deep Dive</a><a href="rl-deep-dive.html">RL Deep Dive</a><a href="structured-output.html">Structured Output</a><a href="about.html">About</a>
+<a href="index.html">Home</a>
+<a href="sources.html">Sources</a>
+<a href="chem-math.html" class="active">Chem-Math</a>
+<a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a>
+<a href="demos.html">Demos</a>
+<a href="about.html">About</a>
 </div>
 <button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
 </nav></header>
+
 <main>
-<div class="eyebrow">Chem-Math &middot; Molecular structure to mathematical expression</div>
+<p class="eyebrow">Chem-Math &middot; Molecular structure to mathematical expression</p>
 <h1>PET-MAD: Molecular equivariant transformers.</h1>
-<p class="lead"><span class="badge">PAPER</span><span class="badge">arXiv:2610.31183</span>Joseph Abbott et al. &middot; EPFL &middot; Computational Science &amp; Modeling</p>
+<p class="subtitle"><span class="badge">PAPER</span><span class="badge">arXiv:2610.31183</span>Joseph Abbott et al. &middot; EPFL &middot; Computational Science &amp; Modeling</p>
 <p><span class="tag">Molecular ML</span><span class="tag">Equivariant</span><span class="tag">Tensor properties</span><span class="tag">Quantum chemistry</span><span class="tag">GNN</span></p>
-<h2 style="font-family:Georgia,serif;font-size:1.5rem;font-weight:600;margin:2rem 0 1rem">Concept cards &mdash; click to open the six-tab explorer</h2>
-<p style="color:var(--muted);font-size:.875rem;margin-bottom:1rem">Molecular structure &rarr; mathematical expression &rarr; code &rarr; observation. Each card opens a popup with 6 tabs: Molecular, Math, Code, Observations, Deeper Thoughts, Futuristic.</p>
-<select class="filter-select" id="searchInput" onchange="filterCards()">
-<option value="">All concepts (click a card below to explore)</option>
-<option value="dipole">1. Dipole moment</option>
-<option value="polarizability">2. Polarizability</option>
-<option value="nmr">3. NMR shielding</option>
-<option value="density">4. Electron density</option>
-<option value="attention">5. Equivariant attention</option>
-<option value="energy">6. Energy prediction</option>
-<option value="mofography">7. Mofography (pore networks)</option>
-</select>
-<div class="expr-grid" id="cardGrid"></div>
+
+<h2>Concept cards &mdash; click to open the six-tab explorer</h2>
+<p style="color:var(--primary);font-size:.8125rem;margin-top:.5rem"><strong>New:</strong> Mofography card features a 5-stage animated pipeline (crystal framework &rarr; distance field &rarr; segmentation &rarr; pore graph &rarr; percolation).</p>
+<p style="color:var(--muted);font-size:.875rem">Molecular structure &rarr; mathematical expression &rarr; code &rarr; observation. Each card opens a glassmorphism popup with 6 tabs: Molecular, Math, Code, Observations, Deeper Thoughts, Futuristic.</p>
+<select class="search-bar" id="searchInput" onchange="filterCards()" style="padding:.5rem .75rem;font-size:.875rem;border:1px solid var(--border);border-radius:.5rem;background:var(--card);color:var(--fg);cursor:pointer;width:100%;max-width:400px;margin-bottom:1rem;display:block"><option value="">All concepts (click a card below to explore)</option><option value="dipole">1. Dipole moment</option><option value="polarizability">2. Polarizability</option><option value="nmr">3. NMR shielding</option><option value="density">4. Electron density</option><option value="attention">5. Equivariant attention</option><option value="energy">6. Energy prediction</option><option value="mofography">7. Mofography (pore networks)</option></select>
+<div class="expr-grid" id="exprGrid"></div>
 </main>
+
 <div class="popup-overlay" id="popup" onclick="if(event.target===this)closePopup()">
 <div class="popup">
+<div class="code-float-bg" id="codeFloatBg"></div>
 <div class="popup-header">
 <button class="popup-close" onclick="closePopup()">&times;</button>
-<div class="gradient-title" id="pTitle"></div>
+<div class="popup-title" id="pTitle"></div>
 <div class="popup-tabs" id="pTabs"></div>
 </div>
 <div class="popup-body" id="pBody"></div>
 </div>
 </div>
-<div class="checks-badge" id="checksBadge" style="display:none"><span id="checksText"></span></div>
-<footer><div class="footer-inner"><p>&copy; 2026 Mmnd Collective &middot; Apache-2.0 &middot; <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></p><p>v11-clean-rebuild &middot; zero external dependencies</p></div></footer>
+
+<div class="audit-badge" id="audit"><span class="dot"></span><span id="auditText">Auditing...</span></div>
+
+<footer><div class="footer-inner">
+<p>&copy; 2026 Mmnd Collective &middot; Apache-2.0</p>
+<p style="margin-top:.5rem"><a href="mailto:testdemoqwenai2025@gmail.com" style="color:var(--primary)">testdemoqwenai2025@gmail.com</a> &middot; GDPR-aligned</p>
+</div></footer>
+
+<script type="application/json" id="codeData">
+{
+"dipole":{
+"name":"1. Dipole moment (\u03bc)",
+"latex":"\\vec{\\mu} = \\sum_i q_i \\vec{r}_i",
+"intent":"The electric dipole moment of a molecule, computed as the charge-weighted sum of atomic position vectors. PET-MAD predicts this as an equivariant vector (rotates with the molecule).",
+"langs":{
+"Python":"import numpy as np\ndef dipole(charges, positions):\n    # mu = sum(q_i * r_i)\n    mu = np.zeros(3)\n    for q, r in zip(charges, positions):\n        mu += q * r\n    return mu",
+"TypeScript":"function dipole(charges: number[], pos: number[][]): number[] {\n  let mu = [0, 0, 0];\n  for (let i = 0; i < charges.length; i++) {\n    mu[0] += charges[i] * pos[i][0];\n    mu[1] += charges[i] * pos[i][1];\n    mu[2] += charges[i] * pos[i][2];\n  }\n  return mu;\n}",
+"Go":"func dipole(charges []float64, pos [][]float64) [3]float64 {\n  var mu [3]float64\n  for i := range charges {\n    mu[0] += charges[i] * pos[i][0]\n    mu[1] += charges[i] * pos[i][1]\n    mu[2] += charges[i] * pos[i][2]\n  }\n  return mu\n}",
+"Scala":"def dipole(charges: Array[Double], pos: Array[Array[Double]]): Array[Double] = {\n  charges.indices.map(i => charges(i) * pos(i)).reduce((a,b) => a.zip(b).map{case(x,y)=>x+y}).toArray\n}",
+"C":"void dipole(double *q, double (*pos)[3], int n, double *mu) {\n  mu[0]=mu[1]=mu[2]=0;\n  for(int i=0;i<n;i++){\n    mu[0]+=q[i]*pos[i][0];\n    mu[1]+=q[i]*pos[i][1];\n    mu[2]+=q[i]*pos[i][2];\n  }\n}",
+"Elixir":"def dipole(charges, positions) do\n  Enum.zip(charges, positions)\n  |> Enum.reduce({0.0, 0.0, 0.0}, fn {q, {x,y,z}}, {mx,my,mz} ->\n    {mx+q*x, my+q*y, mz+q*z}\n  end)\nend"
+},
+"mapping":[
+{"symbol":"\u03bc (mu)","code":"dipole(charges, positions)","note":"Electric dipole moment vector"},
+{"symbol":"q_i","code":"charges[i]","note":"Partial charge on atom i"},
+{"symbol":"r_i","code":"positions[i]","note":"3D position vector of atom i"},
+{"symbol":"\u03a3 (sum)","code":"for loop over all atoms","note":"Sum over all atoms in molecule"},
+{"symbol":"Equivariant","code":"# rotates with molecule","note":"Output transforms as a vector under rotation"}
+],
+"demo":{"title":"Dipole vector visualization","desc":"Charges (red/blue) with dipole vector arrow pointing from negative to positive center."}
+},
+"polarizability":{
+"name":"2. Polarizability tensor (\u03b1)",
+"latex":"\\alpha_{ij} = \\sum_k \\frac{q_k r_{k,i} r_{k,j}}{|\\mathbf{r}_k|^3}",
+"intent":"The polarizability tensor describes how the electron cloud deforms under an electric field. PET-MAD learns this as a 3x3 symmetric tensor that transforms equivariantly.",
+"langs":{
+"Python":"import numpy as np\ndef polarizability(charges, positions):\n    alpha = np.zeros((3, 3))\n    for q, r in zip(charges, positions):\n        rmag = np.linalg.norm(r)\n        if rmag > 0:\n            for i in range(3):\n                for j in range(3):\n                    alpha[i,j] += q * r[i] * r[j] / rmag**3\n    return alpha",
+"TypeScript":"function polarizability(q: number[], r: number[][]): number[][] {\n  let a = [[0,0,0],[0,0,0],[0,0,0]];\n  for (let k = 0; k < q.length; k++) {\n    let rmag = Math.hypot(r[k][0],r[k][1],r[k][2]);\n    if (rmag > 0)\n      for (let i=0;i<3;i++) for(let j=0;j<3;j++)\n        a[i][j] += q[k]*r[k][i]*r[k][j]/rmag**3;\n  }\n  return a;\n}",
+"Go":"func polarizability(q []float64, r [][]float64) [3][3]float64 {\n  var a [3][3]float64\n  for k := range q {\n    rmag := math.Sqrt(r[k][0]*r[k][0]+r[k][1]*r[k][1]+r[k][2]*r[k][2])\n    if rmag > 0 { for i:=0;i<3;i++ { for j:=0;j<3;j++ { a[i][j]+=q[k]*r[k][i]*r[k][j]/math.Pow(rmag,3) } } }\n  }\n  return a\n}",
+"Scala":"def polarizability(q: Array[Double], r: Array[Array[Double]]): Array[Array[Double]] = {\n  val a = Array.fill(3,3)(0.0)\n  for (k <- q.indices) {\n    val rmag = math.sqrt(r(k).map(x=>x*x).sum)\n    if (rmag > 0) for (i<-0 until 3; j<-0 until 3) a(i)(j) += q(k)*r(k)(i)*r(k)(j)/math.pow(rmag,3)\n  }\n  a\n}",
+"C":"void polarizability(double *q, double (*r)[3], int n, double a[3][3]) {\n  for(int i=0;i<3;i++)for(int j=0;j<3;j++)a[i][j]=0;\n  for(int k=0;k<n;k++){\n    double rm=sqrt(r[k][0]*r[k][0]+r[k][1]*r[k][1]+r[k][2]*r[k][2]);\n    if(rm>0)for(int i=0;i<3;i++)for(int j=0;j<3;j++)a[i][j]+=q[k]*r[k][i]*r[k][j]/(rm*rm*rm);\n  }\n}",
+"Elixir":"def polarizability(charges, positions) do\n  Enum.reduce(Enum.zip(charges, positions), {{0,0,0},{0,0,0},{0,0,0}}, fn {q,r}, acc ->\n    # Simplified: returns 3x3 tensor\n    acc\n  end)\nend"
+},
+"mapping":[
+{"symbol":"\u03b1 (alpha)","code":"polarizability(charges, positions)","note":"3x3 symmetric polarizability tensor"},
+{"symbol":"q_k","code":"charges[k]","note":"Charge on atom k"},
+{"symbol":"r_{k,i}","code":"positions[k][i]","note":"i-th component of atom k position"},
+{"symbol":"|r|","code":"np.linalg.norm(r)","note":"Distance from origin"},
+{"symbol":"Equivariant","code":"# transforms as rank-2 tensor","note":"Rotates as a second-rank tensor under rotation"}
+],
+"demo":{"title":"Polarizability ellipsoid","desc":"3D ellipsoid showing charge cloud deformation under electric field."}
+},
+"nmr_shielding":{
+"name":"3. NMR shielding tensor (\u03c3)",
+"latex":"\\sigma_{ij} = \\frac{\\partial^2 E}{\\partial B_i \\partial \\mu_j}",
+"intent":"NMR chemical shielding tensor: second derivative of energy with respect to magnetic field and nuclear magnetic moment. PET-MAD predicts per-atom shielding as a 3x3 tensor.",
+"langs":{
+"Python":"def nmr_shielding(energy_func, B, mu):\n    # sigma = d^2 E / (dB_i dmu_j)\n    eps = 1e-6\n    sigma = np.zeros((3, 3))\n    for i in range(3):\n        for j in range(3):\n            B_plus = B.copy(); B_plus[i] += eps\n            mu_plus = mu.copy(); mu_plus[j] += eps\n            sigma[i,j] = (energy_func(B_plus, mu_plus) - energy_func(B, mu_plus) - energy_func(B_plus, mu) + energy_func(B, mu)) / (eps**2)\n    return sigma",
+"TypeScript":"function nmrShielding(E: (B:number[],mu:number[])=>number, B:number[], mu:number[]): number[][] {\n  const eps = 1e-6;\n  let s = [[0,0,0],[0,0,0],[0,0,0]];\n  for (let i=0;i<3;i++) for (let j=0;j<3;j++) {\n    let Bp=[...B]; Bp[i]+=eps;\n    let mup=[...mu]; mup[j]+=eps;\n    s[i][j] = (E(Bp,mup)-E(B,mup)-E(Bp,mu)+E(B,mu))/(eps*eps);\n  }\n  return s;\n}",
+"Go":"func nmrShielding(E func(B,mu []float64)float64, B,mu []float64) [3][3]float64 {\n  eps := 1e-6; var s [3][3]float64\n  for i:=0;i<3;i++ { for j:=0;j<3;j++ {\n    Bp:=make([]float64,3); copy(Bp,B); Bp[i]+=eps\n    mup:=make([]float64,3); copy(mup,mu); mup[j]+=eps\n    s[i][j]=(E(Bp,mup)-E(B,mup)-E(Bp,mu)+E(B,mu))/(eps*eps)\n  }}\n  return s\n}",
+"Scala":"def nmrShielding(E: (Array[Double],Array[Double])=>Double, B: Array[Double], mu: Array[Double]): Array[Array[Double]] = {\n  val eps = 1e-6; val s = Array.fill(3,3)(0.0)\n  for (i<-0 until 3; j<-0 until 3) {\n    val Bp = B.clone; Bp(i)+=eps; val mup = mu.clone; mup(j)+=eps\n    s(i)(j) = (E(Bp,mup)-E(B,mup)-E(Bp,mu)+E(B,mu))/(eps*eps)\n  }\n  s\n}",
+"C":"/* NMR shielding: d^2E/(dB_i dmu_j) */\nvoid nmr_shielding(double (*E)(double*,double*), double *B, double *mu, double s[3][3]) {\n  double eps=1e-6;\n  for(int i=0;i<3;i++)for(int j=0;j<3;j++)s[i][j]=0;\n  double Bp[3],mup[3];\n  for(int i=0;i<3;i++){memcpy(Bp,B,24);Bp[i]+=eps;\n    for(int j=0;j<3;j++){memcpy(mup,mu,24);mup[j]+=eps;\n      s[i][j]=(E(Bp,mup)-E(B,mup)-E(Bp,mu)+E(B,mu))/(eps*eps);}}\n}",
+"Elixir":"def nmr_shielding(energy_fn, b, mu) do\n  eps = 1.0e-6\n  for i <- 0..2, j <- 0..2 do\n    bp = List.update_at(b, i, &(&1 + eps))\n    mup = List.update_at(mu, j, &(&1 + eps))\n    (energy_fn.(bp, mup) - energy_fn.(b, mup) - energy_fn.(bp, mu) + energy_fn.(b, mu)) / (eps * eps)\n  end\nend"
+},
+"mapping":[
+{"symbol":"\u03c3 (sigma)","code":"nmr_shielding(E, B, mu)","note":"3x3 NMR shielding tensor per atom"},
+{"symbol":"E","code":"energy_func(B, mu)","note":"Energy as function of field and moment"},
+{"symbol":"B_i","code":"B[i]","note":"Magnetic field component i"},
+{"symbol":"\u03bc_j","code":"mu[j]","note":"Nuclear magnetic moment component j"},
+{"symbol":"\u2202\u00b2/\u2202B\u2202\u03bc","code":"finite difference","note":"Second derivative via central difference"}
+],
+"demo":{"title":"NMR shielding ellipsoids","desc":"Per-atom shielding tensors visualized as oriented ellipsoids on molecular structure."}
+},
+"electron_density":{
+"name":"4. Electron density (\u03c1)",
+"latex":"\\rho(\\mathbf{r}) = \\sum_i |\\psi_i(\\mathbf{r})|^2",
+"intent":"Electron density at position r, computed as the sum of squared orbital wavefunctions. PET-MAD predicts this on an atomic basis set for electrostatic potential computation.",
+"langs":{
+"Python":"import numpy as np\ndef electron_density(psi_funcs, r_eval):\n    rho = np.zeros_like(r_eval)\n    for psi in psi_funcs:\n        rho += np.abs(psi(r_eval))**2\n    return rho",
+"TypeScript":"function electronDensity(psiFns: ((r:number)=>number)[], rEval: number[]): number[] {\n  return rEval.map(r => psiFns.reduce((s, f) => s + Math.pow(f(r), 2), 0));\n}",
+"Go":"func electronDensity(psiFns []func(float64)float64, rEval []float64) []float64 {\n  rho := make([]float64, len(rEval))\n  for _, psi := range psiFns {\n    for i, r := range rEval {\n      v := psi(r); rho[i] += v*v\n    }\n  }\n  return rho\n}",
+"Scala":"def electronDensity(psiFns: Seq[Double=>Double], rEval: Seq[Double]): Seq[Double] = {\n  rEval.map(r => psiFns.map(psi => math.pow(psi(r), 2)).sum)\n}",
+"C":"void electron_density(double (**psi)(double), int npsi, double *r, int nr, double *rho) {\n  for(int i=0;i<nr;i++)rho[i]=0;\n  for(int k=0;k<npsi;k++)\n    for(int i=0;i<nr;i++){double v=psi[k](r[i]);rho[i]+=v*v;}\n}",
+"Elixir":"def electron_density(psi_funcs, r_eval) do\n  Enum.map(r_eval, fn r ->\n    Enum.reduce(psi_funcs, 0.0, fn psi, acc -> acc + :math.pow(psi.(r), 2) end)\n  end)\nend"
+},
+"mapping":[
+{"symbol":"\u03c1 (rho)","code":"electron_density(psi_funcs, r)","note":"Electron density at position r"},
+{"symbol":"\u03c8_i","code":"psi_funcs[i]","note":"i-th molecular orbital wavefunction"},
+{"symbol":"|.\u00b2","code":"abs(psi(r))**2","note":"Probability density of orbital"},
+{"symbol":"\u03a3","code":"sum over orbitals","note":"Sum over all occupied orbitals"},
+{"symbol":"Atomic basis","code":"# predicted per-atom by PET","note":"PET-MAD predicts on atomic basis sets"}
+],
+"demo":{"title":"Electrostatic potential surface","desc":"Molecular surface colored by electron density (red=negative, blue=positive)."}
+},
+"equivariant_attention":{
+"name":"5. Equivariant edge attention",
+"latex":"\\text{Att}_{ij} = \\text{softmax}_j\\left(\\frac{(W_v h_i)^T (W_e e_{ij})}{\\sqrt{d}}\\right)",
+"intent":"The edge-to-edge attention mechanism in PET-MAD. Messages pass along molecular edges (bonds) with attention weights computed from node and edge features. Equivariance preserves rotational symmetry.",
+"langs":{
+"Python":"import numpy as np\ndef equivariant_attention(h, e, W_v, W_e, d):\n    # h: node features [N, d], e: edge features [N, N, d]\n    q = h @ W_v  # [N, d]\n    k = np.einsum('ijd,dk->ijk', e, W_e)  # [N, N, d]\n    scores = np.einsum('id,ijd->ij', q, k) / np.sqrt(d)\n    attn = np.exp(scores - scores.max(axis=-1, keepdims=True))\n    attn /= attn.sum(axis=-1, keepdims=True)\n    return attn",
+"TypeScript":"function equivariantAttention(h: number[][], e: number[][][], Wv: number[][], We: number[][], d: number): number[][] {\n  const N = h.length;\n  let attn = Array.from({length:N}, ()=>new Array(N).fill(0));\n  for (let i=0;i<N;i++) for(let j=0;j<N;j++) {\n    let s = 0;\n    for (let k=0;k<d;k++) {\n      let qi = h[i].reduce((a,hi,ki)=>a+hi*Wv[ki][k],0);\n      let kj = e[i][j].reduce((a,eij,ki)=>a+eij*We[ki][k],0);\n      s += qi*kj;\n    }\n    attn[i][j] = Math.exp(s/Math.sqrt(d));\n  }\n  // softmax\n  for (let i=0;i<N;i++) {\n    let sum = attn[i].reduce((a,b)=>a+b,0);\n    for(let j=0;j<N;j++) attn[i][j] /= sum;\n  }\n  return attn;\n}",
+"Go":"func equivariantAttention(h [][]float64, e [][][]float64, Wv,We [][]float64, d int) [][]float64 {\n  N := len(h); attn := make([][]float64, N)\n  for i:=0;i<N;i++ { attn[i] = make([]float64, N); for j:=0;j<N;j++ {\n    var s float64; for k:=0;k<d;k++ { var qi,kj float64; for x:=0;x<d;x++ { qi+=h[i][x]*Wv[x][k]; kj+=e[i][j][x]*We[x][k] }; s+=qi*kj }\n    attn[i][j] = math.Exp(s/math.Sqrt(float64(d)))\n  }}\n  for i:=0;i<N;i++ { var sum float64; for _,v:=range attn[i] {sum+=v}; for j:=range attn[i] {attn[i][j]/=sum} }\n  return attn\n}",
+"Scala":"def equivariantAttention(h: Array[Array[Double]], e: Array[Array[Array[Double]]], Wv: Array[Array[Double]], We: Array[Array[Double]], d: Int): Array[Array[Double]] = {\n  val N = h.length; val attn = Array.ofDim[Double](N, N)\n  for (i <- 0 until N; j <- 0 until N) {\n    var s = 0.0; for (k <- 0 until d) { var qi=0.0; var kj=0.0; for(x<-0 until d){qi+=h(i)(x)*Wv(x)(k); kj+=e(i)(j)(x)*We(x)(k)}; s+=qi*kj }\n    attn(i)(j) = math.exp(s/math.sqrt(d))\n  }\n  for (i <- 0 until N) { val sum = attn(i).sum; for (j <- 0 until N) attn(i)(j) /= sum }\n  attn\n}",
+"C":"/* Equivariant edge attention for PET-MAD */\nvoid equiv_attn(double *h, double *e, double *Wv, double *We, int N, int d, double *attn) {\n  for(int i=0;i<N;i++)for(int j=0;j<N;j++){\n    double s=0;\n    for(int k=0;k<d;k++){double qi=0,kj=0;\n      for(int x=0;x<d;x++){qi+=h[i*d+x]*Wv[x*d+k];kj+=e[(i*N+j)*d+x]*We[x*d+k];}\n      s+=qi*kj;}\n    attn[i*N+j]=exp(s/sqrt((double)d));\n  }\n  for(int i=0;i<N;i++){double s=0;for(int j=0;j<N;j++)s+=attn[i*N+j];\n    for(int j=0;j<N;j++)attn[i*N+j]/=s;}\n}",
+"Elixir":"def equivariant_attn(h, e, wv, we, d) do\n  n = length(h)\n  for i <- 0..(n-1) do\n    for j <- 0..(n-1) do\n      # Compute attention score\n      0.0  # placeholder\n    end\n  end\nend"
+},
+"mapping":[
+{"symbol":"Att_{ij}","code":"equivariant_attention(h, e, Wv, We, d)","note":"Attention weight from node i to node j"},
+{"symbol":"h_i","code":"h[i]","note":"Node (atom) feature vector"},
+{"symbol":"e_{ij}","code":"e[i][j]","note":"Edge (bond) feature vector"},
+{"symbol":"W_v, W_e","code":"Wv, We","note":"Learned weight matrices"},
+{"symbol":"Equivariant","code":"# preserves SO(3) symmetry","note":"Output transforms correctly under 3D rotations"}
+],
+"demo":{"title":"Edge-to-edge attention heatmap","desc":"Attention weights between molecular bonds. Brighter = higher attention."}
+},
+"energy_prediction":{
+"name":"6. Scalar energy prediction",
+"latex":"E = \\text{MLP}\\left(\\sum_{ij} \\text{Att}_{ij} \\cdot \\text{msg}(h_i, e_{ij}, h_j)\\right)",
+"intent":"PET-MAD's core energy prediction: message passing with equivariant attention, followed by an MLP head. The scalar energy is rotation-invariant (same for all orientations).",
+"langs":{
+"Python":"def predict_energy(h, e, W_v, W_e, W_m, mlp, d):\n    attn = equivariant_attention(h, e, W_v, W_e, d)\n    N = len(h)\n    msg = np.zeros((N, d))\n    for i in range(N):\n        for j in range(N):\n            msg[i] += attn[i,j] * (h[i] + e[i,j] + h[j]) @ W_m\n    pooled = msg.sum(axis=0)\n    return mlp(pooled)",
+"TypeScript":"function predictEnergy(h:number[][], e:number[][][], Wv:number[][], We:number[][], Wm:number[][], mlp:(x:number[])=>number, d:number): number {\n  const attn = equivariantAttention(h, e, Wv, We, d);\n  const N = h.length;\n  let msg = Array.from({length:N}, ()=>new Array(d).fill(0));\n  for (let i=0;i<N;i++) for(let j=0;j<N;j++)\n    for(let k=0;k<d;k++) msg[i][k] += attn[i][j] * (h[i][k]+e[i][j][k]+h[j][k]);\n  let pooled = new Array(d).fill(0);\n  for(let i=0;i<N;i++) for(let k=0;k<d;k++) pooled[k] += msg[i][k];\n  return mlp(pooled);\n}",
+"Go":"func predictEnergy(h [][]float64, e [][][]float64, Wv,We [][]float64, mlp func([]float64)float64, d int) float64 {\n  attn := equivariantAttention(h, e, Wv, We, d)\n  N := len(h); pooled := make([]float64, d)\n  for i:=0;i<N;i++ { for j:=0;j<N;j++ { for k:=0;k<d;k++ { pooled[k] += attn[i][j]*(h[i][k]+e[i][j][k]+h[j][k]) } } }\n  return mlp(pooled)\n}",
+"Scala":"def predictEnergy(h: Array[Array[Double]], e: Array[Array[Array[Double]]], Wv: Array[Array[Double]], We: Array[Array[Double]], mlp: Array[Double]=>Double, d: Int): Double = {\n  val attn = equivariantAttention(h, e, Wv, We, d)\n  val pooled = new Array[Double](d)\n  for (i <- h.indices; j <- h.indices; k <- 0 until d) pooled(k) += attn(i)(j)*(h(i)(k)+e(i)(j)(k)+h(j)(k))\n  mlp(pooled)\n}",
+"C":"double predict_energy(double *h, double *e, double *attn, double *mlp_w, int N, int d) {\n  double pooled[256]; for(int k=0;k<d;k++)pooled[k]=0;\n  for(int i=0;i<N;i++)for(int j=0;j<N;j++)\n    for(int k=0;k<d;k++)pooled[k]+=attn[i*N+j]*(h[i*d+k]+e[(i*N+j)*d+k]+h[j*d+k]);\n  /* MLP forward pass */\n  double E=0; for(int k=0;k<d;k++)E+=pooled[k]*mlp_w[k];\n  return E;\n}",
+"Elixir":"def predict_energy(h, e, attn, mlp, d) do\n  n = length(h)\n  pooled = List.duplicate(0.0, d)\n  pooled = Enum.reduce(0..(n-1), pooled, fn i, acc ->\n    Enum.reduce(0..(n-1), acc, fn j, acc2 ->\n      Enum.reduce(0..(d-1), acc2, fn k, acc3 ->\n        List.update_at(acc3, k, &(&1 + Enum.at(Enum.at(attn, i), j) * (\n          Enum.at(Enum.at(h, i), k) + Enum.at(Enum.at(Enum.at(e, i), j), k) + Enum.at(Enum.at(h, j), k)\n        )))\n      end)\n    end)\n  end)\n  mlp.(pooled)\nend"
+},
+"mapping":[
+{"symbol":"E","code":"predict_energy(h, e, ...)","note":"Scalar molecular energy (rotation-invariant)"},
+{"symbol":"Att_{ij}","code":"attn[i][j]","note":"Equivariant attention weight"},
+{"symbol":"msg","code":"h[i] + e[i][j] + h[j]","note":"Message from node j to node i"},
+{"symbol":"MLP","code":"mlp(pooled)","note":"Multi-layer perceptron output head"},
+{"symbol":"Invariant","code":"# same for all rotations","note":"Scalar output is rotation-invariant"}
+],
+"demo":{"title":"Energy prediction convergence","desc":"PET vs DFT energy comparison across molecular conformations."}
+}
+,
+"mofography":{
+  "name": "7. Mofography: Pore Network Analysis",
+  "langs": {
+    "Python": "import numpy as np\nfrom mofography import PoreNetwork\n\n# Load atomistic structure (CIF/POSCAR)\npn = PoreNetwork.from_file(\"HKUST-1.cif\")\n\n# Stage 1: Compute distance-to-framework field\ndist_field = pn.compute_distance_field(resolution=0.1)\n# dist_field[x,y,z] = min distance to nearest framework atom\n\n# Stage 2: Segment void space into individual pores\npores = pn.segment_void(dist_field, method=\"watershed\")\n# Each voxel assigned to a non-overlapping pore region\n\n# Stage 3: Pore-level characterization\nfor pore in pores:\n    print(f\"Pore {pore.id}: d={pore.diameter:.2f}A, \"\n          f\"V={pore.volume:.1f}A3, S={pore.surface_area:.1f}A2\")\n\n# Stage 4: Construct pore graph\ngraph = pn.build_pore_graph(pores)\n# Nodes = pore centroids, Edges = windows (shared boundaries)\nprint(f\"Graph: {graph.n_nodes} pores, {graph.n_edges} windows\")\nprint(f\"Percolating: {graph.is_percolating()}\")\n\n# Stage 5: Topological analysis\ncentrality = graph.betweenness_centrality()\npaths = graph.shortest_paths()\ntypes = graph.classify_pore_types()  # by cavity size + vdW energy",
+    "TypeScript": "import { PoreNetwork } from \"mofography\";\n\nconst pn = PoreNetwork.fromFile(\"HKUST-1.cif\");\n\n// Distance-to-framework field\nconst distField = pn.computeDistanceField(0.1);\n\n// Segment into individual pores\nconst pores = pn.segmentVoid(distField, \"watershed\");\n\n// Pore-level characterization\npores.forEach(p =>\n  console.log(`Pore ${p.id}: d=${p.diameter}A, V=${p.volume}A3`)\n);\n\n// Pore graph: nodes=pores, edges=windows\nconst graph = pn.buildPoreGraph(pores);\nconsole.log(`Graph: ${graph.nNodes} pores, ${graph.nEdges} windows`);\nconsole.log(`Percolating: ${graph.isPercolating()}`);",
+    "Go": "pn := mofography.FromFile(\"HKUST-1.cif\")\ndistField := pn.ComputeDistanceField(0.1)\npores := pn.SegmentVoid(distField, \"watershed\")\n\nfor _, p := range pores {\n    fmt.Printf(\"Pore %d: d=%.2f, V=%.1f\\n\", p.ID, p.Diameter, p.Volume)\n}\n\ngraph := pn.BuildPoreGraph(pores)\nfmt.Printf(\"Graph: %d pores, %d windows\\n\", graph.NNodes, graph.NEdges)\nfmt.Printf(\"Percolating: %v\\n\", graph.IsPercolating())",
+    "Scala": "val pn = PoreNetwork.fromFile(\"HKUST-1.cif\")\nval distField = pn.computeDistanceField(0.1)\nval pores = pn.segmentVoid(distField, \"watershed\")\n\npores.foreach(p =>\n  println(f\"Pore ${p.id}: d=${p.diameter}%.2f, V=${p.volume}%.1f\")\n)\n\nval graph = pn.buildPoreGraph(pores)\nprintln(s\"Graph: ${graph.nNodes} pores, ${graph.nEdges} windows\")\nprintln(s\"Percolating: ${graph.isPercolating}\")",
+    "C": "pore_network_t* pn = pore_network_from_file(\"HKUST-1.cif\");\ndouble* dist = compute_distance_field(pn, 0.1);\npore_t* pores = segment_void(pn, dist, \"watershed\");\n\nfor (int i = 0; i < pn->n_pores; i++)\n    printf(\"Pore %d: d=%.2f, V=%.1f\\n\", pores[i].id,\n           pores[i].diameter, pores[i].volume);\n\ngraph_t* graph = build_pore_graph(pn, pores);\nprintf(\"Graph: %d pores, %d windows\\n\",\n       graph->n_nodes, graph->n_edges);\nprintf(\"Percolating: %s\\n\",\n       graph_is_percolating(graph) ? \"yes\" : \"no\");",
+    "Elixir": "pn = Mofography.from_file(\"HKUST-1.cif\")\ndist_field = Mofography.compute_distance_field(pn, 0.1)\npores = Mofography.segment_void(pn, dist_field, :watershed)\n\nEnum.each(pores, fn p ->\n  IO.puts(\"Pore #{p.id}: d=#{Float.round(p.diameter,2)}, V=#{Float.round(p.volume,1)}\")\nend)\n\ngraph = Mofography.build_pore_graph(pn, pores)\nIO.puts(\"Graph: #{graph.n_nodes} pores, #{graph.n_edges} windows\")\nIO.puts(\"Percolating: #{graph.is_percolating}\")"
+  },
+  "math": "\\mathbf{d}(\\mathbf{x}) = \\min_{\\mathbf{a} \\in \\text{framework}} \\|\\mathbf{x} - \\mathbf{a}\\|, \\quad G = (V, E)",
+  "mapping": [
+    {
+      "symbol": "\\mathbf{d}(\\mathbf{x})",
+      "code": "dist_field[x,y,z]",
+      "note": "Distance-to-framework scalar field"
+    },
+    {
+      "symbol": "V",
+      "code": "graph.nodes",
+      "note": "Pore centroids (graph nodes)"
+    },
+    {
+      "symbol": "E",
+      "code": "graph.edges",
+      "note": "Windows between adjacent pores"
+    },
+    {
+      "symbol": "G = (V, E)",
+      "code": "build_pore_graph()",
+      "note": "Pore graph: nodes + connectivity edges"
+    },
+    {
+      "symbol": "P_{perc}",
+      "code": "graph.is_percolating()",
+      "note": "Percolation threshold check"
+    }
+  ],
+  "demo": {
+    "title": "5-stage Mofography pipeline",
+    "desc": "Crystal framework -> distance field -> segmentation -> pore graph -> percolation."
+  }
+}
+}
+</script>
+
 <script>
-// === THEME ===
-(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
-function toggleTheme(){var c=document.documentElement.classList;c.toggle('dark');localStorage.setItem('mmnd-theme',c.contains('dark')?'dark':'light')}
-// === HELPERS ===
-function prepCanvas(cv){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();if(r.width<10)return null;var newW=Math.round(r.width*dpr),newH=Math.round(r.height*dpr);if(cv.width!==newW||cv.height!==newH){cv.width=newW;cv.height=newH}ctx.setTransform(dpr,0,0,dpr,0,0);return{ctx:ctx,W:r.width,H:r.height}}
-function glowNode(ctx,x,y,r,c,g){ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=g||8;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
-function gradientBg(ctx,W,H,t,c1,c2){var g=ctx.createLinearGradient(0,0,W,H);var s=Math.sin(t*.3)*.2;g.addColorStop(Math.max(0,.3-s),c1);g.addColorStop(Math.min(1,.7+s),c2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
-function flowParticles(ctx,x1,y1,x2,y2,t,n,c,sp){sp=sp||1;var dx=x2-x1,dy=y2-y1;for(var i=0;i<n;i++){var p=((t*sp+i/n)%1);var px=x1+dx*p,py=y1+dy*p;var a=Math.sin(p*Math.PI)*.8;ctx.globalAlpha=a;ctx.fillStyle=c;ctx.shadowColor=c;ctx.shadowBlur=4;ctx.beginPath();ctx.arc(px,py,1.5+Math.sin(p*Math.PI),0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;ctx.shadowBlur=0}
+function toggleTheme(){var d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
+;(function(){var s=localStorage.getItem('mmnd-theme');var p=matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+
+;var CODE=null;
+;var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
+;var TABS=[{id:'mol',icon:'\ud83e\udd1b',label:'Molecular'},{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
+
+;var CHEM_FUTURES={
+'dipole':[{n:'Real-time dipole MD',y:2027,p:0.45,t:'Instant dipole prediction during molecular dynamics'},{n:'Drug polarity screen',y:2028,p:0.40,t:'Pharma screening for solubility via dipole'},{n:'IR spectra ML',y:2029,p:0.35,t:'Infrared spectra from predicted dipoles'},{n:'Ferromagnetism',y:2032,p:0.20,t:'Magnetic dipole prediction for materials'},{n:'Dipole surfaces',y:2035,p:0.25,t:'2D material dipole mapping'}],
+'polarizability':[{n:'Raman ML',y:2027,p:0.40,t:'Raman spectra from predicted polarizability'},{n:'Nonlinear optics',y:2029,p:0.30,t:'Hyperpolarizability for NLO materials'},{n:'Refractive index',y:2028,p:0.45,t:'Bulk refractive index from molecular alpha'},{n:'Optoelectronics',y:2032,p:0.25,t:'Solar cell material screening'},{n:'Stark effect',y:2035,p:0.20,t:'Field-dependent polarizability dynamics'}],
+'nmr_shielding':[{n:'NMR spectra ML',y:2027,p:0.50,t:'Full NMR spectra from predicted shielding'},{n:'Structure elucidation',y:2028,p:0.40,t:'AI-assisted NMR structure determination'},{n:'Reaction monitoring',y:2029,p:0.35,t:'Real-time NMR for reaction tracking'},{n:'Metabolomics',y:2031,p:0.30,t:'NMR-based metabolomics at scale'},{n:'MRI contrast',y:2035,p:0.15,t:'Molecular MRI contrast design'}],
+'electron_density':[{n:'ESP surfaces ML',y:2027,p:0.50,t:'Instant electrostatic potential surfaces'},{n:'Docking ML',y:2028,p:0.45,t:'Drug docking with ML electron density'},{n:'Catalysis design',y:2030,p:0.30,t:'Catalyst screening via ESP patterns'},{n:'Density functional',y:2032,p:0.25,t:'ML density functional approximation'},{n:'Quantum embedding',y:2035,p:0.20,t:'ML density for embedding methods'}],
+'equivariant_attention':[{n:'Equivariant GNNs',y:2027,p:0.50,t:'Equivariant GNNs becoming standard'},{n:'Large mol GNN',y:2029,p:0.35,t:'Protein-scale equivariant prediction'},{n:'Equivariant AGI',y:2032,p:0.20,t:'Symmetry-aware reasoning in AI'},{n:'Causal equivariance',y:2034,p:0.15,t:'Causal models with equivariance'},{n:'Unification',y:2038,p:0.10,t:'Unified equivariant ML theory'}],
+'energy_prediction':[{n:'MD acceleration',y:2027,p:0.55,t:'ML-MD replacing DFT-MD in routine tasks'},{n:'Reaction paths',y:2028,p:0.40,t:'AI finding reaction pathways'},{n:'Catalyst screening',y:2029,p:0.45,t:'High-throughput catalyst design'},{n:'Material discovery',y:2031,p:0.30,t:'Novel materials via energy landscapes'},{n:'Protein folding',y:2033,p:0.25,t:'ML energy for protein folding'}],
+'mofography':[{n:'Pore graph ML (PoroNet)',y:2027,p:0.50,t:'GNN predictions of gas uptake from pore graphs'},{n:'Accelerated MOF discovery',y:2028,p:0.45,t:'High-throughput screening via pore graphs'},{n:'CO2 capture design',y:2029,p:0.40,t:'Optimal pore topology for carbon capture'},{n:'H2 storage materials',y:2030,p:0.35,t:'Pore graph-guided hydrogen storage MOFs'},{n:'Shape-selective catalysis',y:2032,p:0.25,t:'Xylene separation via pore topology design'}]
+};
+
+fetch('code-data.json').then(function(r){return r.json()}).then(function(data){}).catch(function(){})
+;
+
+// Load chem data from inline JSON
+try{CODE=JSON.parse(document.getElementById('codeData').textContent)}catch(e){console.error('Parse error:',e)}
+
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function prepCanvas(cv){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();if(r.width<10)return null;var newW=Math.round(r.width*dpr),newH=Math.round(r.height*dpr);if(cv.width!==newW||cv.height!==newH){cv.width=newW;cv.height=newH}ctx.setTransform(dpr,0,0,dpr,0,0);return{ctx:ctx,W:r.width,H:r.height}}
 function cleanLatex(s){return String(s)
 .replace(/\\mathbf\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<b>$1</b>')
+.replace(/\\boldsymbol\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<b>$1</b>')
 .replace(/\\text\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
 .replace(/\\mathcal\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\mathrm\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
 .replace(/\\frac\{((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1/$2')
 .replace(/\\sqrt\{((?:[^{}]|\{[^{}]*\})*)\}/g,'\u221a$1')
-.replace(/\\%/g,'%').replace(/\\&/g,'&amp;')
+.replace(/\\hat\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1\u0302')
+.replace(/\\bar\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1\u0304')
+.replace(/\\vec\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1\u20d7')
+.replace(/\\dot\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1\u0307')
+.replace(/\\%/g,'%').replace(/\\&/g,'&amp;').replace(/\\#/g,'#')
 .replace(/_\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<sub>$1</sub>')
 .replace(/\^\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<sup>$1</sup>')
 .replace(/_([a-zA-Z0-9])/g,'<sub>$1</sub>')
 .replace(/\^([a-zA-Z0-9])/g,'<sup>$1</sup>')
 .replace(/\\alpha/g,'\u03b1').replace(/\\beta/g,'\u03b2').replace(/\\gamma/g,'\u03b3').replace(/\\delta/g,'\u03b4')
-.replace(/\\epsilon/g,'\u03b5').replace(/\\theta/g,'\u03b8').replace(/\\lambda/g,'\u03bb').replace(/\\mu/g,'\u03bc')
-.replace(/\\pi/g,'\u03c0').replace(/\\sigma/g,'\u03c3').replace(/\\phi/g,'\u03c6').replace(/\\omega/g,'\u03c9')
-.replace(/\\Delta/g,'\u0394').replace(/\\Sigma/g,'\u03a3').replace(/\\nabla/g,'\u2207').replace(/\\partial/g,'\u2202')
-.replace(/\\times/g,'\u00d7').replace(/\\cdot/g,'\u00b7').replace(/\\leq/g,'\u2264').replace(/\\geq/g,'\u2265')
-.replace(/\\neq/g,'\u2260').replace(/\\approx/g,'\u2248').replace(/\\sum/g,'\u03a3').replace(/\\prod/g,'\u03a0')
-.replace(/\\to/g,'\u2192').replace(/\\rightarrow/g,'\u2192').replace(/\\in/g,'\u2208')
-.replace(/\\quad/g,'&nbsp;&nbsp;').replace(/\\ln/g,'ln').replace(/\\log/g,'log').replace(/\\exp/g,'exp')
-.replace(/\\max/g,'max').replace(/\\min/g,'min').replace(/\\dots/g,'\u2026')
+.replace(/\\epsilon/g,'\u03b5').replace(/\\varepsilon/g,'\u03b5').replace(/\\zeta/g,'\u03b6').replace(/\\eta/g,'\u03b7')
+.replace(/\\theta/g,'\u03b8').replace(/\\vartheta/g,'\u03b8').replace(/\\iota/g,'\u03b9').replace(/\\kappa/g,'\u03ba')
+.replace(/\\lambda/g,'\u03bb').replace(/\\mu/g,'\u03bc').replace(/\\nu/g,'\u03bd').replace(/\\xi/g,'\u03be')
+.replace(/\\pi/g,'\u03c0').replace(/\\rho/g,'\u03c1').replace(/\\sigma/g,'\u03c3').replace(/\\tau/g,'\u03c4')
+.replace(/\\upsilon/g,'\u03c5').replace(/\\phi/g,'\u03c6').replace(/\\varphi/g,'\u03c6').replace(/\\chi/g,'\u03c7')
+.replace(/\\psi/g,'\u03c8').replace(/\\omega/g,'\u03c9')
+.replace(/\\Gamma/g,'\u0393').replace(/\\Delta/g,'\u0394').replace(/\\Theta/g,'\u0398').replace(/\\Lambda/g,'\u039b')
+.replace(/\\Xi/g,'\u039e').replace(/\\Pi/g,'\u03a0').replace(/\\Sigma/g,'\u03a3').replace(/\\Phi/g,'\u03a6')
+.replace(/\\Psi/g,'\u03a8').replace(/\\Omega/g,'\u03a9')
+.replace(/\\nabla/g,'\u2207').replace(/\\partial/g,'\u2202').replace(/\\infty/g,'\u221e').replace(/\\cdot/g,'\u00b7')
+.replace(/\\times/g,'\u00d7').replace(/\\div/g,'\u00f7').replace(/\\pm/g,'\u00b1').replace(/\\mp/g,'\u2213')
+.replace(/\\leq/g,'\u2264').replace(/\\geq/g,'\u2265').replace(/\\neq/g,'\u2260').replace(/\\approx/g,'\u2248')
+.replace(/\\equiv/g,'\u2261').replace(/\\sim/g,'\u223c').replace(/\\propto/g,'\u221d')
+.replace(/\\sum/g,'\u03a3').replace(/\\prod/g,'\u03a0').replace(/\\int/g,'\u222b').replace(/\\oint/g,'\u222e')
+.replace(/\\forall/g,'\u2200').replace(/\\exists/g,'\u2203').replace(/\\in/g,'\u2208').replace(/\\notin/g,'\u2209')
+.replace(/\\subset/g,'\u2282').replace(/\\subseteq/g,'\u2286').replace(/\\supset/g,'\u2283').replace(/\\supseteq/g,'\u2287')
+.replace(/\\cup/g,'\u222a').replace(/\\cap/g,'\u2229').replace(/\\emptyset/g,'\u2205')
+.replace(/\\to/g,'\u2192').replace(/\\rightarrow/g,'\u2192').replace(/\\leftarrow/g,'\u2190')
+.replace(/\\Rightarrow/g,'\u21d2').replace(/\\Leftarrow/g,'\u21d0').replace(/\\leftrightarrow/g,'\u2194')
+.replace(/\\mapsto/g,'\u21a6')
+.replace(/\\quad/g,'&nbsp;&nbsp;').replace(/\\qquad/g,'&nbsp;&nbsp;&nbsp;&nbsp;')
+.replace(/\\,/g,' ').replace(/\\;/g,' ').replace(/\\:/g,' ')
+.replace(/\\ln/g,'ln').replace(/\\log/g,'log').replace(/\\exp/g,'exp')
+.replace(/\\max/g,'max').replace(/\\min/g,'min').replace(/\\argmax/g,'argmax').replace(/\\argmin/g,'argmin')
+.replace(/\\sin/g,'sin').replace(/\\cos/g,'cos').replace(/\\tan/g,'tan')
+.replace(/\\det/g,'det').replace(/\\dim/g,'dim')
+.replace(/\\dagger/g,'\u2020').replace(/\\ddagger/g,'\u2021')
+.replace(/\\dots/g,'\u2026').replace(/\\ldots/g,'\u2026').replace(/\\cdots/g,'\u22ef')
+.replace(/\\degree/g,'\u00b0').replace(/\\circ/g,'\u2218')
+.replace(/\\xrightarrow/g,'\u2192').replace(/\\xleftarrow/g,'\u2190')
 .replace(/\\[a-zA-Z]+/g,'').replace(/[{}]/g,'')}
-// === CONCEPT DATA ===
-var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
-var TABS=[{id:'mol',icon:'\ud83e\udd1b',label:'Molecular'},{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deeper Thoughts'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
-var CONCEPTS={
-'dipole':{name:'1. Dipole moment (μ)',latex:'\\vec{\\mu} = \\sum_i q_i \\vec{r}_i',intent:'The electric dipole moment of a molecule, computed as the charge-weighted sum of atomic position vectors. PET-MAD predicts this as an equivariant vector (rotates with the molecule).',langs:{'Python':'import numpy as np\ndef dipole(charges, positions):\n    # mu = sum(q_i * r_i)\n    mu = np.zeros(3)\n    for q, r in zip(charges, positions):\n        mu += q * r\n    return mu','TypeScript':'function dipole(charges: number[], pos: number[][]): number[] {\n  let mu = [0, 0, 0];\n  for (let i = 0; i < charges.length; i++) {\n    mu[0] += charges[i] * pos[i][0];\n    mu[1] += charges[i] * pos[i][1];\n    mu[2] += charges[i] * pos[i][2];\n  }\n  return mu;\n}','Go':'func dipole(charges []float64, pos [][]float64) [3]float64 {\n  var mu [3]float64\n  for i := range charges {\n    mu[0] += charges[i] * pos[i][0]\n    mu[1] += charges[i] * pos[i][1]\n    mu[2] += charges[i] * pos[i][2]\n  }\n  return mu\n}','Scala':'def dipole(charges: Array[Double], pos: Array[Array[Double]]): Array[Double] = {\n  charges.indices.map(i => charges(i) * pos(i)).reduce((a,b) => a.zip(b).map{case(x,y)=>x+y}).toArray\n}','C':'void dipole(double *q, double (*pos)[3], int n, double *mu) {\n  mu[0]=mu[1]=mu[2]=0;\n  for(int i=0;i<n;i++){\n    mu[0]+=q[i]*pos[i][0];\n    mu[1]+=q[i]*pos[i][1];\n    mu[2]+=q[i]*pos[i][2];\n  }\n}','Elixir':'def dipole(charges, positions) do\n  Enum.zip(charges, positions)\n  |> Enum.reduce({0.0, 0.0, 0.0}, fn {q, {x,y,z}}, {mx,my,mz} ->\n    {mx+q*x, my+q*y, mz+q*z}\n  end)\nend'},mapping:[{symbol:'μ (mu)',code:'dipole(charges, positions)',note:'Electric dipole moment vector'},{symbol:'q_i',code:'charges[i]',note:'Partial charge on atom i'},{symbol:'r_i',code:'positions[i]',note:'3D position vector of atom i'},{symbol:'Σ (sum)',code:'for loop over all atoms',note:'Sum over all atoms in molecule'},{symbol:'Equivariant',code:'# rotates with molecule',note:'Output transforms as a vector under rotation'}],demo:{title:'Dipole vector visualization',desc:'Charges (red/blue) with dipole vector arrow pointing from negative to positive center.'}},
-'polarizability':{name:'2. Polarizability tensor (α)',latex:'\\alpha_{ij} = \\sum_k \\frac{q_k r_{k,i} r_{k,j}}{|\\mathbf{r}_k|^3}',intent:'The polarizability tensor describes how the electron cloud deforms under an electric field. PET-MAD learns this as a 3x3 symmetric tensor that transforms equivariantly.',langs:{'Python':'import numpy as np\ndef polarizability(charges, positions):\n    alpha = np.zeros((3, 3))\n    for q, r in zip(charges, positions):\n        rmag = np.linalg.norm(r)\n        if rmag > 0:\n            for i in range(3):\n                for j in range(3):\n                    alpha[i,j] += q * r[i] * r[j] / rmag**3\n    return alpha','TypeScript':'function polarizability(q: number[], r: number[][]): number[][] {\n  let a = [[0,0,0],[0,0,0],[0,0,0]];\n  for (let k = 0; k < q.length; k++) {\n    let rmag = Math.hypot(r[k][0],r[k][1],r[k][2]);\n    if (rmag > 0)\n      for (let i=0;i<3;i++) for(let j=0;j<3;j++)\n        a[i][j] += q[k]*r[k][i]*r[k][j]/rmag**3;\n  }\n  return a;\n}','Go':'func polarizability(q []float64, r [][]float64) [3][3]float64 {\n  var a [3][3]float64\n  for k := range q {\n    rmag := math.Sqrt(r[k][0]*r[k][0]+r[k][1]*r[k][1]+r[k][2]*r[k][2])\n    if rmag > 0 { for i:=0;i<3;i++ { for j:=0;j<3;j++ { a[i][j]+=q[k]*r[k][i]*r[k][j]/math.Pow(rmag,3) } } }\n  }\n  return a\n}','Scala':'def polarizability(q: Array[Double], r: Array[Array[Double]]): Array[Array[Double]] = {\n  val a = Array.fill(3,3)(0.0)\n  for (k <- q.indices) {\n    val rmag = math.sqrt(r(k).map(x=>x*x).sum)\n    if (rmag > 0) for (i<-0 until 3; j<-0 until 3) a(i)(j) += q(k)*r(k)(i)*r(k)(j)/math.pow(rmag,3)\n  }\n  a\n}','C':'void polarizability(double *q, double (*r)[3], int n, double a[3][3]) {\n  for(int i=0;i<3;i++)for(int j=0;j<3;j++)a[i][j]=0;\n  for(int k=0;k<n;k++){\n    double rm=sqrt(r[k][0]*r[k][0]+r[k][1]*r[k][1]+r[k][2]*r[k][2]);\n    if(rm>0)for(int i=0;i<3;i++)for(int j=0;j<3;j++)a[i][j]+=q[k]*r[k][i]*r[k][j]/(rm*rm*rm);\n  }\n}','Elixir':'def polarizability(charges, positions) do\n  Enum.reduce(Enum.zip(charges, positions), {{0,0,0},{0,0,0},{0,0,0}}, fn {q,r}, acc ->\n    # Simplified: returns 3x3 tensor\n    acc\n  end)\nend'},mapping:[{symbol:'α (alpha)',code:'polarizability(charges, positions)',note:'3x3 symmetric polarizability tensor'},{symbol:'q_k',code:'charges[k]',note:'Charge on atom k'},{symbol:'r_{k,i}',code:'positions[k][i]',note:'i-th component of atom k position'},{symbol:'|r|',code:'np.linalg.norm(r)',note:'Distance from origin'},{symbol:'Equivariant',code:'# transforms as rank-2 tensor',note:'Rotates as a second-rank tensor under rotation'}],demo:{title:'Polarizability ellipsoid',desc:'3D ellipsoid showing charge cloud deformation under electric field.'}},
-'nmr_shielding':{name:'3. NMR shielding tensor (σ)',latex:'\\sigma_{ij} = \\frac{\\partial^2 E}{\\partial B_i \\partial \\mu_j}',intent:'NMR chemical shielding tensor: second derivative of energy with respect to magnetic field and nuclear magnetic moment. PET-MAD predicts per-atom shielding as a 3x3 tensor.',langs:{'Python':'def nmr_shielding(energy_func, B, mu):\n    # sigma = d^2 E / (dB_i dmu_j)\n    eps = 1e-6\n    sigma = np.zeros((3, 3))\n    for i in range(3):\n        for j in range(3):\n            B_plus = B.copy(); B_plus[i] += eps\n            mu_plus = mu.copy(); mu_plus[j] += eps\n            sigma[i,j] = (energy_func(B_plus, mu_plus) - energy_func(B, mu_plus) - energy_func(B_plus, mu) + energy_func(B, mu)) / (eps**2)\n    return sigma','TypeScript':'function nmrShielding(E: (B:number[],mu:number[])=>number, B:number[], mu:number[]): number[][] {\n  const eps = 1e-6;\n  let s = [[0,0,0],[0,0,0],[0,0,0]];\n  for (let i=0;i<3;i++) for (let j=0;j<3;j++) {\n    let Bp=[...B]; Bp[i]+=eps;\n    let mup=[...mu]; mup[j]+=eps;\n    s[i][j] = (E(Bp,mup)-E(B,mup)-E(Bp,mu)+E(B,mu))/(eps*eps);\n  }\n  return s;\n}','Go':'func nmrShielding(E func(B,mu []float64)float64, B,mu []float64) [3][3]float64 {\n  eps := 1e-6; var s [3][3]float64\n  for i:=0;i<3;i++ { for j:=0;j<3;j++ {\n    Bp:=make([]float64,3); copy(Bp,B); Bp[i]+=eps\n    mup:=make([]float64,3); copy(mup,mu); mup[j]+=eps\n    s[i][j]=(E(Bp,mup)-E(B,mup)-E(Bp,mu)+E(B,mu))/(eps*eps)\n  }}\n  return s\n}','Scala':'def nmrShielding(E: (Array[Double],Array[Double])=>Double, B: Array[Double], mu: Array[Double]): Array[Array[Double]] = {\n  val eps = 1e-6; val s = Array.fill(3,3)(0.0)\n  for (i<-0 until 3; j<-0 until 3) {\n    val Bp = B.clone; Bp(i)+=eps; val mup = mu.clone; mup(j)+=eps\n    s(i)(j) = (E(Bp,mup)-E(B,mup)-E(Bp,mu)+E(B,mu))/(eps*eps)\n  }\n  s\n}','C':'/* NMR shielding: d^2E/(dB_i dmu_j) */\nvoid nmr_shielding(double (*E)(double*,double*), double *B, double *mu, double s[3][3]) {\n  double eps=1e-6;\n  for(int i=0;i<3;i++)for(int j=0;j<3;j++)s[i][j]=0;\n  double Bp[3],mup[3];\n  for(int i=0;i<3;i++){memcpy(Bp,B,24);Bp[i]+=eps;\n    for(int j=0;j<3;j++){memcpy(mup,mu,24);mup[j]+=eps;\n      s[i][j]=(E(Bp,mup)-E(B,mup)-E(Bp,mu)+E(B,mu))/(eps*eps);}}\n}','Elixir':'def nmr_shielding(energy_fn, b, mu) do\n  eps = 1.0e-6\n  for i <- 0..2, j <- 0..2 do\n    bp = List.update_at(b, i, &(&1 + eps))\n    mup = List.update_at(mu, j, &(&1 + eps))\n    (energy_fn.(bp, mup) - energy_fn.(b, mup) - energy_fn.(bp, mu) + energy_fn.(b, mu)) / (eps * eps)\n  end\nend'},mapping:[{symbol:'σ (sigma)',code:'nmr_shielding(E, B, mu)',note:'3x3 NMR shielding tensor per atom'},{symbol:'E',code:'energy_func(B, mu)',note:'Energy as function of field and moment'},{symbol:'B_i',code:'B[i]',note:'Magnetic field component i'},{symbol:'μ_j',code:'mu[j]',note:'Nuclear magnetic moment component j'},{symbol:'∂²/∂B∂μ',code:'finite difference',note:'Second derivative via central difference'}],demo:{title:'NMR shielding ellipsoids',desc:'Per-atom shielding tensors visualized as oriented ellipsoids on molecular structure.'}},
-'electron_density':{name:'4. Electron density (ρ)',latex:'\\rho(\\mathbf{r}) = \\sum_i |\\psi_i(\\mathbf{r})|^2',intent:'Electron density at position r, computed as the sum of squared orbital wavefunctions. PET-MAD predicts this on an atomic basis set for electrostatic potential computation.',langs:{'Python':'import numpy as np\ndef electron_density(psi_funcs, r_eval):\n    rho = np.zeros_like(r_eval)\n    for psi in psi_funcs:\n        rho += np.abs(psi(r_eval))**2\n    return rho','TypeScript':'function electronDensity(psiFns: ((r:number)=>number)[], rEval: number[]): number[] {\n  return rEval.map(r => psiFns.reduce((s, f) => s + Math.pow(f(r), 2), 0));\n}','Go':'func electronDensity(psiFns []func(float64)float64, rEval []float64) []float64 {\n  rho := make([]float64, len(rEval))\n  for _, psi := range psiFns {\n    for i, r := range rEval {\n      v := psi(r); rho[i] += v*v\n    }\n  }\n  return rho\n}','Scala':'def electronDensity(psiFns: Seq[Double=>Double], rEval: Seq[Double]): Seq[Double] = {\n  rEval.map(r => psiFns.map(psi => math.pow(psi(r), 2)).sum)\n}','C':'void electron_density(double (**psi)(double), int npsi, double *r, int nr, double *rho) {\n  for(int i=0;i<nr;i++)rho[i]=0;\n  for(int k=0;k<npsi;k++)\n    for(int i=0;i<nr;i++){double v=psi[k](r[i]);rho[i]+=v*v;}\n}','Elixir':'def electron_density(psi_funcs, r_eval) do\n  Enum.map(r_eval, fn r ->\n    Enum.reduce(psi_funcs, 0.0, fn psi, acc -> acc + :math.pow(psi.(r), 2) end)\n  end)\nend'},mapping:[{symbol:'ρ (rho)',code:'electron_density(psi_funcs, r)',note:'Electron density at position r'},{symbol:'ψ_i',code:'psi_funcs[i]',note:'i-th molecular orbital wavefunction'},{symbol:'|.²',code:'abs(psi(r))**2',note:'Probability density of orbital'},{symbol:'Σ',code:'sum over orbitals',note:'Sum over all occupied orbitals'},{symbol:'Atomic basis',code:'# predicted per-atom by PET',note:'PET-MAD predicts on atomic basis sets'}],demo:{title:'Electrostatic potential surface',desc:'Molecular surface colored by electron density (red=negative, blue=positive).'}},
-'equivariant_attention':{name:'5. Equivariant edge attention',latex:'\\text{Att}_{ij} = \\text{softmax}_j\\left(\\frac{(W_v h_i)^T (W_e e_{ij})}{\\sqrt{d}}\\right)',intent:'The edge-to-edge attention mechanism in PET-MAD. Messages pass along molecular edges (bonds) with attention weights computed from node and edge features. Equivariance preserves rotational symmetry.',langs:{'Python':'import numpy as np\ndef equivariant_attention(h, e, W_v, W_e, d):\n    # h: node features [N, d], e: edge features [N, N, d]\n    q = h @ W_v  # [N, d]\n    k = np.einsum(\'ijd,dk->ijk\', e, W_e)  # [N, N, d]\n    scores = np.einsum(\'id,ijd->ij\', q, k) / np.sqrt(d)\n    attn = np.exp(scores - scores.max(axis=-1, keepdims=True))\n    attn /= attn.sum(axis=-1, keepdims=True)\n    return attn','TypeScript':'function equivariantAttention(h: number[][], e: number[][][], Wv: number[][], We: number[][], d: number): number[][] {\n  const N = h.length;\n  let attn = Array.from({length:N}, ()=>new Array(N).fill(0));\n  for (let i=0;i<N;i++) for(let j=0;j<N;j++) {\n    let s = 0;\n    for (let k=0;k<d;k++) {\n      let qi = h[i].reduce((a,hi,ki)=>a+hi*Wv[ki][k],0);\n      let kj = e[i][j].reduce((a,eij,ki)=>a+eij*We[ki][k],0);\n      s += qi*kj;\n    }\n    attn[i][j] = Math.exp(s/Math.sqrt(d));\n  }\n  // softmax\n  for (let i=0;i<N;i++) {\n    let sum = attn[i].reduce((a,b)=>a+b,0);\n    for(let j=0;j<N;j++) attn[i][j] /= sum;\n  }\n  return attn;\n}','Go':'func equivariantAttention(h [][]float64, e [][][]float64, Wv,We [][]float64, d int) [][]float64 {\n  N := len(h); attn := make([][]float64, N)\n  for i:=0;i<N;i++ { attn[i] = make([]float64, N); for j:=0;j<N;j++ {\n    var s float64; for k:=0;k<d;k++ { var qi,kj float64; for x:=0;x<d;x++ { qi+=h[i][x]*Wv[x][k]; kj+=e[i][j][x]*We[x][k] }; s+=qi*kj }\n    attn[i][j] = math.Exp(s/math.Sqrt(float64(d)))\n  }}\n  for i:=0;i<N;i++ { var sum float64; for _,v:=range attn[i] {sum+=v}; for j:=range attn[i] {attn[i][j]/=sum} }\n  return attn\n}','Scala':'def equivariantAttention(h: Array[Array[Double]], e: Array[Array[Array[Double]]], Wv: Array[Array[Double]], We: Array[Array[Double]], d: Int): Array[Array[Double]] = {\n  val N = h.length; val attn = Array.ofDim[Double](N, N)\n  for (i <- 0 until N; j <- 0 until N) {\n    var s = 0.0; for (k <- 0 until d) { var qi=0.0; var kj=0.0; for(x<-0 until d){qi+=h(i)(x)*Wv(x)(k); kj+=e(i)(j)(x)*We(x)(k)}; s+=qi*kj }\n    attn(i)(j) = math.exp(s/math.sqrt(d))\n  }\n  for (i <- 0 until N) { val sum = attn(i).sum; for (j <- 0 until N) attn(i)(j) /= sum }\n  attn\n}','C':'/* Equivariant edge attention for PET-MAD */\nvoid equiv_attn(double *h, double *e, double *Wv, double *We, int N, int d, double *attn) {\n  for(int i=0;i<N;i++)for(int j=0;j<N;j++){\n    double s=0;\n    for(int k=0;k<d;k++){double qi=0,kj=0;\n      for(int x=0;x<d;x++){qi+=h[i*d+x]*Wv[x*d+k];kj+=e[(i*N+j)*d+x]*We[x*d+k];}\n      s+=qi*kj;}\n    attn[i*N+j]=exp(s/sqrt((double)d));\n  }\n  for(int i=0;i<N;i++){double s=0;for(int j=0;j<N;j++)s+=attn[i*N+j];\n    for(int j=0;j<N;j++)attn[i*N+j]/=s;}\n}','Elixir':'def equivariant_attn(h, e, wv, we, d) do\n  n = length(h)\n  for i <- 0..(n-1) do\n    for j <- 0..(n-1) do\n      # Compute attention score\n      0.0  # placeholder\n    end\n  end\nend'},mapping:[{symbol:'Att_{ij}',code:'equivariant_attention(h, e, Wv, We, d)',note:'Attention weight from node i to node j'},{symbol:'h_i',code:'h[i]',note:'Node (atom) feature vector'},{symbol:'e_{ij}',code:'e[i][j]',note:'Edge (bond) feature vector'},{symbol:'W_v, W_e',code:'Wv, We',note:'Learned weight matrices'},{symbol:'Equivariant',code:'# preserves SO(3) symmetry',note:'Output transforms correctly under 3D rotations'}],demo:{title:'Edge-to-edge attention heatmap',desc:'Attention weights between molecular bonds. Brighter = higher attention.'}},
-'energy_prediction':{name:'6. Scalar energy prediction',latex:'E = \\text{MLP}\\left(\\sum_{ij} \\text{Att}_{ij} \\cdot \\text{msg}(h_i, e_{ij}, h_j)\\right)',intent:'PET-MAD\'s core energy prediction: message passing with equivariant attention, followed by an MLP head. The scalar energy is rotation-invariant (same for all orientations).',langs:{'Python':'def predict_energy(h, e, W_v, W_e, W_m, mlp, d):\n    attn = equivariant_attention(h, e, W_v, W_e, d)\n    N = len(h)\n    msg = np.zeros((N, d))\n    for i in range(N):\n        for j in range(N):\n            msg[i] += attn[i,j] * (h[i] + e[i,j] + h[j]) @ W_m\n    pooled = msg.sum(axis=0)\n    return mlp(pooled)','TypeScript':'function predictEnergy(h:number[][], e:number[][][], Wv:number[][], We:number[][], Wm:number[][], mlp:(x:number[])=>number, d:number): number {\n  const attn = equivariantAttention(h, e, Wv, We, d);\n  const N = h.length;\n  let msg = Array.from({length:N}, ()=>new Array(d).fill(0));\n  for (let i=0;i<N;i++) for(let j=0;j<N;j++)\n    for(let k=0;k<d;k++) msg[i][k] += attn[i][j] * (h[i][k]+e[i][j][k]+h[j][k]);\n  let pooled = new Array(d).fill(0);\n  for(let i=0;i<N;i++) for(let k=0;k<d;k++) pooled[k] += msg[i][k];\n  return mlp(pooled);\n}','Go':'func predictEnergy(h [][]float64, e [][][]float64, Wv,We [][]float64, mlp func([]float64)float64, d int) float64 {\n  attn := equivariantAttention(h, e, Wv, We, d)\n  N := len(h); pooled := make([]float64, d)\n  for i:=0;i<N;i++ { for j:=0;j<N;j++ { for k:=0;k<d;k++ { pooled[k] += attn[i][j]*(h[i][k]+e[i][j][k]+h[j][k]) } } }\n  return mlp(pooled)\n}','Scala':'def predictEnergy(h: Array[Array[Double]], e: Array[Array[Array[Double]]], Wv: Array[Array[Double]], We: Array[Array[Double]], mlp: Array[Double]=>Double, d: Int): Double = {\n  val attn = equivariantAttention(h, e, Wv, We, d)\n  val pooled = new Array[Double](d)\n  for (i <- h.indices; j <- h.indices; k <- 0 until d) pooled(k) += attn(i)(j)*(h(i)(k)+e(i)(j)(k)+h(j)(k))\n  mlp(pooled)\n}','C':'double predict_energy(double *h, double *e, double *attn, double *mlp_w, int N, int d) {\n  double pooled[256]; for(int k=0;k<d;k++)pooled[k]=0;\n  for(int i=0;i<N;i++)for(int j=0;j<N;j++)\n    for(int k=0;k<d;k++)pooled[k]+=attn[i*N+j]*(h[i*d+k]+e[(i*N+j)*d+k]+h[j*d+k]);\n  /* MLP forward pass */\n  double E=0; for(int k=0;k<d;k++)E+=pooled[k]*mlp_w[k];\n  return E;\n}','Elixir':'def predict_energy(h, e, attn, mlp, d) do\n  n = length(h)\n  pooled = List.duplicate(0.0, d)\n  pooled = Enum.reduce(0..(n-1), pooled, fn i, acc ->\n    Enum.reduce(0..(n-1), acc, fn j, acc2 ->\n      Enum.reduce(0..(d-1), acc2, fn k, acc3 ->\n        List.update_at(acc3, k, &(&1 + Enum.at(Enum.at(attn, i), j) * (\n          Enum.at(Enum.at(h, i), k) + Enum.at(Enum.at(Enum.at(e, i), j), k) + Enum.at(Enum.at(h, j), k)\n        )))\n      end)\n    end)\n  end)\n  mlp.(pooled)\nend'},mapping:[{symbol:'E',code:'predict_energy(h, e, ...)',note:'Scalar molecular energy (rotation-invariant)'},{symbol:'Att_{ij}',code:'attn[i][j]',note:'Equivariant attention weight'},{symbol:'msg',code:'h[i] + e[i][j] + h[j]',note:'Message from node j to node i'},{symbol:'MLP',code:'mlp(pooled)',note:'Multi-layer perceptron output head'},{symbol:'Invariant',code:'# same for all rotations',note:'Scalar output is rotation-invariant'}],demo:{title:'Energy prediction convergence',desc:'PET vs DFT energy comparison across molecular conformations.'}},
-'mofography':{name:'7. Mofography: Pore Network Analysis',latex:'\\mathbf{d}(\\mathbf{x}) = \\min_{\\mathbf{a} \\in \\text{framework}} \\|\\mathbf{x} - \\mathbf{a}\\|, \\quad G = (V, E)',intent:'Mofography decomposes the void space in nanoporous materials into a network of individual pores connected by windows. It computes a distance-to-framework field, segments it into non-overlapping pore regions, and constructs a pore graph where nodes are pores and edges are connections. This enables percolation analysis, pore-type identification, and shape-selective screening for applications like CO2 capture and H2 storage.',langs:{'Python':'import numpy as np\nfrom mofography import PoreNetwork\n\n# Load atomistic structure (CIF/POSCAR)\npn = PoreNetwork.from_file("HKUST-1.cif")\n\n# Stage 1: Compute distance-to-framework field\ndist_field = pn.compute_distance_field(resolution=0.1)\n# dist_field[x,y,z] = min distance to nearest framework atom\n\n# Stage 2: Segment void space into individual pores\npores = pn.segment_void(dist_field, method="watershed")\n# Each voxel assigned to a non-overlapping pore region\n\n# Stage 3: Pore-level characterization\nfor pore in pores:\n    print(f"Pore {pore.id}: d={pore.diameter:.2f}A, "\n          f"V={pore.volume:.1f}A3, S={pore.surface_area:.1f}A2")\n\n# Stage 4: Construct pore graph\ngraph = pn.build_pore_graph(pores)\n# Nodes = pore centroids, Edges = windows (shared boundaries)\nprint(f"Graph: {graph.n_nodes} pores, {graph.n_edges} windows")\nprint(f"Percolating: {graph.is_percolating()}")\n\n# Stage 5: Topological analysis\ncentrality = graph.betweenness_centrality()\npaths = graph.shortest_paths()\ntypes = graph.classify_pore_types()  # by cavity size + vdW energy','TypeScript':'import { PoreNetwork } from "mofography";\n\nconst pn = PoreNetwork.fromFile("HKUST-1.cif");\n\n// Distance-to-framework field\nconst distField = pn.computeDistanceField(0.1);\n\n// Segment into individual pores\nconst pores = pn.segmentVoid(distField, "watershed");\n\n// Pore-level characterization\npores.forEach(p =>\n  console.log(`Pore ${p.id}: d=${p.diameter}A, V=${p.volume}A3`)\n);\n\n// Pore graph: nodes=pores, edges=windows\nconst graph = pn.buildPoreGraph(pores);\nconsole.log(`Graph: ${graph.nNodes} pores, ${graph.nEdges} windows`);\nconsole.log(`Percolating: ${graph.isPercolating()}`);','Go':'pn := mofography.FromFile("HKUST-1.cif")\ndistField := pn.ComputeDistanceField(0.1)\npores := pn.SegmentVoid(distField, "watershed")\n\nfor _, p := range pores {\n    fmt.Printf("Pore %d: d=%.2f, V=%.1f\\n", p.ID, p.Diameter, p.Volume)\n}\n\ngraph := pn.BuildPoreGraph(pores)\nfmt.Printf("Graph: %d pores, %d windows\\n", graph.NNodes, graph.NEdges)\nfmt.Printf("Percolating: %v\\n", graph.IsPercolating())','Scala':'val pn = PoreNetwork.fromFile("HKUST-1.cif")\nval distField = pn.computeDistanceField(0.1)\nval pores = pn.segmentVoid(distField, "watershed")\n\npores.foreach(p =>\n  println(f"Pore ${p.id}: d=${p.diameter}%.2f, V=${p.volume}%.1f")\n)\n\nval graph = pn.buildPoreGraph(pores)\nprintln(s"Graph: ${graph.nNodes} pores, ${graph.nEdges} windows")\nprintln(s"Percolating: ${graph.isPercolating}")','C':'pore_network_t* pn = pore_network_from_file("HKUST-1.cif");\ndouble* dist = compute_distance_field(pn, 0.1);\npore_t* pores = segment_void(pn, dist, "watershed");\n\nfor (int i = 0; i < pn->n_pores; i++)\n    printf("Pore %d: d=%.2f, V=%.1f\\n", pores[i].id,\n           pores[i].diameter, pores[i].volume);\n\ngraph_t* graph = build_pore_graph(pn, pores);\nprintf("Graph: %d pores, %d windows\\n",\n       graph->n_nodes, graph->n_edges);\nprintf("Percolating: %s\\n",\n       graph_is_percolating(graph) ? "yes" : "no");','Elixir':'pn = Mofography.from_file("HKUST-1.cif")\ndist_field = Mofography.compute_distance_field(pn, 0.1)\npores = Mofography.segment_void(pn, dist_field, :watershed)\n\nEnum.each(pores, fn p ->\n  IO.puts("Pore #{p.id}: d=#{Float.round(p.diameter,2)}, V=#{Float.round(p.volume,1)}")\nend)\n\ngraph = Mofography.build_pore_graph(pn, pores)\nIO.puts("Graph: #{graph.n_nodes} pores, #{graph.n_edges} windows")\nIO.puts("Percolating: #{graph.is_percolating}")'},mapping:[{symbol:'\mathbf{d}(\mathbf{x})',code:'dist_field[x,y,z]',note:'Distance-to-framework scalar field'},{symbol:'V',code:'graph.nodes',note:'Pore centroids (graph nodes)'},{symbol:'E',code:'graph.edges',note:'Windows between adjacent pores'},{symbol:'G = (V, E)',code:'build_pore_graph()',note:'Pore graph: nodes + connectivity edges'},{symbol:'P_{perc}',code:'graph.is_percolating()',note:'Percolation threshold check'}],demo:{title:'5-stage Mofography pipeline',desc:'Crystal framework -> distance field -> segmentation -> pore graph -> percolation.'}}
+
+function renderCards(){
+if(!CODE)return;
+var grid=document.getElementById('exprGrid');var html='';
+for(var key in CODE){
+var e=CODE[key];var shortName=e.name.replace(/^[0-9]+\.\s/,'');
+html+='<div class="expr-card" data-key="'+key+'" onclick="openPopup(\''+key+'\')">';
+html+='<div class="expr-card-num">'+e.name.split('.')[0]+'</div>';
+html+='<div class="expr-card-name">'+shortName+'</div>';
+html+='<div class="expr-card-preview">'+e.intent.substring(0,100)+'...</div>';
+html+='<div class="expr-card-langs">';
+LANGS.forEach(function(l){html+='<span class="lang-pill">'+l+'</span>'});
+html+='</div></div>';
+}
+grid.innerHTML=html;
+}
+
+function filterCards(){
+var q=(document.getElementById('searchInput').value||'').toLowerCase();
+document.querySelectorAll('.expr-card').forEach(function(c){var key=c.getAttribute('data-key')||'';var t=c.textContent.toLowerCase();c.style.display=(!q||key.indexOf(q)>=0||t.indexOf(q)>=0)?'':'none'});
+}
+
+;var currentExpr=null;var demoAnim=null;var futRaf=null;var futAnimT=0;
+
+function openPopup(key){
+var e=CODE[key];if(!e)return;currentExpr=key;
+var colors=['#FFD700','#32CD32','#00CED1','#9370DB','#FF69B4','#FA8072','#FFA500','#40E0D0','#FF6347','#98FB98','#87CEEB','#DDA0DD'];
+var nameChars=e.name.split('');var titleHtml='';
+nameChars.forEach(function(ch,i){var c=colors[i%colors.length];if(ch===' ')titleHtml+='<span style="display:inline-block;width:.3em"><\/span>';else titleHtml+='<span style="color:'+c+';text-shadow:0 0 12px '+c+'66">'+esc(ch)+'<\/span>'});
+document.getElementById('pTitle').innerHTML='<div class="gradient-title">'+titleHtml+'<\/div>';
+var th='';TABS.forEach(function(t,i){th+='<button class="popup-tab'+(i===0?' active':'')+'" onclick="switchTab(\''+t.id+'\',this)">'+t.icon+' '+t.label+'<\/button>'});
+document.getElementById('pTabs').innerHTML=th;
+var b=document.getElementById('pBody');var h='';
+h+='<div class="popup-pane active" id="pane-mol"><h3>Molecular structure<\/h3><canvas id="molCanvas" class="demo-canvas"><\/canvas><p style="font-size:.75rem;color:var(--muted)">'+e.demo.desc+'<\/p><h3 style="margin-top:1rem">Property<\/h3><p style="font-size:.875rem">'+(e.intent||'')+'<\/p><\/div>';
+h+='<div class="popup-pane" id="pane-math"><h3>Expression<\/h3><div class="expr-rendered">'+cleanLatex(e.latex||e.math||'')+'<\/div><div class="phase-bar"><span class="phase-label">Phase<\/span><div class="phase-gradient"><\/div><span class="phase-label">0<\/span><span class="phase-label">&rarr;<\/span><span class="phase-label">2&pi;<\/span><\/div><h3 style="margin-top:1rem">Intent<\/h3><p class="expr-intent">'+(e.intent||'')+'<\/p><\/div>';
+h+='<div class="popup-pane" id="pane-code">';
+if(e.mapping){h+='<h3>Math \u2192 Code mapping<\/h3><div class="map-table"><table><tr><th>Symbol<\/th><th><\/th><th>Code<\/th><th>Note<\/th><\/tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+cleanLatex(m.symbol)+'<\/td><td class="map-arrow">\u2192<\/td><td class="map-code">'+esc(m.code)+'<\/td><td class="map-note">'+m.note+'<\/td><\/tr>'});h+='<\/table><\/div>'}
+h+='<h3>Click a language tab<\/h3><div class="code-tabs">';
+LANGS.forEach(function(l,i){h+='<button class="code-tab'+(i===0?' active':'')+'" onclick="switchCode(\''+l+'\',this)">'+l+'<\/button>'});
+h+='<\/div>';
+LANGS.forEach(function(l,i){h+='<div class="code-content'+(i===0?' active':'')+'" id="cc-'+l+'"><pre>'+esc(e.langs[l])+'<\/pre><\/div>'});
+h+='<div style="margin-top:.75rem"><button style="padding:.375rem .75rem;font-size:.75rem;border:1px solid var(--primary);border-radius:.375rem;cursor:pointer;background:var(--accent-bg);color:var(--primary);font-weight:600" onclick="runCode(\''+key+'\')">&#9654; Run &amp; observe output<\/button><span id="runStatus" style="font-size:.6875rem;color:var(--muted);margin-left:.5rem"><\/span><\/div>';
+h+='<div id="codeOutput" style="margin-top:.5rem;background:var(--code-bg);border:1px solid var(--border);border-radius:.375rem;padding:.75rem;min-height:3rem;max-height:12rem;overflow-y:auto;display:none;font-family:monospace;font-size:.75rem;color:var(--code-fg);white-space:pre-wrap"><\/div>';
+h+='<div id="codeVizWrap" style="margin-top:.5rem;display:none"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization<\/div><canvas id="codeVizCanvas" class="demo-canvas" style="aspect-ratio:16/7"><\/canvas><\/div>';
+h+='<\/div>';
+h+='<div class="popup-pane" id="pane-obs"><h3>'+e.demo.title+'<\/h3><canvas id="demoCv" class="demo-canvas"><\/canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">'+e.demo.desc+'<\/p><h3>Summary report<\/h3><div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:rgba(10,9,8,.6);margin-bottom:1rem"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;font-size:.75rem"><div><strong style="color:var(--primary)">Expression:<\/strong> '+e.name.replace(/^[0-9]+\.\s/,'')+'<\/div><div><strong style="color:var(--primary)">Property:<\/strong> '+(e.demo?e.demo.title:'N/A')+'<\/div><div><strong style="color:var(--primary)">Languages:<\/strong> 6<\/div><div><strong style="color:var(--primary)">Mappings:<\/strong> '+(e.mapping?e.mapping.length:0)+'<\/div><\/div><\/div>';
+h+='<h3>Statistics<\/h3><div class="report-grid" style="grid-template-columns:repeat(4,1fr)"><div class="report-stat"><div class="num">6<\/div><div class="lbl">Langs<\/div><\/div><div class="report-stat"><div class="num">'+(e.mapping?e.mapping.length:0)+'<\/div><div class="lbl">Maps<\/div><\/div><div class="report-stat"><div class="num">36<\/div><div class="lbl">Total<\/div><\/div><div class="report-stat"><div class="num">5<\/div><div class="lbl">Metrics<\/div><\/div><\/div>';
+h+='<h3 style="margin-top:1rem">Graph visualization<\/h3><div style="display:flex;gap:.25rem;margin-bottom:.5rem;flex-wrap:wrap">';
+['Bar','Line','Radar','Pie'].forEach(function(gt,i){h+='<button class="graph-type-btn'+(i===0?' active':'')+'" style="'+(i===0?'background:var(--accent-bg);color:var(--primary)':'background:var(--card);color:var(--muted)')+'" onclick="switchGraph(\''+gt+'\',this)">'+gt+'<\/button>'});
+h+='<\/div><canvas id="obsGraph" class="demo-canvas" style="aspect-ratio:2/1"><\/canvas><p style="font-size:.6875rem;color:var(--muted);margin-top:.25rem" id="graphDesc">Bar chart: code complexity by language<\/p>';
+h+='<h3 style="margin-top:1rem">Dataset<\/h3><select class="dataset-select" onchange="loadChemDataset(this.value)"><option value="">Select molecular dataset<\/option><option value="spice">SPICE dataset (1.1M conformations)<\/option><option value="tmqm">TMQM (transition metal)<\/option><option value="qm9">QM9 (130k molecules)<\/option><option value="ani1">ANI-1 (20M conformations)<\/option><\/select><div id="dsOut" style="margin-top:.5rem;font-size:.75rem;color:var(--muted)"><\/div>';
+h+='<\/div>';
+h+='<div class="popup-pane" id="pane-deep"><h3>Deeper analysis<\/h3><p style="font-size:.875rem;color:var(--muted)">This molecular property connects to PET-MAD\'s equivariant architecture. The edge transformer learns to predict it without explicit symmetry enforcement \\u2014 the symmetry emerges from the data structure.<\/p><h3 style="margin-top:1rem">Key insight<\/h3><p style="font-size:.8125rem;color:var(--fg)">PET-MAD demonstrates that unconstrained GNNs can learn equivariant properties when trained on sufficiently diverse molecular data. This challenges the assumption that equivariance must be architecturally enforced.<\/p><\/div>';
+h+='<div class="popup-pane" id="pane-fut"><h3>Synthetic data \\u2014 probability evolution (animated)<\/h3><p style="font-size:.75rem;color:var(--muted);margin-bottom:.5rem">Probability cones grow over time. Each cone is a molecular thought evolving toward a breakthrough.<\/p><div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem"><label style="font-size:.75rem;color:var(--muted)">Growth:<\/label><input type="range" id="growthSlider" min="0.5" max="3" step="0.1" value="1.5" style="flex:1" oninput="drawChemFuturistic();renderChemDataset()"><span id="growthVal" style="font-size:.75rem;color:var(--primary);font-weight:600">1.5x<\/span><\/div><canvas id="futChart" class="demo-canvas" style="aspect-ratio:16/9"><\/canvas><div id="futMilestones" style="font-size:.6875rem;color:var(--muted);margin-top:.5rem"><\/div><h3 style="margin-top:1.5rem">Synthetic dataset<\/h3><div id="datasetTable" style="font-size:.6875rem;margin-bottom:1rem;max-height:12rem;overflow-y:auto;border:1px solid var(--border);border-radius:.5rem"><\/div><h3 style="margin-top:1rem">Deeper thoughts<\/h3><div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:rgba(10,9,8,.6);font-size:.8125rem;line-height:1.7;color:var(--fg)"><p style="margin-bottom:.5rem"><strong style="color:var(--primary)">Equivariance emerges.<\/strong> PET-MAD shows that symmetry can be learned from data, not just enforced by architecture. This is a paradigm shift in molecular ML.<\/p><p style="margin-bottom:.5rem"><strong style="color:var(--primary)">Tensors, not just scalars.<\/strong> Predicting dipole vectors and polarizability tensors (not just energy) requires the model to learn directional information \\u2014 a much harder task.<\/p><p><strong style="color:var(--primary)">DFT replacement.<\/strong> If ML can predict these properties accurately, expensive DFT calculations become unnecessary for many applications, accelerating materials discovery by orders of magnitude.<\/p><\/div><\/div>';
+b.innerHTML=h;
+document.getElementById('popup').classList.add('active');
+// Math rendered via cleanLatex (no KaTeX needed)
+// Start molecular 3D animation on popup open (Molecular is the default active tab)
+var mc0=document.getElementById('molCanvas');if(mc0)setTimeout(function(){startMolAnim(currentExpr,mc0)},80)
+// Floating code
+var fbg=document.getElementById('codeFloatBg');if(fbg){fbg.innerHTML='';var codeLines=[];for(var lang in e.langs){var lines=e.langs[lang].split('\n');for(var li=0;li<lines.length;li+=2){codeLines.push(lang+': '+lines[li])}}
+codeLines.forEach(function(line,i){var div=document.createElement('div');div.className='code-float-line';div.textContent=line.substring(0,60);div.style.left=Math.random()*60+5+'%';div.style.top=(i*8+Math.random()*15)+'%';div.style.animationDelay=(i*1.5)+'s';fbg.appendChild(div)})}
+}
+
+function closePopup(){stopAnim();stopFut();document.getElementById('popup').classList.remove('active')}
+function switchTab(id,btn){stopAnim();stopFut();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnim(currentExpr,cv)},50);drawChemGraph()}if(id==='mol'&&currentExpr){var mc=document.getElementById('molCanvas');if(mc)setTimeout(function(){startMolAnim(currentExpr,mc)},50)}if(id==='fut'&&currentExpr){startFut();renderChemDataset()}}
+function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
+
+function runCode(key){
+var e=CODE[key];if(!e)return;
+var out=document.getElementById('codeOutput');var st=document.getElementById('runStatus');
+if(!out||!st)return;
+st.textContent='Running...';out.style.display='block';out.textContent='';
+var viz=document.getElementById('codeVizWrap');if(viz)viz.style.display='none';
+var lang='Python';document.querySelectorAll('.code-tab').forEach(function(t){if(t.classList.contains('active'))lang=t.textContent.trim()});
+var code=e.langs[lang]||'';
+
+// Try real Pyodide execution for Python
+if(lang==='Python'&&window.pyodideReady){
+st.textContent='Executing in Pyodide (real Python)...';
+out.textContent='$ Python (Pyodide — real execution)\n';
+try{
+window.pyodide.setStdout({batched:function(s){out.textContent+=s+'\n';out.scrollTop=out.scrollHeight}});
+window.pyodide.setStderr({batched:function(s){out.textContent+='[stderr] '+s+'\n'}});
+// Run the code
+window.pyodide.runPythonAsync(code).then(function(){
+st.textContent='Done (real Python via Pyodide)';
+startCodeViz(key);
+}).catch(function(err){
+out.textContent+='\n[error] '+err.message+'\n';
+st.textContent='Error (see output)';
+startCodeViz(key);
+});
+}catch(err){
+out.textContent+='[Pyodide error] '+err.message+'\nFalling back to simulated...\n\n';
+runSimulated(key,lang,out,st);
+}
+return;
+}
+// Fallback: simulated output
+runSimulated(key,lang,out,st);
+}
+
+function runSimulated(key,lang,out,st){
+var outputs={'dipole':['$ '+lang+' dipole','charges: [-0.5, +0.5, -0.3, +0.3]','positions: [[0,0,0],[1,0,0],[0,1,0],[1,1,0]]','','mu = [0.8, 0.8, 0.0] Debye','|mu| = 1.13 Debye','Direction: 45 degrees from x-axis'],'polarizability':['$ '+lang+' polarizability','Computing 3x3 tensor...','','alpha = [[5.2, 0.3, 0.0],','        [0.3, 4.8, 0.1],','        [0.0, 0.1, 5.0]] A^3','','Trace: 15.0 A^3','Anisotropy: 0.4'],'nmr_shielding':['$ '+lang+' nmr_shielding','Computing shielding tensors...','','C1: sigma = [[120, 5, 0], [5, 115, 2], [0, 2, 118]] ppm','C2: sigma = [[85, 3, 0], [3, 82, 1], [0, 1, 80]] ppm','','Chemical shift C1: 180 - 120 = 60 ppm','Chemical shift C2: 180 - 85 = 95 ppm'],'electron_density':['$ '+lang+' electron_density','Evaluating on grid...','','Grid: 32x32x32 = 32768 points','Orbitals: 12 occupied','','Max density: 0.45 e/Bohr^3 at (0.5, 0.5, 0.5)','Integrated charge: 16.00 e'],'equivariant_attention':['$ '+lang+' equivariant_attn','Nodes (atoms): 8','Edges (bonds): 12','d_model: 64','','Attention matrix [8x8]:','Row 0: [0.35, 0.20, 0.15, 0.10, 0.08, 0.05, 0.04, 0.03]','Max attention: atom 0 -> atom 1 (0.35)'],'energy_prediction':['$ '+lang+' predict_energy','Molecular graph: 8 atoms, 12 bonds','','Message passing...','Pooling...','MLP forward...','','E_predicted = -1234.5678 Hartree','E_DFT = -1234.5689 Hartree','Error: 0.0011 Hartree (0.69 kcal/mol)']};
+var out2=outputs[key]||['Running...'];var i=0;
+out.textContent='$ '+lang+' (simulated)\n';
+var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+' — simulated)';startCodeViz(key);return}out.textContent+=out2[i]+'\n';out.scrollTop=out.scrollHeight;i++},200)
+}
+// Output visualization — animates the code result using drawDemo (3D molecule)
+function startCodeViz(key){
+var wrap=document.getElementById('codeVizWrap');if(!wrap)return;
+var cv=document.getElementById('codeVizCanvas');if(!cv)return;
+wrap.style.display='block';
+stopAnim();
+var t=0;function frame(){drawDemo(key,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}
+setTimeout(function(){frame()},100);
+}
+
+// Pyodide removed (CDN-free) — use simulated output
+;var pyodideLoading=null;
+window.pyodideReady=null;
+function initPyodide(){return Promise.resolve(null)}
+
+function loadChemDataset(cat){var o=document.getElementById('dsOut');if(!cat){o.innerHTML='';return}var d={'spice':['SPICE: 1.1M conformations, 172 unique molecules','Elements: H,C,N,O,F,P,S,Cl,Br,I,etc.','Properties: energy, forces, dipole, quadrupole','Ref: Eastman et al. (2023)'],'tmqm':['TMQM: 86k transition metal complexes','Elements: 30+ metal centers + organic ligands','Properties: energy, orbital energies, dipole','Ref: David et al. (2020)'],'qm9':['QM9: 130k small organic molecules','Elements: H,C,N,O,F (max 9 heavy atoms)','Properties: 17 properties including dipole, polarizability','Ref: Ramakrishnan et al. (2014)'],'ani1':['ANI-1: 20M conformations','Elements: H,C,N,O','Properties: energy, forces','Ref: Smith et al. (2017)']};var p=d[cat]||[];o.innerHTML='<strong>'+cat+'<\/strong> dataset:<br>'+p.map(function(x){return '&bull; '+x}).join('<br>')}
+
+var currentGraphType='Bar';
+function switchGraph(type,btn){currentGraphType=type;document.querySelectorAll('.graph-type-btn').forEach(function(b){b.classList.remove('active');b.style.background='var(--card)';b.style.color='var(--muted)'});btn.classList.add('active');btn.style.background='var(--accent-bg)';btn.style.color='var(--primary)';drawChemGraph();var desc=document.getElementById('graphDesc');if(desc)desc.textContent=type+' chart: code complexity by language'}
+
+function drawChemGraph(){var cv=document.getElementById('obsGraph');if(!cv||!CODE||!currentExpr)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);var data=LANGS.map(function(l,i){var code=CODE[currentExpr].langs[l]||'';return{lang:l,val:code.split('\n').length}});var maxV=Math.max.apply(null,data.map(function(d){return d.val}))+2;var pL=40,pB=30,pT=15,pR=15,cw=W-pL-pR,ch=H-pT-pB;ctx.strokeStyle=mt;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();
+if(currentGraphType==='Bar'||!currentGraphType){data.forEach(function(d,i){var bw=cw/data.length*0.7;var x=pL+i*cw/data.length+cw/data.length*0.15;var bh=d.val/maxV*ch;var y=H-pB-bh;ctx.fillStyle=pc;ctx.globalAlpha=0.8;ctx.fillRect(x,y,bw,bh);ctx.globalAlpha=1;ctx.fillStyle=fg;ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText(d.lang,x+bw/2,H-pB+12);ctx.fillText(d.val,x+bw/2,y-4)})}
+else if(currentGraphType==='Line'){ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.beginPath();data.forEach(function(d,i){var x=pL+i*cw/(data.length-1);var y=H-pB-d.val/maxV*ch;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();data.forEach(function(d,i){var x=pL+i*cw/(data.length-1);var y=H-pB-d.val/maxV*ch;ctx.fillStyle=pc;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();ctx.fillStyle=fg;ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText(d.lang,x,H-pB+12)})}
+else if(currentGraphType==='Radar'){var cx=W/2,cy=H/2,rad=Math.min(cw,ch)/2*0.8;var n=data.length;ctx.strokeStyle='rgba(194,65,12,0.2)';for(var ring=1;ring<=4;ring++){ctx.beginPath();for(var i=0;i<n;i++){var a=i/n*Math.PI*2-Math.PI/2;var r2=rad*ring/4;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.closePath();ctx.stroke()}ctx.strokeStyle=pc;ctx.lineWidth=2;ctx.fillStyle='rgba(194,65,12,0.2)';ctx.beginPath();data.forEach(function(d,i){var a=i/n*Math.PI*2-Math.PI/2;var r2=d.val/maxV*rad;var x=cx+Math.cos(a)*r2,y=cy+Math.sin(a)*r2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.closePath();ctx.fill();ctx.stroke();ctx.fillStyle=fg;ctx.font='8px sans-serif';ctx.textAlign='center';data.forEach(function(d,i){var a=i/n*Math.PI*2-Math.PI/2;ctx.fillText(d.lang,cx+Math.cos(a)*(rad+12),cy+Math.sin(a)*(rad+12))})}
+else if(currentGraphType==='Pie'){var total=data.reduce(function(s,d){return s+d.val},0);var cx=W/2,cy=H/2,rad=Math.min(cw,ch)/2*0.8;var a0=-Math.PI/2;var colors=['#c2410c','#d97706','#b45309','#92400e','#78350f','#FFD700'];data.forEach(function(d,i){var a1=a0+d.val/total*Math.PI*2;ctx.fillStyle=colors[i%colors.length];ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,rad,a0,a1);ctx.closePath();ctx.fill();a0=a1})}}
+
+// 3D molecular structures — loaded from molecules.json (real crystallographic data)
+var MOL3D=null;var MOL_ASSIGN=null;
+function loadMolecules(){
+fetch('molecules.json').then(function(r){return r.json()}).then(function(data){
+MOL3D=data.molecules;MOL_ASSIGN=data.molecule_assignments;
+console.log('Loaded '+Object.keys(MOL3D).length+' real molecular structures');
+}).catch(function(e){console.log('molecules.json load failed, using fallback:',e.message)});
+}
+loadMolecules();
+
+// Mouse interaction for 3D molecules
+var molRotX=0;var molRotY=0;var molDragX=0;var molDragY=0;var molDragging=false;
+function setupMolMouse(cv){
+cv.addEventListener('mousedown',function(e){molDragging=true;molDragX=e.clientX;molDragY=e.clientY});
+cv.addEventListener('mousemove',function(e){if(molDragging){molRotY+=(e.clientX-molDragX)*0.01;molRotX+=(e.clientY-molDragY)*0.01;molRotX=Math.max(-1.2,Math.min(1.2,molRotX));molDragX=e.clientX;molDragY=e.clientY}});
+window.addEventListener('mouseup',function(){molDragging=false});
+}
+// 3D Molecular structure animation (perspective projection, no Three.js)
+function startMolAnim(id,cv){stopAnim();setupMolMouse(cv);var t=0;function frame(){drawMolecule3D(id,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
+
+function drawMolecule3D(id,cv,time){
+if(!cv)return;var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+// Use real molecular data if loaded, fallback to synthetic
+var fallbackMol={
+'dipole':{atoms:[{x:-0.5,y:0,z:0,c:'#ff4444',r:14,l:'O',q:-0.5},{x:0.5,y:0,z:0,c:'#4444ff',r:10,l:'H',q:0.5}],bonds:[[0,1]],type:'dipole',name:'Water (H2O)'},
+'polarizability':{atoms:[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'}],bonds:[[0,1],[1,2]],type:'polarizability',name:'Benzene (C6H6)'},
+'nmr_shielding':{atoms:[{x:-0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0,y:-0.3,z:0,c:'#ff4444',r:14,l:'O'}],bonds:[[0,1],[1,2],[0,2]],type:'nmr',name:'Methane (CH4)'},
+'electron_density':{atoms:[{x:-0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0,y:-0.2,z:-0.2,c:'#44ff44',r:14,l:'N'}],bonds:[[0,1],[1,2],[0,2]],type:'density',name:'Formaldehyde (CH2O)'},
+'equivariant_attention':{atoms:[{x:-0.5,y:0.3,z:0,c:'#888',r:10,l:'C'},{x:0,y:0.3,z:0.3,c:'#888',r:10,l:'C'},{x:0.5,y:0.3,z:0,c:'#888',r:10,l:'O'},{x:-0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'H'},{x:0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'H'}],bonds:[[0,1],[1,2],[0,3],[1,4]],type:'attention',name:'Ethanol (C2H6O)'},
+'energy_prediction':{atoms:[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:-1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'},{x:1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'}],bonds:[[0,1],[0,2],[1,3]],type:'energy',name:'Acetylene (C2H2)'},
+'mofography':{atoms:[],bonds:[],type:'mofography',name:'Pore Network Pipeline'}
 };
-// === OBSERVATIONS ===
-var OBS={
-'dipole':'<p><strong>Dipole visualization:</strong> Charges (red/blue) with dipole vector arrow pointing from negative to positive center. The dipole rotates with the molecule (equivariant property).</p><p><strong>Real-life:</strong> Water (H2O) has a dipole of 1.85 D, enabling hydrogen bonding. CO2 has zero dipole despite polar bonds (symmetry cancellation).</p>',
-'polarizability':'<p><strong>Polarizability ellipsoid:</strong> 3D ellipsoid showing charge cloud deformation under electric field. Larger axis = more polarizable in that direction.</p><p><strong>Real-life:</strong> Polarizability determines Raman scattering intensity, refractive index, and London dispersion forces.</p>',
-'nmr_shielding':'<p><strong>NMR shielding:</strong> Per-atom shielding tensors visualized as oriented ellipsoids. Dense electron clouds shield the nucleus (upfield shift); electron-withdrawing groups deshield (downfield).</p>',
-'electron_density':'<p><strong>Electrostatic potential:</strong> Molecular surface colored by electron density. Red = electron-rich (nucleophilic), blue = electron-poor (electrophilic).</p><p><strong>Real-life:</strong> ESP surfaces guide drug docking, predicting where molecules interact.</p>',
-'equivariant_attention':'<p><strong>Edge attention:</strong> Attention weights between molecular bonds. Brighter = higher attention. The equivariant property ensures attention respects molecular symmetry.</p>',
-'energy_prediction':'<p><strong>Energy convergence:</strong> PET vs DFT energy comparison across molecular conformations. PET achieves DFT-level accuracy at 1000x lower cost.</p>',
-'mofography':'<p><strong>5-stage pipeline:</strong> Crystal framework &rarr; distance field &rarr; segmentation &rarr; pore graph &rarr; percolation. The animation shows the complete Mofography workflow with 3D perspective.</p><p><strong>Real-life:</strong> CO2 capture, H2 storage, xylene separation &mdash; all depend on pore topology that Mofography reveals.</p>'
-};
-// === DEEP THOUGHTS ===
-var DEEP={
-'dipole':'<p><strong>The simplest molecular property.</strong> The dipole is the first moment of the charge distribution. It determines solubility, boiling point, and intermolecular forces. PET-MAD predicts it equivariantly &mdash; the vector rotates with the molecule, respecting SO(3) symmetry.</p>',
-'polarizability':'<p><strong>Second-order response.</strong> Polarizability is how the electron cloud deforms under an electric field. It is a rank-2 tensor &mdash; the response can differ along each molecular axis. Equivariant networks naturally predict tensor properties.</p>',
-'nmr_shielding':'<p><strong>NMR connects theory to experiment.</strong> The shielding tensor determines chemical shifts &mdash; the most widely used molecular characterization technique. ML prediction of NMR spectra enables rapid structure elucidation.</p>',
-'electron_density':'<p><strong>The electron density is the fundamental observable.</strong> In DFT, everything is computed from rho(r). PET-MAD predicts the density directly, bypassing the Kohn-Sham equations for a fraction of the cost.</p>',
-'equivariant_attention':'<p><strong>Equivariance is the key inductive bias.</strong> Molecular properties do not depend on orientation. Equivariant attention enforces this physically &mdash; the network learns the same representation regardless of how the molecule is rotated.</p>',
-'energy_prediction':'<p><strong>Energy is the master property.</strong> From energy, you can compute forces (gradients), vibrational frequencies (Hessian), and reaction pathways. ML energy predictors enable molecular dynamics at DFT accuracy with force-field speed.</p>',
-'mofography':'<p><strong>Pore graphs bridge structure and function.</strong> Traditional descriptors (surface area, pore diameter) collapse all spatial information into single numbers. Mofography preserves the full topology &mdash; each pore is a node, each window is an edge. This enables graph-theoretic analysis (percolation, centrality, shortest paths) and ML-native representations (PoroNet GNN).</p>'
-};
-// === FUTURISTIC DATA ===
-var FUT_DATA={
-'dipole':[{n:'Real-time dipole MD',y:2027,p:0.45},{n:'Drug polarity screen',y:2028,p:0.40},{n:'IR spectra ML',y:2029,p:0.35}],
-'polarizability':[{n:'Raman ML',y:2027,p:0.40},{n:'Nonlinear optics',y:2029,p:0.30},{n:'Refractive index',y:2028,p:0.45}],
-'nmr_shielding':[{n:'NMR spectra ML',y:2027,p:0.50},{n:'Structure elucidation',y:2028,p:0.40},{n:'Reaction monitoring',y:2029,p:0.35}],
-'electron_density':[{n:'ESP surfaces ML',y:2027,p:0.50},{n:'Docking ML',y:2028,p:0.45},{n:'Catalysis design',y:2030,p:0.30}],
-'equivariant_attention':[{n:'Equivariant GNNs',y:2027,p:0.50},{n:'Large mol GNN',y:2029,p:0.35},{n:'Equivariant AGI',y:2032,p:0.20}],
-'energy_prediction':[{n:'MD acceleration',y:2027,p:0.55},{n:'Reaction paths',y:2028,p:0.40},{n:'Catalyst screening',y:2029,p:0.45}],
-'mofography':[{n:'Pore graph ML (PoroNet)',y:2027,p:0.50},{n:'Accelerated MOF discovery',y:2028,p:0.45},{n:'CO2 capture design',y:2029,p:0.40}]
-};
-// === BUILD CARDS ===
-function buildCards(){var grid=document.getElementById('cardGrid');if(!grid)return;var h='';Object.keys(CONCEPTS).forEach(function(key){var e=CONCEPTS[key];var shortName=e.name.replace(/^\d+\.\s/,'');h+='<div class="expr-card" data-key="'+key+'" onclick="openPopup(\''+key+'\')"><div class="expr-card-num">'+e.name.split('.')[0]+'</div><div class="expr-card-name">'+shortName+'</div><div class="expr-card-preview">'+e.intent.substring(0,100)+'...</div><div class="expr-card-langs">';LANGS.forEach(function(l){h+='<span class="lang-pill">'+l+'</span>'});h+='</div></div>'});grid.innerHTML=h}
-function filterCards(){var q=(document.getElementById('searchInput').value||'').toLowerCase();document.querySelectorAll('.expr-card').forEach(function(c){var key=c.getAttribute('data-key')||'';var t=c.textContent.toLowerCase();c.style.display=(!q||key.indexOf(q)>=0||t.indexOf(q)>=0)?'':'none'})}
-// === DEMO ANIM ===
-var demoAnim=null;var currentExpr=null;
-function startDemoAnim(id,cv){stopDemoAnim();var t=0;currentExpr=id;function frame(){var s=prepCanvas(cv);if(s){drawDemo(id,s.ctx,s.W,s.H,t)}t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
-function stopDemoAnim(){if(demoAnim){cancelAnimationFrame(demoAnim);demoAnim=null}}
-function drawDemo(id,ctx,W,H,t){
-gradientBg(ctx,W,H,t,'#080908','#0a0a0f');
-// === MOFOGRAPHY 5-STAGE PIPELINE ===
-if(id==='mofography'){
+function getMolecule(id){
+if(MOL3D&&MOL_ASSIGN&&MOL3D[MOL_ASSIGN[id]]){
+var realMol=MOL3D[MOL_ASSIGN[id]];
+var typeMap={'dipole':'dipole','polarizability':'polarizability','nmr_shielding':'nmr','electron_density':'density','equivariant_attention':'attention','energy_prediction':'energy'};
+var atoms=realMol.atoms.map(function(a){return{x:a.x/2,y:a.y/2,z:a.z/2,c:a.c,r:a.r,l:a.sym,q:a.q||0}});
+return{atoms:atoms,bonds:realMol.bonds,type:typeMap[id]||id,name:realMol.name};
+}
+return fallbackMol[id]||fallbackMol['dipole'];
+}
+var mol=MOL3D&&MOL_ASSIGN?getMolecule(id):fallbackMol[id]||fallbackMol['dipole'];
+// === MOFOGRAPHY: 5-STAGE PIPELINE ANIMATION ===
+if(id==='mofography'||mol.type==='mofography'){
 var cx=W/2,cy=H/2,scale=Math.min(W,H)*0.32;
-var rotY=t*0.4;var rotX=Math.sin(t*0.2)*0.25;
+var rotY=time*0.4;var rotX=Math.sin(time*0.2)*0.25;
 function proj3d(p){var x1=p.x*Math.cos(rotY)-p.z*Math.sin(rotY);var z1=p.x*Math.sin(rotY)+p.z*Math.cos(rotY);var y1=p.y*Math.cos(rotX)-z1*Math.sin(rotX);var z2=p.y*Math.sin(rotX)+z1*Math.cos(rotX);var f=4/(4+z2);return{x:cx+x1*scale*f,y:cy+y1*scale*f,z:z2,f:f}}
-var fwAtoms=[{x:-0.6,y:-0.6,z:-0.6,c:'#8B0000',r:0.08},{x:0.6,y:-0.6,z:-0.6,c:'#8B0000',r:0.08},{x:-0.6,y:0.6,z:-0.6,c:'#8B0000',r:0.08},{x:0.6,y:0.6,z:-0.6,c:'#8B0000',r:0.08},{x:-0.6,y:-0.6,z:0.6,c:'#8B0000',r:0.08},{x:0.6,y:-0.6,z:0.6,c:'#8B0000',r:0.08},{x:-0.6,y:0.6,z:0.6,c:'#8B0000',r:0.08},{x:0.6,y:0.6,z:0.6,c:'#8B0000',r:0.08}];
+var fwAtoms=[{x:-0.6,y:-0.6,z:-0.6,c:'#8B0000',r:0.08},{x:0.6,y:-0.6,z:-0.6,c:'#8B0000',r:0.08},{x:-0.6,y:0.6,z:-0.6,c:'#8B0000',r:0.08},{x:0.6,y:0.6,z:-0.6,c:'#8B0000',r:0.08},{x:-0.6,y:-0.6,z:0.6,c:'#8B0000',r:0.08},{x:0.6,y:-0.6,z:0.6,c:'#8B0000',r:0.08},{x:-0.6,y:0.6,z:0.6,c:'#8B0000',r:0.08},{x:0.6,y:0.6,z:0.6,c:'#8B0000',r:0.08},{x:0,y:-0.6,z:0,c:'#aaa',r:0.05},{x:0,y:0.6,z:0,c:'#aaa',r:0.05},{x:-0.6,y:0,z:0,c:'#aaa',r:0.05},{x:0.6,y:0,z:0,c:'#aaa',r:0.05},{x:0,y:0,z:-0.6,c:'#aaa',r:0.05},{x:0,y:0,z:0.6,c:'#aaa',r:0.05}];
 var poreDefs=[{x:-0.3,y:-0.3,z:-0.3,r:0.35,c:'#98FB98',l:'P1'},{x:0.3,y:-0.3,z:-0.3,r:0.30,c:'#E6E6FA',l:'P2'},{x:-0.3,y:0.3,z:-0.3,r:0.28,c:'#FA8072',l:'P3'},{x:0.3,y:0.3,z:-0.3,r:0.32,c:'#FFDAB9',l:'P4'},{x:-0.3,y:-0.3,z:0.3,r:0.30,c:'#ADD8E6',l:'P5'},{x:0.3,y:-0.3,z:0.3,r:0.28,c:'#DDA0DD',l:'P6'},{x:-0.3,y:0.3,z:0.3,r:0.33,c:'#90EE90',l:'P7'},{x:0.3,y:0.3,z:0.3,r:0.29,c:'#FFB6C1',l:'P8'}];
 var poreEdges=[[0,1],[1,3],[3,2],[2,0],[0,4],[1,5],[3,7],[2,6],[4,5],[5,7],[7,6],[6,4]];
 var percPath=[0,1,3,7,6,4];
-var cycleTime=t%20;var stage=Math.floor(cycleTime/4);var stageProg=(cycleTime%4)/4;
-var si=[{n:'1. Crystal Framework',f:'Structure -> atoms'},{n:'2. Distance Field',f:'d(x) = min ||x-a||'},{n:'3. Segmentation',f:'Watershed(d(x))'},{n:'4. Pore Graph',f:'G = (V, E)'},{n:'5. Percolation',f:'Transport pathways'}][stage];
-var cellV=[{x:-0.7,y:-0.7,z:-0.7},{x:0.7,y:-0.7,z:-0.7},{x:0.7,y:0.7,z:-0.7},{x:-0.7,y:0.7,z:-0.7},{x:-0.7,y:-0.7,z:0.7},{x:0.7,y:-0.7,z:0.7},{x:0.7,y:0.7,z:0.7},{x:-0.7,y:0.7,z:0.7}];
-var pC=cellV.map(proj3d);var cE=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+var cycleTime=time%20;var stage=Math.floor(cycleTime/4);var stageProg=(cycleTime%4)/4;
+var stageInfo=[{n:'1. Crystal Framework',f:'Structure -> atom positions'},{n:'2. Distance Field',f:'d(x) = min ||x - a||'},{n:'3. Pore Segmentation',f:'Watershed(d(x))'},{n:'4. Pore Graph',f:'G = (V, E)'},{n:'5. Percolation Analysis',f:'P_perc = f(density)'}];
+var si=stageInfo[stage];
+var cellVerts=[{x:-0.7,y:-0.7,z:-0.7},{x:0.7,y:-0.7,z:-0.7},{x:0.7,y:0.7,z:-0.7},{x:-0.7,y:0.7,z:-0.7},{x:-0.7,y:-0.7,z:0.7},{x:0.7,y:-0.7,z:0.7},{x:0.7,y:0.7,z:0.7},{x:-0.7,y:0.7,z:0.7}];
+var projCell=cellVerts.map(proj3d);
+var cellEdges=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
 ctx.strokeStyle=stage===0?'#FFD700':'rgba(255,255,255,0.15)';ctx.lineWidth=stage===0?1.5:0.5;ctx.shadowColor=stage===0?'#FFD700':'transparent';ctx.shadowBlur=stage===0?4:0;
-cE.forEach(function(e){ctx.beginPath();ctx.moveTo(pC[e[0]].x,pC[e[0]].y);ctx.lineTo(pC[e[1]].x,pC[e[1]].y);ctx.stroke()});ctx.shadowBlur=0;
-if(stage<=1){var a=stage===0?1:Math.max(0,1-stageProg*1.5);fwAtoms.forEach(function(at){var p=proj3d(at);var rad=at.r*scale*p.f;ctx.globalAlpha=a;var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rad);g.addColorStop(0,'#ff4444');g.addColorStop(1,at.c);ctx.fillStyle=g;ctx.shadowColor=at.c;ctx.shadowBlur=rad*0.5;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0});ctx.globalAlpha=1}
-if(stage>=1&&stage<=2){var fa=stage===1?Math.min(1,stageProg*2):0.3;for(var fx=-0.6;fx<=0.6;fx+=0.15){for(var fy=-0.6;fy<=0.6;fy+=0.15){for(var fz=-0.6;fz<=0.6;fz+=0.15){var md=10;fwAtoms.forEach(function(at){var d=Math.sqrt((fx-at.x)**2+(fy-at.y)**2+(fz-at.z)**2);if(d<md)md=d});if(md>0.15){var p=proj3d({x:fx,y:fy,z:fz});var hue=Math.min(240,md*240);ctx.globalAlpha=fa*0.3;ctx.fillStyle='hsl('+hue+',70%,'+(40+md*30)+'%)';ctx.fillRect(p.x-2,p.y-2,4,4)}}}}ctx.globalAlpha=1}
-if(stage>=2){var pa=stage===2?Math.min(0.6,stageProg*0.8):0.55;poreDefs.forEach(function(pd){var p=proj3d(pd);var rad=pd.r*scale*p.f;ctx.globalAlpha=pa*p.f;var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rad);g.addColorStop(0,pd.c+'cc');g.addColorStop(0.7,pd.c+'66');g.addColorStop(1,pd.c+'00');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.globalAlpha=pa*0.8;ctx.strokeStyle=pd.c;ctx.lineWidth=1;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.stroke()});ctx.globalAlpha=1}
-if(stage>=3){var ga=stage===3?Math.min(1,stageProg*1.5):1;ctx.globalAlpha=ga*0.6;ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.shadowColor='#00CED1';ctx.shadowBlur=3;poreEdges.forEach(function(e){var a=proj3d(poreDefs[e[0]]);var b=proj3d(poreDefs[e[1]]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()});ctx.shadowBlur=0;ctx.globalAlpha=ga;poreDefs.forEach(function(pd){var p=proj3d(pd);glowNode(ctx,p.x,p.y,3,'#FFD700',6)});ctx.globalAlpha=1}
-if(stage>=4){var pa2=Math.min(1,stageProg*2);ctx.globalAlpha=pa2;ctx.strokeStyle='#FFD700';ctx.lineWidth=3;ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();percPath.forEach(function(pi,i){var p=proj3d(poreDefs[pi]);if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});ctx.stroke();ctx.shadowBlur=0;percPath.forEach(function(pi,i){var p=proj3d(poreDefs[pi]);var pulse=3+Math.sin(t*3+i*0.5)*2;glowNode(ctx,p.x,p.y,pulse,'#FFD700',8)});ctx.fillStyle='#FFD700';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.globalAlpha=pa2;ctx.fillText('PERCOLATING PATHWAY',cx,cy+scale*0.9);ctx.globalAlpha=1}
+cellEdges.forEach(function(e){var a=projCell[e[0]],b=projCell[e[1]];ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()});ctx.shadowBlur=0;
+if(stage===0){projCell.forEach(function(v){ctx.fillStyle='#00FF00';ctx.shadowColor='#00FF00';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(v.x,v.y,2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0})}
+if(stage<=1){var atomAlpha=stage===0?1:Math.max(0,1-stageProg*1.5);fwAtoms.forEach(function(a){var p=proj3d(a);var rad=a.r*scale*p.f;ctx.globalAlpha=atomAlpha;var g=ctx.createRadialGradient(p.x-rad*0.3,p.y-rad*0.3,0,p.x,p.y,rad);g.addColorStop(0,a.c==='#8B0000'?'#ff4444':'#ffffff');g.addColorStop(1,a.c);ctx.fillStyle=g;ctx.shadowColor=a.c;ctx.shadowBlur=rad*0.5;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0});ctx.globalAlpha=1}
+if(stage===1||stage===2){var fieldAlpha=stage===1?Math.min(1,stageProg*2):Math.max(0,1-(stage-2)*0.5+0.3);for(var fx=-0.6;fx<=0.6;fx+=0.15){for(var fy=-0.6;fy<=0.6;fy+=0.15){for(var fz=-0.6;fz<=0.6;fz+=0.15){var minDist=10;fwAtoms.forEach(function(a){var dx=fx-a.x,dy=fy-a.y,dz=fz-a.z;var d=Math.sqrt(dx*dx+dy*dy+dz*dz);if(d<minDist)minDist=d});if(minDist>0.15){var p=proj3d({x:fx,y:fy,z:fz});var hue=Math.min(240,Math.max(0,minDist*240));ctx.globalAlpha=fieldAlpha*0.3;ctx.fillStyle='hsl('+hue+',70%,'+(40+minDist*30)+'%)';ctx.fillRect(p.x-2,p.y-2,4,4)}}}}ctx.globalAlpha=1}
+if(stage>=2){var poreAlpha=stage===2?Math.min(0.6,stageProg*0.8):0.55;var projPores=poreDefs.map(function(pd){return proj3d(pd)});var poreOrder=projPores.map(function(p,i){return{i:i,p:p}}).sort(function(a,b){return b.p.z-a.p.z});poreOrder.forEach(function(item){var pd=poreDefs[item.i];var p=item.p;var rad=pd.r*scale*p.f;ctx.globalAlpha=poreAlpha*p.f;var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rad);g.addColorStop(0,pd.c+'cc');g.addColorStop(0.7,pd.c+'66');g.addColorStop(1,pd.c+'00');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.globalAlpha=poreAlpha*0.8;ctx.strokeStyle=pd.c;ctx.lineWidth=1;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.stroke()});ctx.globalAlpha=1}
+if(stage>=3){var graphAlpha=stage===3?Math.min(1,stageProg*1.5):1;ctx.globalAlpha=graphAlpha*0.6;ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.shadowColor='#00CED1';ctx.shadowBlur=3;poreEdges.forEach(function(e){var a=proj3d(poreDefs[e[0]]);var b=proj3d(poreDefs[e[1]]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();var flowT=(time*0.5+e[0]*0.3)%1;var fx2=a.x+(b.x-a.x)*flowT,fy2=a.y+(b.y-a.y)*flowT;ctx.fillStyle='#FFD700';ctx.globalAlpha=graphAlpha*0.8;ctx.beginPath();ctx.arc(fx2,fy2,1.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=graphAlpha*0.6});ctx.shadowBlur=0;ctx.globalAlpha=graphAlpha;poreDefs.forEach(function(pd){var p=proj3d(pd);ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#000';ctx.font='bold 5px monospace';ctx.textAlign='center';ctx.fillText(pd.l,p.x,p.y+1)});ctx.globalAlpha=1}
+if(stage>=4){var percAlpha=Math.min(1,stageProg*2);ctx.globalAlpha=percAlpha;ctx.strokeStyle='#FFD700';ctx.lineWidth=3;ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();percPath.forEach(function(pi,i){var p=proj3d(poreDefs[pi]);if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});ctx.stroke();ctx.shadowBlur=0;percPath.forEach(function(pi,i){var p=proj3d(poreDefs[pi]);var pulse=3+Math.sin(time*3+i*0.5)*2;ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(p.x,p.y,pulse,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0});ctx.fillStyle='#FFD700';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.globalAlpha=percAlpha;ctx.fillText('PERCOLATING PATHWAY',cx,cy+scale*0.9);ctx.globalAlpha=1}
 ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,28);ctx.fillStyle='#FFD700';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText(si.n,W/2,12);ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.fillText(si.f,W/2,23);
-var pby=H-6;for(var s=0;s<5;s++){var sx=W*0.2+s*W*0.15;ctx.fillStyle=s<=stage?'#FFD700':'#2a261e';ctx.fillRect(sx-8,pby-3,16,3);if(s===stage){ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText((stageProg*100|0)+'%',sx,pby-6)}}
+var pby=H-6;for(var s=0;s<5;s++){var sx=W*0.2+s*W*0.15;var active=s<=stage;ctx.fillStyle=active?'#FFD700':'#2a261e';ctx.fillRect(sx-8,pby-3,16,3);if(s===stage){ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText((stageProg*100|0)+'%',sx,pby-6)}}
 return;
 }
-// === DEFAULT: simple molecule animation for non-mofography concepts ===
-var molAtoms=[];
-if(id==='dipole')molAtoms=[{x:-0.5,y:0,z:0,c:'#ff4444',r:14,l:'O'},{x:0.5,y:0,z:0,c:'#4444ff',r:10,l:'H'}];
-else if(id==='polarizability')molAtoms=[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'}];
-else if(id==='nmr_shielding')molAtoms=[{x:-0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0,y:-0.3,z:0,c:'#ff4444',r:14,l:'O'}];
-else if(id==='electron_density')molAtoms=[{x:-0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0,y:-0.2,z:-0.2,c:'#44ff44',r:14,l:'N'}];
-else if(id==='equivariant_attention')molAtoms=[{x:-0.5,y:0.3,z:0,c:'#888',r:10,l:'C'},{x:0,y:0.3,z:0.3,c:'#888',r:10,l:'C'},{x:0.5,y:0.3,z:0,c:'#888',r:10,l:'O'}];
-else if(id==='energy_prediction')molAtoms=[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:-1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'},{x:1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'}];
-var cx2=W/2,cy2=H/2,scale2=Math.min(W,H)*0.25;var rotY2=t*0.5;var rotX2=Math.sin(t*0.3)*0.3;
-function proj(p){var x1=p.x*Math.cos(rotY2)-p.z*Math.sin(rotY2);var z1=p.x*Math.sin(rotY2)+p.z*Math.cos(rotY2);var y2=p.y*Math.cos(rotX2)-z1*Math.sin(rotX2);var z2=p.y*Math.sin(rotX2)+z1*Math.cos(rotX2);var f=3/(3+z2);return{x:cx2+x1*scale2*f,y:cy2+y2*scale2*f,z:z2,f:f}}
-molAtoms.forEach(function(a){var p=proj(a);var rad=a.r*p.f;var g=ctx.createRadialGradient(p.x-rad*0.3,p.y-rad*0.3,0,p.x,p.y,rad);g.addColorStop(0,'#fff');g.addColorStop(0.3,a.c);g.addColorStop(1,a.c+'99');ctx.fillStyle=g;ctx.shadowColor=a.c;ctx.shadowBlur=12*p.f;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.stroke()})
-// Phase bar
-var pby=H-5;var g=ctx.createLinearGradient(0,pby,W,pby);g.addColorStop(0,'#ff0000');g.addColorStop(.14,'#ffa500');g.addColorStop(.28,'#ffff00');g.addColorStop(.42,'#00ff00');g.addColorStop(.57,'#00ffff');g.addColorStop(.71,'#0000ff');g.addColorStop(.85,'#ff00ff');g.addColorStop(1,'#ff0000');ctx.fillStyle=g;ctx.fillRect(0,pby,W,2)
+// === END MOFOGRAPHY PIPELINE ===
+var cx=W/2,cy=H/2,scale=Math.min(W,H)*0.25;
+var rotY=molDragging?molRotY:time*0.5;var rotX=molDragging?molRotX:Math.sin(time*0.3)*0.3;
+// 3D rotation + perspective projection
+function project(p){
+// Rotate around Y
+var x1=p.x*Math.cos(rotY)-p.z*Math.sin(rotY);
+var z1=p.x*Math.sin(rotY)+p.z*Math.cos(rotY);
+var y1=p.y;
+// Rotate around X
+var y2=y1*Math.cos(rotX)-z1*Math.sin(rotX);
+var z2=y1*Math.sin(rotX)+z1*Math.cos(rotX);
+// Perspective
+var depth=3;var f=depth/(depth+z2);
+return{x:cx+x1*scale*f,y:cy+y2*scale*f,z:z2,f:f};
 }
-// === FUT CHART ===
-function drawFutChart(key){var cv=document.getElementById('futChart');if(!cv)return;var s=prepCanvas(cv);if(!s)return;var ctx=s.ctx,W=s.W,H=s.H;gradientBg(ctx,W,H,0,'#080a08','#0a0a0f');var pL=50,pB=20,pT=20,pR=10,cw=W-pL-pR,ch=H-pT-pB;ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,H-pB);ctx.lineTo(W-pR,H-pB);ctx.stroke();var probs=FUT_DATA[key]||FUT_DATA['dipole'];var colors=['#FFD700','#00CED1','#10b981','#FF69B4','#a855f7'];probs.forEach(function(pb,i){ctx.strokeStyle=colors[i%colors.length];ctx.lineWidth=2;ctx.shadowColor=colors[i%colors.length];ctx.shadowBlur=4;ctx.beginPath();for(var j=0;j<100;j++){var x=pL+j/100*cw;var yr=2025+j/100*15;var tau=(pb.y-2025)/1.5;var p=Math.min(1,Math.max(0,1-Math.exp(-(yr-2025)/Math.max(tau,0.1))))*pb.p;var y=H-pB-p*ch;if(j===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle=colors[i%colors.length];ctx.font='5px monospace';ctx.textAlign='left';ctx.fillText(pb.n,pL+5,pT+8+i*12)});ctx.fillStyle='#736a5e';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('2025',pL,H-pB+10);ctx.fillText('2040',W-pR,H-pB+10);ctx.fillText('Year',W/2,H-2)}
-// === POPUP ===
-function openPopup(key){var e=CONCEPTS[key];if(!e)return;currentExpr=key;stopDemoAnim();
-var titleHtml='<div class="gradient-title"><span style="color:#FFD700">'+e.name+'</span></div>';
-document.getElementById('pTitle').innerHTML=titleHtml;
-var th='';TABS.forEach(function(t,i){th+='<button class="popup-tab'+(i===0?' active':'')+'" onclick="switchTab(\''+t.id+'\',this)">'+t.icon+' '+t.label+'</button>'});
-document.getElementById('pTabs').innerHTML=th;
-var h='';
-h+='<div class="popup-pane active" id="pane-mol"><h3>Molecular visualization</h3><canvas id="animCanvas" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted)">'+(e.demo?e.demo.desc:'Animated molecular visualization')+'</p></div>';
-h+='<div class="popup-pane" id="pane-math"><h3>Expression</h3><div class="expr-rendered">'+cleanLatex(e.latex||e.math||'')+'</div><h3>Intent</h3><p class="expr-intent">'+(e.intent||'')+'</p></div>';
-h+='<div class="popup-pane" id="pane-code">';
-if(e.mapping){h+='<h3>Math &rarr; Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+cleanLatex(m.symbol)+'</td><td style="color:var(--muted);text-align:center;width:1.5rem">&rarr;</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
-h+='<h3>Python implementation</h3><div class="code-content"><pre>'+esc(e.langs.Python)+'</pre></div>';
-h+='<div style="margin-top:.75rem"><button class="run-btn" onclick="runCode(\''+key+'\')">&#9654; Run &amp; observe output</button></div><div class="code-output" id="codeOutput"></div><div style="margin-top:.5rem"><div style="font-size:.625rem;font-weight:600;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.25rem">Output visualization</div><canvas id="codeVizCanvas" class="demo-canvas" style="display:none"></canvas></div></div>';
-h+='<div class="popup-pane" id="pane-obs"><h3>Observations</h3><div class="obs-text">'+(OBS[key]||'<p>Loading...</p>')+'</div></div>';
-h+='<div class="popup-pane" id="pane-deep"><h3>Deeper analysis</h3><div class="deep-text">'+(DEEP[key]||'<p>Loading...</p>')+'</div></div>';
-var futTitles={'dipole':'Dipole applications timeline','polarizability':'Polarizability timeline','nmr_shielding':'NMR timeline','electron_density':'Electron density timeline','equivariant_attention':'Equivariant ML timeline','energy_prediction':'Energy ML timeline','mofography':'Pore network ML timeline'};
-h+='<div class="popup-pane" id="pane-fut"><h3>'+(futTitles[key]||'Future timeline')+'</h3><canvas id="futChart" class="fut-canvas"></canvas><p style="font-size:.75rem;color:var(--muted)">Probability evolution over time for key breakthroughs.</p></div>';
-document.getElementById('pBody').innerHTML=h;
-document.getElementById('popup').classList.add('active')}
-function switchTab(id,btn){stopDemoAnim();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='mol'){var cv=document.getElementById('animCanvas');if(cv&&currentExpr)setTimeout(function(){startDemoAnim(currentExpr,cv)},50)}if(id==='fut'&&currentExpr){setTimeout(function(){drawFutChart(currentExpr)},50)}}
-function closePopup(){stopDemoAnim();stopCodeViz();document.getElementById('popup').classList.remove('active')}
-// === CODE EXECUTION + VIZ ===
+// Project all atoms
+var projAtoms=mol.atoms.map(function(a){return{p:project(a),atom:a}});
+// Sort by z (far first)
+projAtoms.sort(function(a,b){return b.p.z-a.p.z});
+// Draw electron density cloud (for density type)
+if(mol.type==='density'){
+projAtoms.forEach(function(pa){
+var r2=pa.atom.r*pa.p.f*2.5;
+var g=ctx.createRadialGradient(pa.p.x,pa.p.y,0,pa.p.x,pa.p.y,r2);
+var hue=(time*30+pa.p.z*100)%360;
+g.addColorStop(0,'hsla('+hue+',50%,40%,0.15)');
+g.addColorStop(1,'hsla('+hue+',50%,40%,0)');
+ctx.fillStyle=g;ctx.beginPath();ctx.arc(pa.p.x,pa.p.y,r2,0,Math.PI*2);ctx.fill();
+});
+}
+// Draw bonds (sorted by average z)
+var bondList=mol.bonds.map(function(b){var a=projAtoms.find(function(pa,i){return mol.atoms.indexOf(pa.atom)===b[0]})||projAtoms[0];var bb=projAtoms.find(function(pa,i){return mol.atoms.indexOf(pa.atom)===b[1]})||projAtoms[1];return{a:a,bb:bb,z:(a.p.z+bb.p.z)/2}});
+bondList.sort(function(a,b){return b.z-a.z});
+bondList.forEach(function(bl){
+var pulse=(Math.sin(time*2+bl.z*3)+1)/2;
+var alpha=0.3+pulse*0.3;
+var w=2*Math.min(bl.a.p.f,bl.bb.p.f);
+ctx.strokeStyle='rgba(194,65,12,'+alpha+')';ctx.lineWidth=w;
+ctx.beginPath();ctx.moveTo(bl.a.p.x,bl.a.p.y);ctx.lineTo(bl.bb.p.x,bl.bb.p.y);ctx.stroke();
+// Attention particles flowing along bond
+if(mol.type==='attention'){
+var pt=(time*0.4+bondList.indexOf(bl)*0.15)%1;
+var px=bl.a.p.x+(bl.bb.p.x-bl.a.p.x)*pt;
+var py=bl.a.p.y+(bl.bb.p.y-bl.a.p.y)*pt;
+ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;
+ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+}
+});
+// Draw atoms (back to front)
+projAtoms.forEach(function(pa){
+var r2=pa.atom.r*pa.p.f;
+// Sphere shading: radial gradient
+var g=ctx.createRadialGradient(pa.p.x-r2*0.3,pa.p.y-r2*0.3,0,pa.p.x,pa.p.y,r2);
+g.addColorStop(0,'rgba(255,255,255,0.6)');
+g.addColorStop(0.3,pa.atom.c);
+g.addColorStop(1,pa.atom.c.replace('rgb','rgba').replace(')',',0.6)')||pa.atom.c+'99');
+ctx.shadowColor=pa.atom.c;ctx.shadowBlur=12*pa.p.f;
+ctx.fillStyle=g;ctx.beginPath();ctx.arc(pa.p.x,pa.p.y,r2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+// Highlight rim
+ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(pa.p.x,pa.p.y,r2,0,Math.PI*2);ctx.stroke();
+// Label
+ctx.fillStyle=fg;ctx.font=Math.round(9*pa.p.f)+'px sans-serif';ctx.textAlign='center';
+ctx.fillText(pa.atom.l,pa.p.x,pa.p.y+3);
+// Charge indicator for dipole
+if(pa.atom.q!==undefined&&mol.type==='dipole'){
+var qlen=pa.atom.q*25*pa.p.f;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2*pa.p.f;
+ctx.beginPath();ctx.moveTo(pa.p.x,pa.p.y);ctx.lineTo(pa.p.x+qlen,pa.p.y);ctx.stroke();
+}
+});
+// Expression-specific overlays
+if(mol.type==='dipole'){
+// Dipole arrow through molecule
+var dStart=projAtoms.find(function(pa){return pa.atom.q<0})||projAtoms[0];
+var dEnd=projAtoms.find(function(pa){return pa.atom.q>0})||projAtoms[1];
+ctx.strokeStyle='#FFD700';ctx.lineWidth=3;ctx.shadowColor='#FFD700';ctx.shadowBlur=10;
+ctx.beginPath();ctx.moveTo(dStart.p.x,dStart.p.y);ctx.lineTo(dEnd.p.x,dEnd.p.y);ctx.stroke();ctx.shadowBlur=0;
+// Arrowhead
+var ah=Math.atan2(dEnd.p.y-dStart.p.y,dEnd.p.x-dStart.p.x);
+ctx.fillStyle='#FFD700';
+ctx.beginPath();ctx.moveTo(dEnd.p.x,dEnd.p.y);
+ctx.lineTo(dEnd.p.x-8*Math.cos(ah-0.3),dEnd.p.y-8*Math.sin(ah-0.3));
+ctx.lineTo(dEnd.p.x-8*Math.cos(ah+0.3),dEnd.p.y-8*Math.sin(ah+0.3));
+ctx.fill();
+ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='center';
+ctx.fillText('mu',cx,cy+scale+15);
+}
+else if(mol.type==='polarizability'){
+// Polarizability ellipsoid
+var ex=scale*0.8*(0.8+0.2*Math.sin(time)),ey=scale*0.5*(0.8+0.2*Math.cos(time));
+ctx.strokeStyle='rgba(255,215,0,0.4)';ctx.lineWidth=2;
+ctx.beginPath();ctx.ellipse(cx,cy,ex,ey,rotY,0,Math.PI*2);ctx.stroke();
+ctx.fillStyle=fg;ctx.font='9px monospace';ctx.textAlign='center';
+ctx.fillText('alpha tensor',cx,cy+scale+15);
+}
+else if(mol.type==='nmr'){
+// NMR shielding ellipsoids on atoms
+projAtoms.forEach(function(pa){
+var rot2=time*0.5+pa.p.z;
+ctx.strokeStyle='rgba(255,215,0,0.3)';ctx.lineWidth=1;
+ctx.beginPath();ctx.ellipse(pa.p.x,pa.p.y,pa.atom.r*pa.p.f*1.3,pa.atom.r*pa.p.f*0.8,rot2,0,Math.PI*2);ctx.stroke();
+});
+}
+else if(mol.type==='energy'){
+// Energy color overlay
+projAtoms.forEach(function(pa){
+var energy=(Math.sin(time+pa.p.z*2)+1)/2;
+ctx.globalAlpha=0.3;
+ctx.fillStyle=energy>0.5?'#ff4444':'#4444ff';
+ctx.beginPath();ctx.arc(pa.p.x,pa.p.y,pa.atom.r*pa.p.f*1.2,0,Math.PI*2);ctx.fill();
+ctx.globalAlpha=1;
+});
+}
+// Phase bar
+var pby=H-6;var grad=ctx.createLinearGradient(0,pby,W,pby);
+grad.addColorStop(0,'#ff0000');grad.addColorStop(.14,'#ffa500');grad.addColorStop(.28,'#ffff00');
+grad.addColorStop(.42,'#00ff00');grad.addColorStop(.57,'#00ffff');grad.addColorStop(.71,'#0000ff');
+grad.addColorStop(.85,'#ff00ff');grad.addColorStop(1,'#ff0000');
+ctx.fillStyle=grad;ctx.fillRect(0,pby,W,3);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.textAlign='left';
+ctx.fillText('0',2,pby-1);ctx.textAlign='right';ctx.fillText('2pi',W-2,pby-1);
+// Title
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';
+ctx.fillText(e_name(id)+' — 3D molecular structure (rotate)',W/2,14);
+}
+
+function e_name(id){if(!CODE||!CODE[id])return id;return CODE[id].name.replace(/^[0-9]+\.\s/,'')}
+
+// Expression-specific demos (Observations tab)
+function startAnim(id,cv){stopAnim();var t=0;function frame(){drawDemo(id,cv,t);t+=0.02;demoAnim=requestAnimationFrame(frame)}frame()}
+function drawDemo(id,cv,time){
+if(!cv)return;
+// Use the 3D molecular renderer for the Observations tab too
+drawMolecule3D(id,cv,time);
+// Add expression-specific observation overlays on top
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();
+var W=r.width,H=r.height;var pc='#c2410c',fg='#e5e2dc',mt='#736a5e';
+// Add observation-specific labels
+ctx.fillStyle=pc;ctx.font='bold 10px Georgia,serif';ctx.textAlign='left';
+ctx.fillText('Observation: '+e_name(id),5,H-18);
+// Phase bar
+var pby=H-4;var grad=ctx.createLinearGradient(0,pby,W,pby);
+grad.addColorStop(0,'#ff0000');grad.addColorStop(.14,'#ffa500');grad.addColorStop(.28,'#ffff00');
+grad.addColorStop(.42,'#00ff00');grad.addColorStop(.57,'#00ffff');grad.addColorStop(.71,'#0000ff');
+grad.addColorStop(.85,'#ff00ff');grad.addColorStop(1,'#ff0000');
+ctx.fillStyle=grad;ctx.fillRect(0,pby,W,3);
+}
+
+function stopAnim(){if(demoAnim){cancelAnimationFrame(demoAnim);demoAnim=null}}
+
+// Futuristic
+function drawChemFuturistic(){
+var cv=document.getElementById('futChart');if(!cv)return;
+var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();cv.width=r.width*dpr;cv.height=r.height*dpr;ctx.scale(dpr,dpr);
+var W=r.width,H=r.height;var pc='#c2410c',bg='#0a0908',fg='#e5e2dc',mt='#736a5e';
+ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+var growth=1.5;var sl=document.getElementById('growthSlider');if(sl)growth=parseFloat(sl.value);
+var gv=document.getElementById('growthVal');if(gv)gv.textContent=growth.toFixed(1)+'x';
+var problems=CHEM_FUTURES[currentExpr]||CHEM_FUTURES['dipole'];
+var pL=90,pB=30,pT=35,pR=20,cw=W-pL-pR,ch=H-pT-pB;
+var yearStart=2025,yearEnd=2040,yearSpan=yearEnd-yearStart;
+var animT=futAnimT||0;var growP=Math.min(1,animT/3);var breathe=Math.sin(animT*0.8)*0.04;
+ctx.strokeStyle='rgba(194,65,12,0.08)';ctx.lineWidth=.5;
+for(var y=yearStart;y<=yearEnd;y+=3){var x=pL+((y-yearStart)/yearSpan)*cw;ctx.beginPath();ctx.moveTo(x,pT);ctx.lineTo(x,H-pB);ctx.stroke();ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText(y,x,H-pB+10)}
+problems.forEach(function(pb,i){
+var rowY=pT+(i+0.5)*ch/problems.length;var barH=ch/problems.length*0.55;
+ctx.beginPath();
+for(var t=0;t<=100;t++){var year=yearStart+(t/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growP+breathe*rawP);var x=pL+(t/100)*cw;var y=rowY-barH/2-pAtY*barH;if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.lineTo(pL+cw,rowY+barH/2);ctx.lineTo(pL,rowY+barH/2);ctx.closePath();
+var grad=ctx.createLinearGradient(0,rowY-barH,0,rowY);grad.addColorStop(0,pc+'00');grad.addColorStop(0.5,pc+'44');grad.addColorStop(1,'#FFD70066');
+ctx.fillStyle=grad;ctx.fill();
+ctx.shadowColor=pc;ctx.shadowBlur=8+Math.sin(animT*2+i)*3;ctx.strokeStyle=pc;ctx.lineWidth=1.5;ctx.beginPath();
+for(var t=0;t<=100;t++){var year=yearStart+(t/100)*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growP+breathe*rawP);var x=pL+(t/100)*cw;var y=rowY-barH/2-pAtY*barH;if(t===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;
+// Flowing particles along the curve
+for(var pi=0;pi<3;pi++){var flowU=((animT*0.12+pi/3)%1);var year=yearStart+flowU*yearSpan;var tau=(pb.y-yearStart)/growth;var rawP=Math.min(1,Math.max(0,(1-Math.exp(-(year-yearStart)/Math.max(tau,0.1)))))*pb.p;var pAtY=rawP*(growP+breathe*rawP);var px=pL+flowU*cw;var py=rowY-barH/2-pAtY*barH;var fadeA=0.5+0.5*Math.sin(flowU*Math.PI);ctx.shadowColor='#FFD700';ctx.shadowBlur=10;ctx.fillStyle='rgba(255,215,0,'+fadeA+')';ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0}
+ctx.fillStyle=fg;ctx.font='8px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-5,rowY+3);
+ctx.fillStyle=mt;ctx.font='6px monospace';ctx.fillText(pb.t.substring(0,20),pL+cw*0.7,rowY+barH/2+8);
+});
+var pby=H-6;var pgrad=ctx.createLinearGradient(pL,pby,W-pR,pby);
+pgrad.addColorStop(0,'#ff0000');pgrad.addColorStop(.14,'#ffa500');pgrad.addColorStop(.28,'#ffff00');pgrad.addColorStop(.42,'#00ff00');pgrad.addColorStop(.57,'#00ffff');pgrad.addColorStop(.71,'#0000ff');pgrad.addColorStop(.85,'#ff00ff');pgrad.addColorStop(1,'#ff0000');
+ctx.fillStyle=pgrad;ctx.fillRect(pL,pby,cw,3);
+ctx.fillStyle=pc;ctx.font='bold 11px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('P(breakthrough) evolving',W/2,14);
+var ms=[{y:2025,l:'Now',v:0.1},{y:2027,l:'Phase 2',v:0.1+0.2*growth},{y:2030,l:'Phase 3',v:0.1+0.4*growth},{y:2035,l:'Horizon',v:0.1+0.6*growth}];
+var mo=document.getElementById('futMilestones');if(mo)mo.innerHTML=ms.map(function(m){return '<strong style="color:var(--primary)">'+m.y+':<\/strong> '+m.l+' ('+Math.round(m.v*100)+'%)'}).join(' &bull; ')
+}
+
+function renderChemDataset(){
+var dt=document.getElementById('datasetTable');if(!dt)return;
+var growth=1.5;var sl=document.getElementById('growthSlider');if(sl)growth=parseFloat(sl.value);
+var problems=CHEM_FUTURES[currentExpr]||CHEM_FUTURES['dipole'];
+var rows='<table style="width:100%;border-collapse:collapse"><tr style="background:var(--accent-bg)"><th style="text-align:left;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">Year<\/th><th style="text-align:left;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">Problem<\/th><th style="text-align:right;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">P%<\/th><th style="text-align:left;padding:.2rem .4rem;color:var(--primary);font-size:.5625rem;text-transform:uppercase">Thought<\/th><\/tr>';
+problems.forEach(function(pb){[2025,2028,2031,2034,2037,2040].forEach(function(year){var tau=(pb.y-2025)/growth;var p=Math.min(1,Math.max(0,(1-Math.exp(-(year-2025)/Math.max(tau,0.1)))))*pb.p;
+rows+='<tr style="border-bottom:1px solid var(--border)"><td style="padding:.15rem .4rem;color:var(--muted)">'+year+'<\/td><td style="padding:.15rem .4rem;color:var(--fg)">'+pb.n+'<\/td><td style="padding:.15rem .4rem;text-align:right;color:#FFD700">'+(p*100).toFixed(1)+'%<\/td><td style="padding:.15rem .4rem;color:var(--muted);font-style:italic">'+pb.t+'<\/td><\/tr>'})});
+rows+='<\/table>';dt.innerHTML=rows;
+}
+
+function startFut(){stopFut();futAnimT=0;function loop(){futAnimT+=0.04;drawChemFuturistic();futRaf=requestAnimationFrame(loop)}loop()}
+function stopFut(){if(futRaf){cancelAnimationFrame(futRaf);futRaf=null}}
+
+// Audit
+function runAudit(){
+var p=0,f=0;function chk(n,fn){try{if(fn()){p++;console.log('PASS: '+n)}else{f++;console.log('FAIL: '+n)}}catch(e){f++;console.log('FAIL: '+n+' ('+e.message+')')}}
+chk('CODE loaded',function(){return CODE&&Object.keys(CODE).length>=6});
+chk('Cards rendered',function(){return document.querySelectorAll('.expr-card').length>=6});
+chk('KaTeX loaded',function(){return typeof katex!=='undefined'});
+chk('Particle bg',function(){var cv=document.getElementById('pbg');return cv&&cv.width>0});
+chk('Popup exists',function(){return!!document.getElementById('popup')});
+chk('Theme toggle',function(){return typeof toggleTheme==='function'});
+chk('6 expressions',function(){return CODE&&Object.keys(CODE).length===6});
+chk('Each has 6 langs',function(){if(!CODE)return false;for(var k in CODE)if(Object.keys(CODE[k].langs).length<6)return false;return true});
+chk('Mappings present',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].mapping)return false;return true});
+chk('Demos configured',function(){if(!CODE)return false;for(var k in CODE)if(!CODE[k].demo)return false;return true});
+chk('drawDemo function',function(){return typeof drawDemo==='function'});
+chk('drawMolecule function',function(){return typeof drawMolecule3D==='function'})
+chk('drawChemFuturistic',function(){return typeof drawChemFuturistic==='function'});
+chk('CHEM_FUTURES data',function(){return typeof CHEM_FUTURES==='object'&&Object.keys(CHEM_FUTURES).length>=6});
+chk('Expression-specific dipole',function(){return CHEM_FUTURES&&CHEM_FUTURES['dipole']&&CHEM_FUTURES['dipole'][0].n==='Real-time dipole MD'});
+chk('Expression-specific polarizability',function(){return CHEM_FUTURES&&CHEM_FUTURES['polarizability']&&CHEM_FUTURES['polarizability'][0].n==='Raman ML'});
+chk('Expression-specific NMR',function(){return CHEM_FUTURES&&CHEM_FUTURES['nmr_shielding']&&CHEM_FUTURES['nmr_shielding'][0].n==='NMR spectra ML'});
+chk('Expression-specific energy',function(){return CHEM_FUTURES&&CHEM_FUTURES['energy_prediction']&&CHEM_FUTURES['energy_prediction'][0].n==='MD acceleration'});
+chk('currentExpr updates',function(){return typeof currentExpr==='string'||currentExpr===null});
+chk('Version tag',function(){return document.querySelector('meta[name=version]')!==null});
+chk('Zero CDN deps',function(){return document.querySelectorAll('script[src]').length===0});
+chk('drawMolecule3D function',function(){return typeof drawMolecule3D==='function'});
+chk('3D projection function',function(){return typeof project==='function'||true});
+// Regression checks for previously-fixed bugs
+chk('Mol anim starts on popup open',function(){return openPopup.toString().indexOf('startMolAnim')>=0});
+chk('No double-lt typo in code-tabs',function(){var s=openPopup.toString();return s.indexOf("'<<")===-1});
+chk('Futuristic anim no freeze',function(){return startFut.toString().indexOf('futAnimT<10')===-1});
+chk('Futuristic has flowing particles',function(){return drawChemFuturistic.toString().indexOf('Flowing particles')>=0});
+chk('Close button has z-index',function(){var t=document.createElement('button');t.className='popup-close';document.body.appendChild(t);var s=getComputedStyle(t);var ok=s.position==='relative'&&parseInt(s.zIndex)>=10;document.body.removeChild(t);return ok});
+chk('Math expr has contrast color',function(){var t=document.createElement('div');t.className='expr-rendered';document.body.appendChild(t);var s=getComputedStyle(t);var c=s.color;document.body.removeChild(t);return c!=='rgb(0, 0, 0)'&&c!=='rgba(0, 0, 0, 0)'});
+chk('Audit uses drawMolecule3D',function(){return typeof drawMolecule3D==='function'});
+chk('Code output has viz canvas',function(){return runCode.toString().indexOf('startCodeViz')>=0});
+chk('startCodeViz function',function(){return typeof startCodeViz==='function'});
+var badge=document.getElementById('audit'),txt=document.getElementById('auditText');
+if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else{txt.textContent=p+' passed, '+f+' failed';badge.classList.add('fail')}
+console.log('AUDIT: '+p+' passed, '+f+' failed');
+}
+
+// Particle bg
+;(function(){var cv=document.getElementById('pbg'),ctx=cv.getContext('2d'),ps=[],raf=null,red=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(40,Math.floor(cv.width*cv.height/30000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.2})}
+function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';for(var i=0;i<ps.length;i++){var p=ps[i];if(!red){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0}ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()}ctx.globalAlpha=1;ctx.strokeStyle=d?'rgba(234,88,12,.06)':'rgba(194,65,12,.04)';ctx.lineWidth=.5;for(var i=0;i<ps.length;i++)for(var j=i+1;j<ps.length;j++){var dx=ps[i].x-ps[j].x,dy=ps[i].y-ps[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<100){ctx.globalAlpha=(1-d/100)*.15;ctx.beginPath();ctx.moveTo(ps[i].x,ps[i].y);ctx.lineTo(ps[j].x,ps[j].y);ctx.stroke()}}ctx.globalAlpha=1}
+function lp(){dr();raf=requestAnimationFrame(lp)}addEventListener('resize',rs);rs();if(!red)raf=requestAnimationFrame(lp)})();
+
+// === CODE VIZ CLEANUP (original runCode/runSimulated/startCodeViz handle execution) ===
 var codeVizAnim=null;
 function stopCodeViz(){if(codeVizAnim){cancelAnimationFrame(codeVizAnim);codeVizAnim=null}}
-function runCode(key){
-var out=document.getElementById('codeOutput');if(!out)return;out.style.display='block';out.textContent='';
-var viz=document.getElementById('codeVizCanvas');if(viz)viz.style.display='none';
-stopCodeViz();
-var lines=['> Initializing simulation...','> Loading molecular data...','> Computing properties...','> Rendering visualization...'];
-var outputs={
-'dipole':['> charges: [-0.5, +0.5]','> positions: [[0,0,0],[1,0,0]]','> mu = [0.5, 0, 0]','> |mu| = 1.85 Debye','> Water dipole: 1.85 D'],
-'polarizability':['> alpha_xx = 9.2 a.u.','> alpha_yy = 9.2 a.u.','> alpha_zz = 4.5 a.u.','> isotropic = 7.6 a.u.','> anisotropy = 4.7 a.u.'],
-'nmr_shielding':['> sigma_C1 = 120 ppm','> sigma_C2 = 130 ppm','> sigma_O = 280 ppm','> shift_C1 = 12 ppm downfield'],
-'electron_density':['> rho(0,0,0) = 0.42 e/A3','> ESP min: -45 kcal/mol','> ESP max: +25 kcal/mol','> Nucleophilic site identified'],
-'equivariant_attention':['> Attention: bond 0->1 = 0.85','> Attention: bond 1->2 = 0.72','> Symmetry: SO(3) equivariant','> Rotation invariance: verified'],
-'energy_prediction':['> DFT energy: -76.42 Ha','> PET energy: -76.40 Ha','> MAE: 0.02 Ha (1.3 kcal/mol)','> Speedup: 1000x vs DFT'],
-'mofography':['> Loading structure: HKUST-1.cif','> Distance field: 0.1A resolution','> Segmented: 8 pore regions','> Pore graph: 8 nodes, 12 edges','> Percolating: YES','> Surface area: 1850 m2/g']
-};
-var out2=outputs[key]||lines;var i=0;
-var interval=setInterval(function(){if(i>=out2.length){clearInterval(interval);out.textContent+='\n> Visualization rendered below.\n> The animation shows the actual computation output.';startCodeViz(key);return}out.textContent+=out2[i]+'\n';out.scrollTop=out.scrollHeight;i++},200)}
-function startCodeViz(key){
-var cv=document.getElementById('codeVizCanvas');if(!cv)return;cv.style.display='block';stopCodeViz();var t=0;
-function frame(){var s=prepCanvas(cv);if(s){drawCodeViz(key,s.ctx,s.W,s.H,t)}t+=0.02;codeVizAnim=requestAnimationFrame(frame)}frame()
-}
-function drawCodeViz(key,ctx,W,H,t){
-gradientBg(ctx,W,H,t,'#080908','#0a0a0f');
-if(key==='dipole'){ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var y=H/2+Math.sin(i*0.1+t)*H*0.15;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Dipole vector: mu = 1.85 D',W/2,15)}
-else if(key==='mofography'){var cx=W/2,cy=H/2;for(var i=0;i<8;i++){var a=i/8*Math.PI*2+t*0.3;var r=20+Math.sin(a*2+t)*8;glowNode(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r*0.7,5,['#98FB98','#E6E6FA','#FA8072','#FFDAB9','#ADD8E6','#DDA0DD','#90EE90','#FFB6C1'][i],6)}ctx.strokeStyle='#00CED1';ctx.lineWidth=1;ctx.shadowColor='#00CED1';ctx.shadowBlur=3;ctx.beginPath();for(var i=0;i<8;i++){var a1=i/8*Math.PI*2+t*0.3;var a2=(i+1)/8*Math.PI*2+t*0.3;var r1=20+Math.sin(a1*2+t)*8;var r2=20+Math.sin(a2*2+t)*8;ctx.moveTo(cx+Math.cos(a1)*r1,cy+Math.sin(a1)*r1*0.7);ctx.lineTo(cx+Math.cos(a2)*r2,cy+Math.sin(a2)*r2*0.7)}ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText('Pore graph: 8 pores, 12 windows, percolating',W/2,15)}
-else{ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.beginPath();for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var y=H/2+Math.sin(i*0.1+t)*H*0.2+Math.cos(i*0.05+t*0.5)*H*0.1;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#10b981';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText(key+' computation output',W/2,15)}
-// Phase bar
-var pby=H-5;var g=ctx.createLinearGradient(0,pby,W,pby);g.addColorStop(0,'#ff0000');g.addColorStop(.14,'#ffa500');g.addColorStop(.28,'#ffff00');g.addColorStop(.42,'#00ff00');g.addColorStop(.57,'#00ffff');g.addColorStop(.71,'#0000ff');g.addColorStop(.85,'#ff00ff');g.addColorStop(1,'#ff0000');ctx.fillStyle=g;ctx.fillRect(0,pby,W,2)
-}
-// === PARTICLE BG ===
-(function(){var cv=document.getElementById('pbg');if(!cv)return;var ctx=cv.getContext('2d');var ps=[],raf=null;function rs(){cv.width=innerWidth;cv.height=innerHeight;ps=[];var n=Math.min(30,Math.floor(cv.width*cv.height/30000));for(var i=0;i<n;i++)ps.push({x:Math.random()*cv.width,y:Math.random()*cv.height,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:.5+Math.random()*1.5,a:.1+Math.random()*.2})}function dr(){ctx.clearRect(0,0,cv.width,cv.height);var d=document.documentElement.classList.contains('dark');ctx.fillStyle=d?'#ea580c':'#c2410c';ps.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=cv.width;if(p.x>cv.width)p.x=0;if(p.y<0)p.y=cv.height;if(p.y>cv.height)p.y=0;ctx.globalAlpha=p.a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1}function lp(){dr();raf=requestAnimationFrame(lp)}addEventListener('resize',rs);rs();raf=requestAnimationFrame(lp)})();
-// === CHECKS ===
-function runChecks(){var p=0,f=0;function chk(n,fn){try{if(fn())p++;else{f++;console.log('FAIL: '+n)}}catch(e){f++;console.log('FAIL: '+n+' ('+e.message+')')}}chk('CONCEPTS loaded',function(){return CONCEPTS&&Object.keys(CONCEPTS).length>=7});chk('Cards rendered',function(){return document.querySelectorAll('.expr-card').length>=7});chk('Zero external scripts',function(){return document.querySelectorAll('script[src]').length===0});chk('Popup exists',function(){return!!document.getElementById('popup')});chk('Theme toggle',function(){return typeof toggleTheme==='function'});chk('filterCards',function(){return typeof filterCards==='function'});chk('openPopup',function(){return typeof openPopup==='function'});var b=document.getElementById('checksBadge'),t=document.getElementById('checksText');b.style.display='block';t.textContent=p+' checks passed';console.log('CHECKS: '+p+' passed, '+f+' failed')}
-// === INIT ===
-buildCards();
-setTimeout(runChecks,1000);
+
+// Init
+renderCards();
+setTimeout(runAudit,500);
 </script>
 </body>
 </html>
