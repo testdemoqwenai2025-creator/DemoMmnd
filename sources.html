@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-02-v8-schrodinger-codeviz">
+<meta name="version" content="2026-11-09-v9-lattice-duality">
 <title>Sources · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -569,6 +569,64 @@ ctx.fillStyle=mt;ctx.font='7px monospace';ctx.textAlign='center';ctx.fillText('V
 drawPhaseBar(ctx,W,H);
 ctx.fillStyle=pc;ctx.font='bold 12px Georgia,serif';ctx.textAlign='center';ctx.fillText('Wave packet evolving in harmonic trap',W/2,16);
 break;
+case'lattice_duality':{
+gradientBg(ctx,W,H,time,'#080908','#0a0a0f');
+var cycleT=time%16;var stage=Math.floor(cycleT/4);var stageP=(cycleT%4)/4;
+var si=[{n:'1. The Problem',f:'Sum A(x,y)*e^{-(x^2+y^2)} over all (x,y)'},{n:'2. Hard Way',f:'Count lattice points per circle (discontinuous)'},{n:'3. The Flip',f:'Which circles contain each lattice point?'},{n:'4. Closed Form',f:'pi*(2g-1)^2 where g=sum e^{-k^2}'}][stage];
+// Title
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText(si.n,W/2,14);ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.fillText(si.f,W/2,24);
+// Stage 1: The problem — lattice grid + Gaussian heatmap
+if(stage===0){
+// Draw lattice grid
+ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=.5;
+for(var i=-5;i<=5;i++){ctx.beginPath();ctx.moveTo(W*0.3+i*W*0.06,H*0.2);ctx.lineTo(W*0.3+i*W*0.06,H*0.8);ctx.stroke();ctx.beginPath();ctx.moveTo(W*0.3,H*0.2+i*H*0.06);ctx.lineTo(W*0.9,H*0.2+i*H*0.06);ctx.stroke()}
+// Gaussian heatmap
+for(var gx=-5;gx<=5;gx+=0.5){for(var gy=-5;gy<=5;gy+=0.5){var d2=gx*gx+gy*gy;var val=Math.exp(-d2*0.3);var px=W*0.6+gx*W*0.06;var py=H*0.5+gy*H*0.06;ctx.fillStyle='rgba(16,185,129,'+(val*0.3)+')';ctx.fillRect(px-2,py-2,4,4)}}
+// Lattice points
+for(var lx=-5;lx<=5;lx++){for(var ly=-5;ly<=5;ly++){var px=W*0.6+lx*W*0.06;var py=H*0.5+ly*H*0.06;glowNode(ctx,px,py,2,'#FFD700',3)}}
+// Expanding circle
+var radius=(stageP*0.8+0.1)*W*0.3;ctx.strokeStyle='#FF69B4';ctx.lineWidth=2;ctx.shadowColor='#FF69B4';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(W*0.6,H*0.5,radius,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FF69B4';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText('A(x,y) = lattice points inside circle',W*0.6,H*0.88)}
+// Stage 2: Hard way — discontinuous step function
+if(stage===1){
+// Draw step function
+ctx.strokeStyle='#ff6b6b';ctx.lineWidth=2;ctx.shadowColor='#ff6b6b';ctx.shadowBlur=4;ctx.beginPath();
+for(var i=0;i<100;i++){var r=i/100*5;var cnt=0;for(var mx=-5;mx<=5;mx++){for(var my=-5;my<=5;my++){if(mx*mx+my*my<=r*r+0.01)cnt++}}var x=W*0.1+i/100*W*0.8;var y=H*0.8-cnt*H*0.04;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#ff6b6b';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.fillText('A(r) jumps discontinuously — hard to integrate!',W/2,H*0.88)}
+// Stage 3: The flip — dual integral per lattice point
+if(stage===2){
+// Show lattice points with their dual regions
+for(var mx=-4;mx<=4;mx++){for(var my=-4;my<=4;my++){var d2=mx*mx+my*my;var val=Math.exp(-d2*0.3);var px=W*0.5+mx*W*0.06;var py=H*0.5+my*H*0.06;
+// Dual region (circle around lattice point)
+var r=Math.sqrt(d2)*W*0.06;if(stageP*8>d2){ctx.strokeStyle='rgba(0,206,209,'+(0.3+val*0.5)+')';ctx.lineWidth=1;ctx.beginPath();ctx.arc(px,py,Math.max(3,r),0,Math.PI*2);ctx.stroke()}
+// Gaussian weight
+glowNode(ctx,px,py,2+val*3,'#10b981',4+val*4)}}
+// Arrow showing the flip
+ctx.fillStyle='#FFD700';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.fillText('Flip: for each (m,n), integrate e^{-r^2} over r>=sqrt(m^2+n^2)',W/2,H*0.15);
+ctx.fillStyle='#00CED1';ctx.font='5px monospace';ctx.fillText('= pi * e^{-(m^2+n^2)}',W/2,H*0.88)}
+// Stage 4: Closed form
+if(stage===3){
+// Compute g
+var g=0;for(var k=0;k<50;k++)g+=Math.exp(-k*k);
+var result=Math.PI*(2*g-1)*(2*g-1);
+// Show the formula building up
+ctx.fillStyle='#10b981';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';
+var prog=Math.min(1,stageP*1.5);
+ctx.globalAlpha=prog;
+ctx.fillText('g = sum e^{-k^2} = '+g.toFixed(6),W/2,H*0.3);
+ctx.fillText('2g - 1 = '+(2*g-1).toFixed(6),W/2,H*0.45);
+ctx.fillText('pi*(2g-1)^2 = '+result.toFixed(6),W/2,H*0.6);
+ctx.globalAlpha=1;
+// Visual: converging series
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();
+var partial=0;for(var k=0;k<20;k++){partial+=Math.exp(-k*k);var x=W*0.1+k/20*W*0.8;var y=H*0.8-partial*H*0.03;if(k===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText('g converges: 1 + e^{-1} + e^{-4} + e^{-9} + ...',W/2,H*0.88)}
+// Stage progress bar
+var pby=H-4;for(var s=0;s<4;s++){var sx=W*0.2+s*W*0.2;ctx.fillStyle=s<=stage?'#FFD700':'#2a261e';ctx.fillRect(sx-8,pby-2,16,2);if(s===stage){ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText((stageP*100|0)+'%',sx,pby-5)}}
+break;
+}
 default:clear();label('Demo: '+id,W/2,H/2)}}
 
 // Animation + new functions
