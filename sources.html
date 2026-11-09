@@ -5,12 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-09-v9-lattice-duality">
+<meta name="version" content="2026-11-09-v10-no-cdn">
 <title>Sources · Mmnd</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(250,247,242,0.85)}
 .dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(22,20,15,0.85)}
@@ -239,6 +235,32 @@ runAudit();
 });
 
 function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function prepCanvas(cv){var ctx=cv.getContext('2d');var dpr=devicePixelRatio||1;var r=cv.getBoundingClientRect();if(r.width<10)return null;var newW=Math.round(r.width*dpr),newH=Math.round(r.height*dpr);if(cv.width!==newW||cv.height!==newH){cv.width=newW;cv.height=newH}ctx.setTransform(dpr,0,0,dpr,0,0);return{ctx:ctx,W:r.width,H:r.height}}
+function gradientBg(ctx,W,H,t,c1,c2){var g=ctx.createLinearGradient(0,0,W,H);var s=Math.sin(t*.3)*.2;g.addColorStop(Math.max(0,.3-s),c1);g.addColorStop(Math.min(1,.7+s),c2);ctx.fillStyle=g;ctx.fillRect(0,0,W,H)}
+function cleanLatex(s){return String(s)
+.replace(/\\mathbf\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<b>$1</b>')
+.replace(/\\text\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\mathcal\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1')
+.replace(/\\frac\{((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\}/g,'$1/$2')
+.replace(/\\sqrt\{((?:[^{}]|\{[^{}]*\})*)\}/g,'\u221a$1')
+.replace(/\\%/g,'%').replace(/\\&/g,'&amp;')
+.replace(/_\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<sub>$1</sub>')
+.replace(/\^\{((?:[^{}]|\{[^{}]*\})*)\}/g,'<sup>$1</sup>')
+.replace(/_([a-zA-Z0-9])/g,'<sub>$1</sub>')
+.replace(/\^([a-zA-Z0-9])/g,'<sup>$1</sup>')
+.replace(/\\alpha/g,'\u03b1').replace(/\\beta/g,'\u03b2').replace(/\\gamma/g,'\u03b3')
+.replace(/\\delta/g,'\u03b4').replace(/\\epsilon/g,'\u03b5').replace(/\\theta/g,'\u03b8')
+.replace(/\\lambda/g,'\u03bb').replace(/\\mu/g,'\u03bc').replace(/\\pi/g,'\u03c0')
+.replace(/\\sigma/g,'\u03c3').replace(/\\phi/g,'\u03c6').replace(/\\omega/g,'\u03c9')
+.replace(/\\Delta/g,'\u0394').replace(/\\Sigma/g,'\u03a3').replace(/\\nabla/g,'\u2207')
+.replace(/\\partial/g,'\u2202').replace(/\\infty/g,'\u221e').replace(/\\cdot/g,'\u00b7')
+.replace(/\\times/g,'\u00d7').replace(/\\leq/g,'\u2264').replace(/\\geq/g,'\u2265')
+.replace(/\\approx/g,'\u2248').replace(/\\sum/g,'\u03a3').replace(/\\prod/g,'\u03a0')
+.replace(/\\to/g,'\u2192').replace(/\\rightarrow/g,'\u2192').replace(/\\in/g,'\u2208')
+.replace(/\\quad/g,'&nbsp;&nbsp;').replace(/\\ln/g,'ln').replace(/\\log/g,'log')
+.replace(/\\exp/g,'exp').replace(/\\max/g,'max').replace(/\\min/g,'min')
+.replace(/\\dots/g,'\u2026').replace(/\\mathbb\{([A-Z])\}/g,'$1')
+.replace(/\\[a-zA-Z]+/g,'').replace(/[{}]/g,'')}
 
 function renderCards(){
 var grid=document.getElementById('exprGrid');
@@ -249,7 +271,7 @@ var shortName=e.name.replace(/^[0-9]+\.\s/,'');
 html+='<div class="expr-card" onclick="openPopup(\''+key+'\')">';
 html+='<div class="expr-card-num">'+e.name.split('.')[0]+'</div>';
 html+='<div class="expr-card-name">'+shortName+'</div>';
-html+='<div class="expr-card-preview">'+e.intent.substring(0,100)+'...</div>';
+html+='<div class="expr-card-preview">'+(e.intent||e.math||'').substring(0,100)+'...</div>';
 html+='<div class="expr-card-langs">';
 LANGS.forEach(function(l){html+='<span class="lang-pill">'+l+'</span>'});
 html+='</div></div>';
@@ -312,7 +334,7 @@ h+='<div class="popup-pane active" id="pane-math">';
 // Math
 h+='<div class="popup-pane active" id="pane-math">';
 }
-h+='<h3>Expression</h3><div class="expr-rendered" style="background:rgba(10,9,8,.6);border-color:rgba(194,65,12,.3);padding:2rem;color:#e5e2dc">$$'+e.latex+'$$</div><div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div><h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
+h+='<h3>Expression</h3><div class="expr-rendered" style="background:rgba(10,9,8,.6);border-color:rgba(194,65,12,.3);padding:2rem;color:#e5e2dc">'+cleanLatex(e.latex||e.math||'')+'</div><div class="phase-bar"><span class="phase-label">Phase</span><div class="phase-gradient"></div><span class="phase-label">0</span><span class="phase-label">&rarr;</span><span class="phase-label">2&pi;</span></div><h3 style="margin-top:1rem">Intent</h3><p class="expr-intent">'+e.intent+'</p></div>';
 // Code
 h+='<div class="popup-pane" id="pane-code">';
 if(e.mapping){h+='<h3>Math \u2192 Code mapping</h3><div class="map-table"><table><tr><th>Symbol</th><th></th><th>Code</th><th>Note</th></tr>';e.mapping.forEach(function(m){h+='<tr><td class="map-sym">'+m.symbol+'</td><td class="map-arrow">\u2192</td><td class="map-code">'+esc(m.code)+'</td><td class="map-note">'+m.note+'</td></tr>'});h+='</table></div>'}
@@ -361,7 +383,7 @@ h+='<p><strong style="color:var(--primary)">The two-decade horizon is appropriat
 h+='</div></div>';
 b.innerHTML=h;
 document.getElementById('popup').classList.add('active');
-if(typeof renderMathInElement!=='undefined')renderMathInElement(b,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false});
+// Math rendered via cleanLatex
 // Inject floating code snippets into the background
 var fbg=document.getElementById('codeFloatBg');
 if(fbg){fbg.innerHTML='';var codeLines=[];
@@ -781,16 +803,8 @@ function drawObsGraph(cv){if(!cv||!CODE)return;drawGraphType(cv,currentGraphType
 
 // Code execution output — Pyodide real Python + simulated fallback
 ;var pyodideReady=null;var pyodideLoading=null;
-function ensurePyodide(){
-if(pyodideReady)return Promise.resolve(pyodideReady);
-if(pyodideLoading)return pyodideLoading;
-if(typeof loadPyodide==='undefined')return Promise.resolve(null);
-pyodideLoading=loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'}).then(function(py){
-pyodideReady=py;console.log('Pyodide ready, loading numpy...');py.loadPackage('numpy').then(function(){console.log('numpy loaded')});return py;
-}).catch(function(e){console.log('Pyodide failed:',e.message);pyodideReady=null;return null});
-return pyodideLoading;
-}
-if(typeof loadPyodide==='function'){setTimeout(ensurePyodide,2000)}
+function ensurePyodide(){return Promise.resolve(null)}
+window.pyodideReady=null;
 function runCode(key){
 var e=CODE[key];if(!e)return;
 var out=document.getElementById('codeOutput');var st=document.getElementById('runStatus');
@@ -851,7 +865,7 @@ var outputs={
 'unitary':['Target: random 3-qubit unitary U','Conjectured: needs Omega(2^3) = 8 oracle queries','AI construction: oracle f exists','Circuit size: poly(3) = 9 gates + 1 oracle','Query count: 3 (polynomial!)','CONJECTURE REFUTED','Implication: P=PSPACE would bound black hole complexity'],
 'aixi':['Enumerating all computable programs mu...','Programs of length 1: 2, weight: 0.5 each','Programs of length 2: 4, weight: 0.25 each','Programs of length 3: 8, weight: 0.125 each','Total programs: infinite (sum converges to 1)','Best action a* = argmax_a sum_mu 2^{-|mu|} E[V|a,mu]','Result: a* = "explore" (information-gathering)','Note: AIXI is uncomputable (halting problem)']
 };
-var out2=outputs[key]||['Running...','Output: '+e.intent.substring(0,60)];
+var out2=outputs[key]||['Running...','Output: '+(e.intent||e.math||'').substring(0,60)];
 var i=0;var interval=setInterval(function(){
 if(i>=out2.length){clearInterval(interval);st.textContent='Done ('+out2.length+' lines, '+lang+' \u2014 simulated)';startCodeViz(key);return}
 lines.push('> '+out2[i]);out.textContent=lines.join('\n');out.scrollTop=out.scrollHeight;i++},200)
@@ -901,7 +915,7 @@ var total=data.reduce(function(s,d){return s+d.val},0);var cx=W/2,cy=H/2,rad=Mat
 }
 }
 
-function closePopup(){stopAnimDemo();stopFutAnim();document.getElementById('popup').classList.remove('active')}
+function closePopup(){stopCodeViz();stopAnimDemo();stopFutAnim();document.getElementById('popup').classList.remove('active')}
 function switchTab(id,btn){stopAnimDemo();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='mol'&&currentExpr){var mc=document.getElementById('molCanvas');if(mc)setTimeout(function(){startSMolAnim(currentExpr,mc)},50)}if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnimDemo(currentExpr,cv)},50);var og=document.getElementById('obsGraph');if(og)setTimeout(function(){drawGraphType(og,currentGraphType)},50);var ng=document.getElementById('obsNetGraph');if(ng)setTimeout(function(){drawNetGraph(ng)},50)}if(id==='fut'&&currentExpr){stopFutAnim();var fc=document.getElementById('futChart');if(fc){startFutAnim();renderDataset()}}}
 function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
 
@@ -973,6 +987,22 @@ if(f===0){txt.textContent=p+' checks passed';badge.classList.remove('fail')}else
 r.forEach(function(x){console.log(x)});
 console.log('AUDIT: '+p+' passed, '+f+' failed');
 }
+
+// === CODE VIZ ===
+var codeVizAnim=null;
+function stopCodeViz(){if(codeVizAnim){cancelAnimationFrame(codeVizAnim);codeVizAnim=null}}
+function drawCodeViz(key,ctx,W,H,t){
+gradientBg(ctx,W,H,t,'#080908','#0a0a0f');
+if(key==='lattice_duality'){var g=0;for(var k=0;k<50;k++)g+=Math.exp(-k*k);var result=Math.PI*(2*g-1)*(2*g-1);
+ctx.strokeStyle='#FFD700';ctx.lineWidth=2;ctx.shadowColor='#FFD700';ctx.shadowBlur=4;ctx.beginPath();var partial=0;
+for(var k=0;k<30;k++){partial+=Math.exp(-k*k);var x=W*0.1+k/30*W*0.8;var y=H*0.7-partial*H*0.04;if(k===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#10b981';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('g = '+g.toFixed(6),W/2,H*0.25);ctx.fillText('pi*(2g-1)^2 = '+result.toFixed(6),W/2,H*0.4);
+for(var mx=-3;mx<=3;mx++){for(var my=-3;my<=3;my++){var d2=mx*mx+my*my;var val=Math.exp(-d2*0.3);glowNode(ctx,W/2+mx*15,H*0.85+my*10,2+val*2,'#10b981',3+val*4)}}}
+else{ctx.strokeStyle='#10b981';ctx.lineWidth=2;ctx.shadowColor='#10b981';ctx.shadowBlur=6;ctx.beginPath();
+for(var i=0;i<100;i++){var x=W*0.1+i/100*W*0.8;var y=H/2+Math.sin(i*0.1+t)*H*0.2;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}
+ctx.stroke();ctx.shadowBlur=0;ctx.fillStyle='#10b981';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';ctx.fillText(key+' output',W/2,15)}
+var pby=H-5;var g2=ctx.createLinearGradient(0,pby,W,pby);g2.addColorStop(0,'#ff0000');g2.addColorStop(.14,'#ffa500');g2.addColorStop(.28,'#ffff00');g2.addColorStop(.42,'#00ff00');g2.addColorStop(.57,'#00ffff');g2.addColorStop(.71,'#0000ff');g2.addColorStop(.85,'#ff00ff');g2.addColorStop(1,'#ff0000');ctx.fillStyle=g2;ctx.fillRect(0,pby,W,2)}
 
 // Init canvases after load
 setTimeout(function(){drawGraph();drawSynthetic()},1000);
