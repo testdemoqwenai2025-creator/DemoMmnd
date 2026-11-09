@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-09-v10-no-cdn">
+<meta name="version" content="2026-11-09-v11-peptide">
 <title>Sources · Mmnd</title>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(250,247,242,0.85)}
@@ -650,6 +650,184 @@ ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fill
 var pby=H-4;for(var s=0;s<4;s++){var sx=W*0.2+s*W*0.2;ctx.fillStyle=s<=stage?'#FFD700':'#2a261e';ctx.fillRect(sx-8,pby-2,16,2);if(s===stage){ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText((stageP*100|0)+'%',sx,pby-5)}}
 break;
 }
+case'peptide_sequencing':{
+gradientBg(ctx,W,H,time,'#080908','#0a0a0f');
+var cycleT=time%20;var stage=Math.floor(cycleT/5);var stageP=(cycleT%5)/5;
+var si=[{n:'1. Peptide Structure',f:'PEPTIDE — amide bonds along backbone'},{n:'2. CID Fragmentation',f:'Collision-induced dissociation -> b/y ions'},{n:'3. Mass Spectrum',f:'m/z vs intensity — the experimental data'},{n:'4. Database Search',f:'PSM score = -10*log10(p) — match confidence'}][stage];
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText(si.n,W/2,14);
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.fillText(si.f,W/2,24);
+
+// Peptide sequence
+var pep='PEPTIDE';
+var aaColors={'P':'#FF69B4','E':'#FFD700','T':'#10b981','I':'#00CED1','D':'#a855f7'};
+
+if(stage===0){
+// Draw peptide backbone with amino acids
+var px=W*0.15,py=H*0.35;
+var spacing=Math.min(W*0.7/pep.length,40);
+for(var i=0;i<pep.length;i++){
+var ax=px+i*spacing;
+// Amino acid circle
+var c=aaColors[pep[i]]||'#888';
+glowNode(ctx,ax,py,12,c,6);
+ctx.fillStyle='#000';ctx.font='bold 8px monospace';ctx.textAlign='center';
+ctx.fillText(pep[i],ax,py+2);
+// Amide bond
+if(i<pep.length-1){
+ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(ax+12,py);ctx.lineTo(ax+spacing-12,py);ctx.stroke();
+// Scissors icon at bond
+var scissorAlpha=0.3+0.3*Math.sin(time*2+i);
+ctx.globalAlpha=scissorAlpha;
+ctx.fillStyle='#FFD700';ctx.font='8px monospace';
+ctx.fillText('!',ax+spacing/2,py-10);
+ctx.globalAlpha=1;
+}
+}
+ctx.fillStyle='#736a5e';ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('N-terminus',px,py+25);ctx.fillText('C-terminus',px+(pep.length-1)*spacing,py+25);
+// Show amide bond structure
+ctx.fillStyle='#e5e2dc';ctx.font='5px monospace';ctx.textAlign='left';
+ctx.fillText('Amide bond: -CO-NH- (cleaved by CID)',W*0.15,H*0.6);
+ctx.fillText('Each bond breaks -> charged fragment ions',W*0.15,H*0.68);
+}
+
+if(stage===1){
+// Fragmentation animation — bonds breaking
+var px=W*0.15,py=H*0.3;
+var spacing=Math.min(W*0.7/pep.length,40);
+for(var i=0;i<pep.length;i++){
+var ax=px+i*spacing;
+var c=aaColors[pep[i]]||'#888';
+glowNode(ctx,ax,py,10,c,5);
+ctx.fillStyle='#000';ctx.font='bold 6px monospace';ctx.textAlign='center';
+ctx.fillText(pep[i],ax,py+1);
+}
+// Show fragmentation at each bond progressively
+for(var bi=0;bi<pep.length-1;bi++){
+var bondTime=time*0.5+bi*0.3;
+var broken=((bondTime%3)>1);
+var bx=px+(bi+0.5)*spacing;
+if(broken){
+// Gap in bond
+ctx.strokeStyle='rgba(255,107,107,0.2)';ctx.lineWidth=1;
+ctx.setLineDash([2,3]);
+ctx.beginPath();ctx.moveTo(px+bi*spacing+10,py);ctx.lineTo(px+(bi+1)*spacing-10,py);ctx.stroke();
+ctx.setLineDash([]);
+// b-ion label (above)
+var aaM={'P':97.05,'E':129.04,'T':101.05,'I':113.08,'D':115.03};var bMass=0;for(var k=0;k<=bi;k++)bMass+=aaM[pep[k]]||100;
+ctx.fillStyle='#FF69B4';ctx.font='bold 5px monospace';ctx.textAlign='center';
+ctx.fillText('b'+(bi+1),bx,py-15);
+// y-ion label (below)
+ctx.fillStyle='#00CED1';
+ctx.fillText('y'+(pep.length-bi-1),bx,py+15);
+// Fragmentation flash
+var flash=Math.max(0,1-((bondTime%3)-1)*3);
+if(flash>0){ctx.globalAlpha=flash;glowNode(ctx,bx,py,8,'#FFD700',10);ctx.globalAlpha=1}
+}else{
+ctx.strokeStyle='rgba(255,255,255,0.3)';ctx.lineWidth=2;
+ctx.beginPath();ctx.moveTo(px+bi*spacing+10,py);ctx.lineTo(px+(bi+1)*spacing-10,py);ctx.stroke();
+}
+}
+ctx.fillStyle='#FF69B4';ctx.font='4px monospace';ctx.textAlign='left';
+ctx.fillText('b-ions: N-terminal fragments (prefix)',W*0.15,H*0.6);
+ctx.fillStyle='#00CED1';
+ctx.fillText('y-ions: C-terminal fragments (suffix)',W*0.15,H*0.68);
+ctx.fillStyle='#736a5e';
+ctx.fillText('Mass difference between adjacent ions = amino acid mass',W*0.15,H*0.76);
+}
+
+if(stage===2){
+// Mass spectrum: m/z vs intensity peaks
+var specY=H*0.8,specH=H*0.5;
+ctx.strokeStyle='rgba(255,255,255,0.1)';ctx.lineWidth=.5;
+ctx.beginPath();ctx.moveTo(W*0.1,specY);ctx.lineTo(W*0.9,specY);ctx.stroke();
+// Generate peaks (b and y ions)
+var peaks=[
+{mz:0.15,int:0.6,label:'b1',c:'#FF69B4'},
+{mz:0.25,int:0.8,label:'b2',c:'#FF69B4'},
+{mz:0.35,int:0.5,label:'y6',c:'#00CED1'},
+{mz:0.42,int:0.9,label:'b3',c:'#FF69B4'},
+{mz:0.52,int:0.7,label:'y5',c:'#00CED1'},
+{mz:0.58,int:0.4,label:'b4',c:'#FF69B4'},
+{mz:0.68,int:0.85,label:'y4',c:'#00CED1'},
+{mz:0.75,int:0.65,label:'b5',c:'#FF69B4'},
+{mz:0.82,int:0.55,label:'y3',c:'#00CED1'},
+{mz:0.88,int:0.75,label:'b6',c:'#FF69B4'}
+];
+peaks.forEach(function(pk,i){
+var peakProg=Math.min(1,Math.max(0,(stageP*peaks.length-i*0.3)));
+if(peakProg>0){
+var px=W*0.1+pk.mz*W*0.8;
+var ph=pk.int*specH*peakProg;
+ctx.strokeStyle=pk.c;ctx.lineWidth=2;ctx.shadowColor=pk.c;ctx.shadowBlur=4;
+ctx.beginPath();ctx.moveTo(px,specY);ctx.lineTo(px,specY-ph);ctx.stroke();ctx.shadowBlur=0;
+ctx.fillStyle=pk.c;ctx.font='4px monospace';ctx.textAlign='center';
+ctx.fillText(pk.label,px,specY-ph-3);
+}
+});
+ctx.fillStyle='#736a5e';ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('m/z (mass-to-charge ratio)',W/2,specY+12);
+ctx.save();ctx.translate(W*0.05,specY-specH/2);ctx.rotate(-Math.PI/2);
+ctx.fillText('Intensity',0,0);ctx.restore();
+// Noise peaks
+for(var ni=0;ni<15;ni++){
+var nx=W*0.1+Math.random()*W*0.8;
+var nh=Math.random()*specH*0.15;
+ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(nx,specY);ctx.lineTo(nx,specY-nh);ctx.stroke();
+}
+}
+
+if(stage===3){
+// Database search + PSM scoring
+var matched=7,total=10,dbSize=10000;
+var p=1-Math.pow(1-1/dbSize,matched);
+var score=-10*Math.log10(Math.max(p,1e-300));
+// Show database entries
+ctx.fillStyle='#736a5e';ctx.font='5px monospace';ctx.textAlign='left';
+var candidates=['PEPTIDE','PEPTDIE','PEPTDEE','PAPTIDE','PEPTISE'];
+candidates.forEach(function(cand,i){
+var cy=H*0.2+i*H*0.08;
+var isMatch=cand==='PEPTIDE';
+var matchProg=Math.min(1,stageP*3-i*0.5);
+if(matchProg>0){
+ctx.globalAlpha=matchProg;
+if(isMatch){
+glowNode(ctx,W*0.15,cy,3,'#10b981',4);
+ctx.fillStyle='#10b981';
+}else{
+ctx.fillStyle='#736a5e';
+}
+ctx.font='5px monospace';
+ctx.fillText(cand+(isMatch?' ✓ MATCH':''),W*0.15,cy+2);
+ctx.globalAlpha=1;
+}
+});
+// PSM formula
+ctx.fillStyle='#FFD700';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+var formulaProg=Math.min(1,stageP*1.5);
+ctx.globalAlpha=formulaProg;
+ctx.fillText('PSM score = -10 * log10(p)',W/2,H*0.65);
+ctx.fillStyle='#00CED1';ctx.font='5px monospace';
+ctx.fillText('p = '+p.toExponential(2),W/2,H*0.72);
+ctx.fillStyle='#10b981';ctx.font='bold 8px Georgia,serif';
+ctx.fillText('Score = '+score.toFixed(1),W/2,H*0.82);
+ctx.fillStyle='#736a5e';ctx.font='4px monospace';
+ctx.fillText('(>30 = statistically significant)',W/2,H*0.88);
+ctx.globalAlpha=1;
+}
+
+// Stage progress bar
+var pby=H-4;
+for(var s=0;s<4;s++){
+var sx=W*0.2+s*W*0.2;
+ctx.fillStyle=s<=stage?'#FFD700':'#2a261e';
+ctx.fillRect(sx-8,pby-2,16,2);
+if(s===stage){ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText((stageP*100|0)+'%',sx,pby-5)}
+}
+break;
+}
 default:clear();label('Demo: '+id,W/2,H/2)}}
 
 // Animation + new functions
@@ -865,7 +1043,8 @@ var outputs={
 'loeb':['System F = PA + self-trust axiom','Self-trust: Box(Box P -> P) -> Box P','Checking: does F prove Box(Box P -> P)?','YES (by reflection rule)','By Lob: F proves Box P','CONSEQUENCE: F proves EVERYTHING it can state','AI alignment warning: self-trust is catastrophic'],
 'unitary':['Target: random 3-qubit unitary U','Conjectured: needs Omega(2^3) = 8 oracle queries','AI construction: oracle f exists','Circuit size: poly(3) = 9 gates + 1 oracle','Query count: 3 (polynomial!)','CONJECTURE REFUTED','Implication: P=PSPACE would bound black hole complexity'],
 'aixi':['Enumerating all computable programs mu...','Programs of length 1: 2, weight: 0.5 each','Programs of length 2: 4, weight: 0.25 each','Programs of length 3: 8, weight: 0.125 each','Total programs: infinite (sum converges to 1)','Best action a* = argmax_a sum_mu 2^{-|mu|} E[V|a,mu]','Result: a* = "explore" (information-gathering)','Note: AIXI is uncomputable (halting problem)'],
-'lattice_duality':['> Computing g = sum e^{-k^2} for k=0..99','> g = 1.3863186024...','> 2g - 1 = 1.7726372048...','> pi * (2g-1)^2 = 5.0076096396...','> Verification: theta_3(0, e^{-1}) = 1.7726372048...','> Match confirmed!','> The duality principle: flip counting order','> Discontinuous step function -> smooth integral','> Result: pi(2g-1)^2 is the exact closed form']
+'lattice_duality':['> Computing g = sum e^{-k^2} for k=0..99','> g = 1.3863186024...','> 2g - 1 = 1.7726372048...','> pi * (2g-1)^2 = 5.0076096396...','> Verification: theta_3(0, e^{-1}) = 1.7726372048...','> Match confirmed!','> The duality principle: flip counting order','> Discontinuous step function -> smooth integral','> Result: pi(2g-1)^2 is the exact closed form'],
+'peptide_sequencing':['> Fragmenting peptide: PEPTIDE','> b1=97.05 b2=226.09 b3=327.14 b4=428.19 b5=541.27 b6=654.35','> y1=147.07 y2=260.15 y3=361.20 y4=462.25 y5=563.30 y6=692.34','> Precursor: 800.36 Da','> Database search: 10000 entries','> Matched 7/10 peaks against PEPTIDE','> p = 7.0e-4 (null hypothesis probability)','> PSM score = -10*log10(p) = 31.5','> Score > 30: STATISTICALLY SIGNIFICANT']
 };
 var out2=outputs[key]||['Running...','Output: '+(e.intent||e.math||'').substring(0,60)];
 var i=0;var interval=setInterval(function(){
@@ -918,7 +1097,7 @@ var total=data.reduce(function(s,d){return s+d.val},0);var cx=W/2,cy=H/2,rad=Mat
 }
 
 function closePopup(){stopCodeViz();stopAnimDemo();stopFutAnim();document.getElementById('popup').classList.remove('active')}
-function switchTab(id,btn){stopAnimDemo();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='mol'&&currentExpr){var mc=document.getElementById('molCanvas');if(mc)setTimeout(function(){if(currentExpr==='lattice_duality'){startAnimDemo(currentExpr,mc)}else{startSMolAnim(currentExpr,mc)}},50)}if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnimDemo(currentExpr,cv)},50);var og=document.getElementById('obsGraph');if(og)setTimeout(function(){drawGraphType(og,currentGraphType)},50);var ng=document.getElementById('obsNetGraph');if(ng)setTimeout(function(){drawNetGraph(ng)},50)}if(id==='fut'&&currentExpr){stopFutAnim();var fc=document.getElementById('futChart');if(fc){startFutAnim();renderDataset()}}}
+function switchTab(id,btn){stopAnimDemo();document.querySelectorAll('.popup-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.popup-pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+id).classList.add('active');if(id==='mol'&&currentExpr){var mc=document.getElementById('molCanvas');if(mc)setTimeout(function(){if(currentExpr==='lattice_duality'||currentExpr==='peptide_sequencing'){startAnimDemo(currentExpr,mc)}else{startSMolAnim(currentExpr,mc)}},50)}if(id==='obs'&&currentExpr){var cv=document.getElementById('demoCv');if(cv)setTimeout(function(){startAnimDemo(currentExpr,cv)},50);var og=document.getElementById('obsGraph');if(og)setTimeout(function(){drawGraphType(og,currentGraphType)},50);var ng=document.getElementById('obsNetGraph');if(ng)setTimeout(function(){drawNetGraph(ng)},50)}if(id==='fut'&&currentExpr){stopFutAnim();var fc=document.getElementById('futChart');if(fc){startFutAnim();renderDataset()}}}
 function switchCode(l,btn){btn.parentElement.querySelectorAll('.code-tab').forEach(function(t){t.classList.remove('active')});document.querySelectorAll('.code-content').forEach(function(c){c.classList.remove('active')});btn.classList.add('active');document.getElementById('cc-'+l).classList.add('active')}
 
 function loadDataset(cat){var o=document.getElementById('dsOut');if(!cat){o.innerHTML='';return}var d={'quant-ph':['Aaronson arXiv:0910.4698','Shor arXiv:quant-ph/9508027','Grover arXiv:quant-ph/9605043'],'cs.AI':['Aaronson "Alignment" OpenAI 2022','Christiano arXiv:1706.03741'],'math.LO':['G\u00f6del 1931','L\u00f6b 1955'],'cs.LG':['Vaswani arXiv:1706.03762','Tishby 1999']};var p=d[cat]||[];o.innerHTML='<strong>'+cat+'</strong> '+p.length+' papers:<br>'+p.map(function(x){return '&bull; '+x}).join('<br>')}
