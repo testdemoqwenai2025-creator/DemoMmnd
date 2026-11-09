@@ -304,6 +304,7 @@ CODE={
 ,
 "mofography":{
   "name": "7. Mofography: Pore Network Analysis",
+  "intent": "Mofography decomposes void space in nanoporous materials into individual pores connected by windows. It computes a distance-to-framework field, segments it into pore regions, and constructs a pore graph for percolation analysis and CO2/H2 storage screening.",
   "langs": {
     "Python": "import numpy as np\nfrom mofography import PoreNetwork\n\n# Load atomistic structure (CIF/POSCAR)\npn = PoreNetwork.from_file(\"HKUST-1.cif\")\n\n# Stage 1: Compute distance-to-framework field\ndist_field = pn.compute_distance_field(resolution=0.1)\n# dist_field[x,y,z] = min distance to nearest framework atom\n\n# Stage 2: Segment void space into individual pores\npores = pn.segment_void(dist_field, method=\"watershed\")\n# Each voxel assigned to a non-overlapping pore region\n\n# Stage 3: Pore-level characterization\nfor pore in pores:\n    print(f\"Pore {pore.id}: d={pore.diameter:.2f}A, \"\n          f\"V={pore.volume:.1f}A3, S={pore.surface_area:.1f}A2\")\n\n# Stage 4: Construct pore graph\ngraph = pn.build_pore_graph(pores)\n# Nodes = pore centroids, Edges = windows (shared boundaries)\nprint(f\"Graph: {graph.n_nodes} pores, {graph.n_edges} windows\")\nprint(f\"Percolating: {graph.is_percolating()}\")\n\n# Stage 5: Topological analysis\ncentrality = graph.betweenness_centrality()\npaths = graph.shortest_paths()\ntypes = graph.classify_pore_types()  # by cavity size + vdW energy",
     "TypeScript": "import { PoreNetwork } from \"mofography\";\n\nconst pn = PoreNetwork.fromFile(\"HKUST-1.cif\");\n\n// Distance-to-framework field\nconst distField = pn.computeDistanceField(0.1);\n\n// Segment into individual pores\nconst pores = pn.segmentVoid(distField, \"watershed\");\n\n// Pore-level characterization\npores.forEach(p =>\n  console.log(`Pore ${p.id}: d=${p.diameter}A, V=${p.volume}A3`)\n);\n\n// Pore graph: nodes=pores, edges=windows\nconst graph = pn.buildPoreGraph(pores);\nconsole.log(`Graph: ${graph.nNodes} pores, ${graph.nEdges} windows`);\nconsole.log(`Percolating: ${graph.isPercolating()}`);",
@@ -407,7 +408,7 @@ var e=CODE[key];var shortName=e.name.replace(/^[0-9]+\.\s/,'');
 html+='<div class="expr-card" data-key="'+key+'" onclick="openPopup(\''+key+'\')">';
 html+='<div class="expr-card-num">'+e.name.split('.')[0]+'</div>';
 html+='<div class="expr-card-name">'+shortName+'</div>';
-html+='<div class="expr-card-preview">'+e.intent.substring(0,100)+'...</div>';
+html+='<div class="expr-card-preview">'+(e.intent||e.math||'').substring(0,100)+'...</div>';
 html+='<div class="expr-card-langs">';
 LANGS.forEach(function(l){html+='<span class="lang-pill">'+l+'</span>'});
 html+='</div></div>';
