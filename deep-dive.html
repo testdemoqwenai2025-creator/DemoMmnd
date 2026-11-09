@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="version" content="2026-11-06-v31-deep-dive-rl-enhanced">
+<meta name="version" content="2026-11-06-v32-deep-dive-wsp">
 <title>Deep Dive: From Physics Discovery to Reinforcement Learning · Mmnd</title>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
@@ -91,6 +91,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <li><a href="#sec8">HydroGym: RL meets fluid dynamics</a></li>
 <li><a href="#sec8b">Global impact: aircraft to artificial hearts</a></li>
 <li><a href="#sec9">Future: where RL is heading</a></li>
+<li><a href="#sec_wsp">Weight-Space Programming: LLMs that read &amp; write weights</a></li>
 <li><a href="#sec10">References</a></li>
 </ol>
 </div>
@@ -317,6 +318,73 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <p class="pullquote">The reward-shaping problem is where human values enter the system &mdash; and where the hardest alignment challenges lie. An RL agent optimizes whatever reward you give it, including rewards you didn't intend to specify. This is both the power and the danger of RL.</p>
 </section>
 
+
+<!-- SECTION: Weight-Space Programming -->
+<section id="sec_wsp">
+<h2><span class="num">&sect;WSP</span>Weight-Space Programming: LLMs That Read &amp; Write Neural Weights</h2>
+
+<div style="background:linear-gradient(135deg,rgba(10,9,8,0.97),rgba(20,15,10,0.95));border:1px solid rgba(194,65,12,.2);border-radius:1rem;padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+<div style="font-family:Georgia,serif;font-size:.875rem;color:#FFD700;margin-bottom:.5rem">Paper: Sparks of Weight-Space Programming (Takehi, Teoh, Zhang, Khattab &mdash; MIT CSAIL, Nov 2026)</div>
+<div style="font-size:.75rem;color:#736a5e;margin-bottom:1rem">GPT-6 Astra reads raw weights as text, identifies trained behaviors, fixes failures, and writes functional networks from scratch &mdash; without gradient descent.</div>
+<canvas id="cvWSP" style="width:100%;height:380px;border:1px solid rgba(255,255,255,.1);border-radius:.5rem;background:#0a0908;display:block"></canvas>
+<div style="font-size:.6875rem;color:#736a5e;margin-top:.5rem;text-align:center">4-stage animated pipeline: weight reading &rarr; weight fixing &rarr; weight writing &rarr; resource comparison. Scroll-triggered start.</div>
+</div>
+
+<h3>The Discovery</h3>
+<p><strong>Frontier LLMs can natively read and write neural network weights.</strong> GPT-6 Astra, given 17,253 raw weight values as text, identified that a network was trained to play Breakout &mdash; with 99% confidence, no tools, no forward passes. It found the paddle in the first-layer weights (strong values along row 8, the bottom of the grid) and the bricks in the reward-channel weights (rows 1&ndash;3). This is not pattern matching on architecture &mdash; the network dimensions were identical across all four games tested. Astra read the <em>function</em> from the <em>numbers</em>.</p>
+
+<p><strong>Then it wrote weights from scratch.</strong> Given the rules of Breakout and a zero-initialized network (600&rarr;32&rarr;32&rarr;6), Astra wrote 122 lines of weight assignments in one reply. The resulting network scored <strong>517.4</strong> &mdash; PPO trained for 100 million steps scored 15.8. That is a <strong>33&times; improvement with zero training</strong>, zero data, zero gradients, and zero environment interactions. The network never played the game before being scored.</p>
+
+<p><strong>Then it fixed a real language model.</strong> Qwen3.5-0.8B scored 7.9% on MATH-500. Astra identified a reasoning-loop bug in its weights (documented in Qwen&rsquo;s own model card), and fixed it by editing <strong>0.016% of the weights</strong> &mdash; a few thousand values output as text. MATH-500 jumped to <strong>48.1%</strong>, and IFEval (instruction following) improved 3&times;, generalizing out of the box to tasks Astra was never asked about.</p>
+
+<h3>The Four Capabilities &mdash; Animated Above</h3>
+
+<p><strong>Stage 1: Weight Reading.</strong> Raw weight values flow as text into an LLM. The LLM reasons about the weight structure &mdash; where first-layer weights concentrate, which actions the output layer differentiates, which attention heads compose into induction circuits. In Experiment 3, Astra independently rediscovered the Elhage et al. method for finding copying heads by multiplying weight matrices &mdash; a method we never told it about. It identified the training language (Python vs romaji vs English) from the middle layers alone, with input and output layers removed.</p>
+
+<p><strong>Stage 2: Weight Fixing.</strong> A Kinetix car-ramp policy trained with PPO for 1 billion steps gets stuck &mdash; it drives straight at the ramp and stalls. Astra reads the weights, the scene description, and one episode trace. It identifies the local minimum (the network never samples reverse) and adds a new circuit: a few units per layer that read position and velocity, back up the car, then hand control back to the trained policy once past the obstacle. It edits <strong>3.5% of weights</strong> (6,073 of 171,664) in one shot. Result: 100% success across 1,024 episodes.</p>
+
+<p><strong>Stage 3: Weight Writing.</strong> Given game rules and a zero-weight network, Astra writes every number itself. For Breakout, it creates directional-motion detectors in units 0&ndash;3, subtracts paddle position from target positions, and wires the output layer to favor left/right movement. The 122-line weight program is not a trained policy &mdash; it is a hand-crafted circuit, designed by reasoning about what the game requires.</p>
+
+<p><strong>Stage 4: Resource Comparison.</strong> PPO needs 100 million environment steps, GPU clusters, and hours of training. Astra needs 3,739 output tokens (~$0.0002 at current pricing). The cost reduction for this task class is approximately <strong>50 million times</strong>. No GPUs were used. No training data was collected. No loss function was computed. No gradients were calculated.</p>
+
+<h3>Mathematical Formulation</h3>
+<p>Traditional optimization updates weights via gradient descent:</p>
+<p style="font-family:Georgia,serif;font-size:1rem;text-align:center;background:var(--secondary);padding:.75rem;border-radius:.375rem;margin:.75rem 0">W<sub>t+1</sub> = W<sub>t</sub> &minus; &eta;&nabla;<sub>W</sub> L(W<sub>t</sub>)</p>
+<p>Weight-Space Programming replaces this with LLM-directed reasoning:</p>
+<p style="font-family:Georgia,serif;font-size:1rem;text-align:center;background:var(--secondary);padding:.75rem;border-radius:.375rem;margin:.75rem 0">W<sub>new</sub> = LLM(spec, W<sub>old</sub>) &nbsp;&nbsp; where &nbsp;&nbsp; |W<sub>new</sub> &minus; W<sub>old</sub>| / |W<sub>old</sub>| &le; &epsilon; (sparse edit)</p>
+<p>For the Qwen fix: &epsilon; = 0.00016 (0.016% of weights changed). For the car-ramp fix: &epsilon; = 0.035 (3.5%). For from-scratch writing: W<sub>old</sub> = 0 (all weights written by the LLM).</p>
+
+<h3>Resource Consumption Analysis</h3>
+<table style="width:100%;border-collapse:collapse;font-size:.8125rem;margin:1rem 0">
+<tr style="background:var(--accent-bg)"><th style="padding:.5rem .75rem;text-align:left;border:1px solid var(--border)">Metric</th><th style="padding:.5rem .75rem;text-align:left;border:1px solid var(--border)">PPO (traditional)</th><th style="padding:.5rem .75rem;text-align:left;border:1px solid var(--border)">Weight-Space Programming</th><th style="padding:.5rem .75rem;text-align:left;border:1px solid var(--border)">Reduction</th></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Environment interactions</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">100,000,000</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">0</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">&infin;&times;</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">GPU-hours</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">~28 hours</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">~0 (inference only)</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">~50,000&times;</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Output tokens</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">N/A (weights via gradients)</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">3,739</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--muted)">N/A</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Cost (estimated)</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">~$10 (GPU compute)</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">~$0.0002 (tokens)</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">~50M&times;</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Carbon footprint</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">~5 kg CO&#8322;</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">~0.0001 kg CO&#8322;</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">~50,000&times;</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Breakout score</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">15.8 (100M steps)</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">517.4 (zero training)</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">33&times; better</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Qwen MATH-500</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">7.9% (SFT + RLHF)</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">48.1% (0.016% weight edit)</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">6&times; improvement</td></tr>
+</table>
+
+<h3>Next-Phase Thoughts and Future Considerations</h3>
+
+<p><strong>The simulations and animations above are not just illustrations &mdash; they represent the actual pipeline.</strong> The weight-reading stage shows numbers flowing into an LLM, which is literally what happens: weights are serialized as text and passed as a prompt. The weight-fixing stage shows specific weights being edited, which is exactly what Astra does: it outputs Python code like <code>embed.W[52, 6] = 1</code>. The weight-writing stage shows the LLM generating values that materialize into a functioning network &mdash; this is the from-scratch Breakout result. The resource comparison stage quantifies the paradigm shift.</p>
+
+<p><strong>Phase 1 (2026-2027): Weight Diagnostics as a Service.</strong> The reading capability alone is immediately deployable. A model audit service takes your fine-tuned model&rsquo;s weights and returns a behavioral report: what it learned, what circuits it developed, what failure modes it has, whether it&rsquo;s sycophantic (Experiment 7). This is automated red-teaming of weight space &mdash; the AI safety community&rsquo;s dream. Every deployed model can have its circuits mapped and documented automatically, not as a research paper, but as a living diagnostic. Regulatory compliance (EU AI Act&rsquo;s transparency requirements) becomes technically feasible.</p>
+
+<p><strong>Phase 2 (2027-2028): Gradient-Free Fine-Tuning.</strong> The Qwen result (7.9% &rarr; 48.1% MATH-500 by editing 0.016% of weights) suggests many model improvements don&rsquo;t need training data &mdash; they need weight corrections. Current models ship with known issues documented in their own model cards. Weight-space programming enables surgical fixes: identify the problematic circuit, edit those specific weights, ship the corrected model. No retraining, no regression testing on the full training set, no compute cluster. If 50% of fine-tuning tasks can be replaced, GPU demand for model improvement drops by half. The carbon footprint of AI improvement shrinks proportionally.</p>
+
+<p><strong>Phase 3 (2028-2030): Reasoning-Native Optimization.</strong> The blog post&rsquo;s closing thesis: &ldquo;our neural network weights will soon be natively optimized by LLMs that deliberately reason about their weights.&rdquo; This replaces Adam/Muon with LLM-as-optimizer. Implications: no more hyperparameter tuning (the LLM reasons about learning rate per-layer), no more training instability (the LLM diagnoses and fixes divergence mid-training), no more catastrophic forgetting (the LLM edits weights to preserve old capabilities). The optimizer becomes a reasoner, and the reasoner understands what it optimizes.</p>
+
+<p><strong>Phase 4 (2030+): Weight-Space Compilation.</strong> Astra writing game networks from scratch is the seed of weight-space compilation &mdash; translating natural-language specifications directly into functional weight matrices. The inverse of interpretability: instead of reading weights to understand behavior, write weights to implement behavior. Neural networks become programmable like software, with &ldquo;source code&rdquo; being a natural-language spec and &ldquo;compilation&rdquo; being LLM-generated weights. A developer says &ldquo;I need a controller for a drone that hovers stably in wind&rdquo; and the LLM compiles the weights.</p>
+
+<p><strong>Critical Risks.</strong> Scale: current results are on 17K&ndash;172K weight networks; a 70B model has 140 billion weights. The scaling path likely involves hierarchical analysis (layer-by-layer, head-by-head). Verification: Astra&rsquo;s edits work, but can we prove they&rsquo;re safe? A weight edit that fixes math might introduce subtle biases. We need formal verification methods for weight-space edits. Security: if an LLM can fix weights, it can inject backdoors &mdash; editing a few weights to create a triggerable vulnerability. Weight-space programming is dual-use. Model provenance and weight-integrity checking become critical security concerns.</p>
+
+<p><strong>The deeper insight.</strong> Throughout deep learning history, we encoded our inductive biases into tiny symbolic optimizers (Adam, Muon). Weight-Space Programming changes this: the optimizer is now a reasoner that deliberately thinks about what each weight does. When Astra fixes the car-ramp network, it doesn&rsquo;t adjust learning rates &mdash; it adds a new circuit that reads position and velocity. This is programming, not optimization. The distinction between &ldquo;interpreting&rdquo; and &ldquo;improving&rdquo; collapses &mdash; they&rsquo;re both just reading and writing weights. The black box narrative that has dominated AI safety discourse may be ending: sufficiently capable LLMs can read any model&rsquo;s weights and explain what it does.</p>
+
+<p class="pullquote">The cost of intelligence is about to collapse. Not because models get cheaper to train, but because the optimizer that writes their weights becomes a reasoner that needs no data, no gradients, and no GPU cluster. The bottleneck shifts from compute to understanding.</p>
+</section>
+
 <!-- SECTION 10: References -->
 <section id="sec10">
 <h2><span class="num">&sect;10</span>References</h2>
@@ -336,7 +404,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 </main>
 <footer><div class="footer-inner">
 <p>&copy; 2026 Mmnd Collective &middot; Apache-2.0 &middot; <a href="mailto:testdemoqwenai2025@gmail.com">testdemoqwenai2025@gmail.com</a></p>
-<p>v31-deep-dive-rl-enhanced &middot; zero external dependencies &middot; fully animated &middot; RL section added</p>
+<p>v32-deep-dive-wsp &middot; zero external dependencies &middot; fully animated &middot; RL section added</p>
 </div></footer>
 <script>
 // === THEME ===
@@ -550,6 +618,249 @@ ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fi
 // === START ALL ANIMATIONS ===
 document.addEventListener('DOMContentLoaded',function(){
 startAnim('heroCanvas',drawHero);
+// === WEIGHT-SPACE PROGRAMMING: 4-STAGE PIPELINE ===
+startAnim('cvWSP',drawWeightSpace);
+function drawWeightSpace(ctx,W,H,t){
+gradientBg(ctx,W,H,t,'#080908','#0a0a0f');
+// 4 stages, each 5 seconds, total cycle 20 seconds
+var cycleTime=t%20;
+var stage=Math.floor(cycleTime/5);
+var stageProg=(cycleTime%5)/5;
+
+// Title bar
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,22);
+ctx.fillStyle='#FFD700';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';
+var stageTitles=['Stage 1: Weight Reading','Stage 2: Weight Fixing','Stage 3: Weight Writing','Stage 4: Resource Comparison'];
+ctx.fillText(stageTitles[stage],W/2,14);
+
+// Stage progress indicator
+for(var s=0;s<4;s++){
+var sx=W*0.15+s*W*0.2;
+var active=s<=stage;
+ctx.fillStyle=active?'#FFD700':'#2a261e';
+ctx.fillRect(sx-15,H-8,30,3);
+if(s===stage){ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText((stageProg*100|0)+'%',sx,H-12)}
+}
+
+if(stage===0){
+// === STAGE 1: WEIGHT READING ===
+// Left: weight numbers flowing (Matrix-style)
+ctx.fillStyle='#10b981';ctx.font='5px monospace';ctx.textAlign='left';
+var weightSamples=['-0.080','0.255','-0.015','-0.141','0.010','-0.170','-0.114','0.160','0.531','0.897','0.219','-0.267','3.194','2.708','-4.791','4.066','-4.013'];
+for(var i=0;i<20;i++){
+var rowIdx=Math.floor((t*2+i)%weightSamples.length);
+var py=30+i*14;
+var px=15+Math.sin(t*0.5+i*0.3)*5;
+var alpha=0.3+0.5*Math.sin(t*1+i*0.5);
+if(alpha<0)alpha=0;
+ctx.globalAlpha=alpha;
+ctx.fillText('W1 row '+Math.floor(i*7%500)+' '+weightSamples[rowIdx],px,py);
+}
+ctx.globalAlpha=1;
+
+// Flowing particles from weights to LLM
+flowParticles(ctx,W*0.28,H*0.4,W*0.42,H*0.4,t,5,'#10b981',0.8);
+
+// Center: LLM "brain" processing
+var cx=W*0.48,cy=H*0.4;
+// Pulsing brain circle
+var pulse=25+Math.sin(t*2)*5;
+ctx.fillStyle='rgba(255,215,0,0.1)';ctx.beginPath();ctx.arc(cx,cy,pulse+10,0,Math.PI*2);ctx.fill();
+glowNode(ctx,cx,cy,pulse,'#FFD700',15);
+// Inner neurons
+for(var i=0;i<8;i++){
+var a=i/8*Math.PI*2+t*0.5;
+var r=pulse*0.6;
+glowNode(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r,3,'#00CED1',6);
+// Connections
+ctx.strokeStyle='rgba(0,206,209,0.3)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);ctx.stroke();
+}
+ctx.fillStyle='#000';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.fillText('LLM',cx,cy+2);
+
+// Flowing particles from LLM to output
+flowParticles(ctx,cx+pulse,cy,W*0.72,cy,t,4,'#FFD700',0.8);
+
+// Right: output (game identification)
+ctx.fillStyle='#10b981';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';
+var progLabel=Math.min(1,stageProg*1.5);
+ctx.globalAlpha=progLabel;
+ctx.fillText('Breakout',W*0.82,cy-5);
+ctx.fillStyle='#FFD700';ctx.font='6px monospace';
+ctx.fillText('99% confident',W*0.82,cy+8);
+ctx.globalAlpha=1;
+// Game icon (paddle + bricks)
+if(progLabel>0.5){
+ctx.fillStyle='#FFD700';ctx.fillRect(W*0.78,cy+20,20,3); // paddle
+ctx.fillStyle='#ff6b6b';
+for(var br=0;br<3;br++)for(var bc=0;bc<5;bc++)ctx.fillRect(W*0.78+bc*4,cy+25+br*3,3,2); // bricks
+}
+// Formula
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='center';
+ctx.fillText('W in R^n -> LLM -> f(W)',W/2,H*0.75);
+}
+
+else if(stage===1){
+// === STAGE 2: WEIGHT FIXING ===
+// Neural network diagram
+var layers=[{x:W*0.15,n:4},{x:W*0.35,n:5},{x:W*0.55,n:5},{x:W*0.75,n:3}];
+var nodes=[];
+layers.forEach(function(l,li){
+for(var i=0;i<l.n;i++){
+var ny=H*0.15+(i+0.5)*(H*0.5/l.n);
+var isFailing=(li===1&&(i===2||i===3))||(li===2&&i===2);
+var isFixed=isFailing&&stageProg>0.3+Math.sin(t*2)*0.1;
+nodes.push({x:l.x,y:ny,failing:isFailing,fixed:isFixed,li:li});
+}
+});
+// Draw edges
+ctx.lineWidth=1;
+nodes.forEach(function(n){
+nodes.forEach(function(m){
+if(m.li===n.li+1){
+var isFixedEdge=(n.failing||m.failing)&&stageProg>0.4;
+ctx.strokeStyle=isFixedEdge?'rgba(16,185,129,0.5)':'rgba(255,255,255,0.08)';
+ctx.beginPath();ctx.moveTo(n.x,n.y);ctx.lineTo(m.x,m.y);ctx.stroke();
+}
+})
+});
+// Draw nodes
+nodes.forEach(function(n){
+var color=n.fixed?'#10b981':(n.failing?'#ff6b6b':'#736a5e');
+var glow=n.fixed?8:(n.failing?6:2);
+if(n.failing&&!n.fixed){
+var blink=Math.sin(t*5)>0;
+if(blink){glowNode(ctx,n.x,n.y,5,color,glow)}
+else{ctx.fillStyle='#2a261e';ctx.beginPath();ctx.arc(n.x,n.y,5,0,Math.PI*2);ctx.fill()}
+}else{
+glowNode(ctx,n.x,n.y,5,color,glow);
+}
+});
+// Edit indicator
+if(stageProg>0.3){
+ctx.fillStyle='#FFD700';ctx.font='bold 6px monospace';ctx.textAlign='center';
+ctx.fillText('Astra edits 3.5% of weights',W/2,H*0.72);
+// Show edit code
+ctx.fillStyle='#10b981';ctx.font='4px monospace';
+var edits=['embed.W[52, 6] = 1','actor0.W[6, 122] = 80','actor_head.b[0] -= 200'];
+var editIdx=Math.floor(stageProg*3)%3;
+ctx.fillText(edits[editIdx],W/2,H*0.78);
+}
+// Before/after labels
+ctx.fillStyle='#ff6b6b';ctx.font='5px monospace';ctx.textAlign='left';
+ctx.fillText('BEFORE: stuck (0%)',10,H*0.85);
+ctx.fillStyle='#10b981';
+ctx.fillText('AFTER: 100% success',W*0.55,H*0.85);
+}
+
+else if(stage===2){
+// === STAGE 3: WEIGHT WRITING ===
+// Left: LLM generating weight values as text
+ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='left';
+var genLines=['W1[0,0] = -0.02','W1[0,1] =  0.04','W1[540:600:6, 0] = [0,-0.02,...]','# Units 0..3: directional','W3[22, 0:3] = [0.376, 0.387, 0.537]','b3 = [1.22, 1.01, 1.02, 0.90, 1.30]'];
+for(var i=0;i<6;i++){
+var lineProg=Math.min(1,Math.max(0,(stageProg*8-i*1.2)));
+if(lineProg>0){
+ctx.globalAlpha=lineProg;
+var text=genLines[i].substring(0,Math.floor(genLines[i].length*lineProg));
+ctx.fillText(text,15,35+i*10);
+}
+}
+ctx.globalAlpha=1;
+ctx.fillStyle='#736a5e';ctx.font='4px monospace';
+ctx.fillText('LLM writes weights as text (3,739 tokens)',15,H*0.7);
+
+// Flowing particles: text -> network
+flowParticles(ctx,W*0.3,H*0.4,W*0.5,H*0.4,t,5,'#10b981',0.8);
+
+// Right: network materializing and playing
+var nx=W*0.65,ny=H*0.35;
+// Game screen (Breakout)
+ctx.fillStyle='#0a0908';ctx.fillRect(nx,ny-10,W*0.3,H*0.35);
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.strokeRect(nx,ny-10,W*0.3,H*0.35);
+// Paddle (moving)
+var paddleX=nx+5+Math.sin(t*2)*(W*0.3-20);
+ctx.fillStyle='#FFD700';ctx.fillRect(paddleX,ny+H*0.2-3,15,3);
+// Ball
+var ballX=nx+10+Math.sin(t*1.5)*W*0.25;
+var ballY=ny+5+Math.cos(t*1.3)*H*0.15;
+glowNode(ctx,ballX,ballY,2,'#fff',4);
+// Bricks (disappearing over time)
+ctx.fillStyle='#ff6b6b';
+for(var br=0;br<3;br++)for(var bc=0;bc<8;bc++){
+var brickVisible=(br*8+bc)/24>stageProg*0.5;
+if(brickVisible)ctx.fillRect(nx+5+bc*4,ny+br*3,3,2);
+}
+// Score
+ctx.fillStyle='#10b981';ctx.font='bold 7px monospace';ctx.textAlign='center';
+ctx.fillText('Score: 517.4',nx+W*0.15,ny+H*0.32);
+ctx.fillStyle='#736a5e';ctx.font='4px monospace';
+ctx.fillText('(PPO 100M steps: 15.8)',nx+W*0.15,ny+H*0.36);
+}
+
+else if(stage===3){
+// === STAGE 4: RESOURCE COMPARISON ===
+// Left: PPO (expensive)
+ctx.fillStyle='#ff6b6b';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('PPO (Traditional)',W*0.25,H*0.15);
+// PPO bars
+var ppoMetrics=[
+{n:'Steps',v:100000000,max:100000000,unit:''},
+{n:'GPU-hours',v:28,max:28,unit:'h'},
+{n:'Cost',v:10,max:10,unit:'$'},
+{n:'CO2',v:5,max:5,unit:'kg'}
+];
+ppoMetrics.forEach(function(m,i){
+var y=H*0.25+i*H*0.12;
+ctx.fillStyle='#736a5e';ctx.font='4px monospace';ctx.textAlign='left';
+ctx.fillText(m.n+':',15,y);
+// Bar
+var barW=W*0.18;
+ctx.fillStyle='rgba(255,107,107,0.2)';ctx.fillRect(60,y-4,barW,8);
+var fillW=Math.min(barW,barW*(0.3+stageProg*0.7));
+ctx.fillStyle='#ff6b6b';ctx.shadowColor='#ff6b6b';ctx.shadowBlur=3;ctx.fillRect(60,y-4,fillW,8);ctx.shadowBlur=0;
+ctx.fillStyle='#ff6b6b';ctx.font='4px monospace';ctx.textAlign='left';
+ctx.fillText(m.v.toLocaleString()+m.unit,60+barW+4,y);
+});
+
+// VS divider
+ctx.fillStyle='#FFD700';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('VS',W/2,H*0.4);
+
+// Right: Astra (cheap)
+ctx.fillStyle='#10b981';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Weight-Space Programming',W*0.75,H*0.15);
+var astraMetrics=[
+{n:'Steps',v:0,max:100000000,unit:''},
+{n:'Tokens',v:3739,max:100000000,unit:''},
+{n:'Cost',v:0.0002,max:10,unit:'$'},
+{n:'CO2',v:0.0001,max:5,unit:'kg'}
+];
+astraMetrics.forEach(function(m,i){
+var y=H*0.25+i*H*0.12;
+ctx.fillStyle='#736a5e';ctx.font='4px monospace';ctx.textAlign='left';
+ctx.fillText(m.n+':',W*0.55,y);
+// Bar (tiny compared to PPO)
+var barW=W*0.18;
+ctx.fillStyle='rgba(16,185,129,0.2)';ctx.fillRect(W*0.55+45,y-4,barW,8);
+var fillW=Math.min(barW,barW*(0.3+stageProg*0.7)*(m.v/maxVal(m.v,m.max)));
+ctx.fillStyle='#10b981';ctx.shadowColor='#10b981';ctx.shadowBlur=3;ctx.fillRect(W*0.55+45,y-4,Math.max(1,fillW),8);ctx.shadowBlur=0;
+ctx.fillStyle='#10b981';ctx.font='4px monospace';ctx.textAlign='left';
+ctx.fillText(m.v===0?'0':m.v.toString()+m.unit,W*0.55+45+barW+4,y);
+});
+
+// Reduction ratio
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=Math.min(1,stageProg*2);
+ctx.fillText('~50,000,000x cost reduction',W/2,H*0.78);
+ctx.fillStyle='#10b981';ctx.font='5px monospace';
+ctx.fillText('33x better performance (Breakout: 517 vs 16)',W/2,H*0.85);
+ctx.globalAlpha=1;
+}
+
+function maxVal(a,b){return Math.max(a,b)||1}
+}
+
+// === END WEIGHT-SPACE PROGRAMMING ===
 startAnim('naiveLossCanvas',drawNaiveLoss);
 startAnim('naiveEnergyCanvas',drawNaiveEnergy);
 startAnim('pinnCanvas',drawPinn);
