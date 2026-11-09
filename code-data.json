@@ -1,8 +1,8 @@
 {
   "erdos": {
-    "name": "1. Erd\u0151s unit distance conjecture (disproved)",
+    "name": "1. Erdős unit distance conjecture (disproved)",
     "latex": "u(n) = O\\left(n^{1 + \\frac{c}{\\log \\log n}}\\right)",
-    "intent": "Erd\u0151s 1946 conjectured the maximum unit-distance pairs among n points is maximized by a square grid. AI disproved by algebraic-number-theoretic constructions.",
+    "intent": "Erdős 1946 conjectured the maximum unit-distance pairs among n points is maximized by a square grid. AI disproved by algebraic-number-theoretic constructions.",
     "langs": {
       "Python": "import math\ndef unit_distance_pairs(points):\n    count = 0\n    for i in range(len(points)):\n        for j in range(i+1, len(points)):\n            dx = points[i][0]-points[j][0]\n            dy = points[i][1]-points[j][1]\n            if abs(math.hypot(dx,dy)-1.0) < 1e-9: count += 1\n    return count",
       "TypeScript": "function unitDistancePairs(points: [number,number][]): number {\n  let count = 0;\n  for (let i = 0; i < points.length; i++)\n    for (let j = i+1; j < points.length; j++) {\n      const dx = points[i][0]-points[j][0];\n      const dy = points[i][1]-points[j][1];\n      if (Math.abs(Math.hypot(dx,dy)-1.0) < 1e-9) count++;\n    }\n  return count;\n}",
@@ -18,7 +18,7 @@
         "note": "Count of pairs at distance exactly 1"
       },
       {
-        "symbol": "P \u00d7 P",
+        "symbol": "P × P",
         "code": "for i in range(n): for j in range(i+1, n)",
         "note": "All unordered pairs"
       },
@@ -41,7 +41,7 @@
     "demo": {
       "type": "scatter",
       "title": "Unit-distance pairs on a plane",
-      "desc": "Points scattered randomly. Pairs at distance \u2248 1 connected with lines."
+      "desc": "Points scattered randomly. Pairs at distance ≈ 1 connected with lines."
     }
   },
   "ugc": {
@@ -58,7 +58,7 @@
     },
     "mapping": [
       {
-        "symbol": "x_i - x_j \u2261 c_ij (mod k)",
+        "symbol": "x_i - x_j ≡ c_ij (mod k)",
         "code": "(labeling[i] - labeling[j]) % k == c",
         "note": "Modular arithmetic constraint"
       },
@@ -68,12 +68,12 @@
         "note": "Fraction of satisfied constraints"
       },
       {
-        "symbol": "\u03b5 (epsilon)",
+        "symbol": "ε (epsilon)",
         "code": "1 - epsilon",
         "note": "YES case threshold"
       },
       {
-        "symbol": "\u03b4 (delta)",
+        "symbol": "δ (delta)",
         "code": "delta",
         "note": "NO case threshold"
       },
@@ -90,7 +90,7 @@
     }
   },
   "schrodinger": {
-    "name": "3. Schr\u00f6dinger equation",
+    "name": "3. Schrödinger equation",
     "latex": "i\\hbar \\frac{\\partial}{\\partial t} \\Psi = \\left[ -\\frac{\\hbar^2}{2m}\\nabla^2 + V \\right] \\Psi",
     "intent": "The fundamental equation of non-relativistic quantum mechanics.",
     "langs": {
@@ -108,17 +108,17 @@
         "note": "Square root of -1"
       },
       {
-        "symbol": "\u210f (hbar)",
+        "symbol": "ℏ (hbar)",
         "code": "hbar = 1.0 (natural units)",
         "note": "Reduced Planck constant"
       },
       {
-        "symbol": "\u2202\u03a8/\u2202t",
+        "symbol": "∂Ψ/∂t",
         "code": "psi_new = psi - dt * H_psi",
-        "note": "Time derivative \u2192 discrete time step"
+        "note": "Time derivative → discrete time step"
       },
       {
-        "symbol": "\u2207\u00b2 (Laplacian)",
+        "symbol": "∇² (Laplacian)",
         "code": "np.gradient(np.gradient(psi, dx), dx)",
         "note": "Second spatial derivative"
       },
@@ -128,7 +128,7 @@
         "note": "Potential energy function"
       },
       {
-        "symbol": "|\u03a8|\u00b2 normalization",
+        "symbol": "|Ψ|² normalization",
         "code": "psi /= np.sqrt(np.sum(np.abs(psi)**2)*dx)",
         "note": "Probability conservation"
       }
@@ -136,7 +136,7 @@
     "demo": {
       "type": "wave",
       "title": "Wave function evolution",
-      "desc": "Real part of \u03a8 evolving in time under a harmonic potential."
+      "desc": "Real part of Ψ evolving in time under a harmonic potential."
     }
   },
   "attention": {
@@ -163,7 +163,7 @@
         "note": "Dot product similarity"
       },
       {
-        "symbol": "\u221ad_k",
+        "symbol": "√d_k",
         "code": "math.sqrt(d_k)",
         "note": "Scaling factor prevents gradient explosion"
       },
@@ -173,7 +173,7 @@
         "note": "Normalized attention weights"
       },
       {
-        "symbol": "\u00d7 V",
+        "symbol": "× V",
         "code": "matmul(weights, V)",
         "note": "Weighted sum of values"
       }
@@ -181,34 +181,34 @@
     "demo": {
       "type": "heatmap",
       "title": "Attention weight matrix",
-      "desc": "QK^T/\u221ad_k as a heatmap \u2014 brighter = higher attention."
+      "desc": "QK^T/√d_k as a heatmap — brighter = higher attention."
     }
   },
   "godel": {
-    "name": "5. G\u00f6del/Turing computability bound",
+    "name": "5. Gödel/Turing computability bound",
     "latex": "\\forall F : \\exists T : F \\nvdash T \\land F \\nvdash \\neg T",
     "intent": "Absolute bound on automated theorem proving. Even AI cannot escape this.",
     "langs": {
       "Python": "# For any consistent F strong enough for arithmetic,\n# there exists T undecidable in F. Even AI cannot escape.\ndef godel_sentence(F):\n    G = \"This sentence is not provable in \" + F\n    return G  # Neither G nor -G is provable in F",
-      "TypeScript": "// G\u00f6del: for any consistent F, there exists\n// a true T that F cannot prove or disprove.\nfunction godelSentence(F: string): string {\n  return \"G(F) is not provable in \" + F;\n  // Neither G(F) nor !G(F) is derivable in F\n}",
-      "Go": "// G\u00f6del first incompleteness theorem\nfunc godelSentence(F string) string {\n    return \"G(\" + F + \") is not provable in \" + F\n    // The limit is on F, not on the prover\n}",
+      "TypeScript": "// Gödel: for any consistent F, there exists\n// a true T that F cannot prove or disprove.\nfunction godelSentence(F: string): string {\n  return \"G(F) is not provable in \" + F;\n  // Neither G(F) nor !G(F) is derivable in F\n}",
+      "Go": "// Gödel first incompleteness theorem\nfunc godelSentence(F string) string {\n    return \"G(\" + F + \") is not provable in \" + F\n    // The limit is on F, not on the prover\n}",
       "Scala": "// Even infinitely scaled AI cannot escape this.\n// The bound is on F itself, not on compute.\ndef godelSentence(F: String): String =\n  \"G(\" + F + \") is not provable in \" + F",
       "C": "/* The absolute limit: even unbounded AI cannot escape.\n   The bound is on F itself, not on the prover speed. */\nconst char* godel_sentence(const char *F) {\n    return \"G(F) is not provable in F\"; /* undecidable */\n}",
       "Elixir": "# For any consistent F: exists T: F cannot prove T or not-T\n# Even AI cannot escape the mathematical limit\ndef godel_sentence(f), do: \"G(#{f}) is not provable in #{f}\""
     },
     "mapping": [
       {
-        "symbol": "\u22a2 (turnstile)",
+        "symbol": "⊢ (turnstile)",
         "code": "'provable in'",
         "note": "Derivable in the formal system"
       },
       {
-        "symbol": "\u25a1P (box P)",
+        "symbol": "□P (box P)",
         "code": "'P is provable in F'",
         "note": "Provability predicate"
       },
       {
-        "symbol": "\u00ac (negation)",
+        "symbol": "¬ (negation)",
         "code": "not P / '!P'",
         "note": "Logical NOT"
       },
@@ -218,20 +218,20 @@
         "note": "The system (e.g., PA, ZFC)"
       },
       {
-        "symbol": "G(F) (G\u00f6del sentence)",
+        "symbol": "G(F) (Gödel sentence)",
         "code": "'This is not provable in F'",
         "note": "Self-referential construction"
       },
       {
-        "symbol": "\u22ac (not provable)",
+        "symbol": "⊬ (not provable)",
         "code": "return False # no proof exists",
-        "note": "Neither G nor \u00acG is derivable"
+        "note": "Neither G nor ¬G is derivable"
       }
     ],
     "demo": {
       "type": "selfref",
       "title": "Self-referential loop",
-      "desc": "G(F) refers to itself \u2014 the undecidable sentence."
+      "desc": "G(F) refers to itself — the undecidable sentence."
     }
   },
   "kolmogorov": {
@@ -308,7 +308,7 @@
         "note": "Event horizon surface area"
       },
       {
-        "symbol": "\u2113_P (Planck length)",
+        "symbol": "ℓ_P (Planck length)",
         "code": "1.616e-35",
         "note": "Smallest meaningful length scale"
       },
@@ -340,22 +340,22 @@
       {
         "symbol": "g* (theorem)",
         "code": "model.solve(premise)",
-        "note": "AI output \u2014 the target theorem"
+        "note": "AI output — the target theorem"
       },
       {
-        "symbol": "Model_\u03b8",
-        "code": "AI model with parameters \u03b8",
+        "symbol": "Model_θ",
+        "code": "AI model with parameters θ",
         "note": "Neural network / LLM"
       },
       {
-        "symbol": "s_0 \u2192 g* (one-shot)",
+        "symbol": "s_0 → g* (one-shot)",
         "code": "result = model.solve(premise)",
-        "note": "Single forward pass \u2014 no intermediate steps"
+        "note": "Single forward pass — no intermediate steps"
       },
       {
         "symbol": "ExtractPath",
         "code": "extract_path(s0, g_star)",
-        "note": "Human archaeology \u2014 reconstruct understanding"
+        "note": "Human archaeology — reconstruct understanding"
       },
       {
         "symbol": "s_1, s_2, ...",
@@ -393,7 +393,7 @@
         "note": "Mutual information between Z and Y"
       },
       {
-        "symbol": "\u03b2 (beta)",
+        "symbol": "β (beta)",
         "code": "beta parameter",
         "note": "Compression-prediction tradeoff"
       },
@@ -403,65 +403,65 @@
         "note": "What we optimize over"
       },
       {
-        "symbol": "\u03a3 p(x,y) log[p(x,y)/(p(x)p(y))]",
+        "symbol": "Σ p(x,y) log[p(x,y)/(p(x)p(y))]",
         "code": "sum(p * log(p / (px * py)))",
-        "note": "MI formula \u2192 discrete sum"
+        "note": "MI formula → discrete sum"
       }
     ],
     "demo": {
       "type": "ibn",
       "title": "Information bottleneck flow",
-      "desc": "X \u2192 Z (compress) \u2192 Y (predict). \u03b2 controls the tradeoff."
+      "desc": "X → Z (compress) → Y (predict). β controls the tradeoff."
     }
   },
   "loeb": {
-    "name": "10. L\u00f6b's theorem",
+    "name": "10. Löb's theorem",
     "latex": "\\vdash \\Box(\\Box P \\to P) \\implies \\vdash \\Box P",
     "intent": "If a system proves that provability implies truth, it proves everything. The self-trust trap.",
     "langs": {
-      "Python": "# L\u00f6b: if F proves (Box P -> P), then F proves P\n# AI alignment consequence: self-trust = prove anything\ndef loeb(box_implies_provable):\n    if box_implies_provable:\n        return True  # Box P must hold\n    return False",
-      "TypeScript": "// L\u00f6b in modal logic GL\nfunction loeb(b:boolean):boolean{\n  if(b) return true;\n  return false;\n}",
+      "Python": "# Löb: if F proves (Box P -> P), then F proves P\n# AI alignment consequence: self-trust = prove anything\ndef loeb(box_implies_provable):\n    if box_implies_provable:\n        return True  # Box P must hold\n    return False",
+      "TypeScript": "// Löb in modal logic GL\nfunction loeb(b:boolean):boolean{\n  if(b) return true;\n  return false;\n}",
       "Go": "func loeb(b bool) bool {\n  if b { return true }\n  return false\n}",
       "Scala": "def loeb(b:Boolean):Boolean=\n  if(b) true else false",
-      "C": "/* L\u00f6b: self-trust trap for AI alignment */\nbool loeb(bool b){\n  if(b) return true;\n  return false;\n}",
+      "C": "/* Löb: self-trust trap for AI alignment */\nbool loeb(bool b){\n  if(b) return true;\n  return false;\n}",
       "Elixir": "def loeb(box_box_p_implies_p), do: box_box_p_implies_p"
     },
     "mapping": [
       {
-        "symbol": "\u22a2 (provable)",
+        "symbol": "⊢ (provable)",
         "code": "is_provable()",
         "note": "Derivable in the system"
       },
       {
-        "symbol": "\u25a1P",
+        "symbol": "□P",
         "code": "box(P) = 'P is provable'",
         "note": "Provability predicate"
       },
       {
-        "symbol": "\u25a1P \u2192 P",
+        "symbol": "□P → P",
         "code": "if box(P) then P",
         "note": "Provability implies truth"
       },
       {
-        "symbol": "\u25a1(\u25a1P \u2192 P)",
+        "symbol": "□(□P → P)",
         "code": "box(if box(P) then P)",
         "note": "System proves the implication"
       },
       {
-        "symbol": "\u27f9 (implies)",
+        "symbol": "⟹ (implies)",
         "code": "if ... then ...",
         "note": "Logical consequence"
       },
       {
         "symbol": "Self-trust trap",
-        "code": "# If AI trusts own proofs \u2192 proves anything",
+        "code": "# If AI trusts own proofs → proves anything",
         "note": "Alignment danger"
       }
     ],
     "demo": {
       "type": "selftrust",
       "title": "Self-trust loop",
-      "desc": "If system trusts own proofs \u2192 proves everything. The trap."
+      "desc": "If system trusts own proofs → proves everything. The trap."
     }
   },
   "unitary": {
@@ -478,13 +478,13 @@
     },
     "mapping": [
       {
-        "symbol": "U \u2208 U(2^n)",
+        "symbol": "U ∈ U(2^n)",
         "code": "target_unitary matrix",
         "note": "Arbitrary n-qubit unitary"
       },
       {
-        "symbol": "f: {0,1}* \u2192 {0,1}",
-        "code": "oracle_function(input) \u2192 bool",
+        "symbol": "f: {0,1}* → {0,1}",
+        "code": "oracle_function(input) → bool",
         "note": "Classical Boolean oracle"
       },
       {
@@ -498,7 +498,7 @@
         "note": "Polynomial-size circuit (the refuted conjecture said exponential)"
       },
       {
-        "symbol": "\u03a9(2^n) (conjectured)",
+        "symbol": "Ω(2^n) (conjectured)",
         "code": "# Was believed to need exponential queries",
         "note": "Disproved by construction"
       }
@@ -528,14 +528,14 @@
         "note": "Optimal action selection"
       },
       {
-        "symbol": "\u03a3_\u03bc",
-        "code": "sum over all programs \u03bc",
+        "symbol": "Σ_μ",
+        "code": "sum over all programs μ",
         "note": "Sum over computable environments"
       },
       {
-        "symbol": "2^{-|\u03bc|}",
+        "symbol": "2^{-|μ|}",
         "code": "math.pow(2, -len(mu))",
-        "note": "Solomonoff prior \u2014 shorter programs weighted more"
+        "note": "Solomonoff prior — shorter programs weighted more"
       },
       {
         "symbol": "V(o)",
@@ -543,7 +543,7 @@
         "note": "Reward/value of outcome"
       },
       {
-        "symbol": "p(o|a,\u03bc)",
+        "symbol": "p(o|a,μ)",
         "code": "mu.probability(outcome | action)",
         "note": "Environment's prediction"
       },
@@ -557,6 +557,51 @@
       "type": "solomonoff",
       "title": "Solomonoff prior weighting",
       "desc": "All programs weighted by 2^{-length}. Shorter = more likely."
+    }
+  },
+  "lattice_duality": {
+    "name": "13. Lattice Duality: When counting one way is hard, count the other way",
+    "latex": "\\sum_{(x,y)} A(x,y) e^{-(x^2+y^2)} = \\pi \\left( \\sum_{k=0}^{\\infty} e^{-k^2} \\cdot 2 - 1 \\right)^2 = \\pi(2g-1)^2",
+    "intent": "A 1982 competition problem asks for an infinite weighted sum over all plane points, where each weight is a Gaussian times the count of lattice points inside a circle through that point. The breakthrough: flip the counting order. Instead of asking how many lattice points are in each circle, ask which circles contain each lattice point. The discontinuous step function becomes a smooth polar integral, yielding the closed form pi(2g-1)^2 where g = sum e^{-k^2}.",
+    "langs": {
+      "Python": "import numpy as np\nfrom scipy.special import theta3\n\n# The 1982 competition problem:\n# Sum over all (x,y) of A(x,y) * exp(-(x^2+y^2))\n# where A(x,y) = number of lattice points inside circle through (x,y)\n\n# Key insight: flip the counting order!\n# Instead of: for each (x,y), count lattice points in its circle\n# Do: for each lattice point (m,n), find which circles contain it\n\n# Step 1: The dual integral for each lattice point (m,n)\n# Integral of e^(-r^2) over r >= sqrt(m^2+n^2) in polar coords\n# = pi * e^(-(m^2+n^2))\n\n# Step 2: Sum over all lattice points\n# Total = sum_{(m,n) in Z^2} pi * e^(-(m^2+n^2))\n#       = pi * (sum_m e^{-m^2}) * (sum_n e^{-n^2})  [separation]\n#       = pi * (2g - 1)^2  where g = sum_{k=0}^inf e^{-k^2}\n\n# Compute g numerically\ng = sum(np.exp(-k**2) for k in range(100))  # converges fast\nprint(f'g = {g:.15f}')\nprint(f'2g-1 = {2*g-1:.15f}')\nprint(f'pi*(2g-1)^2 = {np.pi * (2*g-1)**2:.15f}')\n\n# Verify with Jacobi theta function: theta_3(0, e^{-1})\ntheta_val = theta3(0, np.exp(-1))\nprint(f'theta_3(0, e^-1) = {theta_val:.15f}')\nprint(f'pi * theta_3^2 = {np.pi * theta_val**2:.15f}')\nprint(f'Match: {np.isclose(np.pi*(2*g-1)**2, np.pi*theta_val**2)}')\n\n# The exact answer: pi * (2g - 1)^2\n# where g = 1 + e^{-1} + e^{-4} + e^{-9} + ...\n# g approx 1.3863186024...\n# Answer approx 5.0076...",
+      "TypeScript": "function computeLatticeDuality(): { g: number; result: number } {\n  // g = sum_{k=0}^{inf} e^{-k^2}\n  // Converges fast: e^{-100} ~ 3.7e-44\n  let g = 0;\n  for (let k = 0; k < 100; k++) {\n    g += Math.exp(-k * k);\n  }\n  \n  // The dual formulation:\n  // Instead of counting lattice points per circle (hard, discontinuous)\n  // Count which circles contain each lattice point (smooth integral)\n  //\n  // For each lattice point (m,n):\n  //   integral = pi * e^{-(m^2+n^2)}\n  //\n  // Total = pi * (sum_m e^{-m^2}) * (sum_n e^{-n^2})\n  //       = pi * (2g - 1)^2  [symmetry: (-m)^2 = m^2]\n  \n  const result = Math.PI * Math.pow(2 * g - 1, 2);\n  return { g, result };\n}\n\nconst { g, result } = computeLatticeDuality();\nconsole.log(`g = ${g}`);\nconsole.log(`pi*(2g-1)^2 = ${result}`);",
+      "Go": "func computeLatticeDuality() (g, result float64) {\n    // g = sum_{k=0}^{inf} e^{-k^2}\n    for k := 0; k < 100; k++ {\n        g += math.Exp(-float64(k * k))\n    }\n    // Duality: flip counting order\n    // pi * (2g - 1)^2\n    result = math.Pi * math.Pow(2*g - 1, 2)\n    return\n}",
+      "Scala": "def computeLatticeDuality: (Double, Double) = {\n  // g = sum_{k=0}^{inf} e^{-k^2}\n  val g = (0 until 100).map(k => math.exp(-k*k)).sum\n  \n  // Duality principle: when counting one way is hard,\n  // count the other way. Discontinuous -> smooth integral.\n  // Result: pi * (2g - 1)^2\n  val result = math.Pi * math.pow(2*g - 1, 2)\n  (g, result)\n}",
+      "C": "#include <math.h>\n\nvoid lattice_duality(double *g, double *result) {\n    /* g = sum_{k=0}^{inf} e^{-k^2} */\n    *g = 0.0;\n    for (int k = 0; k < 100; k++)\n        *g += exp(-(double)(k * k));\n    \n    /* Duality: flip counting order */\n    /* pi * (2g - 1)^2 */\n    *result = M_PI * pow(2*(*g) - 1, 2);\n}",
+      "Elixir": "defmodule LatticeDuality do\n  def compute do\n    # g = sum_{k=0}^{inf} e^{-k^2}\n    g = Enum.reduce(0..99, 0.0, fn k, acc ->\n      acc + :math.exp(-k * k)\n    end)\n    \n    # Duality: when counting one way is hard, count the other\n    # pi * (2g - 1)^2\n    result = :math.pi * :math.pow(2*g - 1, 2)\n    {g, result}\n  end\nend"
+    },
+    "mapping": [
+      {
+        "symbol": "A(x,y)",
+        "code": "count_lattice_points(r)",
+        "note": "Number of integer lattice points inside circle of radius r=sqrt(x²+y²)"
+      },
+      {
+        "symbol": "\\sum_{(x,y)}",
+        "code": "for each point",
+        "note": "Sum over all points on the plane (continuous)"
+      },
+      {
+        "symbol": "\\sum_{(m,n)\\in\\mathbb{Z}^2}",
+        "code": "for m,n in integers",
+        "note": "Dual: sum over lattice points instead"
+      },
+      {
+        "symbol": "g = \\sum_{k=0}^{\\infty} e^{-k^2}",
+        "code": "sum(exp(-k**2))",
+        "note": "Gaussian lattice sum (Jacobi theta function)"
+      },
+      {
+        "symbol": "\\pi(2g-1)^2",
+        "code": "pi * (2*g-1)**2",
+        "note": "Closed-form exact answer"
+      }
+    ],
+    "demo": {
+      "type": "lattice",
+      "title": "Lattice duality: flipping the counting order",
+      "desc": "Left: hard way (count lattice points per circle). Right: dual way (smooth Gaussian integral per lattice point). Watch the discontinuous step function transform into a smooth closed form."
     }
   }
 }
