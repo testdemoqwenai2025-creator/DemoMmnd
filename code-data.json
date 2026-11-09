@@ -603,5 +603,50 @@
       "title": "Lattice duality: flipping the counting order",
       "desc": "Left: hard way (count lattice points per circle). Right: dual way (smooth Gaussian integral per lattice point). Watch the discontinuous step function transform into a smooth closed form."
     }
+  },
+  "peptide_sequencing": {
+    "name": "14. Peptide Sequencing: From mass spectrum to protein identity",
+    "latex": "\\text{PSM score} = -10 \\log_{10}(p), \\quad p = P(\\text{random match} | \\text{null hypothesis})",
+    "intent": "Computational proteomics identifies proteins by matching experimental mass spectra against theoretical databases. A peptide fragments along its backbone (CID), producing b/y ions whose mass differences reveal the sequence. The Peptide Spectrum Match (PSM) score = -10*log10(p) quantifies confidence that the match is not random. This bridges physics (collision-induced dissociation), computation (database search), and statistics (hypothesis testing).",
+    "langs": {
+      "Python": "import numpy as np\nfrom collections import defaultdict\n\n# Amino acid monoisotopic masses\nAA_MASS = {\n    'G': 57.02, 'A': 71.04, 'S': 87.03, 'P': 97.05, 'V': 99.07,\n    'T': 101.05, 'C': 103.01, 'I': 113.08, 'L': 113.08, 'N': 114.04,\n    'D': 115.03, 'K': 128.09, 'Q': 128.06, 'E': 129.04, 'M': 131.04,\n    'H': 137.06, 'F': 147.07, 'R': 156.10, 'Y': 163.06, 'W': 186.08\n}\n\n# Step 1: Theoretical fragmentation\n# Peptide: PEPTIDE -> fragments at each amide bond\ndef fragment_peptide(seq):\n    b_ions = []  # N-terminal fragments (prefix)\n    y_ions = []  # C-terminal fragments (suffix)\n    mass = 0\n    for i, aa in enumerate(seq):\n        mass += AA_MASS[aa]\n        b_ions.append(('b' + str(i+1), mass))  # b-ion\n    # y-ions = precursor - b-ion + H2O\n    precursor = mass + 18.01  # +H2O\n    for i, (label, b_mass) in enumerate(b_ions):\n        y_mass = precursor - b_mass + 1.01  # +H\n        y_ions.append(('y' + str(len(seq)-i), y_mass))\n    return b_ions, y_ions, precursor\n\n# Step 2: PSM scoring (simplified)\ndef psm_score(matched_peaks, total_peaks, db_size):\n    # Null hypothesis: match is random\n    p = 1.0 - (1.0 - 1.0/db_size)**matched_peaks\n    score = -10 * np.log10(max(p, 1e-300))\n    return score\n\n# Example: PEPTIDE\nseq = 'PEPTIDE'\nb, y, precursor = fragment_peptide(seq)\nprint(f'Precursor: {precursor:.2f} Da')\nprint(f'b-ions: {[(l, f\"{m:.2f}\") for l,m in b]}')\nprint(f'y-ions: {[(l, f\"{m:.2f}\") for l,m in y]}')\n\n# PSM score with 7 matched peaks, 20 peaks total, 10000 db entries\nscore = psm_score(7, 20, 10000)\nprint(f'PSM score: {score:.1f} (>30 is significant)')",
+      "TypeScript": "const AA_MASS: Record<string, number> = {\n  G: 57.02, A: 71.04, S: 87.03, P: 97.05, V: 99.07,\n  T: 101.05, C: 103.01, I: 113.08, L: 113.08, N: 114.04,\n  D: 115.03, K: 128.09, Q: 128.06, E: 129.04, M: 131.04,\n  H: 137.06, F: 147.07, R: 156.10, Y: 163.06, W: 186.08\n};\n\nfunction fragmentPeptide(seq: string) {\n  const bIons: [string, number][] = [];\n  const yIons: [string, number][] = [];\n  let mass = 0;\n  for (let i = 0; i < seq.length; i++) {\n    mass += AA_MASS[seq[i]];\n    bIons.push(['b' + (i+1), mass]);\n  }\n  const precursor = mass + 18.01;\n  for (let i = 0; i < bIons.length; i++) {\n    const yMass = precursor - bIons[i][1] + 1.01;\n    yIons.push(['y' + (seq.length - i), yMass]);\n  }\n  return { bIons, yIons, precursor };\n}\n\nfunction psmScore(matched: number, dbSize: number): number {\n  const p = 1 - Math.pow(1 - 1/dbSize, matched);\n  return -10 * Math.log10(Math.max(p, 1e-300));\n}",
+      "Go": "var aaMass = map[string]float64{\n    \"G\":57.02, \"A\":71.04, \"S\":87.03, \"P\":97.05, \"V\":99.07,\n    \"K\":128.09, \"D\":115.03, \"E\":129.04, \"F\":147.07, \"R\":156.10,\n}\n\nfunc fragmentPeptide(seq string) (bIons, yIons [][2]float64, precursor float64) {\n    mass := 0.0\n    for i, aa := range seq {\n        mass += aaMass[string(aa)]\n        bIons = append(bIons, [2]float64{float64(i+1), mass})\n    }\n    precursor = mass + 18.01\n    for i, b := range bIons {\n        yMass := precursor - b[1] + 1.01\n        yIons = append(yIons, [2]float64{float64(len(seq)-i), yMass})\n    }\n    return\n}",
+      "Scala": "val aaMass = Map(\n  'G' -> 57.02, 'A' -> 71.04, 'S' -> 87.03, 'P' -> 97.05,\n  'K' -> 128.09, 'D' -> 115.03, 'E' -> 129.04, 'R' -> 156.10\n)\n\ndef fragmentPeptide(seq: String): (Seq[(String,Double)], Seq[(String,Double)], Double) = {\n  var mass = 0.0\n  val bIons = seq.zipWithIndex.map { case (aa, i) =>\n    mass += aaMass(aa)\n    (\"b\" + (i+1), mass)\n  }\n  val precursor = mass + 18.01\n  val yIons = bIons.zipWithIndex.map { case ((_, b), i) =>\n    (\"y\" + (seq.length - i), precursor - b + 1.01)\n  }\n  (bIons, yIons, precursor)\n}",
+      "C": "/* Amino acid masses (subset) */\ndouble aa_mass(char aa) {\n    switch(aa) {\n        case 'G': return 57.02; case 'A': return 71.04;\n        case 'S': return 87.03; case 'P': return 97.05;\n        case 'K': return 128.09; case 'D': return 115.03;\n        case 'E': return 129.04; case 'R': return 156.10;\n        default: return 0;\n    }\n}\n\n/* Fragment peptide into b/y ions */\nvoid fragment_peptide(const char* seq, int len,\n                      double* b_ions, double* y_ions, double* precursor) {\n    double mass = 0;\n    for (int i = 0; i < len; i++) {\n        mass += aa_mass(seq[i]);\n        b_ions[i] = mass;\n    }\n    *precursor = mass + 18.01;\n    for (int i = 0; i < len; i++)\n        y_ions[len-1-i] = *precursor - b_ions[i] + 1.01;\n}",
+      "Elixir": "defmodule Proteomics do\n  @aa_mass %{?G => 57.02, ?A => 71.04, ?S => 87.03, ?P => 97.05,\n    ?K => 128.09, ?D => 115.03, ?E => 129.04, ?R => 156.10}\n\n  def fragment_peptide(seq) do\n    {b_ions, mass} = seq\n      |> String.to_charlist()\n      |> Enum.map_reduce(0.0, fn aa, acc ->\n        m = acc + Map.get(@aa_mass, aa, 0)\n        {m, m}\n      end)\n    precursor = mass + 18.01\n    y_ions = b_ions |> Enum.map(&(&1 = precursor - &1 + 1.01))\n    {b_ions, y_ions, precursor}\n  end\n\n  def psm_score(matched, db_size) do\n    p = 1 - :math.pow(1 - 1/db_size, matched)\n    -10 * :math.log10(max(p, 1.0e-300))\n  end\nend"
+    },
+    "mapping": [
+      {
+        "symbol": "\\text{PSM}",
+        "code": "psm_score(matched, db_size)",
+        "note": "Peptide Spectrum Match score"
+      },
+      {
+        "symbol": "-10\\log_{10}(p)",
+        "code": "-10 * log10(p)",
+        "note": "Score formula (higher = more significant)"
+      },
+      {
+        "symbol": "b\\text{-ions}",
+        "code": "b_ions[i]",
+        "note": "N-terminal fragments (prefix masses)"
+      },
+      {
+        "symbol": "y\\text{-ions}",
+        "code": "y_ions[i]",
+        "note": "C-terminal fragments (suffix masses)"
+      },
+      {
+        "symbol": "\\Delta m/z",
+        "code": "b[i+1] - b[i]",
+        "note": "Mass difference reveals amino acid"
+      }
+    ],
+    "demo": {
+      "type": "spectrum",
+      "title": "Peptide fragmentation and spectrum matching",
+      "desc": "Watch a peptide fragment into b/y ions, generate a mass spectrum, then match against a database with PSM scoring."
+    }
   }
 }
