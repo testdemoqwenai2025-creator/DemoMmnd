@@ -6,12 +6,9 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="2026-11-08-v9-mofography">
+<meta name="version" content="2026-11-09-v10-no-cdn-dropdown">
 <title>Chem-Math · Mmnd</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
-<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
 .dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
@@ -131,7 +128,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <h2>Concept cards &mdash; click to open the six-tab explorer</h2>
 <p style="color:var(--primary);font-size:.8125rem;margin-top:.5rem"><strong>New:</strong> Mofography card features a 5-stage animated pipeline (crystal framework &rarr; distance field &rarr; segmentation &rarr; pore graph &rarr; percolation).</p>
 <p style="color:var(--muted);font-size:.875rem">Molecular structure &rarr; mathematical expression &rarr; code &rarr; observation. Each card opens a glassmorphism popup with 6 tabs: Molecular, Math, Code, Observations, Deeper Thoughts, Futuristic.</p>
-<input type="text" class="search-bar" id="searchInput" placeholder="Search expressions by name, property, or language..." oninput="filterCards()">
+<select class="search-bar" id="searchInput" onchange="filterCards()" style="padding:.5rem .75rem;font-size:.875rem;border:1px solid var(--border);border-radius:.5rem;background:var(--card);color:var(--fg);cursor:pointer;width:100%;max-width:400px;margin-bottom:1rem"><option value="">All concepts (select to filter)</option><option value="dipole">1. Dipole moment</option><option value="polarizability">2. Polarizability</option><option value="nmr">3. NMR shielding</option><option value="density">4. Electron density</option><option value="attention">5. Equivariant attention</option><option value="energy">6. Energy prediction</option><option value="mofography">7. Mofography (pore networks)</option></select>
 <div class="expr-grid" id="exprGrid"></div>
 </main>
 
@@ -360,7 +357,7 @@ if(!CODE)return;
 var grid=document.getElementById('exprGrid');var html='';
 for(var key in CODE){
 var e=CODE[key];var shortName=e.name.replace(/^[0-9]+\.\s/,'');
-html+='<div class="expr-card" onclick="openPopup(\''+key+'\')">';
+html+='<div class="expr-card" data-key="'+key+'" onclick="openPopup(\''+key+'\')">';
 html+='<div class="expr-card-num">'+e.name.split('.')[0]+'</div>';
 html+='<div class="expr-card-name">'+shortName+'</div>';
 html+='<div class="expr-card-preview">'+e.intent.substring(0,100)+'...</div>';
@@ -373,7 +370,11 @@ grid.innerHTML=html;
 
 function filterCards(){
 var q=(document.getElementById('searchInput').value||'').toLowerCase();
-document.querySelectorAll('.expr-card').forEach(function(c){var t=c.textContent.toLowerCase();c.style.display=(!q||t.indexOf(q)>=0)?'':'none'});
+document.querySelectorAll('.expr-card').forEach(function(c){
+var key=c.getAttribute('data-key')||'';
+var t=c.textContent.toLowerCase();
+c.style.display=(!q||key.indexOf(q)>=0||t.indexOf(q)>=0)?'':'none';
+});
 }
 
 ;var currentExpr=null;var demoAnim=null;var futRaf=null;var futAnimT=0;
@@ -473,28 +474,10 @@ var t=0;function frame(){drawDemo(key,cv,t);t+=0.02;demoAnim=requestAnimationFra
 setTimeout(function(){frame()},100);
 }
 
-// Load Pyodide async
+// Pyodide removed (was causing blocking load + infinite recursion)
 ;var pyodideLoading=null;
-function loadPyodide(){
-if(window.pyodideReady)return Promise.resolve(window.pyodideReady);
-if(pyodideLoading)return pyodideLoading;
-if(typeof loadPyodide==='undefined'||typeof loadPyodide!=='function')return Promise.resolve(null);
-pyodideLoading=loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'}).then(function(py){
-window.pyodideReady=py;
-console.log('Pyodide loaded, loading numpy...');
-py.loadPackage('numpy').then(function(){console.log('numpy loaded for chem-math')});
-return py;
-}).catch(function(e){
-console.log('Pyodide load failed, using simulated output:',e.message);
+function initPyodide(){return Promise.resolve(null)}
 window.pyodideReady=null;
-return null;
-});
-return pyodideLoading;
-}
-// Start loading Pyodide immediately
-if(typeof loadPyodide==='function'){
-setTimeout(function(){loadPyodide()},2000);
-}
 
 function loadChemDataset(cat){var o=document.getElementById('dsOut');if(!cat){o.innerHTML='';return}var d={'spice':['SPICE: 1.1M conformations, 172 unique molecules','Elements: H,C,N,O,F,P,S,Cl,Br,I,etc.','Properties: energy, forces, dipole, quadrupole','Ref: Eastman et al. (2023)'],'tmqm':['TMQM: 86k transition metal complexes','Elements: 30+ metal centers + organic ligands','Properties: energy, orbital energies, dipole','Ref: David et al. (2020)'],'qm9':['QM9: 130k small organic molecules','Elements: H,C,N,O,F (max 9 heavy atoms)','Properties: 17 properties including dipole, polarizability','Ref: Ramakrishnan et al. (2014)'],'ani1':['ANI-1: 20M conformations','Elements: H,C,N,O','Properties: energy, forces','Ref: Smith et al. (2017)']};var p=d[cat]||[];o.innerHTML='<strong>'+cat+'<\/strong> dataset:<br>'+p.map(function(x){return '&bull; '+x}).join('<br>')}
 
@@ -803,7 +786,7 @@ chk('Expression-specific NMR',function(){return CHEM_FUTURES&&CHEM_FUTURES['nmr_
 chk('Expression-specific energy',function(){return CHEM_FUTURES&&CHEM_FUTURES['energy_prediction']&&CHEM_FUTURES['energy_prediction'][0].n==='MD acceleration'});
 chk('currentExpr updates',function(){return typeof currentExpr==='string'||currentExpr===null});
 chk('Version tag',function(){return document.querySelector('meta[name=version]')!==null});
-chk('Pyodide script loaded',function(){return typeof loadPyodide==='function'});
+chk('Pyodide script loaded',function(){return false});
 chk('drawMolecule3D function',function(){return typeof drawMolecule3D==='function'});
 chk('3D projection function',function(){return typeof project==='function'||true});
 // Regression checks for previously-fixed bugs
