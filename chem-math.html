@@ -6,7 +6,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<meta name="version" content="2026-11-02-v8-schrodinger-codeviz">
+<meta name="version" content="2026-11-08-v9-mofography">
 <title>Chem-Math · Mmnd</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -129,6 +129,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <p><span class="tag">Molecular ML</span><span class="tag">Equivariant</span><span class="tag">Tensor properties</span><span class="tag">Quantum chemistry</span><span class="tag">GNN</span></p>
 
 <h2>Concept cards &mdash; click to open the six-tab explorer</h2>
+<p style="color:var(--primary);font-size:.8125rem;margin-top:.5rem"><strong>New:</strong> Mofography card features a 5-stage animated pipeline (crystal framework &rarr; distance field &rarr; segmentation &rarr; pore graph &rarr; percolation).</p>
 <p style="color:var(--muted);font-size:.875rem">Molecular structure &rarr; mathematical expression &rarr; code &rarr; observation. Each card opens a glassmorphism popup with 6 tabs: Molecular, Math, Code, Observations, Deeper Thoughts, Futuristic.</p>
 <input type="text" class="search-bar" id="searchInput" placeholder="Search expressions by name, property, or language..." oninput="filterCards()">
 <div class="expr-grid" id="exprGrid"></div>
@@ -281,6 +282,50 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 ],
 "demo":{"title":"Energy prediction convergence","desc":"PET vs DFT energy comparison across molecular conformations."}
 }
+,
+"mofography":{
+  "name": "7. Mofography: Pore Network Analysis",
+  "langs": {
+    "Python": "import numpy as np\nfrom mofography import PoreNetwork\n\n# Load atomistic structure (CIF/POSCAR)\npn = PoreNetwork.from_file(\"HKUST-1.cif\")\n\n# Stage 1: Compute distance-to-framework field\ndist_field = pn.compute_distance_field(resolution=0.1)\n# dist_field[x,y,z] = min distance to nearest framework atom\n\n# Stage 2: Segment void space into individual pores\npores = pn.segment_void(dist_field, method=\"watershed\")\n# Each voxel assigned to a non-overlapping pore region\n\n# Stage 3: Pore-level characterization\nfor pore in pores:\n    print(f\"Pore {pore.id}: d={pore.diameter:.2f}A, \"\n          f\"V={pore.volume:.1f}A3, S={pore.surface_area:.1f}A2\")\n\n# Stage 4: Construct pore graph\ngraph = pn.build_pore_graph(pores)\n# Nodes = pore centroids, Edges = windows (shared boundaries)\nprint(f\"Graph: {graph.n_nodes} pores, {graph.n_edges} windows\")\nprint(f\"Percolating: {graph.is_percolating()}\")\n\n# Stage 5: Topological analysis\ncentrality = graph.betweenness_centrality()\npaths = graph.shortest_paths()\ntypes = graph.classify_pore_types()  # by cavity size + vdW energy",
+    "TypeScript": "import { PoreNetwork } from \"mofography\";\n\nconst pn = PoreNetwork.fromFile(\"HKUST-1.cif\");\n\n// Distance-to-framework field\nconst distField = pn.computeDistanceField(0.1);\n\n// Segment into individual pores\nconst pores = pn.segmentVoid(distField, \"watershed\");\n\n// Pore-level characterization\npores.forEach(p =>\n  console.log(`Pore ${p.id}: d=${p.diameter}A, V=${p.volume}A3`)\n);\n\n// Pore graph: nodes=pores, edges=windows\nconst graph = pn.buildPoreGraph(pores);\nconsole.log(`Graph: ${graph.nNodes} pores, ${graph.nEdges} windows`);\nconsole.log(`Percolating: ${graph.isPercolating()}`);",
+    "Go": "pn := mofography.FromFile(\"HKUST-1.cif\")\ndistField := pn.ComputeDistanceField(0.1)\npores := pn.SegmentVoid(distField, \"watershed\")\n\nfor _, p := range pores {\n    fmt.Printf(\"Pore %d: d=%.2f, V=%.1f\\n\", p.ID, p.Diameter, p.Volume)\n}\n\ngraph := pn.BuildPoreGraph(pores)\nfmt.Printf(\"Graph: %d pores, %d windows\\n\", graph.NNodes, graph.NEdges)\nfmt.Printf(\"Percolating: %v\\n\", graph.IsPercolating())",
+    "Scala": "val pn = PoreNetwork.fromFile(\"HKUST-1.cif\")\nval distField = pn.computeDistanceField(0.1)\nval pores = pn.segmentVoid(distField, \"watershed\")\n\npores.foreach(p =>\n  println(f\"Pore ${p.id}: d=${p.diameter}%.2f, V=${p.volume}%.1f\")\n)\n\nval graph = pn.buildPoreGraph(pores)\nprintln(s\"Graph: ${graph.nNodes} pores, ${graph.nEdges} windows\")\nprintln(s\"Percolating: ${graph.isPercolating}\")",
+    "C": "pore_network_t* pn = pore_network_from_file(\"HKUST-1.cif\");\ndouble* dist = compute_distance_field(pn, 0.1);\npore_t* pores = segment_void(pn, dist, \"watershed\");\n\nfor (int i = 0; i < pn->n_pores; i++)\n    printf(\"Pore %d: d=%.2f, V=%.1f\\n\", pores[i].id,\n           pores[i].diameter, pores[i].volume);\n\ngraph_t* graph = build_pore_graph(pn, pores);\nprintf(\"Graph: %d pores, %d windows\\n\",\n       graph->n_nodes, graph->n_edges);\nprintf(\"Percolating: %s\\n\",\n       graph_is_percolating(graph) ? \"yes\" : \"no\");",
+    "Elixir": "pn = Mofography.from_file(\"HKUST-1.cif\")\ndist_field = Mofography.compute_distance_field(pn, 0.1)\npores = Mofography.segment_void(pn, dist_field, :watershed)\n\nEnum.each(pores, fn p ->\n  IO.puts(\"Pore #{p.id}: d=#{Float.round(p.diameter,2)}, V=#{Float.round(p.volume,1)}\")\nend)\n\ngraph = Mofography.build_pore_graph(pn, pores)\nIO.puts(\"Graph: #{graph.n_nodes} pores, #{graph.n_edges} windows\")\nIO.puts(\"Percolating: #{graph.is_percolating}\")"
+  },
+  "math": "\\mathbf{d}(\\mathbf{x}) = \\min_{\\mathbf{a} \\in \\text{framework}} \\|\\mathbf{x} - \\mathbf{a}\\|, \\quad G = (V, E)",
+  "mapping": [
+    {
+      "symbol": "\\mathbf{d}(\\mathbf{x})",
+      "code": "dist_field[x,y,z]",
+      "note": "Distance-to-framework scalar field"
+    },
+    {
+      "symbol": "V",
+      "code": "graph.nodes",
+      "note": "Pore centroids (graph nodes)"
+    },
+    {
+      "symbol": "E",
+      "code": "graph.edges",
+      "note": "Windows between adjacent pores"
+    },
+    {
+      "symbol": "G = (V, E)",
+      "code": "build_pore_graph()",
+      "note": "Pore graph: nodes + connectivity edges"
+    },
+    {
+      "symbol": "P_{perc}",
+      "code": "graph.is_percolating()",
+      "note": "Percolation threshold check"
+    }
+  ],
+  "demo": {
+    "title": "5-stage Mofography pipeline",
+    "desc": "Crystal framework -> distance field -> segmentation -> pore graph -> percolation."
+  }
+}
 }
 </script>
 
@@ -298,7 +343,8 @@ function toggleTheme(){var d=document.documentElement.classList.toggle('dark');l
 'nmr_shielding':[{n:'NMR spectra ML',y:2027,p:0.50,t:'Full NMR spectra from predicted shielding'},{n:'Structure elucidation',y:2028,p:0.40,t:'AI-assisted NMR structure determination'},{n:'Reaction monitoring',y:2029,p:0.35,t:'Real-time NMR for reaction tracking'},{n:'Metabolomics',y:2031,p:0.30,t:'NMR-based metabolomics at scale'},{n:'MRI contrast',y:2035,p:0.15,t:'Molecular MRI contrast design'}],
 'electron_density':[{n:'ESP surfaces ML',y:2027,p:0.50,t:'Instant electrostatic potential surfaces'},{n:'Docking ML',y:2028,p:0.45,t:'Drug docking with ML electron density'},{n:'Catalysis design',y:2030,p:0.30,t:'Catalyst screening via ESP patterns'},{n:'Density functional',y:2032,p:0.25,t:'ML density functional approximation'},{n:'Quantum embedding',y:2035,p:0.20,t:'ML density for embedding methods'}],
 'equivariant_attention':[{n:'Equivariant GNNs',y:2027,p:0.50,t:'Equivariant GNNs becoming standard'},{n:'Large mol GNN',y:2029,p:0.35,t:'Protein-scale equivariant prediction'},{n:'Equivariant AGI',y:2032,p:0.20,t:'Symmetry-aware reasoning in AI'},{n:'Causal equivariance',y:2034,p:0.15,t:'Causal models with equivariance'},{n:'Unification',y:2038,p:0.10,t:'Unified equivariant ML theory'}],
-'energy_prediction':[{n:'MD acceleration',y:2027,p:0.55,t:'ML-MD replacing DFT-MD in routine tasks'},{n:'Reaction paths',y:2028,p:0.40,t:'AI finding reaction pathways'},{n:'Catalyst screening',y:2029,p:0.45,t:'High-throughput catalyst design'},{n:'Material discovery',y:2031,p:0.30,t:'Novel materials via energy landscapes'},{n:'Protein folding',y:2033,p:0.25,t:'ML energy for protein folding'}]
+'energy_prediction':[{n:'MD acceleration',y:2027,p:0.55,t:'ML-MD replacing DFT-MD in routine tasks'},{n:'Reaction paths',y:2028,p:0.40,t:'AI finding reaction pathways'},{n:'Catalyst screening',y:2029,p:0.45,t:'High-throughput catalyst design'},{n:'Material discovery',y:2031,p:0.30,t:'Novel materials via energy landscapes'},{n:'Protein folding',y:2033,p:0.25,t:'ML energy for protein folding'}],
+'mofography':[{n:'Pore graph ML (PoroNet)',y:2027,p:0.50,t:'GNN predictions of gas uptake from pore graphs'},{n:'Accelerated MOF discovery',y:2028,p:0.45,t:'High-throughput screening via pore graphs'},{n:'CO2 capture design',y:2029,p:0.40,t:'Optimal pore topology for carbon capture'},{n:'H2 storage materials',y:2030,p:0.35,t:'Pore graph-guided hydrogen storage MOFs'},{n:'Shape-selective catalysis',y:2032,p:0.25,t:'Xylene separation via pore topology design'}]
 };
 
 fetch('code-data.json').then(function(r){return r.json()}).then(function(data){}).catch(function(){})
@@ -492,7 +538,8 @@ var fallbackMol={
 'nmr_shielding':{atoms:[{x:-0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0.4,y:0.3,z:0,c:'#888',r:12,l:'C'},{x:0,y:-0.3,z:0,c:'#ff4444',r:14,l:'O'}],bonds:[[0,1],[1,2],[0,2]],type:'nmr',name:'Methane (CH4)'},
 'electron_density':{atoms:[{x:-0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0.3,y:0.2,z:0.2,c:'#888',r:12,l:'C'},{x:0,y:-0.2,z:-0.2,c:'#44ff44',r:14,l:'N'}],bonds:[[0,1],[1,2],[0,2]],type:'density',name:'Formaldehyde (CH2O)'},
 'equivariant_attention':{atoms:[{x:-0.5,y:0.3,z:0,c:'#888',r:10,l:'C'},{x:0,y:0.3,z:0.3,c:'#888',r:10,l:'C'},{x:0.5,y:0.3,z:0,c:'#888',r:10,l:'O'},{x:-0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'H'},{x:0.25,y:-0.3,z:-0.2,c:'#888',r:10,l:'H'}],bonds:[[0,1],[1,2],[0,3],[1,4]],type:'attention',name:'Ethanol (C2H6O)'},
-'energy_prediction':{atoms:[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:-1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'},{x:1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'}],bonds:[[0,1],[0,2],[1,3]],type:'energy',name:'Acetylene (C2H2)'}
+'energy_prediction':{atoms:[{x:-0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:0.6,y:0,z:0,c:'#888',r:12,l:'C'},{x:-1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'},{x:1.6,y:0,z:0,c:'#4444ff',r:10,l:'H'}],bonds:[[0,1],[0,2],[1,3]],type:'energy',name:'Acetylene (C2H2)'},
+'mofography':{atoms:[],bonds:[],type:'mofography',name:'Pore Network Pipeline'}
 };
 function getMolecule(id){
 if(MOL3D&&MOL_ASSIGN&&MOL3D[MOL_ASSIGN[id]]){
@@ -504,6 +551,34 @@ return{atoms:atoms,bonds:realMol.bonds,type:typeMap[id]||id,name:realMol.name};
 return fallbackMol[id]||fallbackMol['dipole'];
 }
 var mol=MOL3D&&MOL_ASSIGN?getMolecule(id):fallbackMol[id]||fallbackMol['dipole'];
+// === MOFOGRAPHY: 5-STAGE PIPELINE ANIMATION ===
+if(id==='mofography'||mol.type==='mofography'){
+var cx=W/2,cy=H/2,scale=Math.min(W,H)*0.32;
+var rotY=time*0.4;var rotX=Math.sin(time*0.2)*0.25;
+function proj3d(p){var x1=p.x*Math.cos(rotY)-p.z*Math.sin(rotY);var z1=p.x*Math.sin(rotY)+p.z*Math.cos(rotY);var y1=p.y*Math.cos(rotX)-z1*Math.sin(rotX);var z2=p.y*Math.sin(rotX)+z1*Math.cos(rotX);var f=4/(4+z2);return{x:cx+x1*scale*f,y:cy+y1*scale*f,z:z2,f:f}}
+var fwAtoms=[{x:-0.6,y:-0.6,z:-0.6,c:'#8B0000',r:0.08},{x:0.6,y:-0.6,z:-0.6,c:'#8B0000',r:0.08},{x:-0.6,y:0.6,z:-0.6,c:'#8B0000',r:0.08},{x:0.6,y:0.6,z:-0.6,c:'#8B0000',r:0.08},{x:-0.6,y:-0.6,z:0.6,c:'#8B0000',r:0.08},{x:0.6,y:-0.6,z:0.6,c:'#8B0000',r:0.08},{x:-0.6,y:0.6,z:0.6,c:'#8B0000',r:0.08},{x:0.6,y:0.6,z:0.6,c:'#8B0000',r:0.08},{x:0,y:-0.6,z:0,c:'#aaa',r:0.05},{x:0,y:0.6,z:0,c:'#aaa',r:0.05},{x:-0.6,y:0,z:0,c:'#aaa',r:0.05},{x:0.6,y:0,z:0,c:'#aaa',r:0.05},{x:0,y:0,z:-0.6,c:'#aaa',r:0.05},{x:0,y:0,z:0.6,c:'#aaa',r:0.05}];
+var poreDefs=[{x:-0.3,y:-0.3,z:-0.3,r:0.35,c:'#98FB98',l:'P1'},{x:0.3,y:-0.3,z:-0.3,r:0.30,c:'#E6E6FA',l:'P2'},{x:-0.3,y:0.3,z:-0.3,r:0.28,c:'#FA8072',l:'P3'},{x:0.3,y:0.3,z:-0.3,r:0.32,c:'#FFDAB9',l:'P4'},{x:-0.3,y:-0.3,z:0.3,r:0.30,c:'#ADD8E6',l:'P5'},{x:0.3,y:-0.3,z:0.3,r:0.28,c:'#DDA0DD',l:'P6'},{x:-0.3,y:0.3,z:0.3,r:0.33,c:'#90EE90',l:'P7'},{x:0.3,y:0.3,z:0.3,r:0.29,c:'#FFB6C1',l:'P8'}];
+var poreEdges=[[0,1],[1,3],[3,2],[2,0],[0,4],[1,5],[3,7],[2,6],[4,5],[5,7],[7,6],[6,4]];
+var percPath=[0,1,3,7,6,4];
+var cycleTime=time%20;var stage=Math.floor(cycleTime/4);var stageProg=(cycleTime%4)/4;
+var stageInfo=[{n:'1. Crystal Framework',f:'Structure -> atom positions'},{n:'2. Distance Field',f:'d(x) = min ||x - a||'},{n:'3. Pore Segmentation',f:'Watershed(d(x))'},{n:'4. Pore Graph',f:'G = (V, E)'},{n:'5. Percolation Analysis',f:'P_perc = f(density)'}];
+var si=stageInfo[stage];
+var cellVerts=[{x:-0.7,y:-0.7,z:-0.7},{x:0.7,y:-0.7,z:-0.7},{x:0.7,y:0.7,z:-0.7},{x:-0.7,y:0.7,z:-0.7},{x:-0.7,y:-0.7,z:0.7},{x:0.7,y:-0.7,z:0.7},{x:0.7,y:0.7,z:0.7},{x:-0.7,y:0.7,z:0.7}];
+var projCell=cellVerts.map(proj3d);
+var cellEdges=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+ctx.strokeStyle=stage===0?'#FFD700':'rgba(255,255,255,0.15)';ctx.lineWidth=stage===0?1.5:0.5;ctx.shadowColor=stage===0?'#FFD700':'transparent';ctx.shadowBlur=stage===0?4:0;
+cellEdges.forEach(function(e){var a=projCell[e[0]],b=projCell[e[1]];ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()});ctx.shadowBlur=0;
+if(stage===0){projCell.forEach(function(v){ctx.fillStyle='#00FF00';ctx.shadowColor='#00FF00';ctx.shadowBlur=4;ctx.beginPath();ctx.arc(v.x,v.y,2,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0})}
+if(stage<=1){var atomAlpha=stage===0?1:Math.max(0,1-stageProg*1.5);fwAtoms.forEach(function(a){var p=proj3d(a);var rad=a.r*scale*p.f;ctx.globalAlpha=atomAlpha;var g=ctx.createRadialGradient(p.x-rad*0.3,p.y-rad*0.3,0,p.x,p.y,rad);g.addColorStop(0,a.c==='#8B0000'?'#ff4444':'#ffffff');g.addColorStop(1,a.c);ctx.fillStyle=g;ctx.shadowColor=a.c;ctx.shadowBlur=rad*0.5;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0});ctx.globalAlpha=1}
+if(stage===1||stage===2){var fieldAlpha=stage===1?Math.min(1,stageProg*2):Math.max(0,1-(stage-2)*0.5+0.3);for(var fx=-0.6;fx<=0.6;fx+=0.15){for(var fy=-0.6;fy<=0.6;fy+=0.15){for(var fz=-0.6;fz<=0.6;fz+=0.15){var minDist=10;fwAtoms.forEach(function(a){var dx=fx-a.x,dy=fy-a.y,dz=fz-a.z;var d=Math.sqrt(dx*dx+dy*dy+dz*dz);if(d<minDist)minDist=d});if(minDist>0.15){var p=proj3d({x:fx,y:fy,z:fz});var hue=Math.min(240,Math.max(0,minDist*240));ctx.globalAlpha=fieldAlpha*0.3;ctx.fillStyle='hsl('+hue+',70%,'+(40+minDist*30)+'%)';ctx.fillRect(p.x-2,p.y-2,4,4)}}}}ctx.globalAlpha=1}
+if(stage>=2){var poreAlpha=stage===2?Math.min(0.6,stageProg*0.8):0.55;var projPores=poreDefs.map(function(pd){return proj3d(pd)});var poreOrder=projPores.map(function(p,i){return{i:i,p:p}}).sort(function(a,b){return b.p.z-a.p.z});poreOrder.forEach(function(item){var pd=poreDefs[item.i];var p=item.p;var rad=pd.r*scale*p.f;ctx.globalAlpha=poreAlpha*p.f;var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,rad);g.addColorStop(0,pd.c+'cc');g.addColorStop(0.7,pd.c+'66');g.addColorStop(1,pd.c+'00');ctx.fillStyle=g;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.fill();ctx.globalAlpha=poreAlpha*0.8;ctx.strokeStyle=pd.c;ctx.lineWidth=1;ctx.beginPath();ctx.arc(p.x,p.y,rad,0,Math.PI*2);ctx.stroke()});ctx.globalAlpha=1}
+if(stage>=3){var graphAlpha=stage===3?Math.min(1,stageProg*1.5):1;ctx.globalAlpha=graphAlpha*0.6;ctx.strokeStyle='#00CED1';ctx.lineWidth=1.5;ctx.shadowColor='#00CED1';ctx.shadowBlur=3;poreEdges.forEach(function(e){var a=proj3d(poreDefs[e[0]]);var b=proj3d(poreDefs[e[1]]);ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();var flowT=(time*0.5+e[0]*0.3)%1;var fx2=a.x+(b.x-a.x)*flowT,fy2=a.y+(b.y-a.y)*flowT;ctx.fillStyle='#FFD700';ctx.globalAlpha=graphAlpha*0.8;ctx.beginPath();ctx.arc(fx2,fy2,1.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=graphAlpha*0.6});ctx.shadowBlur=0;ctx.globalAlpha=graphAlpha;poreDefs.forEach(function(pd){var p=proj3d(pd);ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=6;ctx.beginPath();ctx.arc(p.x,p.y,3,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle='#000';ctx.font='bold 5px monospace';ctx.textAlign='center';ctx.fillText(pd.l,p.x,p.y+1)});ctx.globalAlpha=1}
+if(stage>=4){var percAlpha=Math.min(1,stageProg*2);ctx.globalAlpha=percAlpha;ctx.strokeStyle='#FFD700';ctx.lineWidth=3;ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();percPath.forEach(function(pi,i){var p=proj3d(poreDefs[pi]);if(i===0)ctx.moveTo(p.x,p.y);else ctx.lineTo(p.x,p.y)});ctx.stroke();ctx.shadowBlur=0;percPath.forEach(function(pi,i){var p=proj3d(poreDefs[pi]);var pulse=3+Math.sin(time*3+i*0.5)*2;ctx.fillStyle='#FFD700';ctx.shadowColor='#FFD700';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(p.x,p.y,pulse,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0});ctx.fillStyle='#FFD700';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.globalAlpha=percAlpha;ctx.fillText('PERCOLATING PATHWAY',cx,cy+scale*0.9);ctx.globalAlpha=1}
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,28);ctx.fillStyle='#FFD700';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';ctx.fillText(si.n,W/2,12);ctx.fillStyle='#00CED1';ctx.font='8px monospace';ctx.fillText(si.f,W/2,23);
+var pby=H-6;for(var s=0;s<5;s++){var sx=W*0.2+s*W*0.15;var active=s<=stage;ctx.fillStyle=active?'#FFD700':'#2a261e';ctx.fillRect(sx-8,pby-3,16,3);if(s===stage){ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText((stageProg*100|0)+'%',sx,pby-6)}}
+return;
+}
+// === END MOFOGRAPHY PIPELINE ===
 var cx=W/2,cy=H/2,scale=Math.min(W,H)*0.25;
 var rotY=molDragging?molRotY:time*0.5;var rotX=molDragging?molRotX:Math.sin(time*0.3)*0.3;
 // 3D rotation + perspective projection
