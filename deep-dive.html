@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="version" content="2026-11-06-v32-deep-dive-wsp">
+<meta name="version" content="2026-11-13-v33-deep-dive-ifc">
 <title>Deep Dive: From Physics Discovery to Reinforcement Learning · Mmnd</title>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--code-bg:#0a0908;--code-fg:#e5e2dc}
@@ -92,6 +92,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <li><a href="#sec8b">Global impact: aircraft to artificial hearts</a></li>
 <li><a href="#sec9">Future: where RL is heading</a></li>
 <li><a href="#sec_wsp">Weight-Space Programming: LLMs that read &amp; write weights</a></li>
+<li><a href="#sec_ifc">Infrastructure from Code: the AI-era deployment bottleneck</a></li>
 <li><a href="#sec10">References</a></li>
 </ol>
 </div>
@@ -385,6 +386,152 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <p class="pullquote">The cost of intelligence is about to collapse. Not because models get cheaper to train, but because the optimizer that writes their weights becomes a reasoner that needs no data, no gradients, and no GPU cluster. The bottleneck shifts from compute to understanding.</p>
 </section>
 
+
+<!-- SECTION: Infrastructure from Code -->
+<section id="sec_ifc">
+<h2><span class="num">&sect;IfC</span>Infrastructure from Code: the AI-era deployment bottleneck</h2>
+
+<div style="background:linear-gradient(135deg,rgba(10,9,8,0.97),rgba(20,15,10,0.95));border:1px solid rgba(194,65,12,.2);border-radius:1rem;padding:1.5rem;margin-bottom:1.5rem;position:relative;overflow:hidden">
+<div style="font-family:Georgia,serif;font-size:.875rem;color:#FFD700;margin-bottom:.5rem">Paradigm: Infrastructure from Code (IfC) &mdash; static AST analysis auto-provisions cloud resources</div>
+<div style="font-size:.75rem;color:#736a5e;margin-bottom:1rem">AI writes application logic in seconds; deployment is still a manual DevOps tax. IfC eliminates the redundant second description by letting application code itself dictate cloud infrastructure.</div>
+<canvas id="cvIfC" style="width:100%;height:380px;border:1px solid rgba(255,255,255,.1);border-radius:.5rem;background:#0a0908;display:block"></canvas>
+<div style="font-size:.6875rem;color:#736a5e;margin-top:.5rem;text-align:center">4-stage animated pipeline: AST parsing &rarr; Application Graph &rarr; Cloud Compiler &rarr; Safe AI code. Scroll-triggered start.</div>
+</div>
+
+<h3>The Bottleneck Shift</h3>
+<p><strong>AI tools now write application logic faster than humans can deploy it.</strong> Claude and GitHub Copilot generate REST endpoints, SQL queries, and unit tests in seconds; pushing that code to production still means hand-editing Dockerfiles, Terraform HCL, Kubernetes manifests, and cloud IAM policies. The bottleneck has shifted left: from <em>writing</em> the application to <em>describing it a second time</em> in configuration. Engineers call this the <strong>DevOps tax</strong> &mdash; an operational side-effect that appeared when monoliths fragmented into microservices and every service demanded its own pipeline, secrets, and networking rules. A 50-line endpoint can require 200 lines of YAML to actually run.</p>
+
+<p><strong>The redundancy is structural, not accidental.</strong> Traditional frameworks force a system to be described twice: once in application code (the function signatures, the SQL queries, the message publishes) and again in external config (the YAML that provisions the database, the queue, the IAM role that lets the function reach them). The two descriptions drift: a developer adds a new SQL call in code and forgets the matching Terraform block, or worse, commits an IAM policy broader than the code requires. Every drift is a bug, an outage, or a security incident waiting to happen.</p>
+
+<p><strong>Infrastructure from Code (IfC) removes the second description.</strong> Application code natively dictates the cloud infrastructure it needs. A Go function annotated <code class="inline">//encore:api</code> that calls <code class="inline">sqldb.Exec</code> is enough &mdash; the framework parses the Abstract Syntax Tree (AST) at compile time, sees the database access, and provisions PostgreSQL, the connection secret, and the IAM permission to reach it. A TypeScript endpoint that publishes to a <code class="inline">Topic</code> auto-wires the pub/sub queue. No YAML. No Terraform. No second source of truth.</p>
+
+<h3>The Four Capabilities &mdash; Animated Above</h3>
+
+<p><strong>Stage 1: AST Parsing.</strong> At compile time, the IfC engine walks the codebase&rsquo;s Abstract Syntax Tree. Every <code class="inline">api()</code> wrapper, every <code class="inline">//encore:api</code> annotation, every imported <code class="inline">SQLDatabase</code> or <code class="inline">Topic</code> primitive is a node in the tree. Static analysis resolves which endpoints touch which databases, which services publish to which topics, and which secrets are referenced &mdash; without executing a single line. This is the same technology TypeScript uses for type-checking, repurposed to infer infrastructure.</p>
+
+<p><strong>Stage 2: The Application Graph.</strong> The AST walk produces a directed graph: nodes are services, databases, topics, and secrets; edges are the data flows between them. This graph is the <em>single source of truth</em> &mdash; the same artifact drives provisioning, distributed tracing, local dev environments, and architecture documentation. Add a <code class="inline">Topic.publish()</code> call and the graph gains an edge; the trace, the docs, and the preview environment all update automatically. The graph replaces the YAML that used to describe the same relationships by hand.</p>
+
+<p><strong>Stage 3: Cloud Compiler.</strong> The application graph is compiled into cloud resources, exactly as a C++ compiler lowers source into machine assembly. SQL databases become managed PostgreSQL instances on AWS or GCP; topics become Pub/Sub or SNS/SQS; service-to-service edges become VPC rules or service-mesh permissions. No runtime proxy server sits in the hot path &mdash; the framework emits pure cloud-native resources, and the abstraction is light enough that any piece can be swapped for hand-rolled infrastructure when a service outgrows the defaults.</p>
+
+<p><strong>Stage 4: Safe AI Code Generation.</strong> The graph model makes AI-assisted coding meaningfully safer. An AI agent that writes a new endpoint and calls <code class="inline">sqldb.Query</code> cannot accidentally emit a hallucinated, overly-broad IAM policy &mdash; the IAM is derived from the graph, not written by the agent. Standardized defaults prevent the insecure cloud setups that LLMs are prone to invent. Every pull request spins up an isolated, production-exact preview environment, so an AI&rsquo;s code is tested against real cloud resources before it merges. The graph becomes a guardrail: the agent is free to write logic, but the infrastructure it implies is constrained to what the schema actually requires.</p>
+
+<h3>Mathematical Formulation</h3>
+<p>Let the application code be a program <code class="inline">P</code> over an AST. The IfC compiler is a static analysis function <code class="inline">A</code> that extracts infrastructure requirements without executing <code class="inline">P</code>:</p>
+<p style="font-family:Georgia,serif;font-size:1rem;text-align:center;background:var(--secondary);padding:.75rem;border-radius:.375rem;margin:.75rem 0">G(P) = A(AST(P)) &nbsp;&nbsp; (static analysis: no runtime execution)</p>
+<p>The application graph <code class="inline">G = (V, E)</code> has vertices for each resource and edges for each data flow:</p>
+<p style="font-family:Georgia,serif;font-size:1rem;text-align:center;background:var(--secondary);padding:.75rem;border-radius:.375rem;margin:.75rem 0">V = { services, databases, topics, secrets } &nbsp;&nbsp; E = { (u, v) : u &rarr; v is a data flow in P }</p>
+<p>The cloud compiler <code class="inline">C</code> lowers <code class="inline">G</code> into provider resources <code class="inline">R</code> (SQL instances, queues, IAM), with IAM permission <code class="inline">perm(s, r)</code> granted only when an edge requires it:</p>
+<p style="font-family:Georgia,serif;font-size:1rem;text-align:center;background:var(--secondary);padding:.75rem;border-radius:.375rem;margin:.75rem 0">R = C(G) &nbsp;&nbsp; where &nbsp;&nbsp; perm(s, r) = 1 &hArr; (s, r) &isin; E &nbsp;&nbsp; (least-privilege by construction)</p>
+<p>This is least-privilege IAM as a theorem, not a hope: a service can reach a database only if the AST proves it does. The legacy formulation, by contrast, requires a human to write the IAM policy and trust it matches the code &mdash; a correspondence that fails silently the moment anyone forgets an update.</p>
+
+<h3>Legacy vs IfC: Side-by-Side</h3>
+<table style="width:100%;border-collapse:collapse;font-size:.8125rem;margin:1rem 0">
+<tr style="background:var(--accent-bg)"><th style="padding:.5rem .75rem;text-align:left;border:1px solid var(--border)">Aspect</th><th style="padding:.5rem .75rem;text-align:left;border:1px solid var(--border)">Traditional (Docker + Terraform + K8s)</th><th style="padding:.5rem .75rem;text-align:left;border:1px solid var(--border)">Infrastructure from Code</th></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">System described</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">Twice (code + YAML/HCL)</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">Once (in code)</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Infra inference</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">Manual, runtime</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">Static AST, compile time</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">IAM policy</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">Hand-written (drift-prone)</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">Derived from graph (least-privilege)</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Runtime overhead</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">Proxy servers, sidecars</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">None (pure cloud resources)</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Tracing</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">Manual OpenTelemetry setup</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">Auto-instrumented from graph</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Preview envs</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">Per-PR, expensive to build</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">Auto-spun, production-exact</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">AI codegen risk</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">Hallucinated IAM, misconfig</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">Constrained by graph schema</td></tr>
+<tr><td style="padding:.4rem .75rem;border:1px solid var(--border)">Vendor lock-in</td><td style="padding:.4rem .75rem;border:1px solid var(--border)">Heavy (per-provider configs)</td><td style="padding:.4rem .75rem;border:1px solid var(--border);color:var(--primary);font-weight:600">Light (swappable primitives)</td></tr>
+</table>
+
+<h3>Dual-Language Code &mdash; TypeScript and Go</h3>
+<p>IfC frameworks ship SDKs in typed languages so that the AST carries enough structure to infer infrastructure. The two canonical examples below &mdash; one TypeScript, one Go &mdash; declare the same thing: an endpoint that inserts a user row and publishes an event. Neither writes a line of YAML. The cloud compiler sees the <code class="inline">SQLDatabase</code> usage, the <code class="inline">Topic</code> publish, and the <code class="inline">api()</code> / <code class="inline">//encore:api</code> declaration, and provisions the lot.</p>
+
+<h4>TypeScript &mdash; AST-inferred endpoint, database, and topic</h4>
+<pre style="background:var(--code-bg);color:var(--code-fg);padding:1rem;border-radius:.5rem;overflow-x:auto;font-size:.75rem;line-height:1.5;margin:.75rem 0"><code>// Scenario: TypeScript / Infrastructure-from-Code Endpoint &amp; Topic Definition
+import { api } from "@encoredev/api";
+import { SQLDatabase } from "@encoredev/storage/sqldb";
+import { Topic } from "@encoredev/pubsub";
+
+// 1. Define SQL Database natively (parsed via AST at compile time)
+const userDB = new SQLDatabase("users_db", {
+    migrations: "./migrations",
+});
+
+// 2. Define Pub/Sub Topic natively
+export const userCreatedTopic = new Topic&lt;UserEvent&gt;("user-created", {
+    deliveryGuarantee: "at-least-once",
+});
+
+interface CreateUserRequest {
+    username: string;
+    email: string;
+}
+
+// 3. Define Endpoint via function wrapper (static analysis infers IAM &amp; networking)
+export const createUser = api(
+    { expose: true, method: "POST", path: "/v1/users" },
+    async (req: CreateUserRequest): Promise&lt;{ id: string }&gt; =&gt; {
+        // System AST analysis detects SQL DB access requirement
+        const user = await userDB.queryRow`
+            INSERT INTO users (username, email)
+            VALUES (${req.username}, ${req.email})
+            RETURNING id
+        `;
+
+        // System AST analysis detects Pub/Sub publish requirement &amp; auto-wires IAM
+        await userCreatedTopic.publish({
+            userId: user.id,
+            email: req.email,
+        });
+
+        return { id: user.id };
+    }
+);</code></pre>
+
+<h4>Go &mdash; annotation-based AST endpoint and infrastructure declaration</h4>
+<pre style="background:var(--code-bg);color:var(--code-fg);padding:1rem;border-radius:.5rem;overflow-x:auto;font-size:.75rem;line-height:1.5;margin:.75rem 0"><code>// Scenario: Go / Annotation-Based AST Endpoint &amp; Infrastructure Declaration
+package user
+
+import (
+    "context"
+    "encore.dev/storage/sqldb"
+)
+
+// 1. Define Database primitive directly in application package
+var db = sqldb.NewDatabase("analytics_db", sqldb.DatabaseConfig{
+    Migrations: "./migrations",
+})
+
+type EventPayload struct {
+    EventID string `json:"event_id"`
+    Data    string `json:"data"`
+}
+
+// 2. Define Endpoint via Go Comment Annotations parsed during compilation
+//
+//encore:api public path=/events/record
+func RecordEvent(ctx context.Context, p *EventPayload) error {
+    // Compile-time static analysis detects database usage and provisions PostgreSQL
+    _, err := db.Exec(ctx, "INSERT INTO events (id, data) VALUES ($1, $2)", p.EventID, p.Data)
+    return err
+}</code></pre>
+
+<p>Notice the symmetry. TypeScript expresses the endpoint as a wrapped function whose options object declares <code class="inline">expose</code>, <code class="inline">method</code>, and <code class="inline">path</code>; Go uses a comment annotation <code class="inline">//encore:api</code> because Go has no syntactic metadata. Both resolve to the same artifact in the application graph: an externally reachable endpoint that depends on a SQL database. The compiler handles the rest &mdash; routing, IAM, secrets, tracing &mdash; because the graph already contains the dependency.</p>
+
+<h3>The Cloud Compiler Analogy</h3>
+<p>The cleanest mental model is the compiler stack. C++ source lowers through front-end, optimizer, and back-end into machine assembly; the developer never writes the assembly. IfC plays the same role one layer up: high-level application intent (an endpoint, a database, a topic) lowers through static analysis into cloud resources (managed Postgres, Pub/Sub, IAM roles). The YAML and HCL that an engineer used to write are the new assembly &mdash; still emitted, still runnable, but no longer hand-authored for the common case. When a service needs something the compiler cannot express, the engineer drops down a level and writes the equivalent of inline assembly, exactly as a performance-critical inner loop drops out of C++ into intrinsics.</p>
+
+<p>This analogy is also why IfC de-risks AI-generated code. A C++ compiler refuses to emit a program that reads uninitialized memory if the type system catches it; an IfC compiler refuses to grant a service a database permission the AST does not justify. The hallucinated IAM policy &mdash; a known failure mode of LLM codegen in the YAML world &mdash; becomes a type error the compiler rejects. The agent writes logic; the compiler writes the cloud.</p>
+
+<h3>Where Infrastructure Is Heading</h3>
+
+<p><strong>Phase 1 (now&ndash;2027): Abstraction migration.</strong> Teams with standard microservice patterns adopt IfC for new services, leaving Terraform in place for legacy stacks. The Application Graph replaces hand-drawn architecture diagrams; distributed tracing, which used to need an OpenTelemetry SDK install per service, is auto-instrumented because the compiler already knows every edge. The DevOps role shifts from writing YAML to maintaining the compiler defaults.</p>
+
+<p><strong>Phase 2 (2027&ndash;2029): AI-native preview environments.</strong> Every pull request &mdash; many of them AI-authored &mdash; spins up an isolated, production-exact preview environment automatically. Code-review becomes cloud-review: the reviewer sees not just the diff but the resulting running system. Hallucinated misconfigurations fail in the preview, not in production. The cost of an AI agent shipping a broken endpoint falls from &ldquo;an outage&rdquo; to &ldquo;a red CI check.&rdquo;</p>
+
+<p><strong>Phase 3 (2029&ndash;2031): Self-documenting, self-tracing systems.</strong> As logic and infrastructure converge into one application graph, the manual artifacts disappear. Architecture docs are generated, not written. Tracing is compile-time, not bolted on. The graph is the source of truth and the documentation is a view of it &mdash; the same way a database schema is the source of truth and an ER diagram is a view.</p>
+
+<p><strong>Phase 4 (2031+): Specialized infrastructure engineering.</strong> With the common case handled by abstraction, infrastructure engineers stop writing YAML for routine services and focus on the high-scale, low-level problems where defaults do not suffice: custom kernels, FPGA pipelines, bespoke storage engines, and the compiler itself. The job becomes rarer and harder, the way writing a register allocator is rarer and harder than writing a for-loop &mdash; but vastly more leveraged, because every improvement to the compiler benefits every service built on it.</p>
+
+<p><strong>Critical risks.</strong> Abstraction always hides failure modes: a misread AST can provision the wrong resource, and because the YAML is gone, the error is harder to spot by eye. Vendor lock-in is mitigated but not eliminated &mdash; the framework&rsquo;s primitives are the abstraction layer, and migrating between IfC tools means rewriting the SDK calls. The lightest frameworks (Encore and peers) make the primitives removable, but teams should verify the exit path before adopting at scale. And the application graph is only as correct as the static analysis that builds it: dynamic behavior (reflection, runtime plugin loading) can hide dependencies the AST cannot see, so IfC works best on code that is statically analyzable by construction.</p>
+
+<p class="pullquote">AI collapsed the cost of writing application logic. The next collapse is the cost of deploying it &mdash; not by automating the YAML, but by making the YAML unnecessary. When the application graph becomes the single source of truth, the cloud becomes a compiler target, and the DevOps tax dissolves into a compile step.</p>
+</section>
+
 <!-- SECTION 10: References -->
 <section id="sec10">
 <h2><span class="num">&sect;10</span>References</h2>
@@ -399,6 +546,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <li><div class="cite">Mnih, V. et al. (2015). <em>Human-level control through deep reinforcement learning.</em> Nature. <a href="https://doi.org/10.1038/nature14236" target="_blank">doi:10.1038/nature14236</a></div><div class="why">DQN &mdash; deep Q-networks mastering Atari games.</div></li>
 <li><div class="cite">Silver, D. et al. (2016). <em>Mastering the game of Go with deep neural networks and tree search.</em> Nature. <a href="https://doi.org/10.1038/nature16961" target="_blank">doi:10.1038/nature16961</a></div><div class="why">AlphaGo &mdash; the breakthrough that made the world take notice of RL.</div></li>
 <li><div class="cite">Schmidhuber, J. (2015). <em>On learning to think: Algorithmic information theory for novel combinations of RL algorithms.</em> <a href="https://arxiv.org/abs/1511.09249" target="_blank">arXiv:1511.09249</a></div><div class="why">Foundational thinking on RL + world models + curiosity.</div></li>
+<li><div class="cite">Encore.dev. <em>Infrastructure from Code: build backends without the DevOps tax.</em> <a href="https://encore.dev/" target="_blank">encore.dev</a> &middot; <a href="https://encore.dev/docs/ts/primitives/overview" target="_blank">TS primitives docs</a> &middot; <a href="https://encore.dev/docs/go/primitives/overview" target="_blank">Go primitives docs</a></div><div class="why">IfC in practice: AST-based static analysis auto-provisions SQL databases, pub/sub topics, and IAM from application code &mdash; the paradigm summarized in &sect;IfC.</div></li>
 </ol>
 </section>
 </main>
@@ -615,11 +763,277 @@ var u=((animT*0.12+i/3)%1);var year=yearStart+u*yearSpan;var tau=(pb.y-yearStart
 ctx.shadowColor=accent;ctx.shadowBlur=8;ctx.fillStyle=accent;ctx.globalAlpha=fa;ctx.beginPath();ctx.arc(px,py,2.5,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;ctx.shadowBlur=0;
 ctx.fillStyle=fg;ctx.font='6px monospace';ctx.textAlign='right';ctx.fillText(pb.n,pL-5,rowY+3)});
 ctx.fillStyle=pc;ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText('P(RL breakthrough) evolving',W/2,14)}
+
+// === INFRASTRUCTURE FROM CODE: 4-STAGE PIPELINE ===
+function drawIfC(ctx,W,H,t){
+gradientBg(ctx,W,H,t,'#080908','#0a0a0f');
+// 4 stages, each 5 seconds, total cycle 20 seconds
+var cycleTime=t%20;
+var stage=Math.floor(cycleTime/5);
+var stageProg=(cycleTime%5)/5;
+
+// Title bar
+ctx.fillStyle='#0a0908';ctx.fillRect(0,0,W,22);
+ctx.fillStyle='#FFD700';ctx.font='bold 10px Georgia,serif';ctx.textAlign='center';
+var stageTitles=['Stage 1: AST Parsing','Stage 2: Application Graph','Stage 3: Cloud Compiler','Stage 4: Safe AI Code'];
+ctx.fillText(stageTitles[stage],W/2,14);
+
+// Stage progress indicator
+for(var s=0;s<4;s++){
+var sx=W*0.15+s*W*0.2;
+var active=s<=stage;
+ctx.fillStyle=active?'#FFD700':'#2a261e';
+ctx.fillRect(sx-15,H-8,30,3);
+if(s===stage){ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText((stageProg*100|0)+'%',sx,H-12)}
+}
+
+var accent='#FFD700';
+var cyan='#00CED1';
+var green='#10b981';
+var pink='#ff6b6b';
+
+if(stage===0){
+// === STAGE 1: AST PARSING ===
+// Left: source code lines (tree of nodes)
+ctx.fillStyle=green;ctx.font='5px monospace';ctx.textAlign='left';
+var codeLines=['import { api } from "@encoredev/api";','import { SQLDatabase } from ".../sqldb";','import { Topic } from ".../pubsub";','','const userDB = new SQLDatabase("users_db");','export const userCreatedTopic = new Topic<...>();','','export const createUser = api(','  { expose: true, method: "POST", path: "/v1/users" },','  async (req) => {','    const user = await userDB.queryRow`...`','    await userCreatedTopic.publish({...});','    return { id: user.id };','  }',');'];
+for(var i=0;i<codeLines.length;i++){
+var py=32+i*9;
+var alpha=0.4+0.5*Math.sin(t*1+i*0.4);
+if(alpha<0)alpha=0;
+ctx.globalAlpha=alpha;
+ctx.fillText(codeLines[i],8,py);
+}
+ctx.globalAlpha=1;
+
+// Center: AST tree being built (nodes lighting up as parsed)
+// Scan line that sweeps the code
+var scanY=32+((t*8)%codeLines.length)*9;
+ctx.strokeStyle=accent;ctx.lineWidth=1;ctx.globalAlpha=0.6;
+ctx.beginPath();ctx.moveTo(8,scanY);ctx.lineTo(W*0.42,scanY);ctx.stroke();
+ctx.globalAlpha=1;
+
+// Flowing particles from code to AST tree
+flowParticles(ctx,W*0.42,H*0.45,W*0.55,H*0.45,t,5,green,0.7);
+
+// AST tree on the right
+var treeX=W*0.6,treeY=H*0.18;
+// root
+glowNode(ctx,treeX,treeY,4,accent,10);
+ctx.fillStyle='#000';ctx.font='bold 5px Georgia,serif';ctx.textAlign='center';ctx.fillText('api()',treeX,treeY+2);
+// children
+var children=[
+{x:treeX-30,y:treeY+22,label:'SQLDatabase',color:cyan},
+{x:treeX,y:treeY+22,label:'Topic',color:pink},
+{x:treeX+30,y:treeY+22,label:'endpoint',color:green}
+];
+children.forEach(function(c,i){
+var reveal=Math.min(1,Math.max(0,(stageProg*3-i)));
+if(reveal<=0)return;
+ctx.globalAlpha=reveal;
+ctx.strokeStyle='rgba(255,215,0,0.4)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(treeX,treeY);ctx.lineTo(c.x,c.y);ctx.stroke();
+glowNode(ctx,c.x,c.y,3,c.color,7);
+ctx.fillStyle=c.color;ctx.font='4px monospace';ctx.textAlign='center';
+ctx.fillText(c.label,c.x,c.y+8);
+ctx.globalAlpha=1;
+});
+// Highlight that scanning reveals nodes
+ctx.fillStyle=accent;ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=Math.min(1,stageProg*2);
+ctx.fillText('AST walk -> 3 resource refs',W*0.7,H*0.55);
+ctx.globalAlpha=1;
+
+// Formula
+ctx.fillStyle=cyan;ctx.font='6px monospace';ctx.textAlign='center';
+ctx.fillText('G(P) = A(AST(P))  (no execution)',W/2,H*0.78);
+}
+
+else if(stage===1){
+// === STAGE 2: APPLICATION GRAPH ===
+// Build a directed graph: services, DBs, topics
+var nodes=[
+{x:W*0.2,y:H*0.3,label:'API',color:green,t:'svc'},
+{x:W*0.5,y:H*0.2,label:'Topic',color:pink,t:'topic'},
+{x:W*0.5,y:H*0.45,label:'SQL DB',color:cyan,t:'db'},
+{x:W*0.8,y:H*0.2,label:'Subscriber',color:green,t:'svc'},
+{x:W*0.8,y:H*0.45,label:'Postgres',color:cyan,t:'db'}
+];
+var edges=[[0,1],[0,2],[1,3],[2,4]];
+
+// Draw edges (animate growing)
+edges.forEach(function(e,i){
+var a=nodes[e[0]],b=nodes[e[1]];
+var grow=Math.min(1,Math.max(0,(stageProg*edges.length-i)));
+if(grow<=0)return;
+ctx.strokeStyle='rgba(255,215,0,'+(0.3+0.4*grow)+')';ctx.lineWidth=1.5;
+ctx.beginPath();
+ctx.moveTo(a.x,a.y);
+ctx.lineTo(a.x+(b.x-a.x)*grow,a.y+(b.y-a.y)*grow);
+ctx.stroke();
+// flowing particle on completed edge
+if(grow>=1){
+var u=((t*0.5+i*0.2)%1);
+var px=a.x+(b.x-a.x)*u,py=a.y+(b.y-a.y)*u;
+ctx.fillStyle=accent;ctx.shadowColor=accent;ctx.shadowBlur=6;ctx.globalAlpha=0.9;
+ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);ctx.fill();
+ctx.shadowBlur=0;ctx.globalAlpha=1;
+}
+});
+
+// Draw nodes
+nodes.forEach(function(n,i){
+var reveal=Math.min(1,Math.max(0,(stageProg*3-i*0.5)));
+if(reveal<=0)return;
+ctx.globalAlpha=reveal;
+glowNode(ctx,n.x,n.y,5,n.color,10);
+ctx.fillStyle=n.color;ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+ctx.fillText(n.label,n.x,n.y-9);
+ctx.globalAlpha=1;
+});
+
+ctx.fillStyle=accent;ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=Math.min(1,stageProg*2);
+ctx.fillText('Single source of truth',W/2,H*0.65);
+ctx.globalAlpha=1;
+
+ctx.fillStyle=cyan;ctx.font='6px monospace';ctx.textAlign='center';
+ctx.fillText('G=(V,E)  V={svc,db,topic}  E=data flows',W/2,H*0.78);
+}
+
+else if(stage===2){
+// === STAGE 3: CLOUD COMPILER ===
+// Left: Application graph icon -> middle: compiler gear -> right: cloud resources
+var gx=W*0.2,gy=H*0.45;
+// graph icon (3 connected dots)
+glowNode(ctx,gx-8,gy-6,3,cyan,6);glowNode(ctx,gx+8,gy-6,3,pink,6);glowNode(ctx,gx,gy+8,3,green,6);
+ctx.strokeStyle='rgba(255,215,0,0.5)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(gx-8,gy-6);ctx.lineTo(gx+8,gy-6);ctx.moveTo(gx-8,gy-6);ctx.lineTo(gx,gy+8);ctx.moveTo(gx+8,gy-6);ctx.lineTo(gx,gy+8);ctx.stroke();
+ctx.fillStyle=accent;ctx.font='5px monospace';ctx.textAlign='center';ctx.fillText('graph G',gx,gy+22);
+
+// flow to compiler
+flowParticles(ctx,gx+12,gy,W*0.45,gy,t,4,accent,0.8);
+
+// Compiler gear (rotating)
+var cx=W*0.5,cy=gy;
+var rot=t*1.2;
+ctx.save();ctx.translate(cx,cy);ctx.rotate(rot);
+// gear teeth
+for(var tg=0;tg<8;tg++){
+var a=tg/8*Math.PI*2;
+var tx=Math.cos(a)*12,ty=Math.sin(a)*12;
+glowNode(ctx,tx,ty,2,accent,5);
+}
+ctx.restore();
+glowNode(ctx,cx,cy,8,accent,12);
+ctx.fillStyle='#000';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('C()',cx,cy+2);
+ctx.fillStyle=accent;ctx.font='5px monospace';ctx.fillText('compiler',cx,cy+22);
+
+// flow to cloud
+flowParticles(ctx,cx+12,cy,W*0.72,cy,t,4,cyan,0.8);
+
+// Right: cloud resources stack
+var resX=W*0.8;
+var resources=[
+{y:cy-30,label:'PostgreSQL',color:cyan},
+{y:cy-10,label:'Pub/Sub topic',color:pink},
+{y:cy+10,label:'IAM role',color:accent},
+{y:cy+30,label:'VPC rule',color:green}
+];
+resources.forEach(function(r,i){
+var reveal=Math.min(1,Math.max(0,(stageProg*4-i*0.8)));
+if(reveal<=0)return;
+ctx.globalAlpha=reveal;
+ctx.fillStyle='rgba(10,9,8,0.9)';
+ctx.fillRect(resX-30,r.y-7,60,14);
+ctx.strokeStyle=r.color;ctx.lineWidth=1;ctx.strokeRect(resX-30,r.y-7,60,14);
+glowNode(ctx,resX-22,r.y,2,r.color,5);
+ctx.fillStyle=r.color;ctx.font='5px monospace';ctx.textAlign='left';ctx.fillText(r.label,resX-16,r.y+2);
+ctx.globalAlpha=1;
+});
+
+ctx.fillStyle=accent;ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=Math.min(1,stageProg*2);
+ctx.fillText('high-level intent -> cloud resources',W/2,H*0.72);
+ctx.globalAlpha=1;
+
+ctx.fillStyle=cyan;ctx.font='6px monospace';ctx.textAlign='center';
+ctx.fillText('R = C(G)  (like C++ -> assembly)',W/2,H*0.82);
+}
+
+else if(stage===3){
+// === STAGE 4: SAFE AI CODE ===
+// Left: AI agent writing code -> middle: graph constrains IAM -> right: preview env spun up
+// Left: AI agent box with code streaming
+var ax=W*0.18,ay=H*0.45;
+ctx.strokeStyle=green;ctx.lineWidth=1;
+ctx.strokeRect(ax-25,ay-30,50,55);
+ctx.fillStyle=green;ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('AI agent',ax,ay-36);
+// streaming code lines inside
+ctx.fillStyle=green;ctx.font='4px monospace';ctx.textAlign='left';
+var aiLines=['const u=api(...)','  userDB.queryRow(...)','  topic.publish(...)','  return {id}'];
+for(var i=0;i<aiLines.length;i++){
+var py=ay-22+i*8;
+var visible=Math.min(1,Math.max(0,(stageProg*5-i)));
+if(visible<=0)continue;
+ctx.globalAlpha=visible;
+ctx.fillText(aiLines[i],ax-22,py);
+ctx.globalAlpha=1;
+}
+
+// flow to graph
+flowParticles(ctx,ax+25,ay,W*0.45,ay,t,4,green,0.8);
+
+// Middle: graph as guardrail
+var mx=W*0.5,my=ay;
+glowNode(ctx,mx,my,12,accent,14);
+ctx.fillStyle='#000';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';ctx.fillText('graph',mx,my+2);
+// Shield ring (guardrail)
+ctx.strokeStyle=accent;ctx.lineWidth=1.5;ctx.globalAlpha=0.5+0.3*Math.sin(t*2);
+ctx.beginPath();ctx.arc(mx,my,20,0,Math.PI*2);ctx.stroke();ctx.globalAlpha=1;
+ctx.fillStyle=accent;ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('perm(s,r)=1',mx,my+30);
+ctx.fillText('<== edge in G',mx,my+38);
+
+// flow to preview env
+flowParticles(ctx,mx+18,my,W*0.72,my,t,4,cyan,0.8);
+
+// Right: preview environment spinning up
+var px=W*0.8,py=my;
+ctx.strokeStyle=cyan;ctx.lineWidth=1;
+ctx.strokeRect(px-28,py-25,56,50);
+ctx.fillStyle=cyan;ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Preview env',px,py-30);
+// Resources materializing inside
+var res=[{y:py-12,c:cyan,l:'PG'},{y:py-2,c:pink,l:'Topic'},{y:py+8,c:green,l:'IAM'},{y:py+18,c:accent,l:'VPC'}];
+res.forEach(function(r,i){
+var reveal=Math.min(1,Math.max(0,(stageProg*5-i*0.8)));
+if(reveal<=0)return;
+ctx.globalAlpha=reveal;
+glowNode(ctx,px-12,r.y,2,r.c,5);
+ctx.fillStyle=r.c;ctx.font='4px monospace';ctx.textAlign='left';ctx.fillText(r.l,px-4,r.y+2);
+ctx.globalAlpha=1;
+});
+// Spinning up indicator
+var spinProg=stageProg;
+ctx.strokeStyle=accent;ctx.lineWidth=1.5;
+ctx.beginPath();ctx.arc(px+18,py-15,4,-Math.PI/2,-Math.PI/2+spinProg*Math.PI*2);ctx.stroke();
+
+ctx.fillStyle=accent;ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=Math.min(1,stageProg*2);
+ctx.fillText('AI writes logic; graph writes the cloud',W/2,H*0.82);
+ctx.globalAlpha=1;
+}
+}
+
 // === START ALL ANIMATIONS ===
 document.addEventListener('DOMContentLoaded',function(){
 startAnim('heroCanvas',drawHero);
 // === WEIGHT-SPACE PROGRAMMING: 4-STAGE PIPELINE ===
 startAnim('cvWSP',drawWeightSpace);
+// === INFRASTRUCTURE FROM CODE: 4-STAGE PIPELINE ===
+startAnim('cvIfC',drawIfC);
 function drawWeightSpace(ctx,W,H,t){
 gradientBg(ctx,W,H,t,'#080908','#0a0a0f');
 // 4 stages, each 5 seconds, total cycle 20 seconds
