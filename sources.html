@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-09-v11-peptide">
+<meta name="version" content="2026-11-13-v12-lean-riemann">
 <title>Sources · Mmnd</title>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(250,247,242,0.85)}
@@ -349,7 +349,7 @@ h+='<div id="codeVizWrap" style="margin-top:.5rem;display:none"><div style="font
 h+='</div>';
 // Obs
 h+='<div class="popup-pane" id="pane-obs">';
-if(e.demo){h+='<h3>'+e.demo.title+'</h3><canvas id="demoCv" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">'+e.demo.desc+'</p>'}
+if(e.demo){h+='<h3>'+e.demo.title+'</h3><canvas id="demoCv" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">'+e.demo.desc+'</p>';if(key==='lean_riemann'){h+='<figure style="margin:.5rem 0 1rem;text-align:center"><img src="images/lean_riemann_zeros.png" alt="Riemann zeta zeros, critical strip, and the Lean-formalized zero-free region Re(s) >= 7/8" loading="lazy" style="max-width:100%;height:auto;border:1px solid var(--border);border-radius:.5rem"><figcaption style="font-size:.7rem;color:var(--muted);margin-top:.4rem">The critical strip 0 &lt; Re(s) &lt; 1, the Riemann Hypothesis line Re(s) = 1/2 (teal), and the formally verified zero-free region Re(s) &ge; 7/8 with Im(s) &ne; 0 (gold). Red dots: the first ten non-trivial zeros on the critical line.</figcaption></figure>'}}
 h+='<h3>Summary report</h3><div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--secondary);margin-bottom:1rem"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;font-size:.75rem"><div><strong style="color:var(--primary)">Expression:</strong> '+e.name.replace(/^[0-9]+\.\s/,"")+'</div><div><strong style="color:var(--primary)">Domain:</strong> '+(e.demo?e.demo.title:'N/A')+'</div><div><strong style="color:var(--primary)">Languages:</strong> 6 (Python/TS/Go/Scala/C/Elixir)</div><div><strong style="color:var(--primary)">Code blocks:</strong> 6 implementations</div><div><strong style="color:var(--primary)">Status:</strong> Analyzed</div><div><strong style="color:var(--primary)">Phase:</strong> 1 — KaTeX-rendered</div></div></div>';
 h+='<h3 style="margin-top:1rem">Statistics</h3><div class="report-grid" style="grid-template-columns:repeat(4,1fr)"><div class="report-stat"><div class="num">1</div><div class="lbl">Expr</div></div><div class="report-stat"><div class="num">6</div><div class="lbl">Langs</div></div><div class="report-stat"><div class="num">5</div><div class="lbl">Mappings</div></div><div class="report-stat"><div class="num">72</div><div class="lbl">Total</div></div></div>';
 h+='<h3 style="margin-top:1rem">Graph visualization — select a chart type</h3>';
@@ -825,6 +825,162 @@ var sx=W*0.2+s*W*0.2;
 ctx.fillStyle=s<=stage?'#FFD700':'#2a261e';
 ctx.fillRect(sx-8,pby-2,16,2);
 if(s===stage){ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText((stageP*100|0)+'%',sx,pby-5)}
+}
+break;
+}
+case'lean_riemann':{
+gradientBg(ctx,W,H,time,'#080908','#0a0a0f');
+var cycleT=time%20;var stage=Math.floor(cycleT/5);var stageP=(cycleT%5)/5;
+var si=[{n:'1. LLM Token Distribution',f:'context -> P(token)  (stochastic)'},{n:'2. Lean Tactic',f:'tactic stream proposed as text'},{n:'3. Kernel Verification',f:'deterministic rules of inference'},{n:'4. Proof-State Tree',f:'goal collapses to qed'}][stage];
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText(si.n,W/2,14);
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.fillText(si.f,W/2,24);
+var pby=H-14;
+for(var s=0;s<4;s++){var sx=W*0.15+s*W*0.2;ctx.fillStyle=s<=stage?'#FFD700':'#2a261e';ctx.fillRect(sx-8,pby-2,16,2);if(s===stage){ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText((stageP*100|0)+'%',sx,pby-5)}}
+
+if(stage===0){
+// === STAGE 1: LLM token probability distribution ===
+var tokens=[{t:'theorem',p:0.45,c:'#10b981'},{t:'proof',p:0.30,c:'#00CED1'},{t:'lemma',p:0.15,c:'#a855f7'},{t:'sorry',p:0.10,c:'#dc2626'}];
+var bx=W*0.1,by=H*0.6,bw=W*0.5,bh=H*0.3;
+// axis
+ctx.strokeStyle='#2a261e';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(bx,by);ctx.lineTo(bx+bw,by);ctx.stroke();
+ctx.fillStyle=fg;ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('P(token)',bx-2,by-bh/2);
+ctx.fillText('tokens ->',bx+bw/2,by+8);
+var barW=bw/tokens.length*0.6;
+tokens.forEach(function(tk,i){
+var h=tk.p*bh*(0.8+0.2*Math.sin(time*2+i));
+var x=bx+(i+0.2)*(bw/tokens.length);
+// animated probability shimmer
+ctx.fillStyle=tk.c;ctx.globalAlpha=0.85;
+ctx.fillRect(x,by-h,barW,h);
+ctx.globalAlpha=1;
+// label
+ctx.fillStyle=tk.c;ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText(tk.t,x+barW/2,by+16);
+ctx.fillStyle=fg;ctx.fillText(tk.p.toFixed(2),x+barW/2,by-h-4);
+});
+// selected token (highest prob = theorem)
+var selX=bx+0.2*(bw/tokens.length)+barW/2;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1;ctx.globalAlpha=0.6+0.4*Math.sin(time*4);
+ctx.beginPath();ctx.moveTo(selX,by-bh*0.5);ctx.lineTo(selX,by-bh*0.55-6);ctx.stroke();
+ctx.globalAlpha=1;
+// arrow to stage 2
+flowParticles(ctx,W*0.65,H*0.45,W*0.78,H*0.45,time,3,'#FFD700',0.7);
+// mini LLM box
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;
+ctx.strokeRect(W*0.7,H*0.35,W*0.2,H*0.2);
+ctx.fillStyle='#10b981';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('LLM',W*0.8,H*0.45);
+ctx.fillStyle=mt;ctx.font='4px monospace';
+ctx.fillText('stochastic',W*0.8,H*0.5);
+}
+
+else if(stage===1){
+// === STAGE 2: Lean tactic stream ===
+var tactics=['intro h_re','intro h_im','rw [zeta_zero_free]','apply zero_free_region','simp','qed'];
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.textAlign='left';
+for(var i=0;i<tactics.length;i++){
+var py=H*0.18+i*8;
+var reveal=Math.min(1,Math.max(0,(stageP*tactics.length-i)));
+if(reveal<=0)continue;
+ctx.globalAlpha=reveal;
+ctx.fillText(tactics[i],W*0.08,py);
+}
+ctx.globalAlpha=1;
+// highlighted current tactic
+var curIdx=Math.min(tactics.length-1,Math.floor(stageP*tactics.length));
+var curY=H*0.18+curIdx*8;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=0.8;ctx.globalAlpha=0.5+0.5*Math.sin(time*4);
+ctx.strokeRect(W*0.07,curY-5,W*0.32,7);
+ctx.globalAlpha=1;
+// flow to kernel
+flowParticles(ctx,W*0.42,H*0.4,W*0.58,H*0.4,time,4,'#00CED1',0.8);
+ctx.fillStyle=accent;ctx.font='bold 5px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('propose',W*0.5,H*0.36);
+// kernel box (right)
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1;
+ctx.strokeRect(W*0.6,H*0.25,W*0.22,H*0.3);
+ctx.fillStyle='#FFD700';ctx.font='bold 6px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('Lean kernel',W*0.71,H*0.35);
+ctx.fillStyle=mt;ctx.font='4px monospace';
+ctx.fillText('deterministic',W*0.71,H*0.4);
+ctx.fillText('rules of inference',W*0.71,H*0.44);
+}
+
+else if(stage===2){
+// === STAGE 3: Kernel verification (checkmark / cross) ===
+var checks=[{t:'intro h_re',ok:true},{t:'intro h_im',ok:true},{t:'rw [zeta_zero_free]',ok:true},{t:'apply zero_free_region',ok:true},{t:'simp',ok:true},{t:'qed',ok:true}];
+var cx=W*0.5,cy=H*0.45;
+// central kernel node
+glowNode(ctx,cx,cy,12,'#FFD700',14);
+ctx.fillStyle='#000';ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';ctx.fillText('kernel',cx,cy+2);
+// checks streaming in
+ctx.font='5px monospace';ctx.textAlign='left';
+checks.forEach(function(c,i){
+var py=H*0.2+i*8;
+var reveal=Math.min(1,Math.max(0,(stageP*checks.length-i)));
+if(reveal<=0)return;
+ctx.globalAlpha=reveal;
+ctx.fillStyle=mt;
+ctx.fillText(c.t,W*0.06,py);
+// check or cross
+ctx.fillStyle=c.ok?'#10b981':'#dc2626';
+ctx.font='bold 7px monospace';ctx.textAlign='left';
+ctx.fillText(c.ok?'\u2713':'\u2717',W*0.4,py);
+ctx.globalAlpha=1;
+});
+// flow of verified steps back out
+flowParticles(ctx,cx+12,cy,W*0.78,cy,time,3,'#10b981',0.8);
+ctx.fillStyle='#10b981';ctx.font='bold 5px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=Math.min(1,stageP*2);
+ctx.fillText('verified',W*0.78,cy-8);
+ctx.globalAlpha=1;
+}
+
+else if(stage===3){
+// === STAGE 4: Proof-state tree collapsing to qed ===
+// Tree: root goal at top, branches = tactics, leaves collapse to qed
+var treeX=W*0.5,treeY=H*0.15;
+// root goal
+glowNode(ctx,treeX,treeY,6,'#c2410c',10);
+ctx.fillStyle='#c2410c';ctx.font='bold 5px monospace';ctx.textAlign='center';
+ctx.fillText('goal: zeta != 0',treeX,treeY-8);
+// 4 children (tactic applications)
+var children=[{x:treeX-40,y:treeY+24,lab:'intro',closed:false},{x:treeX-13,y:treeY+24,lab:'rw',closed:false},{x:treeX+13,y:treeY+24,lab:'apply',closed:false},{x:treeX+40,y:treeY+24,lab:'simp',closed:false}];
+// leaves at bottom row
+var leaves=children.map(function(c,i){return{x:c.x,y:c.y+22,lab:'subgoal',idx:i}});
+// animate closing: each leaf collapses (turns green + shrinks) in sequence
+children.forEach(function(c,i){
+ctx.strokeStyle='rgba(194,65,12,0.4)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(treeX,treeY);ctx.lineTo(c.x,c.y);ctx.stroke();
+glowNode(ctx,c.x,c.y,3,'#FFD700',5);
+ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';
+ctx.fillText(c.lab,c.x,c.y-6);
+});
+leaves.forEach(function(l,i){
+var closeProgress=Math.min(1,Math.max(0,(stageP*leaves.length-i)));
+ctx.strokeStyle='rgba(194,65,12,0.3)';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(children[i].x,children[i].y);ctx.lineTo(l.x,l.y);ctx.stroke();
+if(closeProgress>=1){
+// collapsed -> green checkmark
+glowNode(ctx,l.x,l.y,2,'#10b981',4);
+ctx.fillStyle='#10b981';ctx.font='bold 6px monospace';ctx.textAlign='center';
+ctx.fillText('\u2713',l.x,l.y+2);
+} else {
+glowNode(ctx,l.x,l.y,3*(1-closeProgress*0.5)+1,'#dc2626',4);
+ctx.fillStyle='#dc2626';ctx.font='4px monospace';ctx.textAlign='center';
+ctx.fillText(l.lab,l.x,l.y-5);
+}
+});
+// final qed marker
+var qedProg=Math.max(0,Math.min(1,(stageP-0.7)/0.3));
+if(qedProg>0){
+ctx.fillStyle='#10b981';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=qedProg;
+ctx.fillText('qed',treeX,H-22);
+ctx.globalAlpha=1;
+}
 }
 break;
 }
