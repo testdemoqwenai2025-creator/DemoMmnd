@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="version" content="2026-11-21-v1-tags">
+<title>Topics · Mmnd</title>
+<meta name="description" content="Browse the Mmnd Observatory by topic. Ten cross-cutting tags — Riemann, formal verification, ML theory, dynamical systems, complexity, quantum, foundations, chemistry, physics+ML, infrastructure — thread across every page.">
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;background-image:radial-gradient(rgba(115,106,94,0.04) 1px,transparent 1px);background-size:24px 24px;background-attachment:fixed;transition:background-color .2s,color .2s}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.625rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.logo-sub{font-size:.6875rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-left:.25rem}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500;border-radius:.375rem;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem;display:flex;align-items:center;justify-content:center}
+main{max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+.hero{margin-bottom:2rem}
+.crumbs{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem}
+.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,6vw,3.25rem);font-weight:600;line-height:1.1;letter-spacing:-.02em;margin-bottom:.75rem}
+.hero h1 .accent{color:var(--primary);font-style:italic}
+.lead{font-size:1.0625rem;color:var(--muted);max-width:55rem;line-height:1.7}
+.lead a{color:var(--primary);text-decoration:none}
+.lead a:hover{text-decoration:underline}
+.pill{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-bottom:.75rem}
+/* Tag filter chips */
+.filter-bar{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.5rem 0 2rem;padding:1rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem}
+.filter-chip{display:inline-flex;align-items:center;gap:.375rem;padding:.4rem .8rem;border-radius:1.25rem;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:.8125rem;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+.filter-chip:hover{border-color:var(--primary);color:var(--fg)}
+.filter-chip.active{color:#fff;border-color:transparent}
+.filter-chip .chip-dot{width:.625rem;height:.625rem;border-radius:50%;background:currentColor;flex-shrink:0}
+.filter-chip .chip-count{font-size:.6875rem;opacity:.7;font-variant-numeric:tabular-nums}
+.filter-chip.active .chip-count{opacity:.9}
+.filter-clear{margin-left:auto;padding:.4rem .8rem;border-radius:1.25rem;border:1px dashed var(--border);background:transparent;color:var(--muted);font-size:.8125rem;cursor:pointer;font-family:inherit}
+.filter-clear:hover{border-color:var(--primary);color:var(--primary)}
+/* Results grid */
+.results-meta{font-size:.8125rem;color:var(--muted);margin-bottom:1rem;font-variant-numeric:tabular-nums}
+.results-grid{display:grid;grid-template-columns:1fr;gap:1rem}
+@media(min-width:768px){.results-grid{grid-template-columns:repeat(2,1fr)}}
+.result-card{display:block;padding:1.25rem;background:var(--card);border:1px solid var(--border);border-radius:.625rem;text-decoration:none;color:var(--fg);transition:border-color .15s,transform .15s;position:relative;overflow:hidden}
+.result-card:hover{border-color:var(--primary);transform:translateY(-2px)}
+.result-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--tag-color,var(--primary))}
+.result-kind{font-size:.625rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:.375rem;display:flex;align-items:center;gap:.375rem}
+.result-kind .kind-icon{font-size:.875rem}
+.result-title{font-family:Georgia,serif;font-size:1rem;font-weight:600;line-height:1.3;margin-bottom:.5rem}
+.result-tags{display:flex;flex-wrap:wrap;gap:.3rem}
+.result-tag{font-size:.625rem;text-transform:uppercase;letter-spacing:.08em;padding:.125rem .5rem;border-radius:1rem;border:1px solid var(--border);color:var(--muted)}
+.result-tag.current{color:var(--tag-color);border-color:var(--tag-color);font-weight:600}
+/* Tag sections (when no filter active) */
+.tag-section{margin-bottom:2.5rem}
+.tag-section-head{display:flex;align-items:baseline;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap}
+.tag-section-head h2{font-family:Georgia,serif;font-size:1.5rem;font-weight:600;line-height:1.2}
+.tag-section-head .tag-dot{width:.875rem;height:.875rem;border-radius:50%;flex-shrink:0}
+.tag-section-blurb{font-size:.9375rem;color:var(--muted);margin-bottom:1rem;max-width:50rem;line-height:1.6}
+.tag-section-count{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.empty-state{padding:3rem 1rem;text-align:center;color:var(--muted)}
+.empty-state .emoji{font-size:2rem;display:block;margin-bottom:.5rem}
+footer{border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+.footer-inner a{color:var(--primary);text-decoration:none}
+.footer-inner a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header>
+<nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span><span class="logo-sub">Observatory</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="sources.html">Sources</a>
+<a href="playgrounds.html">Playgrounds</a>
+<a href="tags.html" class="active">Topics</a>
+<a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a>
+<a href="demos.html">Demos</a>
+<a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#127763;</button>
+</nav>
+</header>
+
+<main>
+<div class="hero">
+<div class="crumbs">Browse by topic</div>
+<span class="pill">10 tags &middot; 50 entries &middot; cross-page</span>
+<h1>Threads that run <span class="accent">across</span> the observatory.</h1>
+<p class="lead">A topic is not a page &mdash; it is a thread. <em>Riemann</em> appears on the sources cards, in three playgrounds, and in the Langlands deep-dive. <em>Formal verification</em> ties Lean to G&ouml;del to L&ouml;b. Click a chip to filter; click any card to jump straight to the source. Everything below is generated from a single <a href="tags.json">tags.json</a> registry.</p>
+</div>
+
+<div class="filter-bar" id="filterBar">
+<!-- chips injected by JS -->
+<button class="filter-clear" onclick="clearFilter()" id="clearBtn" style="display:none">Clear filter &times;</button>
+</div>
+
+<div class="results-meta" id="resultsMeta"></div>
+<div id="content"><!-- injected by JS --></div>
+</main>
+
+<footer>
+<div class="footer-inner">
+<p>Part of the <a href="index.html">Mmnd Observatory</a> &middot; <a href="sources.html">Sources</a> &middot; <a href="playgrounds.html">Playgrounds</a> &middot; <a href="demos.html">Demos</a> &middot; Built for a two-decade horizon.</p>
+</div>
+</footer>
+
+<script>
+function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
+(function(){const s=localStorage.getItem('mmnd-theme');const p=window.matchMedia('(prefers-color-scheme:dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+
+const KIND_ICONS={card:'&#9878;',playground:'&#9658;',section:'&sect;'};
+let TAGS={}, ORDER=[], ENTRIES=[]; // ENTRIES = flattened index for cross-tag lookup
+let activeFilter=null;
+
+function render(){
+  const bar=document.getElementById('filterBar');
+  const clearBtn=document.getElementById('clearBtn');
+  // chips
+  const chipsHtml=ORDER.map(t=>{
+    const tg=TAGS[t];
+    return '<button class="filter-chip'+(activeFilter===t?' active':'')+'" style="'+(activeFilter===t?'background:'+tg.color:'')+'" onclick="setFilter(\''+t+'\')">'+
+      '<span class="chip-dot" style="background:'+tg.color+'"></span>'+
+      tg.label+' <span class="chip-count">'+tg.entries.length+'</span></button>';
+  }).join('');
+  bar.innerHTML=chipsHtml+'<button class="filter-clear" onclick="clearFilter()" id="clearBtn" style="'+(activeFilter?'display:inline-flex':'display:none')+'">Clear filter &times;</button>';
+  const content=document.getElementById('content');
+  const meta=document.getElementById('resultsMeta');
+  if(activeFilter){
+    // filtered view: show entries for this tag only
+    const tg=TAGS[activeFilter];
+    meta.textContent=tg.entries.length+' entries tagged "'+tg.label+'"';
+    content.innerHTML='<div class="tag-section">'+
+      '<div class="tag-section-head"><span class="tag-dot" style="background:'+tg.color+'"></span>'+
+      '<h2>'+tg.label+'</h2><span class="tag-section-count">'+tg.entries.length+' entries</span></div>'+
+      '<p class="tag-section-blurb">'+tg.blurb+'</p></div>'+
+      '<div class="results-grid">'+tg.entries.map(e=>renderCard(e,activeFilter)).join('')+'</div>';
+  } else {
+    // overview: all tags as sections
+    const total=ENTRIES.length;
+    meta.textContent='Showing all '+total+' entries across '+ORDER.length+' topics. Click a chip to filter.';
+    content.innerHTML=ORDER.map(t=>{
+      const tg=TAGS[t];
+      return '<div class="tag-section">'+
+        '<div class="tag-section-head"><span class="tag-dot" style="background:'+tg.color+'"></span>'+
+        '<h2>'+tg.label+'</h2><span class="tag-section-count">'+tg.entries.length+' entries</span></div>'+
+        '<p class="tag-section-blurb">'+tg.blurb+'</p>'+
+        '<div class="results-grid">'+tg.entries.map(e=>renderCard(e,t)).join('')+'</div>'+
+      '</div>';
+    }).join('');
+  }
+}
+
+function renderCard(e,currentTag){
+  // find all tags that include this entry (for cross-tag display)
+  const entryTags=ORDER.filter(t=>TAGS[t].entries.some(x=>x.page===e.page&&x.anchor===e.anchor));
+  const tagChips=entryTags.map(t=>{
+    const tg=TAGS[t];
+    return '<span class="result-tag'+(t===currentTag?' current':'')+'" style="'+(t===currentTag?'--tag-color:'+tg.color:'')+'" onclick="event.preventDefault();event.stopPropagation();setFilter(\''+t+'\')">'+tg.label+'</span>';
+  }).join('');
+  return '<a class="result-card" href="'+e.page+'#'+e.anchor+'" style="--tag-color:'+TAGS[currentTag].color+'">'+
+    '<div class="result-kind"><span class="kind-icon">'+(KIND_ICONS[e.kind]||'&#9679;')+'</span>'+e.kind+'</div>'+
+    '<div class="result-title">'+e.title+'</div>'+
+    '<div class="result-tags">'+tagChips+'</div>'+
+  '</a>';
+}
+
+function setFilter(t){activeFilter=(activeFilter===t)?null:t;render();window.scrollTo({top:document.getElementById('filterBar').offsetTop-80,behavior:'smooth'})}
+function clearFilter(){activeFilter=null;render()}
+
+// load + boot
+fetch('tags.json?v='+Date.now())
+  .then(r=>r.json())
+  .then(d=>{
+    TAGS=d.tags; ORDER=d._meta.tagOrder;
+    ENTRIES=ORDER.flatMap(t=>TAGS[t].entries.map(e=>({tag:t,...e})));
+    // deep-link: if URL hash matches a tag, pre-filter
+    const h=window.location.hash.replace('#','');
+    if(h && ORDER.includes(h)){activeFilter=h;}
+    render();
+  })
+  .catch(err=>{
+    document.getElementById('content').innerHTML='<div class="empty-state"><span class="emoji">&#9888;</span>Could not load tags.json. '+err.message+'</div>';
+  });
+
+// react to hash changes (back/forward, or chip clicks from other pages)
+window.addEventListener('hashchange',()=>{
+  const h=window.location.hash.replace('#','');
+  activeFilter=(h && ORDER.includes(h))?h:null;
+  render();
+});
+</script>
+
+</body>
+</html>
