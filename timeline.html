@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="version" content="2026-11-21-v1-timeline">
+<title>Timeline · Mmnd</title>
+<meta name="description" content="The Mmnd Observatory research log: 25 dated milestones from Riemann's 1859 memoir through Wong's 2026 Ramanujan pipeline and the √X theta-lift chain. Five research threads — Riemann, formal verification, ML, physics+ML, foundations.">
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--tl-line:rgba(115,106,94,0.25)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--tl-line:rgba(168,160,152,0.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;background-image:radial-gradient(rgba(115,106,94,0.04) 1px,transparent 1px);background-size:24px 24px;background-attachment:fixed;transition:background-color .2s,color .2s}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.625rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.logo-sub{font-size:.6875rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-left:.25rem}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500;border-radius:.375rem;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem;display:flex;align-items:center;justify-content:center}
+main{max-width:900px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+.hero{margin-bottom:2rem}
+.crumbs{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem}
+.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,6vw,3.25rem);font-weight:600;line-height:1.1;letter-spacing:-.02em;margin-bottom:.75rem}
+.hero h1 .accent{color:var(--primary);font-style:italic}
+.lead{font-size:1.0625rem;color:var(--muted);max-width:55rem;line-height:1.7}
+.lead a{color:var(--primary);text-decoration:none}
+.lead a:hover{text-decoration:underline}
+.pill{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-bottom:.75rem}
+/* Thread filter bar */
+.filter-bar{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.5rem 0 1rem;padding:1rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem;position:sticky;top:4.25rem;z-index:50}
+.filter-chip{display:inline-flex;align-items:center;gap:.375rem;padding:.375rem .75rem;border-radius:1.25rem;border:1.5px solid var(--border);background:var(--bg);color:var(--muted);font-size:.8125rem;font-weight:500;cursor:pointer;transition:all .15s;font-family:inherit}
+.filter-chip:hover{border-color:var(--chip-color,var(--primary));color:var(--fg)}
+.filter-chip.active{color:#fff;border-color:transparent;background:var(--chip-color)}
+.filter-chip .chip-dot{width:.625rem;height:.625rem;border-radius:50%;background:var(--chip-color,var(--primary));flex-shrink:0}
+.filter-chip .chip-count{font-size:.6875rem;opacity:.7;font-variant-numeric:tabular-nums}
+.filter-clear{margin-left:auto;padding:.375rem .75rem;border-radius:1.25rem;border:1px dashed var(--border);background:transparent;color:var(--muted);font-size:.8125rem;cursor:pointer;font-family:inherit}
+.filter-clear:hover{border-color:var(--primary);color:var(--primary)}
+.results-meta{font-size:.8125rem;color:var(--muted);margin-bottom:1.5rem;font-variant-numeric:tabular-nums}
+/* Timeline */
+.timeline{position:relative;padding-left:2rem;margin-left:.5rem}
+.timeline::before{content:'';position:absolute;left:.375rem;top:.5rem;bottom:.5rem;width:2px;background:var(--tl-line)}
+.tl-entry{position:relative;padding:0 0 2rem 0;margin-bottom:0}
+.tl-entry:last-child{padding-bottom:0}
+.tl-entry::before{content:'';position:absolute;left:-1.875rem;top:.5rem;width:.875rem;height:.875rem;border-radius:50%;background:var(--card);border:2px solid var(--tl-dot,var(--primary));box-shadow:0 0 0 4px var(--bg);transition:transform .15s}
+.tl-entry:hover::before{transform:scale(1.25)}
+.tl-date{font-family:Georgia,serif;font-size:.875rem;font-weight:700;color:var(--tl-dot,var(--primary));letter-spacing:.02em;margin-bottom:.25rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.tl-thread-pills{display:inline-flex;gap:.25rem;flex-wrap:wrap}
+.tl-thread-pill{font-size:.625rem;text-transform:uppercase;letter-spacing:.08em;padding:.0625rem .375rem;border-radius:.625rem;color:#fff;background:var(--thread-color);opacity:.85}
+.tl-title{font-family:Georgia,serif;font-size:1.1875rem;font-weight:600;line-height:1.3;margin-bottom:.375rem;color:var(--fg)}
+.tl-summary{font-size:.9375rem;color:var(--muted);line-height:1.65;margin-bottom:.5rem}
+.tl-link{display:inline-flex;align-items:center;gap:.25rem;font-size:.8125rem;color:var(--primary);text-decoration:none;font-weight:500;border-bottom:1px solid transparent;transition:border-color .15s}
+.tl-link:hover{border-color:var(--primary)}
+.tl-link .arrow{font-size:.875rem}
+.tl-entry.hidden{display:none}
+/* Era separator (decade markers) */
+.era-sep{position:relative;padding:0 0 1rem 0;margin:.5rem 0 0 -.25rem}
+.era-sep::before{content:'';position:absolute;left:-2.625rem;top:1rem;width:1.5rem;height:2px;background:var(--tl-line)}
+.era-label{font-family:Georgia,serif;font-size:.6875rem;text-transform:uppercase;letter-spacing:.2em;color:var(--muted);font-weight:600}
+.empty-state{padding:3rem 1rem;text-align:center;color:var(--muted)}
+.empty-state .emoji{font-size:2rem;display:block;margin-bottom:.5rem}
+footer{border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+.footer-inner a{color:var(--primary);text-decoration:none}
+.footer-inner a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header>
+<nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span><span class="logo-sub">Observatory</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="sources.html">Sources</a>
+<a href="playgrounds.html">Playgrounds</a>
+<a href="tags.html">Topics</a>
+<a href="timeline.html" class="active">Timeline</a>
+<a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a>
+<a href="demos.html">Demos</a>
+<a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#127763;</button>
+</nav>
+</header>
+
+<main>
+<div class="hero">
+<div class="crumbs">Research log</div>
+<span class="pill">25 milestones &middot; 5 threads &middot; 1859 &rarr; 2026</span>
+<h1>A field notebook for the <span class="accent">convergence</span>.</h1>
+<p class="lead">From Riemann's 1859 memoir to Wong's 2026 Ramanujan pipeline and the &radic;X theta-lift chain &mdash; twenty-five dated milestones in the long collision of pure mathematics and machine intelligence. Filter by thread to follow one line of inquiry; click any entry to jump to the source. Everything below is generated from a single <a href="timeline.json">timeline.json</a> registry.</p>
+</div>
+
+<div class="filter-bar" id="filterBar">
+<!-- chips injected by JS -->
+</div>
+
+<div class="results-meta" id="resultsMeta"></div>
+<div class="timeline" id="timeline"><!-- injected by JS --></div>
+</main>
+
+<footer>
+<div class="footer-inner">
+<p>Part of the <a href="index.html">Mmnd Observatory</a> &middot; <a href="sources.html">Sources</a> &middot; <a href="playgrounds.html">Playgrounds</a> &middot; <a href="tags.html">Topics</a> &middot; Built for a two-decade horizon.</p>
+</div>
+</footer>
+
+<script>
+function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
+(function(){const s=localStorage.getItem('mmnd-theme');const p=window.matchMedia('(prefers-color-scheme:dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+
+let DATA=null, THREADS={}, ENTRIES=[], activeThreads=new Set(); // empty = all visible
+
+function decadeOf(dateStr){
+  // "1859" -> 1850, "2026-03" -> 2020
+  const y=parseInt(dateStr.slice(0,4),10);
+  return Math.floor(y/10)*10;
+}
+
+function render(){
+  const bar=document.getElementById('filterBar');
+  const meta=document.getElementById('resultsMeta');
+  const tl=document.getElementById('timeline');
+  // filter chips
+  const chipsHtml=Object.keys(THREADS).map(t=>{
+    const th=THREADS[t];
+    const isActive=activeThreads.has(t);
+    const allActive=activeThreads.size===0; // "all" mode
+    const cls=allActive||isActive?'active':'';
+    const style=cls?('background:'+th.color):('--chip-color:'+th.color);
+    return '<button class="filter-chip '+cls+'" style="'+style+'" onclick="toggleThread(\''+t+'\')">'+
+      '<span class="chip-dot" style="background:'+th.color+'"></span>'+
+      th.label+' <span class="chip-count">'+ENTRIES.filter(e=>e.threads.includes(t)).length+'</span></button>';
+  }).join('');
+  bar.innerHTML=chipsHtml+
+    (activeThreads.size>0?'<button class="filter-clear" onclick="clearFilter()">Clear filter &times;</button>':'');
+
+  // filter entries: an entry is visible if it has ANY active thread (or all if none active)
+  const visible=ENTRIES.filter(e=>activeThreads.size===0||e.threads.some(t=>activeThreads.has(t)));
+  meta.textContent=visible.length+' of '+ENTRIES.length+' milestones shown'+(activeThreads.size>0?(' &middot; filtering: '+Array.from(activeThreads).map(t=>THREADS[t].label).join(', ')):'');
+
+  // build timeline with decade separators
+  let html='', lastDecade=null;
+  visible.forEach(e=>{
+    const dec=decadeOf(e.date);
+    if(dec!==lastDecade){
+      html+='<div class="era-sep"><div class="era-label">'+dec+'s</div></div>';
+      lastDecade=dec;
+    }
+    // primary thread color = first thread
+    const primaryColor=THREADS[e.threads[0]].color;
+    const threadPills=e.threads.map(t=>{
+      const th=THREADS[t];
+      return '<span class="tl-thread-pill" style="--thread-color:'+th.color+';background:'+th.color+'">'+th.label+'</span>';
+    }).join('');
+    html+='<div class="tl-entry" style="--tl-dot:'+primaryColor+'">'+
+      '<div class="tl-date">'+e.dateLabel+
+        '<span class="tl-thread-pills">'+threadPills+'</span>'+
+      '</div>'+
+      '<div class="tl-title">'+e.title+'</div>'+
+      '<div class="tl-summary">'+e.summary+'</div>'+
+      (e.link?'<a class="tl-link" href="'+e.link.page+(e.link.anchor?('#'+e.link.anchor):'')+'">'+e.link.label+' <span class="arrow">&rarr;</span></a>':'')+
+    '</div>';
+  });
+  if(!visible.length){
+    html='<div class="empty-state"><span class="emoji">&#128197;</span>No milestones match the current filter.</div>';
+  }
+  tl.innerHTML=html;
+}
+
+function toggleThread(t){
+  if(activeThreads.has(t))activeThreads.delete(t);
+  else activeThreads.add(t);
+  render();
+  // update hash
+  if(activeThreads.size>0){
+    history.replaceState(null,'','#'+Array.from(activeThreads).sort().join(','));
+  } else {
+    history.replaceState(null,'','#');
+  }
+}
+function clearFilter(){activeThreads.clear();render();history.replaceState(null,'','#')}
+
+// load + boot
+fetch('timeline.json?v='+Date.now())
+  .then(r=>r.json())
+  .then(d=>{
+    THREADS=d._meta.threads;
+    ENTRIES=d.entries;
+    // pre-filter from hash (#riemann or #riemann,formal)
+    const h=window.location.hash.replace('#','');
+    if(h){
+      h.split(',').forEach(t=>{if(THREADS[t])activeThreads.add(t);});
+    }
+    render();
+  })
+  .catch(err=>{
+    document.getElementById('timeline').innerHTML='<div class="empty-state"><span class="emoji">&#9888;</span>Could not load timeline.json. '+err.message+'</div>';
+  });
+
+window.addEventListener('hashchange',()=>{
+  activeThreads.clear();
+  const h=window.location.hash.replace('#','');
+  if(h){h.split(',').forEach(t=>{if(THREADS[t])activeThreads.add(t);});}
+  render();
+});
+</script>
+
+</body>
+</html>
