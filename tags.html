@@ -61,6 +61,9 @@ main{max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
 .tag-section-head .tag-dot{width:.875rem;height:.875rem;border-radius:50%;flex-shrink:0}
 .tag-section-blurb{font-size:.9375rem;color:var(--muted);margin-bottom:1rem;max-width:50rem;line-height:1.6}
 .tag-section-count{font-size:.75rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.chevron{margin-left:auto;font-size:.75rem;color:var(--muted);transition:transform .15s;user-select:none}
+.tag-section-head{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap}
+.tag-section-body{transition:opacity .2s}
 .empty-state{padding:3rem 1rem;text-align:center;color:var(--muted)}
 .empty-state .emoji{font-size:2rem;display:block;margin-bottom:.5rem}
 footer{border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
@@ -79,7 +82,7 @@ footer{border-top:1px solid var(--border);background:var(--secondary);padding:2r
 <a href="index.html">Home</a>
 <a href="sources.html">Sources</a>
 <a href="playgrounds.html">Playgrounds</a>
-<a href="tags.html" class="active">Topics</a>
+<a href="tags.html" class="active">Topics</a><a href="timeline.html">Timeline</a>
 <a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a>
 <a href="demos.html">Demos</a>
 <a href="about.html">About</a>
@@ -129,10 +132,23 @@ function render(){
       '<span class="chip-dot" style="background:'+tg.color+'"></span>'+
       tg.label+' <span class="chip-count">'+tg.entries.length+'</span></button>';
   }).join('');
-  bar.innerHTML=chipsHtml+'<button class="filter-clear" onclick="clearFilter()" id="clearBtn" style="'+(activeFilter?'display:inline-flex':'display:none')+'">Clear filter &times;</button>';
+  // Phase 3 gap fill: "Untagged" pseudo-chip (curator view)
+  const untaggedCount=countUntagged();
+  const untaggedChip='<button class="filter-chip'+(activeFilter==='untagged'?' active':'')+'" style="'+(activeFilter==='untagged'?'background:#736a5e':'--chip-color:#736a5e')+'" onclick="setFilter(\'untagged\')">'+
+    '<span class="chip-dot" style="background:#736a5e"></span>Untagged <span class="chip-count">'+untaggedCount+'</span></button>';
+  bar.innerHTML=chipsHtml+untaggedChip+'<button class="filter-clear" onclick="clearFilter()" id="clearBtn" style="'+(activeFilter?'display:inline-flex':'display:none')+'">Clear filter &times;</button>';
   const content=document.getElementById('content');
   const meta=document.getElementById('resultsMeta');
-  if(activeFilter){
+  if(activeFilter==='untagged'){
+    // Phase 3 gap fill: show source cards NOT referenced by any tag entry (curator view)
+    const untagged=getUntagged();
+    meta.textContent=untagged.length+' source cards have no topic tag yet (curator view)';
+    content.innerHTML='<div class="tag-section">'+
+      '<div class="tag-section-head"><span class="tag-dot" style="background:#736a5e"></span>'+
+      '<h2>Untagged source cards</h2><span class="tag-section-count">'+untagged.length+' cards</span></div>'+
+      '<p class="tag-section-blurb">These source cards are not yet referenced by any topic in tags.json. Add them to the appropriate tag entry to thread them into the browse system.</p></div>'+
+      (untagged.length?'<div class="results-grid">'+untagged.map(c=>renderUntaggedCard(c)).join('')+'</div>':'<div class="empty-state" style="padding:2rem;text-align:center;color:var(--muted)"><span class="emoji" style="font-size:1.5rem">&#10003;</span>All 16 source cards are tagged.</div>');
+  } else if(activeFilter){
     // filtered view: show entries for this tag only
     const tg=TAGS[activeFilter];
     meta.textContent=tg.entries.length+' entries tagged "'+tg.label+'"';
@@ -142,19 +158,65 @@ function render(){
       '<p class="tag-section-blurb">'+tg.blurb+'</p></div>'+
       '<div class="results-grid">'+tg.entries.map(e=>renderCard(e,activeFilter)).join('')+'</div>';
   } else {
-    // overview: all tags as sections
+    // overview: all tags as collapsible sections (Phase 3 gap fill: collapsed by default, first 2 open)
     const total=ENTRIES.length;
-    meta.textContent='Showing all '+total+' entries across '+ORDER.length+' topics. Click a chip to filter.';
-    content.innerHTML=ORDER.map(t=>{
+    meta.textContent='Showing all '+total+' entries across '+ORDER.length+' topics. Click a section header to expand.';
+    content.innerHTML=ORDER.map((t,i)=>{
       const tg=TAGS[t];
-      return '<div class="tag-section">'+
-        '<div class="tag-section-head"><span class="tag-dot" style="background:'+tg.color+'"></span>'+
-        '<h2>'+tg.label+'</h2><span class="tag-section-count">'+tg.entries.length+' entries</span></div>'+
-        '<p class="tag-section-blurb">'+tg.blurb+'</p>'+
-        '<div class="results-grid">'+tg.entries.map(e=>renderCard(e,t)).join('')+'</div>'+
+      const open=i<2; // first two expanded by default
+      return '<div class="tag-section'+(open?' open':'')+'">'+
+        '<div class="tag-section-head" onclick="toggleSection(this)" style="cursor:pointer">'+
+          '<span class="tag-dot" style="background:'+tg.color+'"></span>'+
+          '<h2>'+tg.label+'</h2><span class="tag-section-count">'+tg.entries.length+' entries</span>'+
+          '<span class="chevron">'+(open?'&#9660;':'&#9654;')+'</span>'+
+        '</div>'+
+        '<div class="tag-section-body" style="'+(open?'':'display:none')+'">'+
+          '<p class="tag-section-blurb">'+tg.blurb+'</p>'+
+          '<div class="results-grid">'+tg.entries.map(e=>renderCard(e,t)).join('')+'</div>'+
+        '</div>'+
       '</div>';
     }).join('');
   }
+}
+
+// Phase 3 gap fill: collapsed-section toggle
+function toggleSection(headEl){
+  const section=headEl.closest('.tag-section');
+  const body=section.querySelector('.tag-section-body');
+  const chevron=headEl.querySelector('.chevron');
+  const isOpen=body.style.display!=='none';
+  body.style.display=isOpen?'none':'block';
+  chevron.innerHTML=isOpen?'&#9654;':'&#9660;';
+  section.classList.toggle('open',!isOpen);
+}
+
+// Phase 3 gap fill: untagged-card computation
+function getTaggedAnchors(){
+  // set of source-card anchors (keys) referenced by any tag entry on sources.html
+  const s=new Set();
+  ORDER.forEach(t=>TAGS[t].entries.forEach(e=>{if(e.page==='sources.html')s.add(e.anchor)}));
+  return s;
+}
+function countUntagged(){
+  // requires code-data.json to be loaded; cache it
+  if(!window._CARD_KEYS){
+    fetch('code-data.json?v='+Date.now()).then(r=>r.json()).then(d=>{window._CARD_KEYS=Object.keys(d);render();}).catch(()=>{window._CARD_KEYS=[]});
+    return '?';
+  }
+  const tagged=getTaggedAnchors();
+  return window._CARD_KEYS.filter(k=>!tagged.has(k)).length;
+}
+function getUntagged(){
+  if(!window._CARD_KEYS)return [];
+  const tagged=getTaggedAnchors();
+  return window._CARD_KEYS.filter(k=>!tagged.has(k)).map(k=>({key:k}));
+}
+function renderUntaggedCard(c){
+  return '<a class="result-card" href="sources.html#'+c.key+'" style="--tag-color:#736a5e">'+
+    '<div class="result-kind"><span class="kind-icon">&#9878;</span>card</div>'+
+    '<div class="result-title">'+c.key+'</div>'+
+    '<div class="result-tags"><span class="result-tag current" style="--tag-color:#736a5e">untagged</span></div>'+
+  '</a>';
 }
 
 function renderCard(e,currentTag){
@@ -180,10 +242,14 @@ fetch('tags.json?v='+Date.now())
   .then(d=>{
     TAGS=d.tags; ORDER=d._meta.tagOrder;
     ENTRIES=ORDER.flatMap(t=>TAGS[t].entries.map(e=>({tag:t,...e})));
-    // deep-link: if URL hash matches a tag, pre-filter
+    // deep-link: if URL hash matches a tag (or 'untagged'), pre-filter
     const h=window.location.hash.replace('#','');
-    if(h && ORDER.includes(h)){activeFilter=h;}
+    if(h && (ORDER.includes(h)||h==='untagged')){activeFilter=h;}
     render();
+    // Phase 3 gap fill: pre-load card keys if untagged view requested
+    if(h==='untagged' && !window._CARD_KEYS){
+      fetch('code-data.json?v='+Date.now()).then(r=>r.json()).then(cd=>{window._CARD_KEYS=Object.keys(cd);render();}).catch(()=>{window._CARD_KEYS=[]});
+    }
   })
   .catch(err=>{
     document.getElementById('content').innerHTML='<div class="empty-state"><span class="emoji">&#9888;</span>Could not load tags.json. '+err.message+'</div>';
@@ -192,8 +258,11 @@ fetch('tags.json?v='+Date.now())
 // react to hash changes (back/forward, or chip clicks from other pages)
 window.addEventListener('hashchange',()=>{
   const h=window.location.hash.replace('#','');
-  activeFilter=(h && ORDER.includes(h))?h:null;
+  activeFilter=(h && (ORDER.includes(h)||h==='untagged'))?h:null;
   render();
+  if(h==='untagged' && !window._CARD_KEYS){
+    fetch('code-data.json?v='+Date.now()).then(r=>r.json()).then(cd=>{window._CARD_KEYS=Object.keys(cd);render();}).catch(()=>{window._CARD_KEYS=[]});
+  }
 });
 </script>
 
