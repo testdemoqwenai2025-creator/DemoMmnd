@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="version" content="2026-11-21-v1-playgrounds">
+<title>Playgrounds · Mmnd</title>
+<meta name="description" content="Three interactive mathematical playgrounds: the Riemann zeta-zero explorer, the prime-counting step function, and the von Mangoldt staircase with its sqrt(X) RH envelope. Everything runs in your browser; no external services.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85);--canvas-bg:#0a0908;--canvas-fg:#e5e2dc}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85);--canvas-bg:#080706;--canvas-fg:#e5e2dc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6;background-image:radial-gradient(rgba(115,106,94,0.04) 1px,transparent 1px);background-size:24px 24px;background-attachment:fixed;transition:background-color .2s,color .2s}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.625rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.logo-sub{font-size:.6875rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-left:.25rem}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500;border-radius:.375rem;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem;display:flex;align-items:center;justify-content:center}
+main{max-width:1200px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+.hero{margin-bottom:2.5rem}
+.crumbs{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem}
+.hero h1{font-family:Georgia,serif;font-size:clamp(2rem,6vw,3.5rem);font-weight:600;line-height:1.1;letter-spacing:-.02em;margin-bottom:.75rem}
+.hero h1 .accent{color:var(--primary);font-style:italic}
+.lead{font-size:1.0625rem;color:var(--muted);max-width:55rem;line-height:1.7}
+.lead a{color:var(--primary);text-decoration:none}
+.lead a:hover{text-decoration:underline}
+.pill{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-bottom:.75rem}
+/* Playground cards */
+.pg-grid{display:grid;grid-template-columns:1fr;gap:1.5rem}
+@media(min-width:768px){.pg-grid{grid-template-columns:repeat(3,1fr)}}
+.pg-card{padding:1.25rem 1.25rem 0;background:var(--card);border:1px solid var(--border);border-radius:.75rem;cursor:pointer;transition:border-color .15s,transform .15s;position:relative;overflow:hidden}
+.pg-card:hover{border-color:var(--primary);transform:translateY(-2px)}
+.pg-card.active{border-color:var(--primary);box-shadow:0 0 0 2px var(--primary)}
+.pg-card .pg-num{font-family:Georgia,serif;font-size:1.5rem;font-weight:700;color:var(--primary);line-height:1}
+.pg-card .pg-title{font-family:Georgia,serif;font-size:1.0625rem;font-weight:600;margin-top:.375rem;line-height:1.25}
+.pg-card .pg-desc{font-size:.8125rem;color:var(--muted);margin-top:.5rem;margin-bottom:1rem;line-height:1.55}
+.pg-card .pg-tags{display:flex;flex-wrap:wrap;gap:.375rem;margin-bottom:1.25rem}
+.pg-card .pg-tag{font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;padding:.125rem .5rem;border-radius:1rem;border:1px solid var(--border);color:var(--muted)}
+/* Playground stage */
+.pg-stage{margin-top:2.5rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem;padding:1.5rem}
+.pg-stage-header{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.pg-stage-header h2{font-family:Georgia,serif;font-size:1.625rem;font-weight:600;line-height:1.2}
+.pg-stage-header .pg-expr{color:var(--muted);font-size:.9375rem;font-family:Georgia,serif}
+.pg-stage-header .pg-expr .katex{color:var(--fg)}
+.canvas-wrap{position:relative;background:var(--canvas-bg);border:1px solid var(--border);border-radius:.5rem;overflow:hidden;aspect-ratio:16/8}
+.canvas-wrap canvas{display:block;width:100%;height:100%;cursor:crosshair}
+.scene-label{position:absolute;top:.5rem;left:.5rem;font-size:.6875rem;font-weight:600;color:var(--canvas-fg);background:rgba(10,9,8,.7);padding:.25rem .5rem;border-radius:.25rem;backdrop-filter:blur(8px)}
+.controls{position:absolute;bottom:.5rem;left:.5rem;right:.5rem;display:flex;align-items:center;gap:.375rem;flex-wrap:wrap;background:rgba(10,9,8,.7);backdrop-filter:blur(8px);padding:.375rem .5rem;border-radius:.375rem}
+.btn{background:none;border:1px solid rgba(255,255,255,.2);color:var(--canvas-fg);border-radius:.375rem;padding:.4rem .7rem;cursor:pointer;font-size:.8125rem;font-weight:600;transition:background .15s;min-height:2rem;display:inline-flex;align-items:center;justify-content:center}
+.btn:hover{background:rgba(255,255,255,.15)}
+.btn:active{transform:scale(.95)}
+.btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+.btn.primary:hover{opacity:.9}
+.scrub{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:var(--canvas-fg);margin-left:auto}
+.scrub input[type=range]{width:90px;accent-color:var(--primary);cursor:pointer}
+.param{display:flex;align-items:center;gap:.25rem;font-size:.6875rem;color:#FFD700}
+.param input[type=range]{width:70px;accent-color:#FFD700;cursor:pointer}
+.param .lbl{font-style:italic;font-family:Georgia,serif;font-weight:600}
+.readout{position:absolute;top:.5rem;right:.5rem;font-size:.6875rem;font-family:Georgia,serif;color:#FFD700;background:rgba(10,9,8,.7);padding:.25rem .625rem;border-radius:.25rem;backdrop-filter:blur(8px);text-align:right;line-height:1.5}
+/* Explanatory panels */
+.pg-panels{display:grid;grid-template-columns:1fr;gap:1rem;margin-top:1.25rem}
+@media(min-width:900px){.pg-panels{grid-template-columns:1fr 1fr}}
+.panel{padding:1rem 1.25rem;background:var(--secondary);border-radius:.5rem;border-left:3px solid var(--primary)}
+.panel h3{font-size:.6875rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.5rem;font-weight:700}
+.panel p{font-size:.875rem;color:var(--fg);margin-bottom:.5rem;line-height:1.6}
+.panel p:last-child{margin-bottom:0}
+.panel .formula{font-family:Georgia,serif;font-size:.9375rem;color:var(--fg);margin:.5rem 0;padding:.5rem .75rem;background:var(--card);border-radius:.375rem;border:1px solid var(--border)}
+.panel ul{font-size:.8125rem;color:var(--muted);margin:.5rem 0 0 1.25rem;line-height:1.7}
+.panel .kw{color:var(--fg);font-weight:500}
+/* Hint bar */
+.hint{margin-top:1rem;font-size:.75rem;color:var(--muted);text-align:center;font-style:italic}
+footer{border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+.footer-inner a{color:var(--primary);text-decoration:none}
+.footer-inner a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header>
+<nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span><span class="logo-sub">Observatory</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="sources.html">Sources</a>
+<a href="playgrounds.html" class="active">Playgrounds</a>
+<a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a>
+<a href="demos.html">Demos</a>
+<a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#127763;</button>
+</nav>
+</header>
+
+<main>
+<div class="hero">
+<div class="crumbs">Interactive math</div>
+<span class="pill">3 playgrounds &middot; browser-native &middot; no services</span>
+<h1>Mathematics that <span class="accent">moves</span> under your hand.</h1>
+<p class="lead">Three interactive playgrounds make the observatory <em>do</em> mathematics, not just display it. Slide along the critical line and watch Riemann zeta cross zero; scrub the prime-counting function and see how far &pi;(x) strays from Li(x); or trace the von Mangoldt staircase and watch the error collapse into the <a href="sources.html#rh_thetalift">&radic;X RH envelope</a>. Every plot is computed live in your browser &mdash; no server, no API, no tracking.</p>
+</div>
+
+<!-- Playground selector -->
+<div class="pg-grid" id="pgGrid">
+<div class="pg-card active" onclick="selectPg(1)">
+<div class="pg-num">1</div>
+<div class="pg-title">Riemann zeta-zero explorer</div>
+<div class="pg-desc">Trace &zeta;(&frac12;+it) along the critical line. Watch the curve cross zero &mdash; those are the Riemann zeros.</div>
+<div class="pg-tags"><span class="pg-tag">zeta</span><span class="pg-tag">critical line</span><span class="pg-tag">RH</span></div>
+</div>
+<div class="pg-card" onclick="selectPg(2)">
+<div class="pg-num">2</div>
+<div class="pg-title">Prime-counting step function</div>
+<div class="pg-desc">&pi;(x) climbs in steps at each prime; the logarithmic integral Li(x) glides above it. The gap is the prime mystery.</div>
+<div class="pg-tags"><span class="pg-tag">&pi;(x)</span><span class="pg-tag">Li(x)</span><span class="pg-tag">PNT</span></div>
+</div>
+<div class="pg-card" onclick="selectPg(3)">
+<div class="pg-num">3</div>
+<div class="pg-title">von Mangoldt staircase</div>
+<div class="pg-desc">&psi;(x) = &Sigma;&Lambda;(n) hugs the main term x. The gold band O(&radic;x log&sup2;x) is the RH envelope &mdash; the &radic;x is RH itself.</div>
+<div class="pg-tags"><span class="pg-tag">&psi;(x)</span><span class="pg-tag">&radic;X</span><span class="pg-tag">RH</span></div>
+</div>
+</div>
+
+<!-- Stage -->
+<section class="pg-stage" id="pgStage">
+<div class="pg-stage-header">
+<h2 id="pgTitle">1. Riemann zeta-zero explorer</h2>
+<span class="pg-expr" id="pgExpr">$$\zeta(\tfrac12+it) \in \mathbb{C}$$</span>
+</div>
+<div class="canvas-wrap">
+<canvas id="pgCanvas"></canvas>
+<div class="scene-label" id="pgScene">critical line Re(s) = 1/2</div>
+<div class="readout" id="pgReadout">t = 14.13<br>|&zeta;| = 0.00</div>
+<div class="controls">
+<button class="btn primary" id="playBtn" onclick="togglePlay()">&#9658; Play</button>
+<button class="btn" onclick="step(-1)">&minus;</button>
+<button class="btn" onclick="step(1)">+</button>
+<button class="btn" onclick="reset()">&#8634;</button>
+<div class="param"><span class="lbl">speed</span><input type="range" id="speedRange" min="0.1" max="3" step="0.1" value="1"></div>
+<div class="scrub"><span>t-range</span><input type="range" id="scrubRange" min="0" max="100" step="0.1" value="0"></div>
+</div>
+</div>
+<p class="hint" id="pgHint">Drag the t-range slider to scrub along the critical line. Click Play to auto-advance. Red dots mark detected zeta zeros.</p>
+
+<div class="pg-panels" id="pgPanels">
+<!-- panels injected by JS -->
+</div>
+</section>
+
+<div style="display:flex;justify-content:space-between;margin-top:1.5rem;gap:1rem;flex-wrap:wrap">
+<a class="btn primary" href="sources.html#rh_thetalift">&larr; Back to card 16: the &radic;X theta-lift chain</a>
+<a class="btn" href="deep-dive.html">Deep dive &rarr;</a>
+</div>
+</main>
+
+<footer>
+<div class="footer-inner">
+<p>Part of the <a href="index.html">Mmnd Observatory</a> &middot; <a href="sources.html">Sources</a> &middot; <a href="demos.html">Demos</a> &middot; Built for a two-decade horizon.</p>
+</div>
+</footer>
+
+<script>
+// === Theme toggle (shared with the rest of the site) ===
+function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
+(function(){const s=localStorage.getItem('mmnd-theme');const p=window.matchMedia('(prefers-color-scheme:dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+
+// === KaTeX auto-render ===
+document.addEventListener('DOMContentLoaded',function(){
+  if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:false},{left:'$',right:'$',display:false}]})}
+});
+
+// =====================================================================
+// Playground framework: three playgrounds share one canvas + controls.
+// Each playground registers a {init,draw,step,reset,scrub,param} interface.
+// =====================================================================
+const canvas=document.getElementById('pgCanvas');
+const ctx=canvas.getContext('2d');
+let dpr=window.devicePixelRatio||1;
+let cw=800,ch=400;       // CSS pixels
+let raf=null;
+let playing=false;
+let activePg=1;
+let speed=parseFloat(document.getElementById('speedRange').value);
+
+function resizeCanvas(){
+  const rect=canvas.getBoundingClientRect();
+  cw=rect.width; ch=rect.height;
+  canvas.width=cw*dpr; canvas.height=ch*dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  if(playgrounds[activePg])playgrounds[activePg].draw();
+}
+window.addEventListener('resize',resizeCanvas);
+
+// ---------- shared drawing helpers ----------
+function bgFill(color){ctx.fillStyle=color;ctx.fillRect(0,0,cw,ch)}
+function line(x0,y0,x1,y1,color,lw){ctx.strokeStyle=color;ctx.lineWidth=lw||1;ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(x1,y1);ctx.stroke()}
+function dot(x,y,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill()}
+function glowDot(x,y,r,color,glow){ctx.save();ctx.shadowBlur=glow||8;ctx.shadowColor=color;ctx.fillStyle=color;ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.fill();ctx.restore()}
+function text(s,x,y,size,color,align){ctx.fillStyle=color;ctx.font=size+'px Georgia,serif';ctx.textAlign=align||'center';ctx.fillText(s,x,y)}
+
+// ---------- palette ----------
+const C={
+  ink:'#e5e2dc',muted:'#736a5e',primary:'#c2410c',main:'#10b981',
+  rh:'#FFD700',pnt:'#dc2626',lift:'#a855f7',canvas:'#0a0908',grid:'rgba(229,226,220,0.08)',
+};
+
+// =====================================================================
+// PLAYGROUND 1: Riemann zeta-zero explorer
+//   Plots Re(zeta(1/2+it)) and Im(zeta(1/2+it)) as t sweeps. The curve
+//   crosses the origin when zeta vanishes -> Riemann zero. Marked in red.
+//   Uses the standard alternating-series eta function for convergence:
+//     zeta(s) = eta(s) / (1 - 2^{1-s}),   eta(s) = sum_{n>=1} (-1)^{n-1} / n^s
+// =====================================================================
+const PG1={
+  tMin:0, tMax:50, tCur:0,
+  // detected zeros of zeta on the critical line (first ~10, well-known)
+  zeros:[14.1347,21.0220,25.0109,30.4249,32.9351,37.5862,40.9187,43.3271,48.0051,49.7738],
+  init(){this.tCur=0;document.getElementById('scrubRange').value=0},
+  reset(){this.init();this.draw()},
+  // eta(s) via Euler transform for stability on Re(s)=1/2
+  zeta(t){
+    // eta(s) = sum (-1)^{n-1} / n^s; use 60 terms + Euler-Maclaurin tail
+    const sRe=0.5, sIm=t;
+    let re=0, im=0;
+    // direct summation of eta with 80 terms is fine for t<60
+    for(let n=1;n<=80;n++){
+      const logn=Math.log(n);
+      const mag=Math.exp(-sRe*logn); // n^{-1/2}
+      const ang=-sIm*logn;           // n^{-it}
+      const sign=(n%2===1)?1:-1;     // (-1)^{n-1}
+      re+=sign*mag*Math.cos(ang);
+      im+=sign*mag*Math.sin(ang);
+    }
+    // divide by (1 - 2^{1-s}); 2^{1-s} = 2^{1/2} * 2^{-it} = sqrt(2) * e^{-it log 2}
+    const twoPow=1.41421356; // 2^{1/2}
+    const ang2=-t*Math.log(2);
+    const denomRe=1-twoPow*Math.cos(ang2);
+    const denomIm=-twoPow*Math.sin(ang2);
+    const denomMag2=denomRe*denomRe+denomIm*denomIm;
+    const zRe=(re*denomRe+im*denomIm)/denomMag2;
+    const zIm=(im*denomRe-re*denomIm)/denomMag2;
+    return {re:zRe, im:zIm, abs:Math.sqrt(zRe*zRe+zIm*zIm)};
+  },
+  draw(){
+    bgFill(C.canvas);
+    // axes
+    const midX=cw*0.5, midY=ch*0.5;
+    line(0,midY,cw,midY,C.grid,1);   // Re axis
+    line(midX,0,midX,ch,C.grid,1);  // Im axis
+    text('Re',cw-15,midY-6,11,C.muted,'right');
+    text('Im',midX+8,14,11,C.muted,'left');
+    text('critical line Re(s)=1/2',cw/2,18,11,C.muted,'center');
+    // trace zeta(1/2+it) parametrically in the complex plane as t grows
+    const maxR=3.0; // display radius
+    const scale=Math.min(cw,ch)*0.18/maxR;
+    // trace the full curve up to current tCur (memory of the path)
+    const tStep=0.05;
+    const tEnd=this.tMin+(this.tMax-this.tMin)*(this.tCur/100);
+    ctx.lineWidth=1.2;
+    // dim full trace
+    ctx.strokeStyle='rgba(16,185,129,0.25)';
+    ctx.beginPath();
+    let started=false;
+    for(let t=this.tMin;t<=Math.min(tEnd,this.tMax);t+=tStep){
+      const z=this.zeta(t);
+      const x=midX+z.re*scale, y=midY-z.im*scale;
+      if(!started){ctx.moveTo(x,y);started=true}else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // bright recent trace (last 5 units of t)
+    ctx.strokeStyle=C.main; ctx.lineWidth=1.8;
+    ctx.beginPath(); started=false;
+    const tStart2=Math.max(this.tMin,tEnd-5);
+    for(let t=tStart2;t<=Math.min(tEnd,this.tMax);t+=tStep){
+      const z=this.zeta(t);
+      const x=midX+z.re*scale, y=midY-z.im*scale;
+      if(!started){ctx.moveTo(x,y);started=true}else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    // mark zeros within the current range
+    this.zeros.forEach(zt=>{
+      if(zt<=tEnd){
+        glowDot(midX,midY,4,C.rh,10); // zero is at origin
+        text('&rho;='+zt.toFixed(2),midX+12,midY-8,9,C.rh,'left');
+      }
+    });
+    // current point (the "head" of the curve)
+    const head=this.zeta(tEnd);
+    const hx=midX+head.re*scale, hy=midY-head.im*scale;
+    glowDot(hx,hy,5,C.primary,12);
+    // crosshair
+    line(hx,midY-6,hx,midY+6,'rgba(229,226,220,0.4)',1);
+    line(midX-6,hy,midX+6,hy,'rgba(229,226,220,0.4)',1);
+    // readout
+    document.getElementById('pgReadout').innerHTML=
+      't = '+tEnd.toFixed(2)+'<br>|&zeta;| = '+head.abs.toFixed(3)+'<br>Re = '+head.re.toFixed(3)+'<br>Im = '+head.im.toFixed(3);
+  },
+  step(dir){
+    // advance tCur; speed scaled
+    this.tCur=Math.max(0,Math.min(100,this.tCur+dir*speed*0.4));
+    document.getElementById('scrubRange').value=this.tCur;
+    this.draw();
+  },
+  scrub(v){this.tCur=Math.max(0,Math.min(100,v));this.draw()},
+  setSpeed(s){speed=s},
+  panels:[
+    {h:'What you are seeing',body:'<p>The green curve is the parametric trace of <span class="kw">&zeta;(&frac12;+it)</span> in the complex plane as <span class="kw">t</span> grows from 0 to 50. The horizontal axis is the real part, the vertical axis the imaginary part. The orange dot is the current value of &zeta; at the scrubbed <span class="kw">t</span>.</p><p>Every time the curve <span class="kw">passes through the origin</span>, &zeta;(&frac12;+it) = 0 &mdash; that is a <span class="kw">non-trivial zero of the Riemann zeta function</span>, marked in gold. The Riemann Hypothesis asserts that <em>all</em> non-trivial zeros lie on this critical line Re(s) = 1/2.</p>'},
+    {h:'The computation',body:'<p>For Re(s) &gt; 0 the alternating eta function <span class="kw">&eta;(s) = &Sigma;(&minus;1)<sup>n&minus;1</sup> / n<sup>s</sup></span> converges and satisfies <span class="kw">&zeta;(s) = &eta;(s) / (1 &minus; 2<sup>1&minus;s</sup>)</span>. This browser sums 80 terms directly &mdash; stable enough for t &lt; 60. The first ten zeros (14.13, 21.02, 25.01, &hellip;) are tabulated and highlighted as they enter the visible range.</p><div class="formula">&zeta;(s) = &sum;<sub>n=1</sub><sup>&infin;</sup> n<sup>&minus;s</sup>, &nbsp; Re(s) &gt; 1</div><p>See <a href="sources.html#lean_riemann">card 15</a> for the Lean-formalized zero-free region Re(s) &ge; 7/8, and <a href="sources.html#rh_thetalift">card 16</a> for the &radic;X theta-lift chain that targets the full RH.</p>'}
+  ]
+};
+
+// =====================================================================
+// PLAYGROUND 2: Prime-counting step function
+//   pi(x) = #{primes <= x}, a staircase. Li(x) = integral_2^x dt/log(t)
+//   glides above. The PNT says pi(x) ~ Li(x); Littlewood proved the
+//   difference changes sign infinitely often (Skewes).
+// =====================================================================
+const PG2={
+  xMax:200, xCur:0,
+  primes:[],
+  init(){
+    this.primes=this.sieve(this.xMax);
+    this.xCur=0;
+    document.getElementById('scrubRange').value=0;
+  },
+  sieve(n){
+    const s=new Array(n+1).fill(true); s[0]=s[1]=false;
+    for(let i=2;i*i<=n;i++) if(s[i]) for(let j=i*i;j<=n;j+=i) s[j]=false;
+    const p=[]; for(let i=2;i<=n;i++) if(s[i]) p.push(i); return p;
+  },
+  pi(x){let c=0;for(const p of this.primes) if(p<=x) c++; else break; return c},
+  li(x){
+    if(x<2) return 0;
+    // Li(x) = li(x) - li(2); approximate li(x) = gamma + log(log(x)) + sum_{k>=1} (log x)^k / (k * k!)
+    const L=Math.log(x);
+    let s=0;
+    for(let k=1;k<=80;k++){
+      const term=Math.pow(L,k)/(k*factorial(k));
+      s+=term; if(term<1e-12) break;
+    }
+    return 0.5772156649+Math.log(L)+s - 1.0451637800; // subtract li(2) ~ 1.0452
+  },
+  reset(){this.init();this.draw()},
+  draw(){
+    bgFill(C.canvas);
+    const padL=44,padB=28,padT=18,padR=12;
+    const pw=cw-padL-padR, ph=ch-padT-padB;
+    // axes
+    line(padL,padT,padL,padT+ph,C.grid,1);
+    line(padL,padT+ph,padL+pw,padT+ph,C.grid,1);
+    text('&pi;(x), Li(x)',padL-6,padT+2,11,C.ink,'right');
+    text('x',padL+pw,padT+ph+18,11,C.muted,'right');
+    // gridlines + ticks
+    for(let v=0;v<=this.xMax;v+=50){
+      const x=padL+(v/this.xMax)*pw;
+      line(x,padT+ph,x,padT+ph+3,C.muted,1);
+      text(v,x,padT+ph+15,9,C.muted,'center');
+    }
+    const piMax=this.pi(this.xMax), liMax=this.li(this.xMax);
+    const yMax=Math.max(piMax,liMax)*1.1;
+    for(let v=0;v<=yMax;v+=10){
+      const y=padT+ph-(v/yMax)*ph;
+      line(padL-3,y,padL,y,C.muted,1);
+      text(v,padL-6,y+3,9,C.muted,'right');
+    }
+    // Li(x) smooth curve (the asymptote from PNT)
+    ctx.strokeStyle=C.rh; ctx.lineWidth=1.6;
+    ctx.beginPath();
+    for(let i=0;i<=200;i++){
+      const x=2+(this.xMax-2)*(i/200);
+      const y=this.li(x);
+      const px=padL+(x/this.xMax)*pw, py=padT+ph-(y/yMax)*ph;
+      if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+    text('Li(x)',padL+(this.xMax/this.xMax)*pw*0.7,padT+ph-(this.li(this.xMax*0.7)/yMax)*ph-6,10,C.rh,'center');
+    // pi(x) staircase up to current x
+    const xEnd=2+(this.xMax-2)*(this.xCur/100);
+    ctx.strokeStyle=C.primary; ctx.lineWidth=2;
+    ctx.beginPath();
+    let started=false, prevPi=0;
+    for(let x=2;x<=xEnd;x+=1){
+      const p=this.pi(x);
+      if(!started){ctx.moveTo(padL+(x/this.xMax)*pw,padT+ph-(p/yMax)*ph);started=true}
+      else{
+        if(p!==prevPi){
+          // vertical jump
+          ctx.lineTo(padL+(x/this.xMax)*pw,padT+ph-(prevPi/yMax)*ph);
+        }
+        ctx.lineTo(padL+(x/this.xMax)*pw,padT+ph-(p/yMax)*ph);
+      }
+      prevPi=p;
+    }
+    ctx.stroke();
+    // mark primes on the x-axis (small ticks)
+    this.primes.forEach(p=>{
+      if(p<=xEnd){
+        const px=padL+(p/this.xMax)*pw;
+        line(px,padT+ph-3,px,padT+ph+3,'rgba(194,65,12,0.4)',1);
+      }
+    });
+    // current point
+    const curPi=this.pi(xEnd), curLi=this.li(xEnd);
+    glowDot(padL+(xEnd/this.xMax)*pw, padT+ph-(curPi/yMax)*ph, 5, C.primary, 10);
+    // readout
+    document.getElementById('pgReadout').innerHTML=
+      'x = '+xEnd.toFixed(1)+'<br>&pi;(x) = '+curPi+'<br>Li(x) = '+curLi.toFixed(2)+'<br>&Delta; = '+(curPi-curLi).toFixed(2);
+  },
+  step(dir){
+    this.xCur=Math.max(0,Math.min(100,this.xCur+dir*speed*0.5));
+    document.getElementById('scrubRange').value=this.xCur;
+    this.draw();
+  },
+  scrub(v){this.xCur=Math.max(0,Math.min(100,v));this.draw()},
+  setSpeed(s){speed=s},
+  panels:[
+    {h:'What you are seeing',body:'<p>The orange staircase is <span class="kw">&pi;(x)</span>, the count of primes up to <span class="kw">x</span>: it jumps by 1 at every prime and is flat between primes. The gold curve is <span class="kw">Li(x) = &int;<sub>2</sub><sup>x</sup> dt / log t</span>, the logarithmic integral that glides smoothly above.</p><p>The <span class="kw">Prime Number Theorem</span> (Hadamard / de la Vall&eacute;e-Poussin, 1896) is the statement &pi;(x) ~ Li(x) &mdash; the staircase and the curve agree asymptotically. The gap you see between them is the prime mystery the Riemann Hypothesis would resolve.</p>'},
+    {h:'The prime mystery',body:'<p>Under RH, the gap is <span class="kw">O(&radic;x log x)</span>. Without RH, the best unconditional bound is <span class="kw">O(x e<sup>&minus;c&radic;log x</sup>)</span> &mdash; much wider. Littlewood proved the gap <em>changes sign</em> infinitely often; the first sign change (Skewes&rsquo; number) is astronomically large.</p><div class="formula">PNT: &pi;(x) ~ Li(x) &nbsp;&nbsp;|&nbsp;&nbsp; RH: &pi;(x) = Li(x) + O(&radic;x log x)</div><p>The staircase&rsquo;s jaggedness is exactly what the <a href="sources.html#rh_thetalift">&radic;X theta-lift chain</a> tames by controlling &psi;(x), the Chebyshev function whose step heights are log p.</p>'}
+  ]
+};
+
+// small factorial helper for Li
+function factorial(k){let f=1;for(let i=2;i<=k;i++)f*=i;return f}
+
+// =====================================================================
+// PLAYGROUND 3: von Mangoldt staircase with sqrt(X) RH envelope
+//   psi(x) = sum_{n<=x} Lambda(n). PNT: psi ~ x. RH: |psi - x| <= O(sqrt(x) log^2 x).
+//   The viewer shows psi climbing in log-p steps at prime powers, hugging
+//   the main term x, with the gold sqrt(x) log^2 x band drawn around it.
+// =====================================================================
+const PG3={
+  xMax:300, xCur:0,
+  primes:[],
+  init(){this.primes=PG2.sieve(this.xMax);this.xCur=0;document.getElementById('scrubRange').value=0},
+  reset(){this.init();this.draw()},
+  lambda(n){
+    // von Mangoldt: log p if n = p^k for prime p and k>=1, else 0
+    for(const p of this.primes){
+      if(p*p>n)break;
+      let pk=p;
+      while(pk<n){pk*=p}
+      if(pk===n) return Math.log(p);
+    }
+    // also check n itself is prime (covered if n < xMax and in sieve)
+    if(this.primes.includes(n)) return Math.log(n);
+    return 0;
+  },
+  psi(x){
+    let s=0;
+    for(let n=2;n<=Math.floor(x);n++){const l=this.lambda(n); if(l>0) s+=l}
+    return s;
+  },
+  draw(){
+    bgFill(C.canvas);
+    const padL=44,padB=28,padT=18,padR=12;
+    const pw=cw-padL-padR, ph=ch-padT-padB;
+    // axes
+    line(padL,padT,padL,padT+ph,C.grid,1);
+    line(padL,padT+ph,padL+pw,padT+ph,C.grid,1);
+    text('&psi;(x), x',padL-6,padT+2,11,C.ink,'right');
+    text('x',padL+pw,padT+ph+18,11,C.muted,'right');
+    // ticks
+    for(let v=0;v<=this.xMax;v+=50){
+      const x=padL+(v/this.xMax)*pw;
+      line(x,padT+ph,x,padT+ph+3,C.muted,1);
+      text(v,x,padT+ph+15,9,C.muted,'center');
+    }
+    const yMax=this.xMax*1.05;
+    for(let v=0;v<=yMax;v+=50){
+      const y=padT+ph-(v/yMax)*ph;
+      line(padL-3,y,padL,y,C.muted,1);
+      text(v,padL-6,y+3,9,C.muted,'right');
+    }
+    // PNT band (red, wide): O(x exp(-c sqrt(log x)))
+    ctx.fillStyle='rgba(220,38,38,0.08)';
+    ctx.beginPath();
+    ctx.moveTo(padL,padT+ph);
+    for(let i=0;i<=200;i++){
+      const x=2+(this.xMax-2)*(i/200);
+      const band=x*Math.exp(-0.3*Math.sqrt(Math.log(x+1)));
+      const px=padL+(x/this.xMax)*pw, py=padT+ph-((x+band)/yMax)*ph;
+      ctx.lineTo(px,py);
+    }
+    for(let i=200;i>=0;i--){
+      const x=2+(this.xMax-2)*(i/200);
+      const band=x*Math.exp(-0.3*Math.sqrt(Math.log(x+1)));
+      const px=padL+(x/this.xMax)*pw, py=padT+ph-((x-band)/yMax)*ph;
+      ctx.lineTo(px,py);
+    }
+    ctx.closePath(); ctx.fill();
+    // RH band (gold): x +/- sqrt(x) * log^2(x)
+    ctx.fillStyle='rgba(255,215,0,0.16)';
+    ctx.beginPath();
+    ctx.moveTo(padL,padT+ph);
+    for(let i=0;i<=200;i++){
+      const x=2+(this.xMax-2)*(i/200);
+      const band=Math.sqrt(x)*Math.pow(Math.log(x+1),2);
+      const px=padL+(x/this.xMax)*pw, py=padT+ph-((x+band)/yMax)*ph;
+      ctx.lineTo(px,py);
+    }
+    for(let i=200;i>=0;i--){
+      const x=2+(this.xMax-2)*(i/200);
+      const band=Math.sqrt(x)*Math.pow(Math.log(x+1),2);
+      const px=padL+(x/this.xMax)*pw, py=padT+ph-((x-band)/yMax)*ph;
+      ctx.lineTo(px,py);
+    }
+    ctx.closePath(); ctx.fill();
+    // main term x (ink line)
+    ctx.strokeStyle=C.ink; ctx.lineWidth=1.4;
+    ctx.beginPath();
+    for(let i=0;i<=200;i++){
+      const x=2+(this.xMax-2)*(i/200);
+      const px=padL+(x/this.xMax)*pw, py=padT+ph-(x/yMax)*ph;
+      if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+    }
+    ctx.stroke();
+    text('x (PNT main term)',padL+(this.xMax*0.5/this.xMax)*pw,padT+ph-(this.xMax*0.5/yMax)*ph-6,10,C.ink,'center');
+    // psi(x) staircase up to current x
+    const xEnd=2+(this.xMax-2)*(this.xCur/100);
+    ctx.strokeStyle=C.main; ctx.lineWidth=2;
+    ctx.beginPath();
+    let started=false, prevPsi=0;
+    for(let x=2;x<=xEnd;x+=1){
+      const p=this.psi(x);
+      if(!started){ctx.moveTo(padL+(x/this.xMax)*pw,padT+ph-(p/yMax)*ph);started=true}
+      else{
+        if(p!==prevPsi){
+          ctx.lineTo(padL+(x/this.xMax)*pw,padT+ph-(prevPsi/yMax)*ph);
+        }
+        ctx.lineTo(padL+(x/this.xMax)*pw,padT+ph-(p/yMax)*ph);
+      }
+      prevPsi=p;
+    }
+    ctx.stroke();
+    // mark prime powers on the x-axis
+    for(let n=2;n<=xEnd;n++){
+      if(this.lambda(n)>0){
+        const px=padL+(n/this.xMax)*pw;
+        line(px,padT+ph-3,px,padT+ph+3,'rgba(16,185,129,0.5)',1);
+      }
+    }
+    // current point
+    const curPsi=this.psi(xEnd);
+    glowDot(padL+(xEnd/this.xMax)*pw, padT+ph-(curPsi/yMax)*ph, 5, C.main, 10);
+    // legend
+    text('RH band O(&radic;x log&sup2;x)',padL+pw*0.65,padT+14,10,C.rh,'center');
+    text('PNT band (unconditional)',padL+pw*0.3,padT+14,10,C.pnt,'center');
+    // readout
+    const rhBand=Math.sqrt(xEnd)*Math.pow(Math.log(xEnd+1),2);
+    document.getElementById('pgReadout').innerHTML=
+      'x = '+xEnd.toFixed(1)+'<br>&psi;(x) = '+curPsi.toFixed(2)+'<br>x = '+xEnd.toFixed(2)+'<br>err = '+(curPsi-xEnd).toFixed(2)+'<br>RH band = &plusmn;'+rhBand.toFixed(2);
+  },
+  step(dir){
+    this.xCur=Math.max(0,Math.min(100,this.xCur+dir*speed*0.5));
+    document.getElementById('scrubRange').value=this.xCur;
+    this.draw();
+  },
+  scrub(v){this.xCur=Math.max(0,Math.min(100,v));this.draw()},
+  setSpeed(s){speed=s},
+  panels:[
+    {h:'What you are seeing',body:'<p>The green staircase is <span class="kw">&psi;(x) = &Sigma;<sub>n&le;x</sub> &Lambda;(n)</span>, the von Mangoldt / Chebyshev function. It jumps by <span class="kw">log p</span> at every prime power <span class="kw">p<sup>k</sup></span> and is flat between. The white diagonal is the main term <span class="kw">x</span> &mdash; the Prime Number Theorem is the statement that the staircase hugs this line.</p><p>The gold band is the <span class="kw">RH admissible error O(&radic;x log&sup2;x)</span>. The Riemann Hypothesis is precisely the assertion that the staircase never escapes this gold envelope. The wider red band is the weaker unconditional PNT bound.</p>'},
+    {h:'The &radic;X that is RH',body:'<p>The exponent <span class="kw">1/2</span> in &radic;x is the entire content of RH. Any larger exponent (e.g. x<sup>0.6</sup>) would be a weaker statement that does not imply RH; any smaller would be false. This is why the <a href="sources.html#rh_thetalift">&radic;X theta-lift chain</a> of length <span class="kw">m = &radic;X</span> is &ldquo;the only length that could yield RH&rdquo; &mdash; each lift mimics one Stepanov multiplicity, and &radic;X lifts collapse the error exactly into this gold band.</p><div class="formula">&psi;(x) = x + O(&radic;x log&sup2;x) &nbsp;&hArr;&nbsp; Riemann Hypothesis</div>'}
+  ]
+};
+
+// =====================================================================
+// Playground registry + control wiring
+// =====================================================================
+const playgrounds={1:PG1,2:PG2,3:PG3};
+const pgMeta={
+  1:{title:'1. Riemann zeta-zero explorer',expr:'$$\\zeta(\\tfrac12+it) \\in \\mathbb{C}$$',scene:'critical line Re(s) = 1/2',hint:'Drag the t-range slider to scrub along the critical line. Click Play to auto-advance. The curve passes through the origin at every Riemann zero.'},
+  2:{title:'2. Prime-counting step function',expr:'$$\\pi(x) = \\#\\{p \\leq x : p \\text{ prime}\\} \\sim \\mathrm{Li}(x)$$',scene:'primes vs logarithmic integral',hint:'Scrub x from 2 to 200. The orange staircase jumps at each prime; the gold Li(x) curve glides above. The gap is the prime mystery.'},
+  3:{title:'3. von Mangoldt staircase',expr:'$$\\psi(x) = \\sum_{n \\leq x} \\Lambda(n) = x + O(\\sqrt{x}\\,\\log^2 x)$$',scene:'Chebyshev function with RH band',hint:'Scrub x. The green staircase hugs the white main term x. The gold band is the RH envelope &mdash; the &radic;x is RH itself.'}
+};
+function selectPg(n){
+  if(playing)togglePlay();
+  activePg=n;
+  document.querySelectorAll('.pg-card').forEach((c,i)=>c.classList.toggle('active',i+1===n));
+  const m=pgMeta[n];
+  document.getElementById('pgTitle').textContent=m.title;
+  document.getElementById('pgExpr').innerHTML=m.expr;
+  document.getElementById('pgScene').textContent=m.scene;
+  document.getElementById('pgHint').textContent=m.hint;
+  // render panels
+  const pg=playgrounds[n];
+  const pc=document.getElementById('pgPanels');
+  pc.innerHTML='';
+  pg.panels.forEach(p=>{
+    const d=document.createElement('div'); d.className='panel';
+    d.innerHTML='<h3>'+p.h+'</h3>'+p.body;
+    pc.appendChild(d);
+  });
+  if(window.renderMathInElement)renderMathInElement(pc,{delimiters:[{left:'$$',right:'$$',display:false},{left:'$',right:'$',display:false}]});
+  pg.init();
+  resizeCanvas();
+}
+function togglePlay(){
+  playing=!playing;
+  document.getElementById('playBtn').innerHTML=playing?'&#10074;&#10074; Pause':'&#9658; Play';
+  if(playing){
+    const tick=()=>{
+      if(!playing)return;
+      playgrounds[activePg].step(1);
+      raf=setTimeout(tick,40);
+    };
+    tick();
+  } else { if(raf){clearTimeout(raf); raf=null} }
+}
+function step(dir){playgrounds[activePg].step(dir)}
+function reset(){playgrounds[activePg].reset()}
+document.getElementById('scrubRange').addEventListener('input',e=>playgrounds[activePg].scrub(parseFloat(e.target.value)));
+document.getElementById('speedRange').addEventListener('input',e=>{speed=parseFloat(e.target.value)});
+
+// boot
+selectPg(1);
+window.addEventListener('load',()=>{setTimeout(resizeCanvas,50)});
+</script>
+
+</body>
+</html>
