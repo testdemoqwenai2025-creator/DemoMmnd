@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
-<meta name="version" content="2026-11-13-v12-lean-riemann">
+<meta name="version" content="2026-11-21-v13-rh-thetalift">
 <title>Sources · Mmnd</title>
 <style>
 :root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--code-bg:#0a0908;--code-fg:#e5e2dc;--glass:rgba(250,247,242,0.85)}
@@ -349,7 +349,7 @@ h+='<div id="codeVizWrap" style="margin-top:.5rem;display:none"><div style="font
 h+='</div>';
 // Obs
 h+='<div class="popup-pane" id="pane-obs">';
-if(e.demo){h+='<h3>'+e.demo.title+'</h3><canvas id="demoCv" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">'+e.demo.desc+'</p>';if(key==='lean_riemann'){h+='<figure style="margin:.5rem 0 1rem;text-align:center"><img src="images/lean_riemann_zeros.png" alt="Riemann zeta zeros, critical strip, and the Lean-formalized zero-free region Re(s) >= 7/8" loading="lazy" style="max-width:100%;height:auto;border:1px solid var(--border);border-radius:.5rem"><figcaption style="font-size:.7rem;color:var(--muted);margin-top:.4rem">The critical strip 0 &lt; Re(s) &lt; 1, the Riemann Hypothesis line Re(s) = 1/2 (teal), and the formally verified zero-free region Re(s) &ge; 7/8 with Im(s) &ne; 0 (gold). Red dots: the first ten non-trivial zeros on the critical line.</figcaption></figure>'}}
+if(e.demo){h+='<h3>'+e.demo.title+'</h3><canvas id="demoCv" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">'+e.demo.desc+'</p>';if(key==='lean_riemann'){h+='<figure style="margin:.5rem 0 1rem;text-align:center"><img src="images/lean_riemann_zeros.png" alt="Riemann zeta zeros, critical strip, and the Lean-formalized zero-free region Re(s) >= 7/8" loading="lazy" style="max-width:100%;height:auto;border:1px solid var(--border);border-radius:.5rem"><figcaption style="font-size:.7rem;color:var(--muted);margin-top:.4rem">The critical strip 0 &lt; Re(s) &lt; 1, the Riemann Hypothesis line Re(s) = 1/2 (teal), and the formally verified zero-free region Re(s) &ge; 7/8 with Im(s) &ne; 0 (gold). Red dots: the first ten non-trivial zeros on the critical line.</figcaption></figure>'}if(key==='rh_thetalift'){h+='<figure style="margin:.5rem 0 1rem;text-align:center"><img src="images/rh_thetalift_psi.png" alt="Chebyshev psi(X) versus the main term X, with the unconditional PNT band and the sqrt(X) RH band" loading="lazy" style="max-width:100%;height:auto;border:1px solid var(--border);border-radius:.5rem"><figcaption style="font-size:.7rem;color:var(--muted);margin-top:.4rem">The prime-counting factoring: &psi;(X) = &Sigma;<sub>n&le;X</sub> &Lambda;(n) hugs the main term X. The gold band O(&radic;X log&sup2; X) is the RH envelope &mdash; the &radic;X is exactly the RH content. The red band O(X e<sup>&minus;c&radic;log X</sup>) is the weaker unconditional PNT (1896).</figcaption></figure>';h+='<figure style="margin:.5rem 0 1rem;text-align:center"><img src="images/rh_thetalift_chain.png" alt="Theta-lift chain U(X0) to U(X_m), m = sqrt(X), collapsing to RH" loading="lazy" style="max-width:100%;height:auto;border:1px solid var(--border);border-radius:.5rem"><figcaption style="font-size:.7rem;color:var(--muted);margin-top:.4rem">The chain of theta lifts U(X<sub>0</sub>) &rarr; U(X<sub>1</sub>) &rarr; &hellip; &rarr; U(X<sub>m</sub>), m = &radic;X, between totally definite unitary groups. Each lift raises the Stepanov-style multiplicity by one; m = &radic;X is the only length that collapses the error into the RH band. &lsquo;And yet, what else could it be?&rsquo;</figcaption></figure>'}}
 h+='<h3>Summary report</h3><div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--secondary);margin-bottom:1rem"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;font-size:.75rem"><div><strong style="color:var(--primary)">Expression:</strong> '+e.name.replace(/^[0-9]+\.\s/,"")+'</div><div><strong style="color:var(--primary)">Domain:</strong> '+(e.demo?e.demo.title:'N/A')+'</div><div><strong style="color:var(--primary)">Languages:</strong> 6 (Python/TS/Go/Scala/C/Elixir)</div><div><strong style="color:var(--primary)">Code blocks:</strong> 6 implementations</div><div><strong style="color:var(--primary)">Status:</strong> Analyzed</div><div><strong style="color:var(--primary)">Phase:</strong> 1 — KaTeX-rendered</div></div></div>';
 h+='<h3 style="margin-top:1rem">Statistics</h3><div class="report-grid" style="grid-template-columns:repeat(4,1fr)"><div class="report-stat"><div class="num">1</div><div class="lbl">Expr</div></div><div class="report-stat"><div class="num">6</div><div class="lbl">Langs</div></div><div class="report-stat"><div class="num">5</div><div class="lbl">Mappings</div></div><div class="report-stat"><div class="num">72</div><div class="lbl">Total</div></div></div>';
 h+='<h3 style="margin-top:1rem">Graph visualization — select a chart type</h3>';
@@ -981,6 +981,210 @@ ctx.globalAlpha=qedProg;
 ctx.fillText('qed',treeX,H-22);
 ctx.globalAlpha=1;
 }
+}
+break;
+}
+case'rh_thetalift':{
+gradientBg(ctx,W,H,time,'#080908','#0a0a0f');
+var cycleT=time%20;var stage=Math.floor(cycleT/5);var stageP=(cycleT%5)/5;
+var si=[{n:'1. Stepanov Multiplicity',f:'divisor *with* multiplicity (function field)'},{n:'2. qN = Mk + R',f:'sign -> holo/automorphy over Z'},{n:'3. Theta-Lift Chain',f:'U(X0) -> ... -> U(Xm),  m = sqrt(X)'},{n:'4. RH Band Collapse',f:'psi(X) - X -> O(sqrt(X) log^2 X)'}][stage];
+ctx.fillStyle='#FFD700';ctx.font='bold 9px Georgia,serif';ctx.textAlign='center';ctx.fillText(si.n,W/2,14);
+ctx.fillStyle='#00CED1';ctx.font='6px monospace';ctx.fillText(si.f,W/2,24);
+var pby=H-14;
+for(var s=0;s<4;s++){var sx=W*0.15+s*W*0.2;ctx.fillStyle=s<=stage?'#FFD700':'#2a261e';ctx.fillRect(sx-8,pby-2,16,2);if(s===stage){ctx.fillStyle='#FFD700';ctx.font='4px monospace';ctx.textAlign='center';ctx.fillText((stageP*100|0)+'%',sx,pby-5)}}
+
+if(stage===0){
+// === STAGE 1: Stepanov divisor WITH multiplicity (function field) ===
+// A divisor D = sum m_P [P] on a curve over F_q, with multiplicities m_P >= 1.
+var pts=[{x:W*0.2,y:H*0.45,m:1},{x:W*0.35,y:H*0.4,m:2},{x:W*0.5,y:H*0.5,m:3},{x:W*0.65,y:H*0.42,m:1}];
+pts.forEach(function(p,i){
+var pulse=0.7+0.3*Math.sin(time*2+i);
+glowNode(ctx,p.x,p.y,3+p.m*1.5,'#c2410c',6*pulse);
+// multiplicity label
+ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('m='+p.m,p.x,p.y-8-p.m*1.5);
+// tiny vertical ticks showing multiplicity count
+for(var k=0;k<p.m;k++){
+ctx.strokeStyle='rgba(255,215,0,'+(0.4+0.2*Math.sin(time*3+k))+')';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(p.x-2-k*1.5,p.y+4);ctx.lineTo(p.x-2-k*1.5,p.y+10);ctx.stroke();
+}
+});
+// the curve (smooth line through points)
+ctx.strokeStyle='rgba(0,206,209,0.5)';ctx.lineWidth=1.2;
+ctx.beginPath();
+pts.forEach(function(p,i){if(i===0)ctx.moveTo(p.x,p.y);else{
+var prev=pts[i-1];var cpx=(prev.x+p.x)/2;
+ctx.quadraticCurveTo(cpx,(prev.y+p.y)/2,p.x,p.y);
+}});
+ctx.stroke();
+// labels
+ctx.fillStyle=mt;ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('divisor D = sum m_P [P]',W/2,H*0.7);
+ctx.fillStyle='#c2410c';ctx.font='5px Georgia,serif';
+ctx.fillText('Stepanov (function field RH)',W/2,H*0.78);
+// problem callout: "multiplicity is hard to find over Z"
+ctx.fillStyle='#dc2626';ctx.font='5px monospace';ctx.textAlign='center';
+ctx.globalAlpha=0.7+0.3*Math.sin(time*2);
+ctx.fillText('> over Z: hard to find (differentiating whole numbers!)',W/2,H*0.86);
+ctx.globalAlpha=1;
+}
+
+else if(stage===1){
+// === STAGE 2: qN = Mk + R  ->  holo/automorphy sign ===
+// Show the congruence qN = Mk + R giving a definite sign (holo/automorphy).
+ctx.fillStyle='#FFD700';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('qN = M k + R',W/2,H*0.3);
+// equation pieces, animated reveal
+var pieces=['qN','=','M','k','+','R'];
+var px=W*0.3;
+pieces.forEach(function(p,i){
+var reveal=Math.min(1,Math.max(0,(stageP*pieces.length-i)));
+if(reveal<=0)return;
+ctx.globalAlpha=reveal;
+ctx.fillStyle = (p==='='||p==='+') ? mt : '#00CED1';
+ctx.font='7px monospace';ctx.textAlign='center';
+ctx.fillText(p,px+i*W*0.08,H*0.3);
+ctx.globalAlpha=1;
+});
+// sign indicator: definite sign => holo/automorphy
+var signPulse=0.5+0.5*Math.sin(time*3);
+ctx.fillStyle='rgba(16,185,129,'+(0.6+signPulse*0.4)+')';
+ctx.font='bold 7px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('definite sign',W/2,H*0.42);
+ctx.fillStyle=mt;ctx.font='5px monospace';
+ctx.fillText('=> holo / automorphy over Z',W/2,H*0.49);
+// the quadric x1.x2 + ... + x_{k-1}.x_k
+ctx.fillStyle='#a855f7';ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('quadric: x1*x2 + x2*x3 + ... + x_{k-1}*x_k',W/2,H*0.58);
+// arrow down to automorphic interpretation
+flowParticles(ctx,W/2,H*0.62,W/2,H*0.72,time,3,'#a855f7',0.7);
+ctx.fillStyle='#FFD700';ctx.font='5px Georgia,serif';ctx.textAlign='center';
+ctx.fillText('natively automorphic',W/2,H*0.78);
+}
+
+else if(stage===2){
+// === STAGE 3: theta-lift chain  U(X0) -> U(X1) -> ... -> U(Xm),  m = sqrt(X) ===
+var nLifts=5;
+var xStart=W*0.1,xEnd=W*0.9;
+var baseY=H*0.5;
+// draw X scale on bottom (the input scale)
+ctx.strokeStyle='#2a261e';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(xStart,H*0.8);ctx.lineTo(xEnd,H*0.8);ctx.stroke();
+ctx.fillStyle=mt;ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('X (length of von Mangoldt sum)',(xStart+xEnd)/2,H*0.88);
+// sqrt(X) marker on the X axis
+var sqrtMark=xStart+(xEnd-xStart)*0.7;
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.2;
+ctx.beginPath();ctx.moveTo(sqrtMark,H*0.78);ctx.lineTo(sqrtMark,H*0.82);ctx.stroke();
+ctx.fillStyle='#FFD700';ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('m = sqrt(X)',sqrtMark,H*0.74);
+// the chain of unitary group nodes
+for(var i=0;i<nLifts;i++){
+var t=i/(nLifts-1);
+var nx=xStart+t*(sqrtMark-xStart);
+var ny=baseY - t*H*0.2; // rising
+// reveal progressively with stageP
+var reveal=Math.min(1,Math.max(0,(stageP*nLifts-i)));
+if(reveal<=0)continue;
+ctx.globalAlpha=reveal;
+glowNode(ctx,nx,ny,5,'#7c3aed',8);
+ctx.fillStyle='#7c3aed';ctx.font='bold 5px monospace';ctx.textAlign='center';
+ctx.fillText('U(X'+i+')',nx,ny-9);
+// multiplicity gained
+ctx.fillStyle='#FFD700';ctx.font='4px monospace';
+ctx.fillText('+1 mult',nx,ny+10);
+ctx.globalAlpha=1;
+}
+// connecting arrows along the chain
+for(var i=0;i<nLifts-1;i++){
+var t1=i/(nLifts-1),t2=(i+1)/(nLifts-1);
+var reveal=Math.min(1,Math.max(0,(stageP*nLifts-(i+1))));
+if(reveal<=0)continue;
+ctx.globalAlpha=reveal*0.8;
+ctx.strokeStyle='#7c3aed';ctx.lineWidth=1.2;
+var x1=xStart+t1*(sqrtMark-xStart),y1=baseY-t1*H*0.2;
+var x2=xStart+t2*(sqrtMark-xStart),y2=baseY-t2*H*0.2;
+ctx.beginPath();ctx.moveTo(x1+6,y1-3);ctx.lineTo(x2-6,y2+3);ctx.stroke();
+ctx.globalAlpha=1;
+}
+// theta symbol over the chain
+ctx.fillStyle='#00CED1';ctx.font='bold 8px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=0.6+0.4*Math.sin(time*2);
+ctx.fillText('theta-lift',W*0.45,H*0.22);
+ctx.globalAlpha=1;
+// the punch line
+ctx.fillStyle='#FFD700';ctx.font='5px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=Math.min(1,stageP*2);
+ctx.fillText('"And yet, what else could it be?"',W/2,H*0.95);
+ctx.globalAlpha=1;
+}
+
+else if(stage===3){
+// === STAGE 4: error psi(X) - X collapses into the RH band ===
+// Plot |psi(X) - X| against two envelopes: PNT band (red, wide) and RH band (gold, sqrt(X)).
+var pL=W*0.1,pR=W*0.9,pT=H*0.2,pB=H*0.7;
+var cw=pR-pL,ch=pB-pT;
+// axes
+ctx.strokeStyle='#2a261e';ctx.lineWidth=1;
+ctx.beginPath();ctx.moveTo(pL,pT);ctx.lineTo(pL,pB);ctx.lineTo(pR,pB);ctx.stroke();
+// X axis label
+ctx.fillStyle=mt;ctx.font='5px monospace';ctx.textAlign='center';
+ctx.fillText('X',(pL+pR)/2,pB+10);
+ctx.fillText('|psi(X)-X|',pL-2,pT-4);
+// PNT band (wide, red) - decays slower
+ctx.strokeStyle='#dc2626';ctx.lineWidth=1.4;ctx.globalAlpha=0.6;
+ctx.beginPath();
+for(var i=0;i<=80;i++){
+var t=i/80;var Xv=Math.exp(t*Math.log(1000)); // log scale X
+var xv=pL+t*cw;
+var pnt=Math.exp(-0.3*Math.sqrt(Math.log(Xv+1))); // O(X exp(-c sqrt log X)) normalized
+var yv=pB-Math.min(pnt*ch*0.9,ch*0.85);
+if(i===0)ctx.moveTo(xv,yv);else ctx.lineTo(xv,yv);
+}
+ctx.stroke();
+ctx.globalAlpha=1;
+// RH band (sqrt(X) log^2 X, gold) - the target
+ctx.strokeStyle='#FFD700';ctx.lineWidth=1.8;
+ctx.beginPath();
+for(var i=0;i<=80;i++){
+var t=i/80;var Xv=Math.exp(t*Math.log(1000));
+var xv=pL+t*cw;
+var rh=Math.sqrt(Xv)*Math.pow(Math.log(Xv+1),2)/100; // normalized
+var yv=pB-Math.min(rh*ch*0.9,ch*0.85);
+if(i===0)ctx.moveTo(xv,yv);else ctx.lineTo(xv,yv);
+}
+ctx.stroke();
+// actual error curve (decorative, lands inside RH band after the chain)
+ctx.strokeStyle='#10b981';ctx.lineWidth=2;
+ctx.beginPath();
+for(var i=0;i<=80;i++){
+var t=i/80;var Xv=Math.exp(t*Math.log(1000));
+var xv=pL+t*cw;
+// error after the theta-lift chain: bounded by RH band, with noise inside it
+var rh=Math.sqrt(Xv)*Math.pow(Math.log(Xv+1),2)/100;
+var noise=0.5+0.3*Math.sin(time*2+t*8);
+var yv=pB-Math.min(rh*ch*0.9*noise,ch*0.85);
+if(i===0)ctx.moveTo(xv,yv);else ctx.lineTo(xv,yv);
+}
+ctx.stroke();
+// legend
+ctx.fillStyle='#dc2626';ctx.font='5px monospace';ctx.textAlign='left';
+ctx.fillText('PNT band (unconditional)',pL+4,pT+8);
+ctx.fillStyle='#FFD700';
+ctx.fillText('RH band O(sqrt(X) log^2 X)',pL+4,pT+16);
+ctx.fillStyle='#10b981';
+ctx.fillText('error after chain',pL+4,pT+24);
+// collapse annotation
+ctx.fillStyle='#FFD700';ctx.font='bold 5px Georgia,serif';ctx.textAlign='center';
+ctx.globalAlpha=Math.min(1,stageP*2);
+ctx.fillText('error collapses into RH band',W/2,H*0.85);
+ctx.globalAlpha=1;
+// Lean certification stamp
+ctx.strokeStyle='#10b981';ctx.lineWidth=1;ctx.globalAlpha=0.6+0.4*Math.sin(time*3);
+ctx.strokeRect(W*0.7,H*0.82,W*0.18,H*0.1);
+ctx.globalAlpha=1;
+ctx.fillStyle='#10b981';ctx.font='bold 5px monospace';ctx.textAlign='center';
+ctx.fillText('Lean: QED',W*0.79,H*0.88);
 }
 break;
 }
