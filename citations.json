@@ -1,0 +1,266 @@
+{
+  "_meta": {
+    "version": "2026-11-21-v1",
+    "description": "Citations registry for the Mmnd Observatory. Each entry is a primary source for a factual claim made on the synthesis page, timeline, or source cards. Cite-keys are referenced inline as superscript links. To cite a new claim, add an entry and reference its key. 'provenance' field documents the verification status: 'verified' (arXiv/DOI/journal confirmed), 'canonical-blog' (official blog post, no peer-reviewed paper), 'classical' (predates digital identifiers, standard reference given), 'observatory-internal' (concept documented in the observatory's own deep-dive, no external source)."
+  },
+  "citations": {
+    "riemann1859": {
+      "key": "riemann1859",
+      "title": "Über die Anzahl der Primzahlen unter einer gegebenen Grösse",
+      "authors": "Bernhard Riemann",
+      "venue": "Monatsberichte der Königlich Preußischen Akademie der Wissenschaften zu Berlin",
+      "year": 1859,
+      "type": "journal",
+      "provenance": "classical",
+      "modern_ref": "H. M. Edwards, 'Riemann's Zeta Function' (Academic Press, 1974)",
+      "url": "https://www.maths.tcd.ie/pub/histmath/People/Riemann/Zeta/EZeta.pdf",
+      "note": "The nine-page memoir that introduced the zeta function and posed RH."
+    },
+    "hadamard1896": {
+      "key": "hadamard1896",
+      "title": "Sur la distribution des zéros de la fonction ζ(s) et ses conséquences arithmétiques",
+      "authors": "Jacques Hadamard",
+      "venue": "Bulletin de la Société Mathématique de France 24, pp. 199–220",
+      "year": 1896,
+      "type": "journal",
+      "provenance": "classical",
+      "note": "One of the two independent proofs of the Prime Number Theorem."
+    },
+    "vallis1896": {
+      "key": "vallis1896",
+      "title": "Recherches sur la théorie des nombres premiers",
+      "authors": "Charles-Jean de la Vallée Poussin",
+      "venue": "Annales de la Société scientifique de Bruxelles 20B/21B",
+      "year": 1896,
+      "type": "journal",
+      "provenance": "classical",
+      "note": "Independent PNT proof; also established the first zero-free region."
+    },
+    "hilbert1900": {
+      "key": "hilbert1900",
+      "title": "Mathematische Probleme (Mathematical Problems)",
+      "authors": "David Hilbert",
+      "venue": "Nachrichten von der Königlichen Gesellschaft der Wissenschaften zu Göttingen, pp. 253–297",
+      "year": 1900,
+      "type": "journal",
+      "provenance": "classical",
+      "url": "https://www.mathunion.org/fileadmin/IMU/100_Problems/Hilbert1900.pdf",
+      "note": "Hilbert's 23 problems; RH is the 8th."
+    },
+    "hardy1914": {
+      "key": "hardy1914",
+      "title": "Sur les zéros de la fonction ζ(s) de Riemann",
+      "authors": "G. H. Hardy",
+      "venue": "Comptes rendus de l'Académie des sciences 158, pp. 1012–1014",
+      "year": 1914,
+      "type": "journal",
+      "provenance": "classical",
+      "note": "Proves infinitely many zeta zeros lie on the critical line."
+    },
+    "godel1931": {
+      "key": "godel1931",
+      "title": "Über formal unentscheidbare Sätze der Principia Mathematica und verwandter Systeme I",
+      "authors": "Kurt Gödel",
+      "venue": "Monatshefte für Mathematik und Physik 38, pp. 173–198",
+      "year": 1931,
+      "type": "journal",
+      "provenance": "classical",
+      "url": "https://homepages.math.uic.edu/~kauffman/Godel1931.pdf",
+      "note": "The incompleteness theorems."
+    },
+    "turing1936": {
+      "key": "turing1936",
+      "title": "On Computable Numbers, with an Application to the Entscheidungsproblem",
+      "authors": "Alan Turing",
+      "venue": "Proceedings of the London Mathematical Society 2(42), pp. 230–265",
+      "year": 1936,
+      "type": "journal",
+      "provenance": "classical",
+      "url": "https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf",
+      "note": "Defines the Turing machine and the Halting Problem."
+    },
+    "skewes1933": {
+      "key": "skewes1933",
+      "title": "On the difference π(x) − Li(x)",
+      "authors": "Stanley Skewes",
+      "venue": "Journal of the London Mathematical Society 8(4), pp. 277–283",
+      "year": 1933,
+      "type": "journal",
+      "provenance": "classical",
+      "note": "Skewes' number — assuming RH, the first sign change of π(x) − Li(x)."
+    },
+    "lob1955": {
+      "key": "lob1955",
+      "title": "Solution of a Problem of Leon Henkin",
+      "authors": "Martin H. Löb",
+      "venue": "Journal of Symbolic Logic 20(2), pp. 115–118",
+      "year": 1955,
+      "type": "journal",
+      "provenance": "classical",
+      "note": "Löb's theorem — the fixed-point self-reference condition."
+    },
+    "langlands1967": {
+      "key": "langlands1967",
+      "title": "Letter to André Weil",
+      "authors": "Robert Langlands",
+      "venue": "Institute for Advanced Study (unpublished letter, 1967)",
+      "year": 1967,
+      "type": "preprint",
+      "provenance": "classical",
+      "url": "https://publications.ias.edu/rpl/section/26",
+      "note": "The founding document of the Langlands program."
+    },
+    "wiles1995": {
+      "key": "wiles1995",
+      "title": "Modular elliptic curves and Fermat's Last Theorem",
+      "authors": "Andrew Wiles",
+      "venue": "Annals of Mathematics 141(3), pp. 443–551",
+      "year": 1995,
+      "type": "journal",
+      "provenance": "classical",
+      "note": "FLT via modularity of semistable elliptic curves."
+    },
+    "taylorwiles1995": {
+      "key": "taylorwiles1995",
+      "title": "Ring-theoretic properties of certain Hecke algebras",
+      "authors": "Richard Taylor, Andrew Wiles",
+      "venue": "Annals of Mathematics 141(3), pp. 553–572",
+      "year": 1995,
+      "type": "journal",
+      "provenance": "classical",
+      "note": "Closed the gap in Wiles's FLT proof."
+    },
+    "hutter2000": {
+      "key": "hutter2000",
+      "title": "A Theory of Universal Artificial Intelligence based on Algorithmic Complexity",
+      "authors": "Marcus Hutter",
+      "venue": "arXiv:cs/0004001",
+      "year": 2000,
+      "type": "preprint",
+      "provenance": "verified",
+      "arxiv": "cs/0004001",
+      "url": "https://arxiv.org/abs/cs/0004001",
+      "modern_ref": "Book: 'Universal Artificial Intelligence' (Springer, 2004)",
+      "note": "AIXI — the optimal universal-AI model."
+    },
+    "lean2021": {
+      "key": "lean2021",
+      "title": "The Lean 4 Theorem Prover and Programming Language",
+      "authors": "Leonardo de Moura, Sebastian Ullrich",
+      "venue": "CADE 2021, LNCS vol. 12699, pp. 625–635",
+      "year": 2021,
+      "type": "conference",
+      "provenance": "verified",
+      "doi": "10.1007/978-3-030-79876-5_37",
+      "url": "https://link.springer.com/chapter/10.1007/978-3-030-79876-5_37",
+      "note": "The Lean 4 reference paper. Lean was first released in 2013."
+    },
+    "mathlib2020": {
+      "key": "mathlib2020",
+      "title": "The Lean Mathematical Library",
+      "authors": "The Mathlib Community",
+      "venue": "CPP 2020 (9th ACM SIGPLAN Conference on Certified Programs and Proofs), pp. 287–301",
+      "year": 2020,
+      "type": "conference",
+      "provenance": "verified",
+      "doi": "10.1145/3372885",
+      "url": "https://dl.acm.org/doi/10.1145/3372885",
+      "note": "The canonical Mathlib paper. The library is now >1.5M lines (2026)."
+    },
+    "attention2017": {
+      "key": "attention2017",
+      "title": "Attention Is All You Need",
+      "authors": "Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Łukasz Kaiser, Illia Polosukhin",
+      "venue": "NeurIPS 2017 (31st Conference on Neural Information Processing Systems)",
+      "year": 2017,
+      "type": "conference",
+      "provenance": "verified",
+      "arxiv": "1706.03762",
+      "url": "https://arxiv.org/abs/1706.03762",
+      "note": "The Transformer and scaled dot-product attention."
+    },
+    "sindy2016": {
+      "key": "sindy2016",
+      "title": "Discovering governing equations from data by sparse identification of nonlinear dynamical systems",
+      "authors": "Steven L. Brunton, Joshua L. Proctor, J. Nathan Kutz",
+      "venue": "PNAS 113(15), pp. 3932–3937",
+      "year": 2016,
+      "type": "journal",
+      "provenance": "verified",
+      "doi": "10.1073/pnas.1517384113",
+      "arxiv": "1509.03580",
+      "url": "https://arxiv.org/abs/1509.03580",
+      "note": "SINDy — sparse identification of nonlinear dynamics."
+    },
+    "ppo2017": {
+      "key": "ppo2017",
+      "title": "Proximal Policy Optimization Algorithms",
+      "authors": "John Schulman, Filip Wolski, Prafulla Dhariwal, Alec Radford, Oleg Klimov",
+      "venue": "arXiv:1707.06347",
+      "year": 2017,
+      "type": "preprint",
+      "provenance": "verified",
+      "arxiv": "1707.06347",
+      "url": "https://arxiv.org/abs/1707.06347",
+      "note": "PPO — the RL algorithm underlying RLHF."
+    },
+    "instructgpt2022": {
+      "key": "instructgpt2022",
+      "title": "Training language models to follow instructions with human feedback",
+      "authors": "Long Ouyang, Jeffrey Wu, Xu Jiang, Diogo Almeida, Carroll L. Wainwright, Pamela Mishkin, Chong Zhang, et al.",
+      "venue": "NeurIPS 2022",
+      "year": 2022,
+      "type": "conference",
+      "provenance": "verified",
+      "arxiv": "2203.02155",
+      "url": "https://arxiv.org/abs/2203.02155",
+      "note": "InstructGPT — the canonical RLHF recipe (SFT + reward model + PPO)."
+    },
+    "alphaproof2024": {
+      "key": "alphaproof2024",
+      "title": "AI achieves silver-medal standard solving International Mathematical Olympiad problems",
+      "authors": "DeepMind (AlphaProof / AlphaGeometry 2 team)",
+      "venue": "DeepMind blog, July 25, 2024",
+      "year": 2024,
+      "type": "blog",
+      "provenance": "canonical-blog",
+      "url": "https://deepmind.google/blog/ai-solves-imo-problems-at-silver-medal-level/",
+      "note": "AlphaProof (Lean-based) solved 4/6 IMO 2024 problems — silver-medalist level. No peer-reviewed paper as of 2026."
+    },
+    "hydrogym2025": {
+      "key": "hydrogym2025",
+      "title": "HydroGym: A Reinforcement Learning Platform for Fluid Dynamics",
+      "authors": "Christian Lagemann, et al. (DynamicsLab)",
+      "venue": "arXiv:2512.17534",
+      "year": 2025,
+      "type": "preprint",
+      "provenance": "verified",
+      "arxiv": "2512.17534",
+      "url": "https://arxiv.org/abs/2512.17534",
+      "code_url": "https://github.com/dynamicslab/hydrogym",
+      "note": "Differentiable Navier-Stokes + G-PPO for fluid control. Author list verified against v2 (June 2026)."
+    },
+    "wsp2026": {
+      "key": "wsp2026",
+      "title": "Weight-Space Programming (WSP)",
+      "authors": "Observatory research notes",
+      "venue": "Mmnd Observatory deep-dive §WSP (internal documentation)",
+      "year": 2026,
+      "type": "observatory-internal",
+      "provenance": "observatory-internal",
+      "url": "deep-dive.html#sec_wsp",
+      "note": "WSP formalizes LLMs directly reading/writing the weights of another network. No external peer-reviewed source located; documented internally in the observatory's deep-dive."
+    },
+    "clay2000": {
+      "key": "clay2000",
+      "title": "The Millennium Prize Problems",
+      "authors": "James Carlson, Arthur Jaffe, Andrew Wiles (eds.)",
+      "venue": "Clay Mathematics Institute",
+      "year": 2000,
+      "type": "other",
+      "provenance": "verified",
+      "url": "https://www.claymath.org/millennium/",
+      "note": "The seven $1M problems; RH is the only one both a Hilbert and a Millennium problem."
+    }
+  }
+}
