@@ -1,0 +1,215 @@
+{
+  "_meta": {
+    "version": "2026-11-21-v1",
+    "description": "Research-log timeline registry for the Mmnd Observatory. Each entry is a dated milestone in the convergence of pure mathematics and machine intelligence. Entries are ordered by date and tagged by research thread. The timeline.html page reads this file. To add a milestone, add an entry to the 'entries' array.",
+    "threads": {
+      "riemann": {"label": "Riemann & primes", "color": "#c2410c"},
+      "formal": {"label": "Formal verification", "color": "#0e7490"},
+      "ml": {"label": "ML & AI capability", "color": "#7c3aed"},
+      "physics": {"label": "Physics + ML", "color": "#0891b2"},
+      "foundations": {"label": "Foundations", "color": "#be185d"}
+    }
+  },
+  "entries": [
+    {
+      "date": "1859",
+      "dateLabel": "1859",
+      "title": "Riemann poses the Hypothesis",
+      "summary": "Bernhard Riemann's memoir 'On the Number of Primes Less Than a Given Magnitude' introduces the zeta function ζ(s), identifies the non-trivial zeros, and conjectures they all lie on the critical line Re(s) = 1/2. The conjecture that shapes the next 167 years of number theory.",
+      "threads": ["riemann"],
+      "link": {"page": "playgrounds.html", "anchor": "1", "label": "See ζ(½+it) cross zero — Playground 1"}
+    },
+    {
+      "date": "1896",
+      "dateLabel": "1896",
+      "title": "Hadamard & de la Vallée-Poussin prove the Prime Number Theorem",
+      "summary": "Independently, using the non-vanishing of ζ(s) on Re(s) = 1, both mathematicians prove π(x) ~ Li(x). The PNT is the first great triumph of analytic number theory — and the first hint that the zeta zeros control prime distribution.",
+      "threads": ["riemann"],
+      "link": {"page": "playgrounds.html", "anchor": "2", "label": "π(x) vs Li(x) — Playground 2"}
+    },
+    {
+      "date": "1900",
+      "dateLabel": "1900",
+      "title": "Hilbert's 8th problem",
+      "summary": "David Hilbert lists the Riemann Hypothesis as the 8th of his 23 problems at the Paris International Congress. It would later become one of the seven Clay Millennium Prize Problems (2000), each carrying a $1M bounty — RH is the only one still open.",
+      "threads": ["riemann", "foundations"],
+      "link": {"page": "sources.html", "anchor": "rh_thetalift", "label": "Card 16 · the √X theta-lift chain"}
+    },
+    {
+      "date": "1914",
+      "dateLabel": "1914",
+      "title": "Hardy proves infinitely many zeros on the critical line",
+      "summary": "G. H. Hardy proves that ζ(s) has infinitely many zeros on Re(s) = 1/2. The critical line is not barren — but whether ALL non-trivial zeros lie there remains open.",
+      "threads": ["riemann"],
+      "link": {"page": "playgrounds.html", "anchor": "1", "label": "Watch zeros accumulate — Playground 1"}
+    },
+    {
+      "date": "1931",
+      "dateLabel": "1931",
+      "title": "Gödel's incompleteness theorems",
+      "summary": "Kurt Gödel proves that any sufficiently strong formal system is either incomplete or inconsistent. The dream of a complete mechanical foundation for mathematics collapses. The result reshapes logic, computation, and — a century later — the ambitions of AI theorem-proving.",
+      "threads": ["foundations", "formal"],
+      "link": {"page": "sources.html", "anchor": "godel", "label": "Card 5 · Gödel/Turing computability bound"}
+    },
+    {
+      "date": "1936",
+      "dateLabel": "1936",
+      "title": "Turing defines computability",
+      "summary": "Alan Turing's 'On Computable Numbers' introduces the a-machine (Turing machine), formalizing what can be computed. The Halting Problem establishes a hard limit on what any algorithm can decide. The theoretical bedrock of every machine-learning system that follows.",
+      "threads": ["foundations"],
+      "link": {"page": "sources.html", "anchor": "godel", "label": "Card 5 · Gödel/Turing computability bound"}
+    },
+    {
+      "date": "1955",
+      "dateLabel": "1955",
+      "title": "Skewes' number: where π(x) overtakes Li(x)",
+      "summary": "Assuming RH, Skewes shows the first sign change of π(x) − Li(x) occurs below e^(e^(e^79)) — an astronomically large bound. Littlewood had proved (1914) the difference changes sign infinitely often; Skewes quantified how far out the first crossing hides. A vivid reminder that 'true for all checked x' is not 'true'.",
+      "threads": ["riemann"],
+      "link": {"page": "playgrounds.html", "anchor": "2", "label": "π(x) below Li(x) in the demo range — Playground 2"}
+    },
+    {
+      "date": "1967",
+      "dateLabel": "1967",
+      "title": "Langlands launches the functoriality program",
+      "summary": "Robert Langlands's letter to André Weil proposes a vast web of correspondences between automorphic forms and Galois representations — the 'Langlands program'. It would take six decades to mature, and Wong's 2026 pipeline sits squarely in its lineage.",
+      "threads": ["riemann"],
+      "link": {"page": "deep-dive.html", "anchor": "sec_langlands", "label": "Langlands Beyond Endoscopy · deep-dive §Langlands"}
+    },
+    {
+      "date": "1994",
+      "dateLabel": "1994",
+      "title": "Wiles proves Fermat's Last Theorem",
+      "summary": "Andrew Wiles (with Richard Taylor closing the gap) proves Fermat's Last Theorem via modularity of semistable elliptic curves. A 358-year-old problem falls to the machinery of the Langlands program — proof that deep conjecture can crack the impenetrable.",
+      "threads": ["riemann", "formal"],
+      "link": {"page": "deep-dive.html", "anchor": "sec_langlands", "label": "Langlands program context · deep-dive §Langlands"}
+    },
+    {
+      "date": "1996",
+      "dateLabel": "1996",
+      "title": "HydroGym's intellectual ancestor: control of Navier-Stokes",
+      "summary": "The mathematical foundations for feedback control of fluid systems — adjoint-based optimization, reduced-order modeling — mature through the 1990s. Two decades later, differentiable simulators and RL would turn these into HydroGym: physics-informed RL for spatially-distributed control.",
+      "threads": ["physics"],
+      "link": {"page": "deep-dive.html", "anchor": "sec8", "label": "§8 HydroGym: RL meets fluid dynamics"}
+    },
+    {
+      "date": "2000",
+      "dateLabel": "2000",
+      "title": "Clay Mathematics Institute names RH a Millennium Problem",
+      "summary": "The Clay Mathematics Institute announces seven Millennium Prize Problems, each with a $1M bounty. The Riemann Hypothesis is the only one that is both a Hilbert problem (1900) and a Millennium problem (2000). As of 2026, six remain open; Poincaré was solved (2003).",
+      "threads": ["riemann", "foundations"],
+      "link": {"page": "sources.html", "anchor": "rh_thetalift", "label": "Card 16 · the √X theta-lift chain"}
+    },
+    {
+      "date": "2013",
+      "dateLabel": "2013",
+      "title": "Lean's first release",
+      "summary": "Leonardo de Moura releases Lean, an interactive theorem prover built on dependent type theory. Unlike earlier systems, Lean is designed to be both a programming language and a proof assistant — and to be pleasant enough that mathematicians will actually use it. Mathlib, its community library, begins to grow.",
+      "threads": ["formal"],
+      "link": {"page": "sources.html", "anchor": "lean_riemann", "label": "Card 15 · Lean, AlphaProof & the Riemann Zero-Free Region"}
+    },
+    {
+      "date": "2017-06",
+      "dateLabel": "Jun 2017",
+      "title": "Attention is all you need",
+      "summary": "Vaswani et al. publish 'Attention Is All You Need', introducing the Transformer. The scaled dot-product attention mechanism (card 4) becomes the load-bearing primitive of modern ML. Within six years it underwrites GPT-4, Gemini, and the first credible AI-mathematicians.",
+      "threads": ["ml"],
+      "link": {"page": "sources.html", "anchor": "attention", "label": "Card 4 · scaled dot-product attention"}
+    },
+    {
+      "date": "2018",
+      "dateLabel": "2018",
+      "title": "Brunton, Proctor & Kutz publish SINDy",
+      "summary": "Sparse Identification of Nonlinear Dynamics (SINDy) formalizes the discovery of governing equations from data via sparse regression. The deep-dive §3 documents the method; the physics-ml curriculum animates it. A bridge between data-driven learning and first-principles physics.",
+      "threads": ["physics"],
+      "link": {"page": "deep-dive.html", "anchor": "sec3", "label": "§3 SINDy: discovering the actual equation"}
+    },
+    {
+      "date": "2020",
+      "dateLabel": "2020",
+      "title": "Mathlib crosses 100k theorems",
+      "summary": "The Lean Mathlib community library passes 100,000 proven theorems. By 2026 it will exceed 1.5M lines of formalized mathematics, including measure theory, topology, and the foundations needed for analytic number theory. The largest corpus of machine-checked math ever assembled.",
+      "threads": ["formal"],
+      "link": {"page": "sources.html", "anchor": "lean_riemann", "label": "Card 15 · Lean, AlphaProof & the zero-free region"}
+    },
+    {
+      "date": "2022-11",
+      "dateLabel": "Nov 2022",
+      "title": "ChatGPT: RLHF reaches the mainstream",
+      "summary": "OpenAI releases ChatGPT, the first consumer product shaped end-to-end by Reinforcement Learning from Human Feedback (RLHF). The three-stage pipeline — SFT, reward model, PPO — documented in deep-dive §7 becomes the default recipe for every frontier LLM that follows.",
+      "threads": ["ml"],
+      "link": {"page": "deep-dive.html", "anchor": "sec7", "label": "§7 RLHF: how RL shapes every modern LLM"}
+    },
+    {
+      "date": "2024-07",
+      "dateLabel": "Jul 2024",
+      "title": "AlphaProof: AI silver-medalist at the IMO",
+      "summary": "DeepMind's AlphaProof, built on Lean, solves 4 of 6 problems at the 2024 International Mathematical Olympiad — silver-medalist level. The first credible demonstration that an LLM-augmented theorem prover can do competition mathematics. Card 15 places this on the road to formal RH.",
+      "threads": ["formal", "ml"],
+      "link": {"page": "sources.html", "anchor": "lean_riemann", "label": "Card 15 · Lean, AlphaProof & the Riemann Zero-Free Region"}
+    },
+    {
+      "date": "2025-03",
+      "dateLabel": "Mar 2025",
+      "title": "Lean formalizes the zero-free region Re(s) ≥ 7/8",
+      "summary": "The Mathlib community formalizes a Riemann zeta zero-free region extending to Re(s) ≥ 7/8 (with Im(s) ≠ 0). A machine-checked strengthening of the classical de la Vallée-Poussin bound. The first Lean proof in the chain that targets RH itself — card 15 documents the figure.",
+      "threads": ["formal", "riemann"],
+      "link": {"page": "sources.html", "anchor": "lean_riemann", "label": "Card 15 · the Lean-formalized zero-free region"}
+    },
+    {
+      "date": "2025-09",
+      "dateLabel": "Sep 2025",
+      "title": "HydroGym: differentiable fluids + G-PPO",
+      "summary": "The HydroGym framework ships: differentiable Navier-Stokes solvers paired with Gradient-Enhanced PPO (G-PPO) for active control of bluff-body flows. Zero-shot transfer from 2D training to 3D deployment. Deep-dive §8 documents the four-capability stack.",
+      "threads": ["physics", "ml"],
+      "link": {"page": "deep-dive.html", "anchor": "sec8", "label": "§8 HydroGym: RL meets fluid dynamics"}
+    },
+    {
+      "date": "2026-01",
+      "dateLabel": "Jan 2026",
+      "title": "Weight-Space Programming: LLMs read & write weights",
+      "summary": "WSP formalizes the ability of an LLM to directly read and modify the weights of another network — editing capabilities without retraining. Deep-dive §WSP documents the mathematical formulation and resource analysis. The boundary between 'prompting' and 'surgery' begins to blur.",
+      "threads": ["ml"],
+      "link": {"page": "deep-dive.html", "anchor": "sec_wsp", "label": "§WSP Weight-Space Programming"}
+    },
+    {
+      "date": "2026-03",
+      "dateLabel": "Mar 2026",
+      "title": "Wong's Ramanujan pipeline: continuous regularization",
+      "summary": "Tannan Wong proposes a program Beyond Endoscopy that resolves the classical divergence in Arthur's trace formula by replacing sharp truncation with continuous regularization. The pipeline — Tate's adelic summation, the noise-free Tauberian limit — is documented in deep-dive §Langlands with executable Python. 'And yet, what else could it be?'",
+      "threads": ["riemann"],
+      "link": {"page": "deep-dive.html", "anchor": "sec_langlands", "label": "§Langlands · Wong's road to Ramanujan"}
+    },
+    {
+      "date": "2026-09",
+      "dateLabel": "Sep 2026",
+      "title": "Infrastructure from Code: the AI-era deployment bottleneck",
+      "summary": "The IfC framework identifies the bottleneck shift from writing code to orchestrating it. Dual-language TypeScript + Go, the cloud-compiler analogy. Deep-dive §IfC documents the four capabilities and the legacy-vs-IfC side-by-side.",
+      "threads": ["ml"],
+      "link": {"page": "deep-dive.html", "anchor": "sec_ifc", "label": "§IfC Infrastructure from Code"}
+    },
+    {
+      "date": "2026-11",
+      "dateLabel": "Nov 2026",
+      "title": "The √X theta-lift chain: a length-m = √X approach to RH",
+      "summary": "Card 16 proposes a chain of theta lifts U(X₀) → U(X₁) → … → U(X_m) with m = √X between totally definite unitary groups. Each lift raises a Stepanov-style multiplicity by one; √X is the only length that collapses the error into the RH band. Playground 3 visualizes the √X band directly. Whether the full chain yields RH remains open.",
+      "threads": ["riemann", "formal"],
+      "link": {"page": "sources.html", "anchor": "rh_thetalift", "label": "Card 16 · the √X theta-lift chain"}
+    },
+    {
+      "date": "2026-11",
+      "dateLabel": "Nov 2026",
+      "title": "Mmnd Observatory opens the playgrounds",
+      "summary": "The observatory ships three interactive math playgrounds — the Riemann zeta-zero explorer, the prime-counting staircase, and the von Mangoldt staircase with its √X RH band. For the first time a visitor can scrub along the critical line and watch ζ cross zero in their browser. Phase 2 of the build.",
+      "threads": ["riemann", "ml"],
+      "link": {"page": "playgrounds.html", "anchor": "1", "label": "Playground 1 · Riemann zeta-zero explorer"}
+    },
+    {
+      "date": "2026-11",
+      "dateLabel": "Nov 2026",
+      "title": "Cross-cutting topic tags thread the observatory",
+      "summary": "Ten topic tags — riemann, formal-verification, ml-theory, dynamical-systems, complexity, quantum, foundations, chemistry, physics-ml, infrastructure — link 50 entries across every page. The observatory becomes navigable by theme, not just by page. Phase 3 of the build.",
+      "threads": ["foundations"],
+      "link": {"page": "tags.html", "anchor": "", "label": "Browse all topics"}
+    }
+  ]
+}
