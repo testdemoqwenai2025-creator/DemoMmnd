@@ -159,6 +159,38 @@ nav {
 .featured-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary); text-decoration: none; font-weight: 500; }
 .featured-link:hover { text-decoration: underline; }
 
+/* === Latest breakthrough callout === */
+.latest {
+  border-bottom: 1px solid var(--border); background: var(--card);
+  padding: 4rem 1.5rem;
+}
+.latest-inner { max-width: 1200px; margin: 0 auto; }
+.latest-grid {
+  display: grid; gap: 2rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 1024px) { .latest-grid { grid-template-columns: 2fr 1fr; align-items: center; } }
+.latest-badge {
+  display: inline-flex; align-items: center; gap: 0.375rem;
+  font-size: 0.6875rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.18em; color: var(--bg); background: var(--primary);
+  padding: 0.25rem 0.625rem; border-radius: 1rem; margin-bottom: 1rem;
+}
+.latest h2 { font-family: Georgia, serif; font-size: 1.875rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.75rem; }
+@media (min-width: 640px) { .latest h2 { font-size: 2.25rem; } }
+.latest h2 .sqrt { color: var(--primary); font-style: italic; }
+.latest-meta { font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 1.25rem; }
+.latest-excerpt { font-size: 1rem; color: var(--muted); margin-bottom: 1.5rem; line-height: 1.7; }
+.latest-excerpt .kw { color: var(--fg); font-weight: 500; }
+.latest-cta { display: inline-flex; align-items: center; gap: 0.5rem; }
+.latest-card {
+  border: 1px solid var(--border); border-radius: 0.5rem; padding: 1.25rem;
+  background: var(--secondary);
+}
+.latest-card h3 { font-size: 0.625rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--muted); margin-bottom: 0.5rem; }
+.latest-card .formula { font-family: Georgia, serif; font-size: 1.125rem; color: var(--fg); line-height: 1.4; margin-bottom: 0.75rem; }
+.latest-card .formula em { color: var(--primary); font-style: italic; }
+
 .featured-card {
   border: 1px dashed var(--border); border-radius: 0.5rem; padding: 1.25rem;
   background: var(--card);
@@ -267,7 +299,7 @@ footer {
 <div class="metrics">
   <div class="metric">
     <div class="metric-label">Expressions curated</div>
-    <div class="metric-value">12</div>
+    <div class="metric-value">16</div>
     <div class="metric-note">KaTeX-rendered · 6 languages</div>
   </div>
   <div class="metric">
@@ -286,6 +318,32 @@ footer {
     <div class="metric-note">Phase 1 — KaTeX + popup workflow</div>
   </div>
 </div>
+
+<section class="latest">
+  <div class="latest-inner">
+    <div class="latest-grid">
+      <div>
+        <span class="latest-badge">★ Latest breakthrough · Card 16</span>
+        <h2>A reported proof of the Riemann Hypothesis, <span class="sqrt">√X</span> theta-lifts deep.</h2>
+        <p class="latest-meta">Source · alpo.ge/remark.pdf (2026-11-20) · formalized in Lean</p>
+        <p class="latest-excerpt">The Riemann Hypothesis is the optimal-control problem on the count of primes of a given size. Factored through the <span class="kw">Chebyshev function</span> ψ(X) = Σ<sub>n≤X</sub> Λ(n), the Prime Number Theorem is ψ(X) ~ X (1896), and RH is the sharper ψ(X) = X + O(X<sup>1/2</sup> log² X) — the <span class="kw">√X is exactly the RH content</span>. A 2026 announcement reports a proof, discovered with Claude, that ports Stepanov's multiplicity argument natively into the automorphic setting by chaining <span class="kw">theta lifts of length √X</span> between totally definite unitary groups — "And yet, what else could it be?" The argument is <span class="kw">fully formalized in Lean</span>; the Generalized Riemann Hypothesis follows.</p>
+        <a href="sources.html#rh_thetalift" class="btn btn-primary latest-cta">Open card 16 → the √X theta-lift chain</a>
+      </div>
+      <div class="latest-card">
+        <h3>The factoring</h3>
+        <div class="formula">ψ(X) = X + <em>O(√X · log²X)</em><br>⇔ Riemann Hypothesis</div>
+        <h3 style="margin-top:1rem">The chain</h3>
+        <div class="formula">U(X₀) → U(X₁) → ⋯ → U(X<sub>√X</sub>)<br><em>m = √X</em> lifts, each mimicking one Stepanov multiplicity.</div>
+        <h3 style="margin-top:1rem">See also</h3>
+        <div class="tag-row" style="margin-top:0.5rem">
+          <a href="sources.html#lean_riemann" class="tag" style="text-decoration:none">Card 15 · Lean + AlphaProof</a>
+          <a href="sources.html#erdos" class="tag" style="text-decoration:none">Card 1 · Erdős</a>
+          <a href="sources.html#ugc" class="tag" style="text-decoration:none">Card 2 · UGC</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section class="featured">
   <div class="featured-inner">
