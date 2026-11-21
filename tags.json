@@ -1,0 +1,129 @@
+{
+  "_meta": {
+    "version": "2026-11-21-v1",
+    "description": "Centralized topic-tag registry for the Mmnd Observatory. Each tag maps to a list of entries {page, anchor, title, kind}. The browse page (tags.html) and the in-page tag chips both read this file. To add a topic, add a key here and tag entries below.",
+    "tagOrder": ["riemann", "formal-verification", "ml-theory", "dynamical-systems", "complexity", "quantum", "foundations", "chemistry", "physics-ml", "infrastructure"]
+  },
+  "tags": {
+    "riemann": {
+      "label": "Riemann & primes",
+      "color": "#c2410c",
+      "blurb": "The zeta function, the Riemann Hypothesis, prime counting, and the theta-lift chain that targets RH. The thread from PNT (1896) to a 2026 Lean-formalized proof announcement.",
+      "entries": [
+        {"page": "sources.html", "anchor": "rh_thetalift", "title": "Card 16 · The √X Theta-Lift Chain: RH via Automorphic Multiplicity", "kind": "card"},
+        {"page": "sources.html", "anchor": "lean_riemann", "title": "Card 15 · Lean, AlphaProof & the Riemann Zero-Free Region", "kind": "card"},
+        {"page": "playgrounds.html", "anchor": "1", "title": "Playground 1 · Riemann zeta-zero explorer", "kind": "playground"},
+        {"page": "playgrounds.html", "anchor": "2", "title": "Playground 2 · Prime-counting step function π(x) vs Li(x)", "kind": "playground"},
+        {"page": "playgrounds.html", "anchor": "3", "title": "Playground 3 · von Mangoldt staircase with √X RH band", "kind": "playground"},
+        {"page": "deep-dive.html", "anchor": "sec_langlands", "title": "Langlands Beyond Endoscopy: Wong's road to Ramanujan", "kind": "section"}
+      ]
+    },
+    "formal-verification": {
+      "label": "Formal verification",
+      "color": "#0e7490",
+      "blurb": "Lean, Mathlib, AlphaProof — machine-checked mathematics. Where proof meets computation, and the computer becomes the most powerful theorem prover on Earth.",
+      "entries": [
+        {"page": "sources.html", "anchor": "lean_riemann", "title": "Card 15 · Lean, AlphaProof & the Riemann Zero-Free Region", "kind": "card"},
+        {"page": "sources.html", "anchor": "ugc", "title": "Card 2 · Unique Games Conjecture (Lean-verified)", "kind": "card"},
+        {"page": "sources.html", "anchor": "godel", "title": "Card 5 · Gödel/Turing computability bound", "kind": "card"},
+        {"page": "sources.html", "anchor": "loeb", "title": "Card 10 · Löb's theorem", "kind": "card"},
+        {"page": "sources.html", "anchor": "rh_thetalift", "title": "Card 16 · The √X Theta-Lift Chain (Lean-formalized)", "kind": "card"}
+      ]
+    },
+    "ml-theory": {
+      "label": "ML theory",
+      "color": "#7c3aed",
+      "blurb": "The mathematical foundations of machine learning: attention, information bottleneck, Kolmogorov complexity, AIXI, embeddings, loss landscapes. What learning actually is.",
+      "entries": [
+        {"page": "sources.html", "anchor": "attention", "title": "Card 4 · Scaled dot-product attention", "kind": "card"},
+        {"page": "sources.html", "anchor": "bottleneck", "title": "Card 9 · Information bottleneck", "kind": "card"},
+        {"page": "sources.html", "anchor": "kolmogorov", "title": "Card 6 · Kolmogorov complexity", "kind": "card"},
+        {"page": "sources.html", "anchor": "aixi", "title": "Card 12 · AIXI (universal AI)", "kind": "card"},
+        {"page": "math-ml.html", "anchor": "clip1", "title": "Math+ML · Token embeddings, loss landscape, prior beliefs", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec7", "title": "RLHF: how RL shapes every modern LLM", "kind": "section"}
+      ]
+    },
+    "dynamical-systems": {
+      "label": "Dynamical systems",
+      "color": "#059669",
+      "blurb": "Differential equations, PINNs, Hamiltonian and Neural ODEs, SINDy. Discovering the equation that governs a system from observation alone.",
+      "entries": [
+        {"page": "sources.html", "anchor": "schrodinger", "title": "Card 3 · Schrödinger equation", "kind": "card"},
+        {"page": "deep-dive.html", "anchor": "sec1", "title": "§1 The naive approach: black-box NN fits data", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec2", "title": "§2 PINN: physics in the loss via autograd", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec3", "title": "§3 SINDy: discovering the actual equation", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec4", "title": "§4 HNN: conservation by construction", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec5", "title": "§5 Neural ODE: continuous depth and the adjoint method", "kind": "section"},
+        {"page": "physics-ml.html", "anchor": "clip1", "title": "Physics+ML · SINDy algorithm, coordinate selection, hierarchical library", "kind": "section"}
+      ]
+    },
+    "complexity": {
+      "label": "Complexity & combinatorics",
+      "color": "#b45309",
+      "blurb": "Hard problems and the boundaries of efficient computation: Erdős conjectures, Unique Games, Unitary Synthesis, lattice counting duality.",
+      "entries": [
+        {"page": "sources.html", "anchor": "erdos", "title": "Card 1 · Erdős unit distance conjecture (disproved)", "kind": "card"},
+        {"page": "sources.html", "anchor": "ugc", "title": "Card 2 · Unique Games Conjecture (Lean-verified)", "kind": "card"},
+        {"page": "sources.html", "anchor": "unitary", "title": "Card 11 · Unitary Synthesis (refuted)", "kind": "card"},
+        {"page": "sources.html", "anchor": "lattice_duality", "title": "Card 13 · Lattice Duality: when counting one way is hard", "kind": "card"},
+        {"page": "sources.html", "anchor": "kolmogorov", "title": "Card 6 · Kolmogorov complexity", "kind": "card"}
+      ]
+    },
+    "quantum": {
+      "label": "Quantum & cosmos",
+      "color": "#1d4ed8",
+      "blurb": "Quantum information, holography, and the physics of information at the boundary. Teleportation, Bekenstein-Hawking entropy, and the unitary-group frontier.",
+      "entries": [
+        {"page": "sources.html", "anchor": "holographic", "title": "Card 7 · Bekenstein-Hawking entropy", "kind": "card"},
+        {"page": "sources.html", "anchor": "teleportation", "title": "Card 8 · Teleportation vs. path-finding", "kind": "card"},
+        {"page": "sources.html", "anchor": "unitary", "title": "Card 11 · Unitary Synthesis (refuted)", "kind": "card"},
+        {"page": "sources.html", "anchor": "schrodinger", "title": "Card 3 · Schrödinger equation", "kind": "card"}
+      ]
+    },
+    "foundations": {
+      "label": "Foundations & philosophy",
+      "color": "#be185d",
+      "blurb": "What can be known, what can be computed, and what an optimal agent would do. Computability, self-reference, universal AI, and the limits of formal reason.",
+      "entries": [
+        {"page": "sources.html", "anchor": "godel", "title": "Card 5 · Gödel/Turing computability bound", "kind": "card"},
+        {"page": "sources.html", "anchor": "loeb", "title": "Card 10 · Löb's theorem", "kind": "card"},
+        {"page": "sources.html", "anchor": "aixi", "title": "Card 12 · AIXI (universal AI)", "kind": "card"},
+        {"page": "sources.html", "anchor": "kolmogorov", "title": "Card 6 · Kolmogorov complexity", "kind": "card"},
+        {"page": "demos.html", "anchor": "clip2", "title": "Demo · Moral Standing Evaluator", "kind": "section"},
+        {"page": "demos.html", "anchor": "clip4", "title": "Demo · Thought Evolution Timeline", "kind": "section"}
+      ]
+    },
+    "chemistry": {
+      "label": "Chemistry & molecules",
+      "color": "#15803d",
+      "blurb": "From mass spectra to protein identity: peptide sequencing, equivariant molecular transformers (PET-MAD), and the molecular-mathematical interface.",
+      "entries": [
+        {"page": "sources.html", "anchor": "peptide_sequencing", "title": "Card 14 · Peptide Sequencing: from mass spectrum to protein identity", "kind": "card"},
+        {"page": "sources.html", "anchor": "lattice_duality", "title": "Card 13 · Lattice Duality (counting in chemistry)", "kind": "card"},
+        {"page": "chem-math.html", "anchor": "pane-mol", "title": "Chem-Math · PET-MAD molecular equivariant transformers", "kind": "section"}
+      ]
+    },
+    "physics-ml": {
+      "label": "Physics + ML",
+      "color": "#0891b2",
+      "blurb": "Physics-informed machine learning: PINNs, SINDy surrogates, differentiable fluid dynamics (HydroGym), and RL for spatially-distributed control.",
+      "entries": [
+        {"page": "deep-dive.html", "anchor": "sec1", "title": "§1 The naive approach: black-box NN fits data", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec2", "title": "§2 PINN: physics in the loss via autograd", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec3", "title": "§3 SINDy: discovering the actual equation", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec4", "title": "§4 HNN: conservation by construction", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec8", "title": "§8 HydroGym: RL meets fluid dynamics", "kind": "section"},
+        {"page": "physics-ml.html", "anchor": "clip1", "title": "Physics+ML · PIML paradigm, PINN PDE residual, KKT enforcement", "kind": "section"}
+      ]
+    },
+    "infrastructure": {
+      "label": "Infrastructure & deployment",
+      "color": "#475569",
+      "blurb": "The AI-era deployment bottleneck: Weight-Space Programming (LLMs that read and write neural weights) and Infrastructure from Code (the cloud compiler analogy).",
+      "entries": [
+        {"page": "deep-dive.html", "anchor": "sec_wsp", "title": "§WSP Weight-Space Programming: LLMs that read & write neural weights", "kind": "section"},
+        {"page": "deep-dive.html", "anchor": "sec_ifc", "title": "§IfC Infrastructure from Code: the AI-era deployment bottleneck", "kind": "section"}
+      ]
+    }
+  }
+}
