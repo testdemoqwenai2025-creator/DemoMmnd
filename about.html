@@ -81,5 +81,6 @@ footer p { font-size:0.75rem; color:var(--muted); }
 function toggleTheme(){const d=document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',d?'dark':'light')}
 (function(){const s=localStorage.getItem('mmnd-theme');const p=window.matchMedia('(prefers-color-scheme: dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
 </script>
+<script src="search-cite.js"></script>
 </body>
 </html>
