@@ -164,7 +164,7 @@ function render(){
         '<span class="tl-thread-pills">'+threadPills+'</span>'+
       '</div>'+
       '<div class="tl-title">'+e.title+'</div>'+
-      '<div class="tl-summary">'+e.summary+'</div>'+
+      (e.citations?'<span data-cite="'+e.citations.join(',')+'"><div class="tl-summary">'+e.summary+'</div></span>':'<div class="tl-summary">'+e.summary+'</div>')+
       (e.link?'<a class="tl-link" href="'+e.link.page+(e.link.anchor?('#'+e.link.anchor):'')+'">'+e.link.label+' <span class="arrow">&rarr;</span></a>':'')+
     '</div>';
   });
@@ -178,6 +178,7 @@ function toggleThread(t){
   if(activeThreads.has(t))activeThreads.delete(t);
   else activeThreads.add(t);
   render();
+  window.dispatchEvent(new Event('mmnd-content-changed'));
   // update hash
   if(activeThreads.size>0){
     history.replaceState(null,'','#'+Array.from(activeThreads).sort().join(','));
@@ -185,7 +186,7 @@ function toggleThread(t){
     history.replaceState(null,'','#');
   }
 }
-function clearFilter(){activeThreads.clear();render();history.replaceState(null,'','#')}
+function clearFilter(){activeThreads.clear();render();history.replaceState(null,'','#');window.dispatchEvent(new Event('mmnd-content-changed'))}
 
 // load + boot
 fetch('timeline.json?v='+Date.now())
@@ -199,6 +200,8 @@ fetch('timeline.json?v='+Date.now())
       h.split(',').forEach(t=>{if(THREADS[t])activeThreads.add(t);});
     }
     render();
+    // re-render citation superscripts after dynamic content loads
+    window.dispatchEvent(new Event('mmnd-content-changed'));
   })
   .catch(err=>{
     document.getElementById('timeline').innerHTML='<div class="empty-state"><span class="emoji">&#9888;</span>Could not load timeline.json. '+err.message+'</div>';
@@ -212,5 +215,6 @@ window.addEventListener('hashchange',()=>{
 });
 </script>
 
+<script src="search-cite.js"></script>
 </body>
 </html>
