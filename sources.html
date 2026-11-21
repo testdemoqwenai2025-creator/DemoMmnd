@@ -128,7 +128,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <canvas id="pbg"></canvas>
 <header><nav>
 <a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
-<div class="nav-links"><a href="index.html">Home</a><a href="sources.html" class="active">Sources</a><a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a><a href="demos.html">Demos</a><a href="about.html">About</a></div>
+<div class="nav-links"><a href="index.html">Home</a><a href="sources.html" class="active">Sources</a><a href="playgrounds.html">Playgrounds</a><a href="tags.html">Topics</a><a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a><a href="demos.html">Demos</a><a href="about.html">About</a></div>
 <button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
 </nav></header>
 
@@ -218,6 +218,43 @@ function toggleTheme(){var d=document.documentElement.classList.toggle('dark');l
 var CODE=null;
 var LANGS=['Python','TypeScript','Go','Scala','C','Elixir'];
 var TABS=[{id:'math',icon:'\ud83d\udcd0',label:'Math'},{id:'mol',icon:'\ud83e\udd1b',label:'Molecular'},{id:'code',icon:'\ud83d\udcbb',label:'Code'},{id:'obs',icon:'\ud83d\udcca',label:'Observations'},{id:'deep',icon:'\ud83e\udde0',label:'Deep Thoughts'},{id:'cmp',icon:'\ud83d\udd2c',label:'Comparison'},{id:'fut',icon:'\ud83d\ude80',label:'Futuristic'}];
+
+// === Phase 3: topic tags (loaded from tags.json) ===
+var TAGS_DATA=null;
+var TAG_INDEX={}; // key -> array of {tag, label, color}
+fetch('tags.json?v='+Date.now()).then(function(r){return r.json()}).then(function(d){
+  TAGS_DATA=d;
+  // build reverse index: for each tag entry with page==='sources.html' and an anchor that is a card key,
+  // map anchor -> [{tag, label, color}]
+  Object.keys(d.tags).forEach(function(t){
+    var tg=d.tags[t];
+    tg.entries.forEach(function(e){
+      if(e.page==='sources.html'){
+        if(!TAG_INDEX[e.anchor]) TAG_INDEX[e.anchor]=[];
+        TAG_INDEX[e.anchor].push({tag:t,label:tg.label,color:tg.color});
+      }
+    });
+  });
+  // re-render any open popup so chips appear if popup was already open
+  if(document.getElementById('popup').classList.contains('open')){
+    var cur=document.getElementById('pTitle').dataset.key;
+    if(cur){
+      var obs=document.getElementById('pane-obs');
+      if(obs && TAG_INDEX[cur]){
+        var existing=obs.querySelector('.tag-chips-row');
+        if(existing) existing.remove();
+        obs.insertAdjacentHTML('afterbegin',tagChipsFor(cur));
+      }
+    }
+  }
+}).catch(function(){/* tags optional */});
+function tagChipsFor(key){
+  if(!TAG_INDEX[key])return '';
+  var chips=TAG_INDEX[key].map(function(t){
+    return '<a href="tags.html#'+t.tag+'" style="display:inline-flex;align-items:center;gap:.3rem;padding:.2rem .55rem;border-radius:1rem;border:1px solid var(--border);font-size:.6875rem;text-decoration:none;color:var(--muted);background:var(--card)"><span style="width:.5rem;height:.5rem;border-radius:50%;background:'+t.color+'"></span>'+t.label+'</a>';
+  }).join('');
+  return '<div class="tag-chips-row" style="margin:0 0 1rem"><div style="font-size:.625rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);margin-bottom:.4rem">Topics</div><div style="display:flex;flex-wrap:wrap;gap:.3rem">'+chips+'</div></div>';
+}
 
 // Load code data
 // Load molecules.json for molecular visualizations
@@ -351,6 +388,7 @@ h+='</div>';
 h+='<div class="popup-pane" id="pane-obs">';
 if(e.demo){h+='<h3>'+e.demo.title+'</h3><canvas id="demoCv" class="demo-canvas"></canvas><p style="font-size:.75rem;color:var(--muted);margin-bottom:1rem">'+e.demo.desc+'</p>';if(key==='lean_riemann'){h+='<figure style="margin:.5rem 0 1rem;text-align:center"><img src="images/lean_riemann_zeros.png" alt="Riemann zeta zeros, critical strip, and the Lean-formalized zero-free region Re(s) >= 7/8" loading="lazy" style="max-width:100%;height:auto;border:1px solid var(--border);border-radius:.5rem"><figcaption style="font-size:.7rem;color:var(--muted);margin-top:.4rem">The critical strip 0 &lt; Re(s) &lt; 1, the Riemann Hypothesis line Re(s) = 1/2 (teal), and the formally verified zero-free region Re(s) &ge; 7/8 with Im(s) &ne; 0 (gold). Red dots: the first ten non-trivial zeros on the critical line.</figcaption></figure>'}if(key==='rh_thetalift'){h+='<figure style="margin:.5rem 0 1rem;text-align:center"><img src="images/rh_thetalift_psi.png" alt="Chebyshev psi(X) versus the main term X, with the unconditional PNT band and the sqrt(X) RH band" loading="lazy" style="max-width:100%;height:auto;border:1px solid var(--border);border-radius:.5rem"><figcaption style="font-size:.7rem;color:var(--muted);margin-top:.4rem">The prime-counting factoring: &psi;(X) = &Sigma;<sub>n&le;X</sub> &Lambda;(n) hugs the main term X. The gold band O(&radic;X log&sup2; X) is the RH envelope &mdash; the &radic;X is exactly the RH content. The red band O(X e<sup>&minus;c&radic;log X</sup>) is the weaker unconditional PNT (1896).</figcaption></figure>';h+='<figure style="margin:.5rem 0 1rem;text-align:center"><img src="images/rh_thetalift_chain.png" alt="Theta-lift chain U(X0) to U(X_m), m = sqrt(X), collapsing to RH" loading="lazy" style="max-width:100%;height:auto;border:1px solid var(--border);border-radius:.5rem"><figcaption style="font-size:.7rem;color:var(--muted);margin-top:.4rem">The chain of theta lifts U(X<sub>0</sub>) &rarr; U(X<sub>1</sub>) &rarr; &hellip; &rarr; U(X<sub>m</sub>), m = &radic;X, between totally definite unitary groups. Each lift raises the Stepanov-style multiplicity by one; m = &radic;X is the only length that collapses the error into the RH band. &lsquo;And yet, what else could it be?&rsquo;</figcaption></figure>'}if(key==='lean_riemann'||key==='rh_thetalift'){var pgNum=key==='lean_riemann'?1:3;var pgName=key==='lean_riemann'?'Riemann zeta-zero explorer':'von Mangoldt staircase';h+='<a href="playgrounds.html" style="display:flex;align-items:center;gap:.625rem;margin:.75rem 0 1rem;padding:.75rem 1rem;background:var(--accent-bg);border:1px solid var(--primary);border-radius:.5rem;text-decoration:none;color:var(--fg)"><span style="font-size:1.125rem">&#9658;</span><span><strong style="color:var(--primary);display:block;font-size:.6875rem;text-transform:uppercase;letter-spacing:.15em;margin-bottom:.125rem">&#9733; Interactive playground</strong><span style="font-size:.875rem">Try this live: playground #'+pgNum+', the '+pgName+'. Scrub the parameter, watch the math move in your browser.</span></span></a>'}}
 h+='<h3>Summary report</h3><div style="border:1px solid var(--border);border-radius:.5rem;padding:1rem;background:var(--secondary);margin-bottom:1rem"><div style="display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;font-size:.75rem"><div><strong style="color:var(--primary)">Expression:</strong> '+e.name.replace(/^[0-9]+\.\s/,"")+'</div><div><strong style="color:var(--primary)">Domain:</strong> '+(e.demo?e.demo.title:'N/A')+'</div><div><strong style="color:var(--primary)">Languages:</strong> 6 (Python/TS/Go/Scala/C/Elixir)</div><div><strong style="color:var(--primary)">Code blocks:</strong> 6 implementations</div><div><strong style="color:var(--primary)">Status:</strong> Analyzed</div><div><strong style="color:var(--primary)">Phase:</strong> 1 — KaTeX-rendered</div></div></div>';
+h+=tagChipsFor(key);
 h+='<h3 style="margin-top:1rem">Statistics</h3><div class="report-grid" style="grid-template-columns:repeat(4,1fr)"><div class="report-stat"><div class="num">1</div><div class="lbl">Expr</div></div><div class="report-stat"><div class="num">6</div><div class="lbl">Langs</div></div><div class="report-stat"><div class="num">5</div><div class="lbl">Mappings</div></div><div class="report-stat"><div class="num">72</div><div class="lbl">Total</div></div></div>';
 h+='<h3 style="margin-top:1rem">Graph visualization — select a chart type</h3>';
 h+='<div style="display:flex;gap:.25rem;margin-bottom:.5rem;flex-wrap:wrap">';
