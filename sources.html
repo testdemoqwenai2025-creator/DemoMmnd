@@ -42,6 +42,9 @@ p{margin-bottom:1rem}
 .expr-card-preview{font-size:.8125rem;color:var(--muted);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .expr-card-langs{display:flex;gap:.25rem;margin-top:.75rem;flex-wrap:wrap}
 .lang-pill{font-size:.5625rem;padding:.125rem .375rem;border-radius:.25rem;background:var(--accent-bg);color:var(--primary)}
+.expr-card-tags{display:flex;gap:.25rem;margin-top:.5rem;align-items:center}
+.card-tag-dot{display:inline-block;width:.5rem;height:.5rem;border-radius:50%;border:1px solid rgba(255,255,255,.3);cursor:pointer;transition:transform .15s;text-decoration:none}
+.card-tag-dot:hover{transform:scale(1.4)}
 .popup-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;padding:1rem}
 .popup-overlay.active{display:flex}
 .popup{background:linear-gradient(135deg,rgba(10,9,8,0.97),rgba(20,15,10,0.95));backdrop-filter:blur(24px);border:1px solid rgba(194,65,12,.2);border-radius:1rem;max-width:800px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 96px rgba(194,65,12,.15),0 0 1px rgba(255,255,255,.05) inset;position:relative}
@@ -128,7 +131,7 @@ footer{position:relative;z-index:1;border-top:1px solid var(--border);background
 <canvas id="pbg"></canvas>
 <header><nav>
 <a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span></a>
-<div class="nav-links"><a href="index.html">Home</a><a href="sources.html" class="active">Sources</a><a href="playgrounds.html">Playgrounds</a><a href="tags.html">Topics</a><a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a><a href="demos.html">Demos</a><a href="about.html">About</a></div>
+<div class="nav-links"><a href="index.html">Home</a><a href="sources.html" class="active">Sources</a><a href="playgrounds.html">Playgrounds</a><a href="tags.html">Topics</a><a href="timeline.html">Timeline</a><a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a><a href="demos.html">Demos</a><a href="about.html">About</a></div>
 <button class="theme-toggle" onclick="toggleTheme()">&#127763;</button>
 </nav></header>
 
@@ -247,6 +250,8 @@ fetch('tags.json?v='+Date.now()).then(function(r){return r.json()}).then(functio
       }
     }
   }
+  // Phase 3 gap fill: re-render the card grid so tag dots appear
+  if(typeof renderCards==='function' && CODE){renderCards();}
 }).catch(function(){/* tags optional */});
 function tagChipsFor(key){
   if(!TAG_INDEX[key])return '';
@@ -312,7 +317,15 @@ html+='<div class="expr-card-name">'+shortName+'</div>';
 html+='<div class="expr-card-preview">'+(e.intent||e.math||'').substring(0,100)+'...</div>';
 html+='<div class="expr-card-langs">';
 LANGS.forEach(function(l){html+='<span class="lang-pill">'+l+'</span>'});
-html+='</div></div>';
+html+='</div>';
+// Phase 3 gap fill: tag dots on the card (colored dots per topic tag)
+var tags=TAG_INDEX[key];
+if(tags&&tags.length){
+  html+='<div class="expr-card-tags">';
+  tags.forEach(function(t){html+='<a href="tags.html#'+t.tag+'" class="card-tag-dot" style="background:'+t.color+'" title="'+t.label+'" onclick="event.stopPropagation();event.preventDefault();window.location.href=\'tags.html#'+t.tag+'\'"></a>'});
+  html+='</div>';
+}
+html+='</div>';
 }
 grid.innerHTML=html;
 }
