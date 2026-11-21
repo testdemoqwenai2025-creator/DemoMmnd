@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="version" content="2026-11-21-v1-convergence">
+<title>The Convergence · Mmnd</title>
+<meta name="description" content="The synthesis: how prime numbers, the Riemann zeta function, formal proof, LLM reasoning, reinforcement learning, and symbolic regression converge into a single research frontier. Six stages, each linking to the deep source.">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+:root{--bg:#faf7f2;--fg:#1a1a1a;--primary:#c2410c;--muted:#736a5e;--card:#fefcf8;--border:#e5e0d8;--secondary:#f0ebe3;--accent-bg:rgba(194,65,12,0.08);--glass:rgba(250,247,242,0.85)}
+.dark{--bg:#16140f;--fg:#f5f0ea;--primary:#ea580c;--muted:#a8a098;--card:#1f1c16;--border:#2a261e;--secondary:#252118;--accent-bg:rgba(234,88,12,0.12);--glass:rgba(22,20,15,0.85)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.7;background-image:radial-gradient(rgba(115,106,94,0.04) 1px,transparent 1px);background-size:24px 24px;background-attachment:fixed;transition:background-color .2s,color .2s}
+header{position:sticky;top:0;z-index:100;background:var(--glass);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+nav{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:4rem}
+.logo{display:flex;align-items:center;gap:.625rem;text-decoration:none;color:var(--fg)}
+.logo-icon{width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent-bg);color:var(--primary);display:flex;align-items:center;justify-content:center;border:1px solid rgba(194,65,12,.3);font-size:1.25rem}
+.logo-text{font-family:Georgia,serif;font-size:1.125rem;font-weight:600}
+.logo-sub{font-size:.6875rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-left:.25rem}
+.nav-links{display:flex;gap:.25rem;flex-wrap:wrap}
+.nav-links a{padding:.5rem .75rem;text-decoration:none;color:var(--muted);font-size:.8125rem;font-weight:500;border-radius:.375rem;transition:color .15s}
+.nav-links a:hover,.nav-links a.active{color:var(--primary)}
+.theme-toggle{width:2.75rem;height:2.75rem;border-radius:50%;border:1px solid var(--border);background:transparent;color:var(--primary);cursor:pointer;font-size:1.125rem;display:flex;align-items:center;justify-content:center}
+main{max-width:820px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+.hero{margin-bottom:3rem}
+.crumbs{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:.5rem}
+.hero h1{font-family:Georgia,serif;font-size:clamp(2.25rem,7vw,4rem);font-weight:600;line-height:1.05;letter-spacing:-.02em;margin-bottom:1rem}
+.hero h1 .accent{color:var(--primary);font-style:italic}
+.hero .subtitle{font-family:Georgia,serif;font-size:clamp(1.125rem,3vw,1.5rem);color:var(--muted);margin-bottom:1.5rem;font-style:italic;line-height:1.4}
+.lead{font-size:1.0625rem;color:var(--fg);max-width:55rem;line-height:1.75;margin-bottom:1rem}
+.lead a{color:var(--primary);text-decoration:none}
+.lead a:hover{text-decoration:underline}
+.pill{display:inline-block;padding:.25rem .75rem;border-radius:1rem;border:1px solid rgba(194,65,12,.3);color:var(--primary);font-size:.75rem;margin-bottom:.75rem}
+/* Thread ribbon (visual map of the 6 stages) */
+.ribbon{margin:2.5rem 0;padding:1.5rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem}
+.ribbon-title{font-size:.6875rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted);margin-bottom:1rem;font-weight:600}
+.ribbon-flow{display:flex;align-items:center;flex-wrap:wrap;gap:.25rem;font-family:Georgia,serif;font-size:.875rem}
+.ribbon-node{display:inline-flex;align-items:center;gap:.3rem;padding:.375rem .625rem;border-radius:.375rem;background:var(--secondary);color:var(--fg);font-weight:600;white-space:nowrap}
+.ribbon-node .num{display:inline-flex;align-items:center;justify-content:center;width:1.25rem;height:1.25rem;border-radius:50%;background:var(--primary);color:#fff;font-size:.6875rem;font-family:-apple-system,sans-serif;font-weight:700}
+.ribbon-arrow{color:var(--muted);font-size:1rem;margin:0 .125rem}
+/* Stage sections */
+.stage{margin:3.5rem 0;scroll-margin-top:5rem}
+.stage-head{display:flex;align-items:baseline;gap:.75rem;margin-bottom:.5rem;flex-wrap:wrap}
+.stage-num{font-family:Georgia,serif;font-size:clamp(2.5rem,8vw,3.5rem);font-weight:700;color:var(--primary);line-height:1;letter-spacing:-.03em}
+.stage-title{font-family:Georgia,serif;font-size:clamp(1.5rem,4vw,2rem);font-weight:600;line-height:1.15}
+.stage-meta{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:1.25rem}
+.stage-body p{font-size:1.0625rem;color:var(--fg);line-height:1.75;margin-bottom:1rem}
+.stage-body p:last-child{margin-bottom:0}
+.stage-body strong{color:var(--fg);font-weight:600}
+.stage-body em{font-style:italic}
+.stage-body a{color:var(--primary);text-decoration:none;border-bottom:1px solid rgba(194,65,12,.3);transition:border-color .15s}
+.stage-body a:hover{border-color:var(--primary)}
+.stage-body .formula{font-family:Georgia,serif;font-size:1.125rem;text-align:center;margin:1.5rem 0;padding:1.25rem 1.5rem;background:var(--secondary);border-radius:.5rem;border-left:3px solid var(--primary);color:var(--fg);line-height:1.6}
+.stage-body .formula .katex{color:var(--fg)}
+/* Pull quote */
+.pullquote{margin:2rem 0;padding:1.5rem 1.75rem;background:var(--accent-bg);border-left:3px solid var(--primary);border-radius:0 .5rem .5rem 0;font-family:Georgia,serif;font-size:1.1875rem;font-style:italic;color:var(--fg);line-height:1.5}
+.pullquote .attribution{display:block;margin-top:.75rem;font-size:.8125rem;font-style:normal;color:var(--muted);font-family:-apple-system,sans-serif}
+/* Deep links panel */
+.deep-links{margin-top:1.5rem;padding:1.25rem 1.5rem;background:var(--card);border:1px solid var(--border);border-radius:.5rem}
+.deep-links-title{font-size:.6875rem;text-transform:uppercase;letter-spacing:.15em;color:var(--primary);margin-bottom:.75rem;font-weight:700}
+.deep-link{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;margin-bottom:.375rem;border-radius:.375rem;background:var(--secondary);text-decoration:none;color:var(--fg);font-size:.875rem;transition:background .15s,transform .15s}
+.deep-link:hover{background:var(--accent-bg);transform:translateX(2px)}
+.deep-link:last-child{margin-bottom:0}
+.deep-link .icon{font-size:1rem;flex-shrink:0}
+.deep-link .label{flex:1}
+.deep-link .arrow{color:var(--muted);font-size:.875rem}
+/* Closing */
+.closing{margin:4rem 0 0;padding:2.5rem 2rem;background:var(--card);border:1px solid var(--border);border-radius:.75rem;text-align:center}
+.closing h2{font-family:Georgia,serif;font-size:1.75rem;font-weight:600;margin-bottom:1rem;line-height:1.2}
+.closing p{font-size:1rem;color:var(--muted);max-width:42rem;margin:0 auto 1.5rem;line-height:1.7}
+.closing .nav-cards{display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;margin-top:1.5rem}
+.closing .nav-card{padding:.75rem 1.25rem;border:1px solid var(--border);border-radius:.5rem;text-decoration:none;color:var(--fg);font-size:.875rem;font-weight:500;transition:border-color .15s,transform .15s;background:var(--bg)}
+.closing .nav-card:hover{border-color:var(--primary);transform:translateY(-2px)}
+.closing .nav-card .icon{margin-right:.375rem}
+footer{border-top:1px solid var(--border);background:var(--secondary);padding:2rem 1.5rem}
+.footer-inner{max-width:1200px;margin:0 auto;text-align:center}
+.footer-inner p{font-size:.75rem;color:var(--muted)}
+.footer-inner a{color:var(--primary);text-decoration:none}
+.footer-inner a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+
+<header>
+<nav>
+<a href="index.html" class="logo"><span class="logo-icon">&#9883;</span><span class="logo-text">Mmnd</span><span class="logo-sub">Observatory</span></a>
+<div class="nav-links">
+<a href="index.html">Home</a>
+<a href="sources.html">Sources</a>
+<a href="playgrounds.html">Playgrounds</a>
+<a href="tags.html">Topics</a>
+<a href="timeline.html">Timeline</a>
+<a href="convergence.html" class="active">Convergence</a>
+<a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a>
+<a href="demos.html">Demos</a>
+<a href="about.html">About</a>
+</div>
+<button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">&#127763;</button>
+</nav>
+</header>
+
+<main>
+<div class="hero">
+<div class="crumbs">The synthesis</div>
+<span class="pill">6 stages &middot; one frontier</span>
+<h1>The <span class="accent">Convergence</span></h1>
+<p class="subtitle">Prime numbers, formal proof, and machine intelligence are not three fields. They are one field, seen from three angles.</p>
+<p class="lead">This page braids the threads. Each stage develops one move in the argument &mdash; from primes to zeta to formal proof to LLM reasoners to reinforcement learning to symbolic regression &mdash; and links back to the deep card, playground, or timeline entry where the move is documented in full. Read it as a single argument, not a survey.</p>
+</div>
+
+<div class="ribbon">
+<div class="ribbon-title">The argument in one line</div>
+<div class="ribbon-flow">
+<span class="ribbon-node"><span class="num">1</span>Primes</span>
+<span class="ribbon-arrow">&rarr;</span>
+<span class="ribbon-node"><span class="num">2</span>Zeta</span>
+<span class="ribbon-arrow">&rarr;</span>
+<span class="ribbon-node"><span class="num">3</span>Formal proof</span>
+<span class="ribbon-arrow">&rarr;</span>
+<span class="ribbon-node"><span class="num">4</span>LLM reasoners</span>
+<span class="ribbon-arrow">&rarr;</span>
+<span class="ribbon-node"><span class="num">5</span>Reinforcement</span>
+<span class="ribbon-arrow">&rarr;</span>
+<span class="ribbon-node"><span class="num">6</span>SINDy &amp; physics</span>
+</div>
+</div>
+
+<!-- STAGE 1 -->
+<section class="stage" id="stage1">
+<div class="stage-head"><span class="stage-num">1</span><span class="stage-title">Primes, and the mystery of their distribution</span></div>
+<div class="stage-meta">The starting question &middot; <a href="timeline.html#riemann">timeline: riemann thread</a></div>
+<div class="stage-body">
+<p>Every integer greater than 1 is a unique product of primes. This single fact &mdash; the <strong>fundamental theorem of arithmetic</strong> &mdash; makes primes the atoms of number theory. Yet their distribution among the integers is, even today, not fully understood. They thin out (the average gap near <em>N</em> grows like log <em>N</em>), but they do so erratically: there are long stretches with none, then pairs separated by only 2.</p>
+<p>The function that counts them, &pi;(x) = #{primes &le; x}, is a staircase. It jumps by 1 at each prime and is flat between. In 1859, in a nine-page memoir, <strong>Bernhard Riemann</strong> proposed that the secret of this staircase lies in a single complex function: the zeta function &zeta;(s). Every jagged step of &pi;(x), Riemann suggested, is the visible trace of the zeros of &zeta;.</p>
+<div class="formula">$$\pi(x) = \sum_{n=1}^{\infty} \frac{\mu(n)}{n} \, \mathrm{Li}(x^{1/n}) \quad \text{(Riemann's explicit formula, 1859)}$$</div>
+<p>You can watch the staircase climb against the smooth logarithmic integral Li(x) in <a href="playgrounds.html">Playground 2</a>. The gap you see &mdash; the prime mystery &mdash; is what every subsequent stage of the convergence tries to close.</p>
+</div>
+<div class="deep-links">
+<div class="deep-links-title">Go deeper</div>
+<a class="deep-link" href="playgrounds.html"><span class="icon">&#9658;</span><span class="label">Playground 2 &middot; the prime-counting step function &pi;(x) vs Li(x)</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="timeline.html#riemann"><span class="icon">&#128197;</span><span class="label">Timeline &middot; 1859 Riemann, 1896 PNT, 1900 Hilbert's 8th</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="sources.html#rh_thetalift"><span class="icon">&#9878;</span><span class="label">Card 16 &middot; the &radic;X theta-lift chain targeting RH</span><span class="arrow">&rarr;</span></a>
+</div>
+</section>
+
+<!-- STAGE 2 -->
+<section class="stage" id="stage2">
+<div class="stage-head"><span class="stage-num">2</span><span class="stage-title">Zeta, and the line where the zeros must lie</span></div>
+<div class="stage-meta">Riemann's conjecture &middot; the load-bearing assertion</div>
+<div class="stage-body">
+<p>The zeta function &zeta;(s) = &Sigma; n<sup>&minus;s</sup> converges for Re(s) &gt; 1, but its analytic continuation is defined everywhere except s = 1. The non-trivial zeros &mdash; the ones that matter for primes &mdash; all lie in the <strong>critical strip</strong> 0 &lt; Re(s) &lt; 1. Riemann computed the first several and found them all on the single line Re(s) = 1/2. He conjectured, without proof, that <em>all</em> non-trivial zeros lie there.</p>
+<p>This is the <strong>Riemann Hypothesis</strong>: the most important open problem in mathematics, a Hilbert problem (1900), a Clay Millennium problem (2000), and the load-bearing assertion behind the prime-counting error term. Under RH, the error in &pi;(x) ~ Li(x) is O(&radic;x log x); without it, the best bound is exponentially weaker. The exponent 1/2 &mdash; the <em>square root</em> &mdash; is the entire content of RH.</p>
+<div class="pullquote">The exponent &frac12; in &radic;x is RH. Any larger exponent would be a weaker statement that does not imply RH; any smaller would be false.<span class="attribution">&mdash; the &radic;X theta-lift chain, card 16</span></div>
+<p>In <a href="playgrounds.html">Playground 1</a> you can scrub along the critical line and watch &zeta;(&frac12;+it) trace a parametric curve that crosses the origin at every Riemann zero (the first ten are tabulated: 14.13, 21.02, 25.01, &hellip;). In <a href="playgrounds.html">Playground 3</a> the same &radic;x appears as the gold band around the von Mangoldt staircase &psi;(x) &mdash; the visible RH envelope that the staircase never escapes.</p>
+</div>
+<div class="deep-links">
+<div class="deep-links-title">Go deeper</div>
+<a class="deep-link" href="playgrounds.html"><span class="icon">&#9658;</span><span class="label">Playground 1 &middot; scrub the critical line, watch &zeta; cross zero</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="playgrounds.html"><span class="icon">&#9658;</span><span class="label">Playground 3 &middot; the &radic;X RH band around &psi;(x)</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="sources.html#rh_thetalift"><span class="icon">&#9878;</span><span class="label">Card 16 &middot; why m = &radic;X is the only length that could yield RH</span><span class="arrow">&rarr;</span></a>
+</div>
+</section>
+
+<!-- STAGE 3 -->
+<section class="stage" id="stage3">
+<div class="stage-head"><span class="stage-num">3</span><span class="stage-title">Formal proof, and the computer as the most powerful prover on Earth</span></div>
+<div class="stage-meta">From Riemann's pencil to Lean's kernel &middot; <a href="timeline.html#formal">timeline: formal thread</a></div>
+<div class="stage-body">
+<p>A proof is only as good as the trust we place in its steps. For three centuries, mathematical trust was social: peer review, reputational, fallible. In 2013 <strong>Lean</strong> changed the substrate. A Lean proof is a program that type-checks against a small, audited kernel; if it compiles, it is correct. The community library <strong>Mathlib</strong> has since grown past 1.5 million lines of formalized mathematics &mdash; the largest corpus of machine-checked math ever assembled.</p>
+<p>In March 2025, Mathlib formalized a <strong>Riemann zeta zero-free region</strong> extending to Re(s) &ge; 7/8 (with Im(s) &ne; 0). It is a machine-checked strengthening of the classical de la Vall&eacute;e-Poussin bound &mdash; the first Lean proof in the chain that targets RH itself. And in July 2024, DeepMind's <strong>AlphaProof</strong>, built on Lean, solved four of six International Mathematical Olympiad problems &mdash; silver-medalist level, the first credible demonstration that an AI-augmented theorem prover can do competition mathematics.</p>
+<div class="formula">$$\text{Lean formalizes: } \zeta(s) \neq 0 \text{ for } \mathrm{Re}(s) \geq \tfrac{7}{8},\ \mathrm{Im}(s) \neq 0 \quad \text{(Mathlib, 2025)}$$</div>
+<p>This is the hinge of the convergence. The same formal machinery that checks Lean proofs is the substrate on which AI reasoners operate: <em>if a machine can verify a proof, a machine can search for one</em>. The road from Riemann's 1859 pencil sketch to a 2026 Lean-checked zero-free region runs straight into the next stage.</p>
+</div>
+<div class="deep-links">
+<div class="deep-links-title">Go deeper</div>
+<a class="deep-link" href="sources.html#lean_riemann"><span class="icon">&#9878;</span><span class="label">Card 15 &middot; Lean, AlphaProof &amp; the Riemann zero-free region</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="sources.html#godel"><span class="icon">&#9878;</span><span class="label">Card 5 &middot; G&ouml;del/Turing &mdash; the limit of what can be proven at all</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="timeline.html#formal"><span class="icon">&#128197;</span><span class="label">Timeline &middot; 1931 G&ouml;del, 2013 Lean, 2024 AlphaProof, 2025 zero-free region</span><span class="arrow">&rarr;</span></a>
+</div>
+</section>
+
+<!-- STAGE 4 -->
+<section class="stage" id="stage4">
+<div class="stage-head"><span class="stage-num">4</span><span class="stage-title">LLM reasoners, and the machine that can hold a proof in mind</span></div>
+<div class="stage-meta">From verification to generation &middot; <a href="timeline.html#ml">timeline: ml thread</a></div>
+<div class="stage-body">
+<p>A formal proof system can <em>check</em> a proof, but discovering one is a search problem over a space so vast that brute force is hopeless. The transformer architecture &mdash; <strong>scaled dot-product attention</strong>, published in 2017 &mdash; gave machines the ability to hold context, to reason across thousands of tokens, to propose the next step of an argument the way a graduate student does. By 2024, AlphaProof was proposing Lean tactics that compiled. By 2026, the same attention mechanism underwrites every frontier LLM.</p>
+<p>But raw next-token prediction is not enough. A reasoner that merely <em>sounds</em> right is dangerous in mathematics, where a single wrong step invalidates the whole. The deep insight is that <strong>the formal system provides the ground truth</strong>: an LLM can propose, Lean can check, and the loop can iterate. <a href="sources.html#loeb">L&ouml;b's theorem</a> (card 10) is the logical pivot &mdash; the formal condition under which a system can trust its own proofs. <a href="sources.html#aixi">AIXI</a> (card 12) is the theoretical ceiling: the optimal agent that combines Solomonoff induction with sequential decision theory.</p>
+<div class="pullquote">Attention is all you need &mdash; but attention without verification is hallucination. The formal system is what turns a fluent speaker into a reliable mathematician.<span class="attribution">&mdash; the convergence, stage 4</span></div>
+<p>And the loop is not just proof. The same LLM that reads Lean tactics can read <a href="sources.html#bottleneck">information bottlenecks</a> (card 9), compress <a href="sources.html#kolmogorov">Kolmogorov complexity</a> (card 6), and &mdash; via <a href="deep-dive.html#sec_wsp">Weight-Space Programming</a> &mdash; directly read and write the weights of another network. The boundary between reasoning and surgery begins to blur.</p>
+</div>
+<div class="deep-links">
+<div class="deep-links-title">Go deeper</div>
+<a class="deep-link" href="sources.html#attention"><span class="icon">&#9878;</span><span class="label">Card 4 &middot; scaled dot-product attention (Vaswani et al., 2017)</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="sources.html#loeb"><span class="icon">&#9878;</span><span class="label">Card 10 &middot; L&ouml;b's theorem &mdash; when a system can trust itself</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="sources.html#aixi"><span class="icon">&#9878;</span><span class="label">Card 12 &middot; AIXI &mdash; the universal-AI ceiling</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="deep-dive.html#sec_wsp"><span class="icon">&sect;</span><span class="label">Deep-dive &sect;WSP &middot; LLMs that read &amp; write neural weights</span><span class="arrow">&rarr;</span></a>
+</div>
+</section>
+
+<!-- STAGE 5 -->
+<section class="stage" id="stage5">
+<div class="stage-head"><span class="stage-num">5</span><span class="stage-title">Reinforcement learning, and the shaping of every modern LLM</span></div>
+<div class="stage-meta">From consequence to alignment &middot; <a href="timeline.html#ml">timeline: ml thread</a></div>
+<div class="stage-body">
+<p>An LLM that proposes proofs is still passive: it waits to be prompted. <strong>Reinforcement learning</strong> closes the loop &mdash; the agent acts, observes a reward, and updates. The agent does not merely predict; it <em>decides</em>. The mathematical skeleton is the Bellman equation: a value function V that satisfies a fixed-point condition over the expected return.</p>
+<div class="formula">$$V^{\pi}(s) = \mathbb{E}\left[\sum_{t=0}^{\infty} \gamma^t r_{t+1} \,\middle|\, s_0 = s\right] \quad \text{(the RL fixed point)}$$</div>
+<p>Since 2022 this is not abstract. <strong>RLHF</strong> &mdash; Reinforcement Learning from Human Feedback &mdash; is the three-stage pipeline (supervised fine-tuning, reward model, PPO) that shaped ChatGPT and every frontier LLM since. The deep-dive <a href="deep-dive.html#sec7">&sect;7</a> documents the recipe. The same loop, taken into physics, becomes <a href="deep-dive.html#sec8">HydroGym</a>: differentiable fluid dynamics paired with Gradient-Enhanced PPO, controlling a Karman vortex street in real time, with zero-shot transfer from 2D training to 3D deployment.</p>
+<p>Notice the recursion. The LLM that proposes Lean proofs (stage 4) is itself the product of RL (stage 5). The agent that learns to prove is shaped by reward. And the reward that shapes it can, in principle, be &lsquo;did the proof compile?&rsquo; &mdash; the formal system (stage 3) supplying the ground truth that the RL loop (stage 5) optimizes against. The three stages are not parallel; they are a closed loop.</p>
+</div>
+<div class="deep-links">
+<div class="deep-links-title">Go deeper</div>
+<a class="deep-link" href="deep-dive.html#sec7"><span class="icon">&sect;</span><span class="label">Deep-dive &sect;7 &middot; RLHF: how RL shapes every modern LLM</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="deep-dive.html#sec8"><span class="icon">&sect;</span><span class="label">Deep-dive &sect;8 &middot; HydroGym: RL meets fluid dynamics (G-PPO)</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="rl-deep-dive.html"><span class="icon">&#128214;</span><span class="label">RL Deep-Dive &middot; the full curriculum</span><span class="arrow">&rarr;</span></a>
+</div>
+</section>
+
+<!-- STAGE 6 -->
+<section class="stage" id="stage6">
+<div class="stage-head"><span class="stage-num">6</span><span class="stage-title">SINDy, and the discovery of the equation from observation alone</span></div>
+<div class="stage-meta">From data to law &middot; <a href="timeline.html#physics">timeline: physics thread</a></div>
+<div class="stage-body">
+<p>The loop closes in physics. A dynamical system &mdash; a fluid, a pendulum, a climate &mdash; produces data. For centuries, the equation governing it was guessed by a genius (Navier, Stokes, Lorenz) and then checked against experiment. <strong>SINDy</strong> (Sparse Identification of Nonlinear Dynamics, Brunton-Proctor-Kutz, 2018) inverts this: given the trajectory data, find the sparsest combination of basis functions whose derivative matches the observed one. The equation is <em>discovered</em>, not guessed.</p>
+<div class="formula">$$\dot{X} = \Theta(X)\,\Xi \quad \text{where } \Xi \text{ is sparse (SINDy, 2018)}$$</div>
+<p>This is the final convergence. The primes (stage 1) posed the original question of structure beneath apparent chaos. The zeta function (stage 2) gave the analytic handle. Formal proof (stage 3) made verification mechanical. LLM reasoners (stage 4) made search fluent. Reinforcement learning (stage 5) made the agent goal-directed. And SINDy (stage 6) is the same principle applied to physics: <strong>find the sparse, verifiable law that the data implies</strong>. The Schr&ouml;dinger equation (card 3), the Hamiltonian (deep-dive &sect;4), the adjoint method (deep-dive &sect;5) &mdash; each is a case where the governing equation can now be recovered from observation by a machine, checked for consistency, and refined by an RL-trained agent that gets reward for prediction accuracy.</p>
+<div class="pullquote">The same shape &mdash; sparse structure recovered from data, verified against ground truth, refined by consequence &mdash; runs from Riemann's explicit formula to SINDy's library. The convergence is not an analogy; it is a single method, seen at six scales.<span class="attribution">&mdash; the convergence, closing</span></div>
+</div>
+<div class="deep-links">
+<div class="deep-links-title">Go deeper</div>
+<a class="deep-link" href="deep-dive.html#sec3"><span class="icon">&sect;</span><span class="label">Deep-dive &sect;3 &middot; SINDy: discovering the actual equation</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="sources.html#schrodinger"><span class="icon">&#9878;</span><span class="label">Card 3 &middot; the Schr&ouml;dinger equation</span><span class="arrow">&rarr;</span></a>
+<a class="deep-link" href="physics-ml.html"><span class="icon">&#128214;</span><span class="label">Physics+ML &middot; the full PIML curriculum (20 clips)</span><span class="arrow">&rarr;</span></a>
+</div>
+</section>
+
+<div class="closing">
+<h2>One field, six angles.</h2>
+<p>The observatory documents this convergence across sources, playgrounds, deep-dives, topics, and a 167-year timeline. Every page is a facet of the same argument: that pure mathematics and machine intelligence are converging on a single method &mdash; sparse structure, formal verification, learned search &mdash; and that the Riemann Hypothesis is the load-bearing instance of the pattern.</p>
+<div class="nav-cards">
+<a class="nav-card" href="sources.html"><span class="icon">&#9878;</span>The 16 source cards</a>
+<a class="nav-card" href="playgrounds.html"><span class="icon">&#9658;</span>The 3 playgrounds</a>
+<a class="nav-card" href="tags.html"><span class="icon">&#9733;</span>Browse by topic</a>
+<a class="nav-card" href="timeline.html"><span class="icon">&#128197;</span>The research log</a>
+<a class="nav-card" href="deep-dive.html"><span class="icon">&#128214;</span>The deep dives</a>
+</div>
+</div>
+</main>
+
+<footer>
+<div class="footer-inner">
+<p>Part of the <a href="index.html">Mmnd Observatory</a> &middot; <a href="sources.html">Sources</a> &middot; <a href="playgrounds.html">Playgrounds</a> &middot; <a href="tags.html">Topics</a> &middot; <a href="timeline.html">Timeline</a> &middot; Built for a two-decade horizon.</p>
+</div>
+</footer>
+
+<script>
+function toggleTheme(){document.documentElement.classList.toggle('dark');localStorage.setItem('mmnd-theme',document.documentElement.classList.contains('dark')?'dark':'light')}
+(function(){const s=localStorage.getItem('mmnd-theme');const p=window.matchMedia('(prefers-color-scheme:dark)').matches;if(s==='dark'||(!s&&p))document.documentElement.classList.add('dark')})();
+document.addEventListener('DOMContentLoaded',function(){
+  if(window.renderMathInElement){renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:false},{left:'$',right:'$',display:false}]})}
+});
+</script>
+
+</body>
+</html>
