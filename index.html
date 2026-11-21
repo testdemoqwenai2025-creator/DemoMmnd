@@ -159,6 +159,29 @@ nav {
 .featured-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--primary); text-decoration: none; font-weight: 500; }
 .featured-link:hover { text-decoration: underline; }
 
+/* === Browse by topic strip === */
+.topics-strip {
+  border-bottom: 1px solid var(--border); background: var(--card);
+  padding: 2.5rem 1.5rem;
+}
+.topics-inner { max-width: 1200px; margin: 0 auto; }
+.topics-eyebrow { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--primary); margin-bottom: 0.5rem; }
+.topics-title { font-family: Georgia, serif; font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+@media (min-width: 640px) { .topics-title { font-size: 1.75rem; } }
+.topics-sub { font-size: 0.9375rem; color: var(--muted); margin-bottom: 1.25rem; max-width: 50rem; line-height: 1.6; }
+.topics-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.topic-chip {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.5rem 0.9rem; border-radius: 1.25rem;
+  border: 1px solid var(--border); background: var(--bg);
+  text-decoration: none; color: var(--fg);
+  font-size: 0.8125rem; font-weight: 500;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.topic-chip:hover { border-color: var(--chip-color, var(--primary)); transform: translateY(-1px); }
+.topic-chip .chip-dot { width: 0.625rem; height: 0.625rem; border-radius: 50%; background: var(--chip-color, var(--primary)); flex-shrink: 0; }
+.topic-chip .chip-count { font-size: 0.6875rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+
 /* === Latest breakthrough callout === */
 .latest {
   border-bottom: 1px solid var(--border); background: var(--card);
@@ -273,7 +296,7 @@ footer {
   </a>
   <div class="nav-links">
     <a href="/" class="active">Home</a>
-    <a href="sources.html">Sources</a>
+    <a href="sources.html">Sources</a><a href="tags.html">Topics</a>
     <a href="playgrounds.html">Playgrounds</a>
     <a href="chem-math.html">Chem-Math</a><a href="math-ml.html">Math+ML</a><a href="physics-ml.html">Physics+ML</a><a href="dashboard.html">Dashboard</a><a href="blog.html">Blog</a>
     <a href="demos.html">Demos</a>
@@ -319,6 +342,15 @@ footer {
     <div class="metric-note">Phase 1 — KaTeX + popup workflow</div>
   </div>
 </div>
+
+<section class="topics-strip">
+  <div class="topics-inner">
+    <p class="topics-eyebrow">Browse by topic</p>
+    <h2 class="topics-title">Ten threads across the observatory.</h2>
+    <p class="topics-sub">A topic is not a page &mdash; it is a thread that runs across sources, playgrounds, and deep dives. Click any chip to see every entry tagged with it.</p>
+    <div class="topics-chips" id="topicsChips"><!-- injected by JS --></div>
+  </div>
+</section>
 
 <section class="latest">
   <div class="latest-inner">
@@ -580,6 +612,24 @@ function toggleTheme() {
   });
   resize();
   if (reduced) { draw(); } else { raf = requestAnimationFrame(loop); }
+})();
+
+// === Topics strip: fetch tags.json and render colored chips ===
+(function() {
+  const container = document.getElementById('topicsChips');
+  if (!container) return;
+  fetch('tags.json?v=' + Date.now())
+    .then(r => r.json())
+    .then(d => {
+      const order = d._meta.tagOrder;
+      container.innerHTML = order.map(t => {
+        const tg = d.tags[t];
+        return '<a class="topic-chip" href="tags.html#' + t + '" style="--chip-color:' + tg.color + '">' +
+          '<span class="chip-dot"></span>' + tg.label +
+          ' <span class="chip-count">' + tg.entries.length + '</span></a>';
+      }).join('');
+    })
+    .catch(() => { container.innerHTML = '<a class="topic-chip" href="tags.html">Browse all topics &rarr;</a>'; });
 })();
 </script>
 
