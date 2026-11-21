@@ -1,0 +1,719 @@
+{
+  "_meta": {
+    "version": "2026-11-21-v1",
+    "description": "Search index for the Mmnd Observatory. Flat list of searchable entries built from code-data.json, tags.json, timeline.json, and the synthesis stages. Loaded by the header search box for client-side fuzzy match. Regenerate this file with scripts/phase5_build_search_index.py after changing any source registry.",
+    "entryCount": 71
+  },
+  "entries": [
+    {
+      "id": "card:erdos",
+      "title": "1. Erdős unit distance conjecture (disproved)",
+      "snippet": "Erdős 1946 conjectured the maximum unit-distance pairs among n points is maximized by a square grid. AI disproved by algebraic-number-theore…",
+      "page": "sources.html",
+      "anchor": "erdos",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "1. erdős unit distance conjecture (disproved) erdős 1946 conjectured the maximum unit-distance pairs among n points is maximized by a square grid. ai disproved by algebraic-number-theoretic constructions. u(n) = o\\left(n^{1 + \\frac{c}{\\log \\log n}}\\right)"
+    },
+    {
+      "id": "card:ugc",
+      "title": "2. Unique Games Conjecture (Lean-verified)",
+      "snippet": "Khot 2001. Pins SDP relaxation as optimal approximation under P != NP.",
+      "page": "sources.html",
+      "anchor": "ugc",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "2. unique games conjecture (lean-verified) khot 2001. pins sdp relaxation as optimal approximation under p != np. \\forall \\varepsilon, \\delta > 0, \\exists k : \\text{np-hard to decide } \\mathrm{sat}_{\\max} \\geq 1-\\varepsilon \\text{ vs. } \\leq \\delta"
+    },
+    {
+      "id": "card:schrodinger",
+      "title": "3. Schrödinger equation",
+      "snippet": "The fundamental equation of non-relativistic quantum mechanics.",
+      "page": "sources.html",
+      "anchor": "schrodinger",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "3. schrödinger equation the fundamental equation of non-relativistic quantum mechanics. i\\hbar \\frac{\\partial}{\\partial t} \\psi = \\left[ -\\frac{\\hbar^2}{2m}\\nabla^2 + v \\right] \\psi"
+    },
+    {
+      "id": "card:attention",
+      "title": "4. Scaled dot-product attention",
+      "snippet": "The core operation of modern transformer models.",
+      "page": "sources.html",
+      "anchor": "attention",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "4. scaled dot-product attention the core operation of modern transformer models. \\mathrm{attention}(q,k,v) = \\mathrm{softmax}\\left(\\frac{qk^t}{\\sqrt{d_k}}\\right)v"
+    },
+    {
+      "id": "card:godel",
+      "title": "5. Gödel/Turing computability bound",
+      "snippet": "Absolute bound on automated theorem proving. Even AI cannot escape this.",
+      "page": "sources.html",
+      "anchor": "godel",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "5. gödel/turing computability bound absolute bound on automated theorem proving. even ai cannot escape this. \\forall f : \\exists t : f \\nvdash t \\land f \\nvdash \\neg t"
+    },
+    {
+      "id": "card:kolmogorov",
+      "title": "6. Kolmogorov complexity",
+      "snippet": "Formalizes AI creativity as discovery of low-complexity bridges between distant concepts.",
+      "page": "sources.html",
+      "anchor": "kolmogorov",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "6. kolmogorov complexity formalizes ai creativity as discovery of low-complexity bridges between distant concepts. k(x) = \\min \\{ |p| : u(p) = x \\}"
+    },
+    {
+      "id": "card:holographic",
+      "title": "7. Bekenstein-Hawking entropy",
+      "snippet": "Black hole entropy is proportional to horizon area. The holographic principle's foundation.",
+      "page": "sources.html",
+      "anchor": "holographic",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "7. bekenstein-hawking entropy black hole entropy is proportional to horizon area. the holographic principle's foundation. s_{\\mathrm{bh}} = \\frac{k_b a}{4 \\ell_p^2}"
+    },
+    {
+      "id": "card:teleportation",
+      "title": "8. Teleportation vs. path-finding",
+      "snippet": "AI teleports from premise to theorem; human extracts the path.",
+      "page": "sources.html",
+      "anchor": "teleportation",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "8. teleportation vs. path-finding ai teleports from premise to theorem; human extracts the path. g^* = \\mathrm{model}_\\theta(\\mathrm{prompt}), \\quad s_0 \\xrightarrow{\\text{one-shot}} g^*"
+    },
+    {
+      "id": "card:bottleneck",
+      "title": "9. Information bottleneck",
+      "snippet": "Compress X into Z while preserving information about Y.",
+      "page": "sources.html",
+      "anchor": "bottleneck",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "9. information bottleneck compress x into z while preserving information about y. \\min_{p(z|x)} i(x;z) - \\beta i(z;y)"
+    },
+    {
+      "id": "card:loeb",
+      "title": "10. Löb's theorem",
+      "snippet": "If a system proves that provability implies truth, it proves everything. The self-trust trap.",
+      "page": "sources.html",
+      "anchor": "loeb",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "10. löb's theorem if a system proves that provability implies truth, it proves everything. the self-trust trap. \\vdash \\box(\\box p \\to p) \\implies \\vdash \\box p"
+    },
+    {
+      "id": "card:unitary",
+      "title": "11. Unitary Synthesis (refuted)",
+      "snippet": "Aaronson-Kuperberg 2007 conjecture refuted by construction.",
+      "page": "sources.html",
+      "anchor": "unitary",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "11. unitary synthesis (refuted) aaronson-kuperberg 2007 conjecture refuted by construction. \\exists f : \\{0,1\\}^* \\to \\{0,1\\} : \\forall u \\in u(2^n), |c^f| = \\mathrm{poly}(n)"
+    },
+    {
+      "id": "card:aixi",
+      "title": "12. AIXI (universal AI)",
+      "snippet": "The theoretically optimal universal AI. Not implementable but defines the ceiling.",
+      "page": "sources.html",
+      "anchor": "aixi",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "12. aixi (universal ai) the theoretically optimal universal ai. not implementable but defines the ceiling. a^* = \\arg\\max_a \\sum_{\\mu} 2^{-|\\mu|} \\sum_o v(o) p(o|a,\\mu)"
+    },
+    {
+      "id": "card:lattice_duality",
+      "title": "13. Lattice Duality: When counting one way is hard, count the other way",
+      "snippet": "A 1982 competition problem asks for an infinite weighted sum over all plane points, where each weight is a Gaussian times the count of latti…",
+      "page": "sources.html",
+      "anchor": "lattice_duality",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "13. lattice duality: when counting one way is hard, count the other way a 1982 competition problem asks for an infinite weighted sum over all plane points, where each weight is a gaussian times the count of lattice points inside a circle through that point. the breakthrough: flip the counting order. instead of asking how many lattice points are in each circle, ask which circles contain each lattice point. the discontinuous step function becomes a smooth polar integral, yielding the closed form pi(2g-1)^2 where g = sum e^{-k^2}. \\sum_{(x,y)} a(x,y) e^{-(x^2+y^2)} = \\pi \\left( \\sum_{k=0}^{\\infty} e^{-k^2} \\cdot 2 - 1 \\right)^2 = \\pi(2g-1)^2"
+    },
+    {
+      "id": "card:peptide_sequencing",
+      "title": "14. Peptide Sequencing: From mass spectrum to protein identity",
+      "snippet": "Computational proteomics identifies proteins by matching experimental mass spectra against theoretical databases. A peptide fragments along …",
+      "page": "sources.html",
+      "anchor": "peptide_sequencing",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "14. peptide sequencing: from mass spectrum to protein identity computational proteomics identifies proteins by matching experimental mass spectra against theoretical databases. a peptide fragments along its backbone (cid), producing b/y ions whose mass differences reveal the sequence. the peptide spectrum match (psm) score = -10*log10(p) quantifies confidence that the match is not random. this bridges physics (collision-induced dissociation), computation (database search), and statistics (hypothesis testing). \\text{psm score} = -10 \\log_{10}(p), \\quad p = p(\\text{random match} | \\text{null hypothesis})"
+    },
+    {
+      "id": "card:lean_riemann",
+      "title": "15. Lean, AlphaProof & the Riemann Zero-Free Region",
+      "snippet": "Formal interactive theorem proving (Lean 4) pairs a small deterministic proof kernel with a stochastic LLM token predictor. The LLM proposes…",
+      "page": "sources.html",
+      "anchor": "lean_riemann",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "15. lean, alphaproof & the riemann zero-free region formal interactive theorem proving (lean 4) pairs a small deterministic proof kernel with a stochastic llm token predictor. the llm proposes tactics as text; the kernel compiles each step against hard-coded rules of inference and returns true/false. alphaproof treats the kernel as a deterministic reward function and self-plays, generating and verifying proofs without human data. the card's theorem — a zero-free region for the riemann zeta function at re(s) >= 7/8 with im(s) != 0 — is the kind of statement mathlib and the tao/kontorovich pnt_plus project formalize. if it compiles, it is 100% correct; no human review required. \\zeta(s) \\neq 0 \\quad \\text{for } \\re(s) \\geq \\tfrac{7}{8},\\ \\im(s) \\neq 0"
+    },
+    {
+      "id": "card:rh_thetalift",
+      "title": "16. The √X Theta-Lift Chain: RH via Automorphic Multiplicity",
+      "snippet": "The Riemann Hypothesis is the optimal-control problem on the count of primes of a given size. Factored through the Chebyshev function ψ(X) =…",
+      "page": "sources.html",
+      "anchor": "rh_thetalift",
+      "kind": "card",
+      "kindLabel": "Source card",
+      "text": "16. the √x theta-lift chain: rh via automorphic multiplicity the riemann hypothesis is the optimal-control problem on the count of primes of a given size. factored through the chebyshev function ψ(x) = σ_{n≤x} λ(n) (the von mangoldt sum), the prime number theorem is ψ(x) ~ x (hadamard / de la vallée-poussin, 1896), and rh is the stronger bound ψ(x) = x + o(x^{1/2} log² x) — the √x is exactly the rh content. in a function-field analogue, stepanov's argument resolves rh using a divisor carrying multiplicity; over the integers, multiplicity is hard to find (“differentiating whole numbers”). the 2026 announcement reports a proof, discovered with claude, that ports stepanov's multiplicity natively into the automorphic setting by chaining theta lifts u(x₀) → u(x₁) → ⋯ → u(x_m) between totally definite unitary groups, each lift raising the multiplicity by one. the chain length is m = √x — the only length that collapses the error into the rh band. the argument is fully formalized in lean (14 tarball parts); the grh extension follows, and the extended rh is expected with more time. \\psi(x) := \\sum_{n \\leq x} \\lambda(n) = x + o\\!\\left(x^{1/2}\\log^2 x\\right) \\;\\longleftrightarrow\\; \\text{rh}"
+    },
+    {
+      "id": "tag:riemann",
+      "title": "Riemann & primes",
+      "snippet": "The zeta function, the Riemann Hypothesis, prime counting, and the theta-lift chain that targets RH. The thread from PNT (1896) to a 2026 Le…",
+      "page": "tags.html",
+      "anchor": "riemann",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "riemann & primes riemann the zeta function, the riemann hypothesis, prime counting, and the theta-lift chain that targets rh. the thread from pnt (1896) to a 2026 lean-formalized proof announcement. topic tag"
+    },
+    {
+      "id": "tag:formal-verification",
+      "title": "Formal verification",
+      "snippet": "Lean, Mathlib, AlphaProof — machine-checked mathematics. Where proof meets computation, and the computer becomes the most powerful theorem p…",
+      "page": "tags.html",
+      "anchor": "formal-verification",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "formal verification formal-verification lean, mathlib, alphaproof — machine-checked mathematics. where proof meets computation, and the computer becomes the most powerful theorem prover on earth. topic tag"
+    },
+    {
+      "id": "tag:ml-theory",
+      "title": "ML theory",
+      "snippet": "The mathematical foundations of machine learning: attention, information bottleneck, Kolmogorov complexity, AIXI, embeddings, loss landscape…",
+      "page": "tags.html",
+      "anchor": "ml-theory",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "ml theory ml-theory the mathematical foundations of machine learning: attention, information bottleneck, kolmogorov complexity, aixi, embeddings, loss landscapes. what learning actually is. topic tag"
+    },
+    {
+      "id": "tag:dynamical-systems",
+      "title": "Dynamical systems",
+      "snippet": "Differential equations, PINNs, Hamiltonian and Neural ODEs, SINDy. Discovering the equation that governs a system from observation alone.",
+      "page": "tags.html",
+      "anchor": "dynamical-systems",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "dynamical systems dynamical-systems differential equations, pinns, hamiltonian and neural odes, sindy. discovering the equation that governs a system from observation alone. topic tag"
+    },
+    {
+      "id": "tag:complexity",
+      "title": "Complexity & combinatorics",
+      "snippet": "Hard problems and the boundaries of efficient computation: Erdős conjectures, Unique Games, Unitary Synthesis, lattice counting duality.",
+      "page": "tags.html",
+      "anchor": "complexity",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "complexity & combinatorics complexity hard problems and the boundaries of efficient computation: erdős conjectures, unique games, unitary synthesis, lattice counting duality. topic tag"
+    },
+    {
+      "id": "tag:quantum",
+      "title": "Quantum & cosmos",
+      "snippet": "Quantum information, holography, and the physics of information at the boundary. Teleportation, Bekenstein-Hawking entropy, and the unitary-…",
+      "page": "tags.html",
+      "anchor": "quantum",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "quantum & cosmos quantum quantum information, holography, and the physics of information at the boundary. teleportation, bekenstein-hawking entropy, and the unitary-group frontier. topic tag"
+    },
+    {
+      "id": "tag:foundations",
+      "title": "Foundations & philosophy",
+      "snippet": "What can be known, what can be computed, and what an optimal agent would do. Computability, self-reference, universal AI, and the limits of …",
+      "page": "tags.html",
+      "anchor": "foundations",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "foundations & philosophy foundations what can be known, what can be computed, and what an optimal agent would do. computability, self-reference, universal ai, and the limits of formal reason. topic tag"
+    },
+    {
+      "id": "tag:chemistry",
+      "title": "Chemistry & molecules",
+      "snippet": "From mass spectra to protein identity: peptide sequencing, equivariant molecular transformers (PET-MAD), and the molecular-mathematical inte…",
+      "page": "tags.html",
+      "anchor": "chemistry",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "chemistry & molecules chemistry from mass spectra to protein identity: peptide sequencing, equivariant molecular transformers (pet-mad), and the molecular-mathematical interface. topic tag"
+    },
+    {
+      "id": "tag:physics-ml",
+      "title": "Physics + ML",
+      "snippet": "Physics-informed machine learning: PINNs, SINDy surrogates, differentiable fluid dynamics (HydroGym), and RL for spatially-distributed contr…",
+      "page": "tags.html",
+      "anchor": "physics-ml",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "physics + ml physics-ml physics-informed machine learning: pinns, sindy surrogates, differentiable fluid dynamics (hydrogym), and rl for spatially-distributed control. topic tag"
+    },
+    {
+      "id": "tag:infrastructure",
+      "title": "Infrastructure & deployment",
+      "snippet": "The AI-era deployment bottleneck: Weight-Space Programming (LLMs that read and write neural weights) and Infrastructure from Code (the cloud…",
+      "page": "tags.html",
+      "anchor": "infrastructure",
+      "kind": "tag",
+      "kindLabel": "Topic",
+      "text": "infrastructure & deployment infrastructure the ai-era deployment bottleneck: weight-space programming (llms that read and write neural weights) and infrastructure from code (the cloud compiler analogy). topic tag"
+    },
+    {
+      "id": "timeline:0",
+      "title": "1859 · Riemann poses the Hypothesis",
+      "snippet": "Bernhard Riemann's memoir 'On the Number of Primes Less Than a Given Magnitude' introduces the zeta function ζ(s), identifies the non-trivia…",
+      "page": "playgrounds.html",
+      "anchor": "1",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1859 riemann poses the hypothesis bernhard riemann's memoir 'on the number of primes less than a given magnitude' introduces the zeta function ζ(s), identifies the non-trivial zeros, and conjectures they all lie on the critical line re(s) = 1/2. the conjecture that shapes the next 167 years of number theory. timeline history milestone"
+    },
+    {
+      "id": "timeline:1",
+      "title": "1896 · Hadamard & de la Vallée-Poussin prove the Prime Number Theorem",
+      "snippet": "Independently, using the non-vanishing of ζ(s) on Re(s) = 1, both mathematicians prove π(x) ~ Li(x). The PNT is the first great triumph of a…",
+      "page": "playgrounds.html",
+      "anchor": "2",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1896 hadamard & de la vallée-poussin prove the prime number theorem independently, using the non-vanishing of ζ(s) on re(s) = 1, both mathematicians prove π(x) ~ li(x). the pnt is the first great triumph of analytic number theory — and the first hint that the zeta zeros control prime distribution. timeline history milestone"
+    },
+    {
+      "id": "timeline:2",
+      "title": "1900 · Hilbert's 8th problem",
+      "snippet": "David Hilbert lists the Riemann Hypothesis as the 8th of his 23 problems at the Paris International Congress. It would later become one of t…",
+      "page": "sources.html",
+      "anchor": "rh_thetalift",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1900 hilbert's 8th problem david hilbert lists the riemann hypothesis as the 8th of his 23 problems at the paris international congress. it would later become one of the seven clay millennium prize problems (2000), each carrying a $1m bounty — rh is the only one still open. timeline history milestone"
+    },
+    {
+      "id": "timeline:3",
+      "title": "1914 · Hardy proves infinitely many zeros on the critical line",
+      "snippet": "G. H. Hardy proves that ζ(s) has infinitely many zeros on Re(s) = 1/2. The critical line is not barren — but whether ALL non-trivial zeros l…",
+      "page": "playgrounds.html",
+      "anchor": "1",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1914 hardy proves infinitely many zeros on the critical line g. h. hardy proves that ζ(s) has infinitely many zeros on re(s) = 1/2. the critical line is not barren — but whether all non-trivial zeros lie there remains open. timeline history milestone"
+    },
+    {
+      "id": "timeline:4",
+      "title": "1931 · Gödel's incompleteness theorems",
+      "snippet": "Kurt Gödel proves that any sufficiently strong formal system is either incomplete or inconsistent. The dream of a complete mechanical founda…",
+      "page": "sources.html",
+      "anchor": "godel",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1931 gödel's incompleteness theorems kurt gödel proves that any sufficiently strong formal system is either incomplete or inconsistent. the dream of a complete mechanical foundation for mathematics collapses. the result reshapes logic, computation, and — a century later — the ambitions of ai theorem-proving. timeline history milestone"
+    },
+    {
+      "id": "timeline:5",
+      "title": "1936 · Turing defines computability",
+      "snippet": "Alan Turing's 'On Computable Numbers' introduces the a-machine (Turing machine), formalizing what can be computed. The Halting Problem estab…",
+      "page": "sources.html",
+      "anchor": "godel",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1936 turing defines computability alan turing's 'on computable numbers' introduces the a-machine (turing machine), formalizing what can be computed. the halting problem establishes a hard limit on what any algorithm can decide. the theoretical bedrock of every machine-learning system that follows. timeline history milestone"
+    },
+    {
+      "id": "timeline:6",
+      "title": "1955 · Skewes' number: where π(x) overtakes Li(x)",
+      "snippet": "Assuming RH, Skewes shows the first sign change of π(x) − Li(x) occurs below e^(e^(e^79)) — an astronomically large bound. Littlewood had pr…",
+      "page": "playgrounds.html",
+      "anchor": "2",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1955 skewes' number: where π(x) overtakes li(x) assuming rh, skewes shows the first sign change of π(x) − li(x) occurs below e^(e^(e^79)) — an astronomically large bound. littlewood had proved (1914) the difference changes sign infinitely often; skewes quantified how far out the first crossing hides. a vivid reminder that 'true for all checked x' is not 'true'. timeline history milestone"
+    },
+    {
+      "id": "timeline:7",
+      "title": "1967 · Langlands launches the functoriality program",
+      "snippet": "Robert Langlands's letter to André Weil proposes a vast web of correspondences between automorphic forms and Galois representations — the 'L…",
+      "page": "deep-dive.html",
+      "anchor": "sec_langlands",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1967 langlands launches the functoriality program robert langlands's letter to andré weil proposes a vast web of correspondences between automorphic forms and galois representations — the 'langlands program'. it would take six decades to mature, and wong's 2026 pipeline sits squarely in its lineage. timeline history milestone"
+    },
+    {
+      "id": "timeline:8",
+      "title": "1994 · Wiles proves Fermat's Last Theorem",
+      "snippet": "Andrew Wiles (with Richard Taylor closing the gap) proves Fermat's Last Theorem via modularity of semistable elliptic curves. A 358-year-old…",
+      "page": "deep-dive.html",
+      "anchor": "sec_langlands",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1994 wiles proves fermat's last theorem andrew wiles (with richard taylor closing the gap) proves fermat's last theorem via modularity of semistable elliptic curves. a 358-year-old problem falls to the machinery of the langlands program — proof that deep conjecture can crack the impenetrable. timeline history milestone"
+    },
+    {
+      "id": "timeline:9",
+      "title": "1996 · HydroGym's intellectual ancestor: control of Navier-Stokes",
+      "snippet": "The mathematical foundations for feedback control of fluid systems — adjoint-based optimization, reduced-order modeling — mature through the…",
+      "page": "deep-dive.html",
+      "anchor": "sec8",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "1996 hydrogym's intellectual ancestor: control of navier-stokes the mathematical foundations for feedback control of fluid systems — adjoint-based optimization, reduced-order modeling — mature through the 1990s. two decades later, differentiable simulators and rl would turn these into hydrogym: physics-informed rl for spatially-distributed control. timeline history milestone"
+    },
+    {
+      "id": "timeline:10",
+      "title": "2000 · Clay Mathematics Institute names RH a Millennium Problem",
+      "snippet": "The Clay Mathematics Institute announces seven Millennium Prize Problems, each with a $1M bounty. The Riemann Hypothesis is the only one tha…",
+      "page": "sources.html",
+      "anchor": "rh_thetalift",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "2000 clay mathematics institute names rh a millennium problem the clay mathematics institute announces seven millennium prize problems, each with a $1m bounty. the riemann hypothesis is the only one that is both a hilbert problem (1900) and a millennium problem (2000). as of 2026, six remain open; poincaré was solved (2003). timeline history milestone"
+    },
+    {
+      "id": "timeline:11",
+      "title": "2013 · Lean's first release",
+      "snippet": "Leonardo de Moura releases Lean, an interactive theorem prover built on dependent type theory. Unlike earlier systems, Lean is designed to b…",
+      "page": "sources.html",
+      "anchor": "lean_riemann",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "2013 lean's first release leonardo de moura releases lean, an interactive theorem prover built on dependent type theory. unlike earlier systems, lean is designed to be both a programming language and a proof assistant — and to be pleasant enough that mathematicians will actually use it. mathlib, its community library, begins to grow. timeline history milestone"
+    },
+    {
+      "id": "timeline:12",
+      "title": "Jun 2017 · Attention is all you need",
+      "snippet": "Vaswani et al. publish 'Attention Is All You Need', introducing the Transformer. The scaled dot-product attention mechanism (card 4) becomes…",
+      "page": "sources.html",
+      "anchor": "attention",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "jun 2017 attention is all you need vaswani et al. publish 'attention is all you need', introducing the transformer. the scaled dot-product attention mechanism (card 4) becomes the load-bearing primitive of modern ml. within six years it underwrites gpt-4, gemini, and the first credible ai-mathematicians. timeline history milestone"
+    },
+    {
+      "id": "timeline:13",
+      "title": "2018 · Brunton, Proctor & Kutz publish SINDy",
+      "snippet": "Sparse Identification of Nonlinear Dynamics (SINDy) formalizes the discovery of governing equations from data via sparse regression. The dee…",
+      "page": "deep-dive.html",
+      "anchor": "sec3",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "2018 brunton, proctor & kutz publish sindy sparse identification of nonlinear dynamics (sindy) formalizes the discovery of governing equations from data via sparse regression. the deep-dive §3 documents the method; the physics-ml curriculum animates it. a bridge between data-driven learning and first-principles physics. timeline history milestone"
+    },
+    {
+      "id": "timeline:14",
+      "title": "2020 · Mathlib crosses 100k theorems",
+      "snippet": "The Lean Mathlib community library passes 100,000 proven theorems. By 2026 it will exceed 1.5M lines of formalized mathematics, including me…",
+      "page": "sources.html",
+      "anchor": "lean_riemann",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "2020 mathlib crosses 100k theorems the lean mathlib community library passes 100,000 proven theorems. by 2026 it will exceed 1.5m lines of formalized mathematics, including measure theory, topology, and the foundations needed for analytic number theory. the largest corpus of machine-checked math ever assembled. timeline history milestone"
+    },
+    {
+      "id": "timeline:15",
+      "title": "Nov 2022 · ChatGPT: RLHF reaches the mainstream",
+      "snippet": "OpenAI releases ChatGPT, the first consumer product shaped end-to-end by Reinforcement Learning from Human Feedback (RLHF). The three-stage …",
+      "page": "deep-dive.html",
+      "anchor": "sec7",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "nov 2022 chatgpt: rlhf reaches the mainstream openai releases chatgpt, the first consumer product shaped end-to-end by reinforcement learning from human feedback (rlhf). the three-stage pipeline — sft, reward model, ppo — documented in deep-dive §7 becomes the default recipe for every frontier llm that follows. timeline history milestone"
+    },
+    {
+      "id": "timeline:16",
+      "title": "Jul 2024 · AlphaProof: AI silver-medalist at the IMO",
+      "snippet": "DeepMind's AlphaProof, built on Lean, solves 4 of 6 problems at the 2024 International Mathematical Olympiad — silver-medalist level. The fi…",
+      "page": "sources.html",
+      "anchor": "lean_riemann",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "jul 2024 alphaproof: ai silver-medalist at the imo deepmind's alphaproof, built on lean, solves 4 of 6 problems at the 2024 international mathematical olympiad — silver-medalist level. the first credible demonstration that an llm-augmented theorem prover can do competition mathematics. card 15 places this on the road to formal rh. timeline history milestone"
+    },
+    {
+      "id": "timeline:17",
+      "title": "Mar 2025 · Lean formalizes the zero-free region Re(s) ≥ 7/8",
+      "snippet": "The Mathlib community formalizes a Riemann zeta zero-free region extending to Re(s) ≥ 7/8 (with Im(s) ≠ 0). A machine-checked strengthening …",
+      "page": "sources.html",
+      "anchor": "lean_riemann",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "mar 2025 lean formalizes the zero-free region re(s) ≥ 7/8 the mathlib community formalizes a riemann zeta zero-free region extending to re(s) ≥ 7/8 (with im(s) ≠ 0). a machine-checked strengthening of the classical de la vallée-poussin bound. the first lean proof in the chain that targets rh itself — card 15 documents the figure. timeline history milestone"
+    },
+    {
+      "id": "timeline:18",
+      "title": "Sep 2025 · HydroGym: differentiable fluids + G-PPO",
+      "snippet": "The HydroGym framework ships: differentiable Navier-Stokes solvers paired with Gradient-Enhanced PPO (G-PPO) for active control of bluff-bod…",
+      "page": "deep-dive.html",
+      "anchor": "sec8",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "sep 2025 hydrogym: differentiable fluids + g-ppo the hydrogym framework ships: differentiable navier-stokes solvers paired with gradient-enhanced ppo (g-ppo) for active control of bluff-body flows. zero-shot transfer from 2d training to 3d deployment. deep-dive §8 documents the four-capability stack. timeline history milestone"
+    },
+    {
+      "id": "timeline:19",
+      "title": "Jan 2026 · Weight-Space Programming: LLMs read & write weights",
+      "snippet": "WSP formalizes the ability of an LLM to directly read and modify the weights of another network — editing capabilities without retraining. D…",
+      "page": "deep-dive.html",
+      "anchor": "sec_wsp",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "jan 2026 weight-space programming: llms read & write weights wsp formalizes the ability of an llm to directly read and modify the weights of another network — editing capabilities without retraining. deep-dive §wsp documents the mathematical formulation and resource analysis. the boundary between 'prompting' and 'surgery' begins to blur. timeline history milestone"
+    },
+    {
+      "id": "timeline:20",
+      "title": "Mar 2026 · Wong's Ramanujan pipeline: continuous regularization",
+      "snippet": "Tannan Wong proposes a program Beyond Endoscopy that resolves the classical divergence in Arthur's trace formula by replacing sharp truncati…",
+      "page": "deep-dive.html",
+      "anchor": "sec_langlands",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "mar 2026 wong's ramanujan pipeline: continuous regularization tannan wong proposes a program beyond endoscopy that resolves the classical divergence in arthur's trace formula by replacing sharp truncation with continuous regularization. the pipeline — tate's adelic summation, the noise-free tauberian limit — is documented in deep-dive §langlands with executable python. 'and yet, what else could it be?' timeline history milestone"
+    },
+    {
+      "id": "timeline:21",
+      "title": "Sep 2026 · Infrastructure from Code: the AI-era deployment bottleneck",
+      "snippet": "The IfC framework identifies the bottleneck shift from writing code to orchestrating it. Dual-language TypeScript + Go, the cloud-compiler a…",
+      "page": "deep-dive.html",
+      "anchor": "sec_ifc",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "sep 2026 infrastructure from code: the ai-era deployment bottleneck the ifc framework identifies the bottleneck shift from writing code to orchestrating it. dual-language typescript + go, the cloud-compiler analogy. deep-dive §ifc documents the four capabilities and the legacy-vs-ifc side-by-side. timeline history milestone"
+    },
+    {
+      "id": "timeline:22",
+      "title": "Nov 2026 · The √X theta-lift chain: a length-m = √X approach to RH",
+      "snippet": "Card 16 proposes a chain of theta lifts U(X₀) → U(X₁) → … → U(X_m) with m = √X between totally definite unitary groups. Each lift raises a S…",
+      "page": "sources.html",
+      "anchor": "rh_thetalift",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "nov 2026 the √x theta-lift chain: a length-m = √x approach to rh card 16 proposes a chain of theta lifts u(x₀) → u(x₁) → … → u(x_m) with m = √x between totally definite unitary groups. each lift raises a stepanov-style multiplicity by one; √x is the only length that collapses the error into the rh band. playground 3 visualizes the √x band directly. whether the full chain yields rh remains open. timeline history milestone"
+    },
+    {
+      "id": "timeline:23",
+      "title": "Nov 2026 · Mmnd Observatory opens the playgrounds",
+      "snippet": "The observatory ships three interactive math playgrounds — the Riemann zeta-zero explorer, the prime-counting staircase, and the von Mangold…",
+      "page": "playgrounds.html",
+      "anchor": "1",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "nov 2026 mmnd observatory opens the playgrounds the observatory ships three interactive math playgrounds — the riemann zeta-zero explorer, the prime-counting staircase, and the von mangoldt staircase with its √x rh band. for the first time a visitor can scrub along the critical line and watch ζ cross zero in their browser. phase 2 of the build. timeline history milestone"
+    },
+    {
+      "id": "timeline:24",
+      "title": "Nov 2026 · Cross-cutting topic tags thread the observatory",
+      "snippet": "Ten topic tags — riemann, formal-verification, ml-theory, dynamical-systems, complexity, quantum, foundations, chemistry, physics-ml, infras…",
+      "page": "tags.html",
+      "anchor": "",
+      "kind": "timeline",
+      "kindLabel": "Timeline",
+      "text": "nov 2026 cross-cutting topic tags thread the observatory ten topic tags — riemann, formal-verification, ml-theory, dynamical-systems, complexity, quantum, foundations, chemistry, physics-ml, infrastructure — link 50 entries across every page. the observatory becomes navigable by theme, not just by page. phase 3 of the build. timeline history milestone"
+    },
+    {
+      "id": "stage:1",
+      "title": "Stage 1 · Primes, and the mystery of their distribution",
+      "snippet": "The fundamental theorem of arithmetic; π(x) the prime staircase; Riemann's explicit formula.",
+      "page": "convergence.html",
+      "anchor": "stage1",
+      "kind": "stage",
+      "kindLabel": "Synthesis",
+      "text": "primes, and the mystery of their distribution the fundamental theorem of arithmetic; π(x) the prime staircase; riemann's explicit formula. primes distribution pi(x) riemann explicit formula fundamental theorem arithmetic staircase convergence synthesis stage"
+    },
+    {
+      "id": "stage:2",
+      "title": "Stage 2 · Zeta, and the line where the zeros must lie",
+      "snippet": "The Riemann Hypothesis: all non-trivial zeros on Re(s)=1/2. The √x error term.",
+      "page": "convergence.html",
+      "anchor": "stage2",
+      "kind": "stage",
+      "kindLabel": "Synthesis",
+      "text": "zeta, and the line where the zeros must lie the riemann hypothesis: all non-trivial zeros on re(s)=1/2. the √x error term. zeta riemann hypothesis zeros critical line strip re(s) square root sqrt x error term convergence synthesis stage"
+    },
+    {
+      "id": "stage:3",
+      "title": "Stage 3 · Formal proof, and the computer as the most powerful prover on Earth",
+      "snippet": "Lean, Mathlib, AlphaProof — formal verification from Riemann's pencil to a 2025 zero-free region.",
+      "page": "convergence.html",
+      "anchor": "stage3",
+      "kind": "stage",
+      "kindLabel": "Synthesis",
+      "text": "formal proof, and the computer as the most powerful prover on earth lean, mathlib, alphaproof — formal verification from riemann's pencil to a 2025 zero-free region. formal proof lean mathlib alphaproof zero-free region verification theorem prover 7/8 convergence synthesis stage"
+    },
+    {
+      "id": "stage:4",
+      "title": "Stage 4 · LLM reasoners, and the machine that can hold a proof in mind",
+      "snippet": "Attention, Löb's theorem, AIXI, Weight-Space Programming — from verification to generation.",
+      "page": "convergence.html",
+      "anchor": "stage4",
+      "kind": "stage",
+      "kindLabel": "Synthesis",
+      "text": "llm reasoners, and the machine that can hold a proof in mind attention, löb's theorem, aixi, weight-space programming — from verification to generation. llm transformer attention lob aixi weight-space programming wsp reasoning prover ai convergence synthesis stage"
+    },
+    {
+      "id": "stage:5",
+      "title": "Stage 5 · Reinforcement learning, and the shaping of every modern LLM",
+      "snippet": "Bellman equation, RLHF, PPO, HydroGym — the closed loop from consequence to alignment.",
+      "page": "convergence.html",
+      "anchor": "stage5",
+      "kind": "stage",
+      "kindLabel": "Synthesis",
+      "text": "reinforcement learning, and the shaping of every modern llm bellman equation, rlhf, ppo, hydrogym — the closed loop from consequence to alignment. reinforcement learning rlhf ppo bellman hydrogym reward value function alignment agent convergence synthesis stage"
+    },
+    {
+      "id": "stage:6",
+      "title": "Stage 6 · SINDy, and the discovery of the equation from observation alone",
+      "snippet": "Sparse Identification of Nonlinear Dynamics — recovering governing equations from data.",
+      "page": "convergence.html",
+      "anchor": "stage6",
+      "kind": "stage",
+      "kindLabel": "Synthesis",
+      "text": "sindy, and the discovery of the equation from observation alone sparse identification of nonlinear dynamics — recovering governing equations from data. sindy sparse identification nonlinear dynamics governing equation discovery brunton physics convergence synthesis stage"
+    },
+    {
+      "id": "page:index.html",
+      "title": "Home",
+      "snippet": "The Mmnd Observatory landing page.",
+      "page": "index.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "home the mmnd observatory landing page. home landing index observatory page"
+    },
+    {
+      "id": "page:sources.html",
+      "title": "Sources — the 16 cards",
+      "snippet": "Browse all 16 source cards across math, ML, physics, chemistry.",
+      "page": "sources.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "sources — the 16 cards browse all 16 source cards across math, ml, physics, chemistry. sources cards browse all expressions page"
+    },
+    {
+      "id": "page:playgrounds.html",
+      "title": "Playgrounds — interactive math",
+      "snippet": "Riemann zeta-zero explorer, prime-counting staircase, von Mangoldt RH band.",
+      "page": "playgrounds.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "playgrounds — interactive math riemann zeta-zero explorer, prime-counting staircase, von mangoldt rh band. playgrounds interactive zeta zeros primes mangoldt rh band page"
+    },
+    {
+      "id": "page:tags.html",
+      "title": "Topics — browse by tag",
+      "snippet": "10 cross-cutting topic tags threading every page.",
+      "page": "tags.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "topics — browse by tag 10 cross-cutting topic tags threading every page. topics tags browse filter threads page"
+    },
+    {
+      "id": "page:timeline.html",
+      "title": "Timeline — the research log",
+      "snippet": "25 dated milestones from 1859 to 2026.",
+      "page": "timeline.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "timeline — the research log 25 dated milestones from 1859 to 2026. timeline history log milestones research page"
+    },
+    {
+      "id": "page:convergence.html",
+      "title": "The Convergence — synthesis",
+      "snippet": "The 6-stage argument braiding primes, zeta, proof, LLMs, RL, SINDy.",
+      "page": "convergence.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "the convergence — synthesis the 6-stage argument braiding primes, zeta, proof, llms, rl, sindy. convergence synthesis argument primes zeta proof llm rl sindy page"
+    },
+    {
+      "id": "page:deep-dive.html",
+      "title": "Deep Dives",
+      "snippet": "SINDy, RLHF, HydroGym, WSP, IfC, Langlands/Wong.",
+      "page": "deep-dive.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "deep dives sindy, rlhf, hydrogym, wsp, ifc, langlands/wong. deep-dive detailed sections sindy rlhf hydrogym wsp ifc langlands wong page"
+    },
+    {
+      "id": "page:rl-deep-dive.html",
+      "title": "RL Deep-Dive",
+      "snippet": "The full reinforcement-learning curriculum.",
+      "page": "rl-deep-dive.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "rl deep-dive the full reinforcement-learning curriculum. rl deep-dive reinforcement learning curriculum page"
+    },
+    {
+      "id": "page:physics-ml.html",
+      "title": "Physics+ML",
+      "snippet": "Physics-informed ML: 20 clips.",
+      "page": "physics-ml.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "physics+ml physics-informed ml: 20 clips. physics ml piml informed 20 clips page"
+    },
+    {
+      "id": "page:chem-math.html",
+      "title": "Chem-Math",
+      "snippet": "Molecular structures and math expressions.",
+      "page": "chem-math.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "chem-math molecular structures and math expressions. chemistry math molecules expressions page"
+    },
+    {
+      "id": "page:demos.html",
+      "title": "Demos",
+      "snippet": "Interactive demonstrations.",
+      "page": "demos.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "demos interactive demonstrations. demos interactive demonstrations page"
+    },
+    {
+      "id": "page:about.html",
+      "title": "About",
+      "snippet": "The manifesto and observatory vision.",
+      "page": "about.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "about the manifesto and observatory vision. about manifesto vision observatory page"
+    },
+    {
+      "id": "page:blog.html",
+      "title": "Blog",
+      "snippet": "Essays and updates.",
+      "page": "blog.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "blog essays and updates. blog essays updates posts page"
+    },
+    {
+      "id": "page:dashboard.html",
+      "title": "Dashboard",
+      "snippet": "Live status dashboard.",
+      "page": "dashboard.html",
+      "anchor": "",
+      "kind": "page",
+      "kindLabel": "Page",
+      "text": "dashboard live status dashboard. dashboard status live page"
+    }
+  ]
+}
